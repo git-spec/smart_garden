@@ -1,4 +1,4 @@
-/* ---------------------------------------- setup ---------------------------------------- */
+/* ---------------------------------------- SETUP ---------------------------------------- */
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors')
@@ -13,16 +13,23 @@ app.use(cors());
 const port = process.env.PORT || 5000;
 
 // modules
-const {checkHubNum} = require('./modules/devicesAuth');
+const {
+    checkHubNum, 
+    checkDeviceNum, 
+    addHub,
+    addDevice, 
+    getHubs,
+    getDevices
+} = require('./modules/devicesAuth');
 
-/* ---------------------------------------- post routes ---------------------------------------- */
+/* ---------------------------------------- POST ROUTES ---------------------------------------- */
 app.post('/checkhubnum', (req, res) => {
     // 1 serialnumber found
     // 2 serialnumber not found
     // 3 server error
-    const num = req.body.num.trim();
-    if (num) {
-        checkHubNum(num).then(data => {
+    const hubNum = req.body.hubNum.trim();
+    if (hubNum) {
+        checkHubNum(hubNum).then(data => {
             res.json(1);
         }).catch(err => {
             // console.log(err);
@@ -37,13 +44,90 @@ app.post('/checkhubnum', (req, res) => {
     }
 });
 
-/* ---------------------------------------- use routes ---------------------------------------- */
+app.post('/checkdevicenum', (req, res) => {
+    // 1 serialnumber found
+    // 2 serialnumber not found
+    // 3 server error
+    const deviceNum = req.body.deviceNum.trim();
+    if (deviceNum) {
+        checkDeviceNum(deviceNum).then(data => {
+            res.json(1);
+        }).catch(err => {
+            if (err === "not found") {
+                res.json(2);
+            } else {
+                res.json(3);
+            }
+        });
+    } else {
+        res.json(3);
+    }
+});
+
+app.post('/addhub', (req, res) => {
+    // 1 hub successfully registered 
+    // 2 server error
+    const hubNum = req.body.hubNum.trim();
+    if (hubNum) {
+        addHub(hubNum).then(data => {
+            // console.log(data);
+            res.json(data);
+        }).catch(err => {
+            console.log(err);
+            res.json(2);
+        });
+    } else {
+        res.json(2);
+    }
+});
+
+app.post('/adddevice', (req, res) => {
+    // 1 device successfully registered 
+    // 2 server error
+    const hubID = req.body.hubID;
+    const deviceNum = req.body.deviceNum.trim();
+    if (hubID && deviceNum) {
+        addDevice(hubID, deviceNum).then(data => {
+            // console.log(data);
+            res.json(data);
+        }).catch(err => {
+            console.log(err);
+            res.json(2);
+        });
+    } else {
+        res.json(2);
+    }
+});
+
+app.post('/gethubs', (req, res) => {
+    // 2 server error
+    getHubs().then(data => {
+        // console.log(data);
+        res.json(data);
+    }).catch(err => {
+        console.log(err);
+        res.json(2);
+    });
+});
+
+app.post('/getdevices', (req, res) => {
+    // 2 server error
+    getDevices().then(data => {
+        // console.log(data);
+        res.json(data);
+    }).catch(err => {
+        console.log(err);
+        res.json(2);
+    });
+});
+
+/* ---------------------------------------- USE ROUTES ---------------------------------------- */
 app.use('/', (req, res) => {
     const html = fs.readFileSync(__dirname + '/public/build/index.html', 'utf-8');
     res.send(html);
 });
 
-/* ---------------------------------------- localhost ---------------------------------------- */
+/* ---------------------------------------- LOCALHOST ---------------------------------------- */
 app.listen(port, () => {
     console.log(`App is listening to port: ${port}`);
 });
