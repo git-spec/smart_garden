@@ -19,61 +19,66 @@ const {
     addHub,
     addDevice, 
     getHubs,
-    getDevices
+    getDevices,
+    deleteHub,
+    deleteDevice
 } = require('./modules/devicesAuth');
 
 /* ---------------------------------------- POST ROUTES ---------------------------------------- */
 app.post('/checkhubnum', (req, res) => {
     // 1 serialnumber found
-    // 2 serialnumber not found
-    // 3 server error
+    // 2 server error
+    // 3 serialnumber not found
+    // 4 serialnumber already registered
     const hubNum = req.body.hubNum.trim();
     if (hubNum) {
         checkHubNum(hubNum).then(data => {
             res.json(1);
         }).catch(err => {
-            // console.log(err);
             if (err === "not found") {
-                res.json(2);
-            } else {
                 res.json(3);
+            } else if (err === "already registered") {
+                res.json(4);
+            } else {
+                res.json(2);
             }
         });
     } else {
-        res.json(3);
+        res.json(2);
     }
 });
 
 app.post('/checkdevicenum', (req, res) => {
     // 1 serialnumber found
-    // 2 serialnumber not found
-    // 3 server error
+    // 2 server error
+    // 3 serialnumber not found
+    // 4 serialnumber already registered
     const deviceNum = req.body.deviceNum.trim();
     if (deviceNum) {
         checkDeviceNum(deviceNum).then(data => {
             res.json(1);
         }).catch(err => {
             if (err === "not found") {
-                res.json(2);
-            } else {
                 res.json(3);
+            } else if (err === "already registered") {
+                res.json(4);
+            } else {
+                res.json(2);
             }
         });
     } else {
-        res.json(3);
+        res.json(2);
     }
 });
 
 app.post('/addhub', (req, res) => {
-    // 1 hub successfully registered 
+    // data: updated hubs
     // 2 server error
     const hubNum = req.body.hubNum.trim();
     if (hubNum) {
         addHub(hubNum).then(data => {
-            // console.log(data);
             res.json(data);
         }).catch(err => {
-            console.log(err);
             res.json(2);
         });
     } else {
@@ -82,16 +87,14 @@ app.post('/addhub', (req, res) => {
 });
 
 app.post('/adddevice', (req, res) => {
-    // 1 device successfully registered 
+    // data: updated devices
     // 2 server error
-    const hubID = req.body.hubID;
     const deviceNum = req.body.deviceNum.trim();
-    if (hubID && deviceNum) {
-        addDevice(hubID, deviceNum).then(data => {
-            // console.log(data);
+    const hubID = req.body.hubID;
+    if (deviceNum && hubID) {
+        addDevice(deviceNum, hubID).then(data => {
             res.json(data);
         }).catch(err => {
-            console.log(err);
             res.json(2);
         });
     } else {
@@ -102,23 +105,55 @@ app.post('/adddevice', (req, res) => {
 app.post('/gethubs', (req, res) => {
     // 2 server error
     getHubs().then(data => {
-        // console.log(data);
         res.json(data);
     }).catch(err => {
-        console.log(err);
         res.json(2);
     });
 });
 
 app.post('/getdevices', (req, res) => {
     // 2 server error
-    getDevices().then(data => {
-        // console.log(data);
-        res.json(data);
-    }).catch(err => {
-        console.log(err);
+    const hubID = req.body.hubID;
+    if (hubID) {
+        getDevices(hubID).then(data => {
+            res.json(data);
+        }).catch(err => {
+            res.json(2);
+        });
+    } else {
         res.json(2);
-    });
+    }
+});
+
+app.post('/deletehub', (req, res) => {
+    // data: updated hubs
+    // 2 server error
+    const hubID = req.body.hubID;
+    if (hubID) {
+        deleteHub(hubID).then(data => {
+            res.json(data);
+        }).catch(err => {
+            res.json(2);
+        });
+    } else {
+        res.json(2);
+    }
+});
+
+app.post('/deletedevice', (req, res) => {
+    // data: updated devices
+    // 2 server error
+    const deviceID = req.body.deviceID;
+    const hubID = req.body.hubID;
+    if (deviceID && hubID) {
+        deleteDevice(deviceID, hubID).then(data => {
+            res.json(data);
+        }).catch(err => {
+            res.json(2);
+        });
+    } else {
+        res.json(2);
+    }
 });
 
 /* ---------------------------------------- USE ROUTES ---------------------------------------- */
