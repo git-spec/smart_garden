@@ -15,7 +15,6 @@ app.use(cors());
 const port = process.env.PORT || 5000;
 
 // modules
-const {checkHubNum} = require('./modules/devicesAuth');
 const {registerUser, checkUser, verifyUser} = require('./modules/usersAuth')
 const {
     checkHubNum, 
@@ -28,7 +27,7 @@ const {
     deleteDevice
 } = require('./modules/devicesAuth');
 
-/* ----------------------------------------POST ROUTES ---------------------------------------- */
+/* ---------------------------------------- POST ROUTES ---------------------------------------- */
 
 app.post('/register', (req, res) => {
     // your post register handler here
@@ -54,9 +53,9 @@ app.post('/register', (req, res) => {
                 res.json(4)
             }
         })
-    } else{
-            res.json(2)
-        };
+    } else {
+        res.json(2)
+    };
 });
 
 app.post('/login', (req, res) => {
@@ -85,7 +84,6 @@ app.post('/login', (req, res) => {
 app.post('/verification', (req, res) => {
     verifyUser(req.body.email).then(() => {
         res.json(1);
-    //   res.send("You've verified your account!");
     }).catch(err => {
         res.json(2)
       console.log(err);
