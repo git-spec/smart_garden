@@ -7,7 +7,8 @@ import Main from './Main'
 // import Register from './Register'
 // import Login from './Login'
 // import User from './User'
-import Products from './Products'
+import Hubs from './Hubs'
+import Devices from './Devices'
 /* **************************************************** ROUTES *********************************************************** */
 function Router() {
     return(
@@ -17,7 +18,8 @@ function Router() {
                 {/* <Route path='/register' exact component={Register} />
                 <Route path='/login' exact component={Login} />
                 <Route path='/user' exact component={User} /> */}
-                <Route path='/products' exact component={Products} />
+                <Route path='/hubs' exact component={Hubs} />
+                <Route path="/hub/:id" exact component={Devices} />
             </Switch>
         </BrowserRouter>
     )
