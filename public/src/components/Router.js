@@ -6,9 +6,9 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import Main from './Main'
 import Register from './Register'
 import Login from './Login'
-// import User from './User'
-import Products from './Products'
 import Verification from './Verification'
+import Hubs from './Hubs'
+import Devices from './Devices'
 /* **************************************************** ROUTES *********************************************************** */
 function Router() {
     return(
@@ -18,9 +18,8 @@ function Router() {
                 <Route path='/register' exact component={Register} />
                 <Route path='/login' exact component={Login} />
                 <Route path='/verify/:email' exact component={Verification} />
-                {/* 
-                <Route path='/user' exact component={User} /> */}
-                <Route path='/products' exact component={Products} />
+                <Route path='/hubs' exact component={Hubs} />
+                <Route path="/hub/:id" exact component={Devices} />
             </Switch>
         </BrowserRouter>
     )
