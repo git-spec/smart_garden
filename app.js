@@ -1,34 +1,42 @@
 /* ---------------------------------------- SETUP ---------------------------------------- */
+// express
 const express = require('express');
+const app = express();
+
+// packages
 const fs = require('fs');
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const cors = require('cors')
+const session = require('express-session');
 
-const app = express();
-
+// app use
 app.use(express.static(__dirname + '/public/build'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
-
-const port = process.env.PORT || 5000;
+app.use(session({
+    secret: 'smart_garden',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+        path: '/', 
+        httpOnly: true, 
+        secure: false, 
+        maxAge: null
+    }
+}));
 
 // modules
-const {registerUser, checkUser, verifyUser} = require('./modules/usersAuth')
-const {
-    checkHubNum, 
-    checkDeviceNum, 
-    addHub,
-    addDevice, 
-    getHubs,
-    getDevices,
-    deleteHub,
-    deleteDevice
-} = require('./modules/devicesAuth');
+const {registerUser, checkUser, verifyUser} = require('./modules/usersAuth');
+
+// user
+const userRoutes = require('./routes/userRoutes');
+
+// port
+const port = process.env.PORT || 5000;
 
 /* ---------------------------------------- POST ROUTES ---------------------------------------- */
-
 app.post('/register', (req, res) => {
     // your post register handler here
     // console.log(req.body)
@@ -65,7 +73,8 @@ app.post('/login', (req, res) => {
     // 4 user not exist
     if (req.body.email && req.body.password) {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
-            // req.session.user = user
+            req.session.user = user
+            // console.log(req.session.user.id);
             res.json(1)
         }).catch(error => {
             console.log(error);
@@ -90,138 +99,18 @@ app.post('/verification', (req, res) => {
     });
   });
 
-app.post('/checkhubnum', (req, res) => {
-    // 1 serialnumber found
-    // 2 server error
-    // 3 serialnumber not found
-    // 4 serialnumber already registered
-    const hubNum = req.body.hubNum.trim();
-    if (hubNum) {
-        checkHubNum(hubNum).then(data => {
-            res.json(1);
-        }).catch(err => {
-            if (err === "not found") {
-                res.json(3);
-            } else if (err === "already registered") {
-                res.json(4);
-            } else {
-                res.json(2);
-            }
-        });
+// checklogin
+app.post('/checklogin', (req, res) => {
+    if (req.session.user) {
+        res.json(req.session.user.username);
     } else {
-        res.json(2);
-    }
-});
-
-app.post('/checkdevicenum', (req, res) => {
-    // 1 serialnumber found
-    // 2 server error
-    // 3 serialnumber not found
-    // 4 serialnumber already registered
-    const deviceNum = req.body.deviceNum.trim();
-    if (deviceNum) {
-        checkDeviceNum(deviceNum).then(data => {
-            res.json(1);
-        }).catch(err => {
-            if (err === "not found") {
-                res.json(3);
-            } else if (err === "already registered") {
-                res.json(4);
-            } else {
-                res.json(2);
-            }
-        });
-    } else {
-        res.json(2);
-    }
-});
-
-app.post('/addhub', (req, res) => {
-    // data: updated hubs
-    // 2 server error
-    const hubNum = req.body.hubNum.trim();
-    if (hubNum) {
-        addHub(hubNum).then(data => {
-            res.json(data);
-        }).catch(err => {
-            res.json(2);
-        });
-    } else {
-        res.json(2);
-    }
-});
-
-app.post('/adddevice', (req, res) => {
-    // data: updated devices
-    // 2 server error
-    const deviceNum = req.body.deviceNum.trim();
-    const hubID = req.body.hubID;
-    if (deviceNum && hubID) {
-        addDevice(deviceNum, hubID).then(data => {
-            res.json(data);
-        }).catch(err => {
-            res.json(2);
-        });
-    } else {
-        res.json(2);
-    }
-});
-
-app.post('/gethubs', (req, res) => {
-    // 2 server error
-    getHubs().then(data => {
-        res.json(data);
-    }).catch(err => {
-        res.json(2);
-    });
-});
-
-app.post('/getdevices', (req, res) => {
-    // 2 server error
-    const hubID = req.body.hubID;
-    if (hubID) {
-        getDevices(hubID).then(data => {
-            res.json(data);
-        }).catch(err => {
-            res.json(2);
-        });
-    } else {
-        res.json(2);
-    }
-});
-
-app.post('/deletehub', (req, res) => {
-    // data: updated hubs
-    // 2 server error
-    const hubID = req.body.hubID;
-    if (hubID) {
-        deleteHub(hubID).then(data => {
-            res.json(data);
-        }).catch(err => {
-            res.json(2);
-        });
-    } else {
-        res.json(2);
-    }
-});
-
-app.post('/deletedevice', (req, res) => {
-    // data: updated devices
-    // 2 server error
-    const deviceID = req.body.deviceID;
-    const hubID = req.body.hubID;
-    if (deviceID && hubID) {
-        deleteDevice(deviceID, hubID).then(data => {
-            res.json(data);
-        }).catch(err => {
-            res.json(2);
-        });
-    } else {
-        res.json(2);
+        res.json(10);
     }
 });
 
 /* ---------------------------------------- USE ROUTES ---------------------------------------- */
+app.use('/user', userRoutes);
+
 app.use('/', (req, res) => {
     const html = fs.readFileSync(__dirname + '/public/build/index.html', 'utf-8');
     res.send(html);
