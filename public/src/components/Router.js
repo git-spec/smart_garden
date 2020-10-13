@@ -20,7 +20,7 @@ function Router(props) {
     // run at initial render
     useEffect(() => {
         checkLoginPost().then(data => {
-            console.log(data);
+            console.log('user:', data);
             // not 10: user is logged in
             if (data !== 10) {
                 props.setUserAction(data);

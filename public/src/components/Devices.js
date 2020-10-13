@@ -83,8 +83,8 @@ const Devices = props => {
             addModalShow: true
         });
     };
-    const confirmAdding = deviceNum => {
-        if (deviceNum) {
+    const confirmAdding = (deviceName, deviceNum) => {
+        if (deviceName.trim() && deviceNum.trim()) {
             checkDeviceNumPost(deviceNum.trim()).then(data => {
                 // 1 serialnumber found
                 // 2 server error
@@ -92,7 +92,7 @@ const Devices = props => {
                 // 4 serialnumber already registered
                 switch (data) {
                     case 1:
-                        addDevicePost(deviceNum.trim(), params.id).then(data => {
+                        addDevicePost(deviceName.trim(), deviceNum.trim(), params.id).then(data => {
                             if (data !== 2) {
                                 setState({
                                     ...state, 
@@ -122,7 +122,7 @@ const Devices = props => {
                 alert(err);
             });    
         } else {
-            alert('Please insert a Serialnumber!');
+            alert('Please fill in all inputs!');
         }
     };
 
@@ -131,7 +131,7 @@ const Devices = props => {
         const devicesElement = state.devices.map((device, idx) => {
             return (
                 <div key={device.id} className="mb-3">
-                    {idx +1}. Device | type: {device.name} | ID: {device.id} | hubID: {device.hub_id}
+                    {idx +1}. Device | name: {device.name} | type: {device.device_name} | ID: {device.id} | hubID: {device.hub_id}
                     {/* <Button className="ml-2" outline color="primary" size="sm">
                         Edit
                     </Button>{' '} */}

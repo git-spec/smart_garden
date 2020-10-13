@@ -85,8 +85,8 @@ const Hubs = props => {
             addModalShow: true
         });
     };
-    const confirmAdding = hubNum => {
-        if (hubNum) {
+    const confirmAdding = (hubName, hubNum) => {
+        if (hubName.trim() && hubNum.trim()) {
             checkHubNumPost(hubNum.trim()).then(data => {
                 // 1 serialnumber found
                 // 2 server error
@@ -94,7 +94,7 @@ const Hubs = props => {
                 // 4 serialnumber already registered
                 switch (data) {
                     case 1:
-                        addHubPost(hubNum.trim()).then(data => {
+                        addHubPost(hubName.trim(), hubNum.trim()).then(data => {
                             if (data !== 2) {
                                 setState({
                                     ...state, 
@@ -124,7 +124,7 @@ const Hubs = props => {
                 alert(err);
             });    
         } else {
-            alert('Please insert a Serialnumber!');
+            alert('Please fill in all inputs!');
         }
     };
 
@@ -134,7 +134,7 @@ const Hubs = props => {
             return (
                 <div key={hub.id} className="mb-3">
                     <Link to={'/user/hub/' + hub.id}>
-                        {idx + 1}. Hub | ID: {hub.id}
+                        {idx + 1}. Hub | name: {hub.name} | ID: {hub.id}
                     </Link>
                     <Button
                         className="ml-2"

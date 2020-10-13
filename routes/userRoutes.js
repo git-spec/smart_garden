@@ -86,10 +86,11 @@ userRouter.post('/checkdevicenum', (req, res) => {
 userRouter.post('/addhub', (req, res) => {
     // data: updated hubs
     // 2 server error
+    const hubName = req.body.hubName.trim();
     const hubNum = req.body.hubNum.trim();
     const userID = req.session.user.id;
-    if (hubNum && userID) {
-        addHub(hubNum, userID).then(data => {
+    if (hubName && hubNum && userID) {
+        addHub(hubName, hubNum, userID).then(data => {
             res.json(data);
         }).catch(err => {
             res.json(2);
@@ -102,11 +103,12 @@ userRouter.post('/addhub', (req, res) => {
 userRouter.post('/adddevice', (req, res) => {
     // data: updated devices
     // 2 server error
+    const deviceName = req.body.deviceName.trim();
     const deviceNum = req.body.deviceNum.trim();
     const hubID = req.body.hubID;
     const userID = req.session.user.id;
-    if (deviceNum && hubID && userID) {
-        addDevice(deviceNum, hubID, userID).then(data => {
+    if (deviceName && deviceNum && hubID && userID) {
+        addDevice(deviceName, deviceNum, hubID, userID).then(data => {
             res.json(data);
         }).catch(err => {
             res.json(2);

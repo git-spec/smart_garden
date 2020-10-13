@@ -46,14 +46,14 @@ export const checkDeviceNumPost = deviceNum => {
     });
 };
 
-export const addHubPost = hubNum => {
+export const addHubPost = (hubName, hubNum) => {
     return new Promise((resolve, reject) => {
         fetch('/user/addhub', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({hubNum})
+            body: JSON.stringify({hubName, hubNum})
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {
@@ -70,14 +70,14 @@ export const addHubPost = hubNum => {
     });
 };
 
-export const addDevicePost = (deviceNum, hubID) => {
+export const addDevicePost = (deviceName, deviceNum, hubID) => {
     return new Promise((resolve, reject) => {
         fetch('/user/adddevice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({deviceNum, hubID})
+            body: JSON.stringify({deviceName, deviceNum, hubID})
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {
