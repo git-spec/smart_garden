@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
 import {
     // InputGroup, 
     // InputGroupAddon, 
@@ -31,14 +31,19 @@ const Hubs = props => {
 
     // run at initial render
     useEffect(() => {
-        getHubsPost().then(hubs => {
-            if (hubs !== 2) {
-                setState({...state, hubs});
-            } else {
-                alert('Server error!');
+        getHubsPost().then(data => {
+            switch (data) {
+                case 2:
+                    alert('Server error');
+                    break;
+                case 10:
+                    break;
+                default:
+                    setState({...state, hubs: data});
+                    break;
             }
         }).catch(err => {
-            console.log(err);
+            alert(err);
         });
     }, []);
 
@@ -69,7 +74,7 @@ const Hubs = props => {
                 alert('Server error!');
             }
         }).catch(err => {
-            alert('Server error!');
+            alert(err);
         });
     };
 
@@ -100,7 +105,7 @@ const Hubs = props => {
                                 alert('Server error!');
                             }
                         }).catch(err => {
-                            console.log(err);
+                            alert(err);
                         })
                         break;
                     case 2:
@@ -116,67 +121,77 @@ const Hubs = props => {
                         break;
                 }
             }).catch(err => {
-                console.log(err);
+                alert(err);
             });    
         } else {
             alert('Please insert a Serialnumber!');
         }
     };
 
-    const hubsElement = state.hubs.map((hub, idx) => {
+    if (state.hubs) {
+        // console.log(state.hubs)
+        const hubsElement = state.hubs.map((hub, idx) => {
+            return (
+                <div key={hub.id} className="mb-3">
+                    <Link to={'/user/hub/' + hub.id}>
+                        {idx + 1}. Hub | ID: {hub.id}
+                    </Link>
+                    <Button
+                        className="ml-2"
+                        outline
+                        color="danger"
+                        size="sm"
+                        onClick={e => onDeleteBtnClick(e, hub.id)}
+                    >
+                        Delete
+                    </Button>{' '}
+                </div>
+            );
+        });
         return (
-            <div key={hub.id} className="mb-3">
-                <Link to={"/hub/" + hub.id}>
-                    {idx +1}. Hub | ID: {hub.id}
-                </Link>
-                <Button className="ml-2" outline color="danger" size="sm" onClick={e => onDeleteBtnClick(e, hub.id)}>
-                    Delete
+            <Container>
+                <ConfirmModal
+                    className="bg-danger"
+                    title="Confirm Deletion"
+                    payload={state.confirmModalPayload}
+                    show={state.confirmModalShow}
+                    delete={confirmDeletion}
+                    close={() => setState({...state, confirmModalShow: false})}
+                >
+                    {state.confirmModalContent}
+                </ConfirmModal>
+                <AddProductModal
+                    className="bg-primary"
+                    title="Add Smart Garden Hub"
+                    show={state.addModalShow}
+                    add={confirmAdding}
+                    close={() => setState({...state, addModalShow: false})}
+                ></AddProductModal>
+                <h3>Smart Garden Hubs</h3>
+                {hubsElement}
+                <Button className="mb-3" size="sm" outline color="primary" onClick={onAddHubBtnClick}>
+                    Add Hub
                 </Button>{' '}
-            </div>
+                {/* <InputGroup className="mb-3">
+                    <Label for="hubInp" className="mr-1">Add a Smart Hub</Label>
+                    <Input
+                        id="hubInp"
+                        placeholder="Insert a Serialnumber"
+                        onChange={e => setState({
+                            ...state,
+                            hubNum: e.target.value
+                        })}
+                        value={state.hubNum}
+                    />
+                    <InputGroupAddon addonType="append">
+                        <Button color="secondary" onClick={onAddHubBtnClick}>Add</Button>{' '}
+                    </InputGroupAddon>
+                </InputGroup> */}
+            </Container>
         );
-    });
-
-    return (
-        <Container>
-            <ConfirmModal
-                className="bg-danger"
-                title="Confirm Deletion"
-                payload={state.confirmModalPayload}
-                show={state.confirmModalShow}
-                delete={confirmDeletion}
-                close={() => setState({ ...state, confirmModalShow: false })}
-            >{state.confirmModalContent}
-            </ConfirmModal>
-            <AddProductModal
-                className="bg-primary"
-                title="Add Smart Garden Hub"
-                show={state.addModalShow}
-                add={confirmAdding}
-                close={() => setState({ ...state, addModalShow: false })}
-            >
-            </AddProductModal>
-            <h3>Smart Garden Hubs</h3>
-            {hubsElement}
-            <Button className="mb-3" size="sm" outline color="primary" onClick={onAddHubBtnClick}>
-                Add Hub
-            </Button>{' '}
-            {/* <InputGroup className="mb-3">
-                <Label for="hubInp" className="mr-1">Add a Smart Hub</Label>
-                <Input
-                    id="hubInp"
-                    placeholder="Insert a Serialnumber"
-                    onChange={e => setState({
-                        ...state,
-                        hubNum: e.target.value
-                    })}
-                    value={state.hubNum}
-                />
-                <InputGroupAddon addonType="append">
-                    <Button color="secondary" onClick={onAddHubBtnClick}>Add</Button>{' '}
-                </InputGroupAddon>
-            </InputGroup> */}
-        </Container>
-    );
+    } else {
+        return <div>Loading...</div>;
+    }
 };
 
 export default Hubs;

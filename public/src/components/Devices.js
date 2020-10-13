@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useParams} from 'react-router-dom'
+import {useParams} from 'react-router-dom';
 import {
     // InputGroup, 
     // InputGroupAddon, 
@@ -35,13 +35,18 @@ const Devices = props => {
     // run at initial render
     useEffect(() => {
         getDevicesPost(params.id).then(data => {
-            if (data !== 2) {
-                setState({...state, devices: data});
-            } else {
-                alert('Server error!');
+            switch (data) {
+                case 2:
+                    alert('Server error');
+                    break;
+                case 10:
+                    break;
+                default:
+                    setState({...state, devices: data});
+                    break;
             }
         }).catch(err => {
-            alert('Server error!');
+            alert(err);
         });
     }, []);
 
@@ -67,7 +72,7 @@ const Devices = props => {
             }
         })
         .catch(err => {
-            alert('Server error!');
+            alert(err);
         });
     };
 
@@ -98,7 +103,7 @@ const Devices = props => {
                                 alert('Server error!');
                             }
                         }).catch(err => {
-                            console.log(err);
+                            alert(err);
                         })
                         break;
                     case 2:
@@ -114,68 +119,72 @@ const Devices = props => {
                         break;
                 }
             }).catch(err => {
-                alert('Server error!');
+                alert(err);
             });    
         } else {
             alert('Please insert a Serialnumber!');
         }
     };
 
-    const devicesElement = state.devices.map((device, idx) => {
+    if (state.devices) {
+        // console.log(state.devices)
+        const devicesElement = state.devices.map((device, idx) => {
+            return (
+                <div key={device.id} className="mb-3">
+                    {idx +1}. Device | type: {device.name} | ID: {device.id} | hubID: {device.hub_id}
+                    {/* <Button className="ml-2" outline color="primary" size="sm">
+                        Edit
+                    </Button>{' '} */}
+                    <Button className="ml-2" outline color="danger" size="sm" onClick={e => onDeleteBtnClick(e, device.id)}>
+                        Delete
+                    </Button>{' '}
+                </div>
+            );
+        });
         return (
-            <div key={device.id} className="mb-3">
-                {idx +1}. Device | type: {device.name} | ID: {device.id} | hubID: {device.hub_id}
-                <Button className="ml-2" outline color="primary" size="sm">
-                    Edit
+            <Container>
+                <ConfirmModal
+                    className="bg-danger"
+                    title="Confirm Deletion"
+                    payload={state.confirmModalPayload}
+                    show={state.confirmModalShow}
+                    delete={confirmDeletion}
+                    close={() => setState({ ...state, confirmModalShow: false })}
+                >{state.confirmModalContent}
+                </ConfirmModal>
+                <AddProductModal
+                    className="bg-primary"
+                    title="Add Smart Garden Device"
+                    show={state.addModalShow}
+                    add={confirmAdding}
+                    close={() => setState({ ...state, addModalShow: false })}
+                >
+                </AddProductModal>
+                <h3>Smart Garden Devices for HubID {params.id}</h3>
+                {devicesElement}
+                <Button className="mb-3" size="sm" outline color="primary" onClick={onAddDeviceBtnClick}>
+                    Add Device
                 </Button>{' '}
-                <Button className="ml-2" outline color="danger" size="sm" onClick={e => onDeleteBtnClick(e, device.id)}>
-                    Delete
-                </Button>{' '}
-            </div>
+                {/* <InputGroup className="mb-3">
+                    <Label for="hubInp" className="mr-1">Add a Smart Hub</Label>
+                    <Input
+                        id="hubInp"
+                        placeholder="Insert a Serialnumber"
+                        onChange={e => setState({
+                            ...state,
+                            hubNum: e.target.value
+                        })}
+                        value={state.hubNum}
+                    />
+                    <InputGroupAddon addonType="append">
+                        <Button color="secondary" onClick={onAddHubBtnClick}>Add</Button>{' '}
+                    </InputGroupAddon>
+                </InputGroup> */}
+            </Container>
         );
-    });
-
-    return (
-        <Container>
-            <ConfirmModal
-                className="bg-danger"
-                title="Confirm Deletion"
-                payload={state.confirmModalPayload}
-                show={state.confirmModalShow}
-                delete={confirmDeletion}
-                close={() => setState({ ...state, confirmModalShow: false })}
-            >{state.confirmModalContent}
-            </ConfirmModal>
-            <AddProductModal
-                className="bg-primary"
-                title="Add Smart Garden Device"
-                show={state.addModalShow}
-                add={confirmAdding}
-                close={() => setState({ ...state, addModalShow: false })}
-            >
-            </AddProductModal>
-            <h3>Smart Garden Devices for HubID {params.id}</h3>
-            {devicesElement}
-            <Button className="mb-3" size="sm" outline color="primary" onClick={onAddDeviceBtnClick}>
-                Add Device
-            </Button>{' '}
-            {/* <InputGroup className="mb-3">
-                <Label for="hubInp" className="mr-1">Add a Smart Hub</Label>
-                <Input
-                    id="hubInp"
-                    placeholder="Insert a Serialnumber"
-                    onChange={e => setState({
-                        ...state,
-                        hubNum: e.target.value
-                    })}
-                    value={state.hubNum}
-                />
-                <InputGroupAddon addonType="append">
-                    <Button color="secondary" onClick={onAddHubBtnClick}>Add</Button>{' '}
-                </InputGroupAddon>
-            </InputGroup> */}
-        </Container>
-    );
+    } else {
+        return <div>Loading...</div>;
+    }
 };
 
 export default Devices;
