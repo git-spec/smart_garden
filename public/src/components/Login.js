@@ -67,10 +67,9 @@ const Login = (props) => {
           case 1:
             // show admin panel
             // props.setUserAction(myState.email)
-            // history.push('/user')
-            console.log('ok ok ok');
+            history.push('/user/hubs')
+            // console.log('ok ok ok');
             break;
-        
           default:
             break;
         }
