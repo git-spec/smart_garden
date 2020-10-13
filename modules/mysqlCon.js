@@ -1,21 +1,19 @@
-// ****************************************   ****************************************
-const mySql = require('mysql')
+const mySql = require('mysql');
 
-
-let con = null
+let con = null;
 function connect() {
     return new Promise((resolve, reject) => {
         if (con) {
             if (con.state === 'disconnected') {
                 con.connect(error => {
                     if (error) {
-                        reject(error)
+                        reject(error);
                     } else {
-                        resolve()
+                        resolve();
                     }
-                })
+                });
             } else {
-                resolve()
+                resolve();
             }
         } else {
             con = mySql.createConnection({
@@ -25,16 +23,16 @@ function connect() {
                 user: 'root',
                 password: '12345678',
                 database: 'smart_garden'
-            })
+            });
             con.connect(error => {
                 if (error) {
-                    reject(error)
+                    reject(error);
                 } else {
-                    resolve()
+                    resolve();
                 }
-            })
+            });
         }
-    })
+    });
 }
 
 function runQuery(queryString) {
@@ -42,16 +40,15 @@ function runQuery(queryString) {
         connect().then(() => {
             con.query(queryString, (error, result, fields) => {
                 if (error) {
-                    reject(error)
+                    reject(error);
                 } else {
-                    resolve(result)
+                    resolve(result);
                 }
-            })
+            });
         }).catch(error => {
-            reject(error)
-        })
-    })
+            reject(error);
+        });
+    });
 }
 
-module.exports = runQuery
-
+module.exports = runQuery;
