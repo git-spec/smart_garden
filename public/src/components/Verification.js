@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useParams, Link, useHistory} from 'react-router-dom';
 
 import {sendParams} from '../services/api';
@@ -18,7 +18,7 @@ const Verification = () => {
         }).catch(err => {
             history.push('/register');
         });
-    }, []);
+    }, [history, params.email]);
 
     return (
         <React.Fragment>
