@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   InputGroup,
   Button,
@@ -67,10 +67,9 @@ const Login = (props) => {
           case 1:
             // show admin panel
             // props.setUserAction(myState.email)
-            // history.push('/user')
-            console.log('ok ok ok');
+            history.push('/user')
+            // console.log('ok ok ok');
             break;
-        
           default:
             break;
         }

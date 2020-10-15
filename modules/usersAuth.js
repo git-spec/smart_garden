@@ -8,7 +8,7 @@ const passwordHash = require("password-hash");
 /* ***************************************************** FUNCTIONS ******************************************************* */
 // Login with checking the (users mails OR username)
 function checkUser(user, password) {
-  console.log("this is the user: " + user + password);
+  // console.log("this is the user: " + user + password);
   return new Promise((resolve, reject) => {
     if (validator.isEmail(user)) {
       runQuery(`SELECT * FROM users where email like '${user}'`)
@@ -32,7 +32,7 @@ function checkUser(user, password) {
     } else {
       runQuery(`SELECT * FROM users where username like '${user}'`)
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           if (result.length === 0) {
             reject(4);
           } else {

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useParams, Link, useHistory} from 'react-router-dom';
 
 import {sendParams} from '../services/api';
@@ -8,19 +8,17 @@ const Verification = () => {
     const history = useHistory();
 
     useEffect(() => {
-        sendParams(params.email)
-            .then(data => {
-                console.log(data);
+        sendParams(params.email).then(data => {
                 if (data !== 2) {
                     history.push('/login');
                 } else {
                     history.push('/register');
                 }
             })
-            .catch(err => {
-                history.push('/register');
-            });
-    }, []);
+        }).catch(err => {
+            history.push('/register');
+        });
+    }, [history, params.email]);
 
     return (
         <React.Fragment>
