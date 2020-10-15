@@ -141,8 +141,14 @@ const Login = (props) => {
 
                 <div className="col-md-4">
                   <Button className="btn black" onClick={onLoginBtnClick}>Login</Button>
-                  <h5>not Registered?
-                    <Link to="/register">register here</Link>
+                </div>
+                <div className="col-md-4">
+                  <h5>Not Registered?
+                    <Link to="/register"> register here</Link>
+                  </h5>
+                </div>  <div className="col-md-4">
+                  <h5>Forget Your Password?
+                    <Link to="/resetPass"> Click here..</Link>
                   </h5>
                 </div>
               </div>
