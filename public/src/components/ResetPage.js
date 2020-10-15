@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   InputGroup,
   Button,
   Input,
   Container
 } from 'reactstrap';
-import {useParams, Link, useHistory} from 'react-router-dom';
+import {useParams, Link} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
 import {resetPass} from '../services/api';
 
