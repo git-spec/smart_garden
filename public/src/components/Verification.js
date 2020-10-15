@@ -8,16 +8,18 @@ const Verification = () => {
     const history = useHistory();
 
     useEffect(() => {
-        sendParams(params.email).then(data => {
-            console.log(data);
-            if (data !== 2) {
-                history.push('/login');
-            } else {
+        sendParams(params.email)
+            .then(data => {
+                console.log(data);
+                if (data !== 2) {
+                    history.push('/login');
+                } else {
+                    history.push('/register');
+                }
+            })
+            .catch(err => {
                 history.push('/register');
-            }
-        }).catch(err => {
-            history.push('/register');
-        });
+            });
     }, []);
 
     return (

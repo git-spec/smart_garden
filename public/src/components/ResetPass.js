@@ -1,48 +1,34 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   InputGroup,
   Button,
   Input,
   Container
 } from 'reactstrap';
-import {Link, useHistory} from 'react-router-dom';
-// import {connect} from 'react-redux'
-
+// import {Link, useHistory} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
-import {loginPost} from '../services/api';
-// import {setUserAction} from '../actions'
+import {sendResetLink} from '../services/api';
 
-const Login = (props) => {
+const ResetPass = (props) => {
 
-
-  // useEffect(() => {
-  //   props.setUserAction(null)
-    
-  // }, []);
-
-
-  const history = useHistory()
+//   const history = useHistory()
   const initialState = {
     email: '',
-    password: '',
     entriesError: false,
     errorElement: null,
     errorTitle: ''
   }
   const [myState, setMyState] = useState(initialState);
 
-  const onLoginBtnClick = (e) => {
+  const onSendBtnClick = (e) => {
     e.preventDefault()
-    if (myState.email.trim() === '' || myState.password === '') {
+    if (myState.email.trim() === '') {
       const errorElement = (
         <ul>
           {myState
             .email
             .trim() === ''
-            ? <li>Email should not be empty</li>
-            : null}
-          {myState.password === ''
-            ? <li>Password should not be empty</li>
+            ? <li>Please enter your Email , <br></br> Email should not be empty</li>
             : null}
         </ul>
       )
@@ -53,13 +39,10 @@ const Login = (props) => {
         errorTitle: 'Entries Error'
       })
     } else {
-      loginPost(myState.email, myState.password).then(data => {
+        sendResetLink(myState.email).then(data => {
         switch (data) {
           case 2:
             setMyState({...myState, entriesError: true, errorElement: <p>there was a server error</p>, errorTitle: 'Server Error' });
-            break;
-          case 3:
-            setMyState({...myState, entriesError: true, errorElement: <p>Password is wrong</p>, errorTitle: 'Wrong password'});
             break;
           case 4:
             setMyState({...myState, entriesError: true, errorElement: <p>the email that you used is not exist</p>, errorTitle: 'Email not exist' });
@@ -67,7 +50,7 @@ const Login = (props) => {
           case 1:
             // show admin panel
             // props.setUserAction(myState.email)
-            // history.push('/user')
+            setMyState({...myState, entriesError: true, errorElement: <p>We have sent you a reset email, <br></br> Check your Email </p>, errorTitle: 'Email not exist' });
             console.log('ok ok ok');
             break;
         
@@ -98,19 +81,14 @@ const Login = (props) => {
           {myState.errorElement}
         </PopUpModal>
       <Container>
-        <div className="breadcrumb">
-          <div className="container">
-            <Link className="breadcrumb-item" to="/">Home</Link>
-            <span className="breadcrumb-item active">Login</span>
-          </div>
-        </div>
           <h1>My Account / login</h1>
+          <h3>Forget your password ??</h3>
           <p>
-            login to start your devices management
+            Don't worry here you can easily reset it. <br/>
+            Enter your email and you will receive a link where you can reset your password
           </p>
           <InputGroup className="mb-3">
-              <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-6">
                   <Input
                     type="email"
                     placeholder="Enter User Name"
@@ -125,38 +103,12 @@ const Login = (props) => {
                   <span className="required-star">*</span>
                 </div>
                 <div className="col-md-4">
-                  <Input
-                    type="password"
-                    placeholder="Password"
-                    required
-                    onChange={(e) => {
-                    setMyState({
-                      ...myState,
-                      password: e.target.value
-                    })
-                  }}
-                    value={myState.password}/>
-                  {/* <span className="required-star">*</span> */}
+                  <Button className="btn black" onClick={onSendBtnClick}>Send</Button>
                 </div>
-
-                <div className="col-md-4">
-                  <Button className="btn black" onClick={onLoginBtnClick}>Login</Button>
-                </div>
-                <div className="col-md-4">
-                  <h5>Not Registered?
-                    <Link to="/register"> register here</Link>
-                  </h5>
-                </div>  <div className="col-md-4">
-                  <h5>Forget Your Password?
-                    <Link to="/resetPass"> Click here..</Link>
-                  </h5>
-                </div>
-              </div>
           </InputGroup>
       </Container>
     </React.Fragment>
   )
 }
 
-// export default connect(null,{setUserAction})(Login)
-export default Login
+export default ResetPass

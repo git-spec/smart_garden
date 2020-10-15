@@ -1,27 +1,3 @@
-export const checkHubNumPost = num => {
-    return new Promise((resolve, reject) => {
-        fetch('/checkhubnum', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({num})
-        }).then(response => {
-            if (response.status === 200) {
-                response.json().then(data => {
-                    resolve(data);
-                }).catch(error => {
-                    reject(error);
-                });
-            } else {
-                reject(new Error('Can not send data to server. Response number: ' + response.status));
-            }
-        }).catch(error => {
-            reject(error);
-        });
-    });
-};
-
 export const registerPost = (firstName, lastName, userName, email, password, repassword) => {
     const sendData = {
         firstName,
@@ -88,6 +64,62 @@ export const sendParams = (email) => {
             email
         }
         fetch('/verification', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data)
+                }).catch(error => {
+                    reject(error)
+                })
+            } else {
+                reject(new Error('can not get the data, response number is: ' + response.status))
+            }
+        }).catch(error => {
+            reject(error)
+        })
+    })
+}
+
+export const sendResetLink = (email) => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            email
+        }
+        fetch('/sendResetLink', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data)
+                }).catch(error => {
+                    reject(error)
+                })
+            } else {
+                reject(new Error('can not get the data, response number is: ' + response.status))
+            }
+        }).catch(error => {
+            reject(error)
+        })
+    })
+}
+
+export const resetPass = (email, id, pass) => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            email,
+            id,
+            pass
+        }
+        fetch('/resetPass', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
