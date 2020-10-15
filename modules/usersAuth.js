@@ -56,11 +56,9 @@ function checkUser(user, password) {
 function registerUser(firstName, lastName, userName, email, password) {
   return new Promise((resolve, reject) => {
     runQuery(
-      `INSERT INTO users (firstname, lastname, username, email, password) VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(
-        password
-      )}')`
-    )
-      .then(() => {
+      `INSERT INTO users (firstname, lastname, username, email, password, verified) 
+      VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0)`
+    ).then(() => {
         // resolve()
 
         // ********************************

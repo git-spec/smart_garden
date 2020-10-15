@@ -23,6 +23,7 @@ const port = process.env.PORT || 5000;
 
 // modules
 const {registerUser, checkUser, verifyUser, confirmVerifiedUser, sendResetLink, resetPass} = require('./modules/usersAuth')
+
 const {
     checkHubNum, 
     checkDeviceNum, 
@@ -34,7 +35,7 @@ const {
     deleteDevice
 } = require('./modules/devicesAuth');
 
-/* ----------------------------------------POST ROUTES ---------------------------------------- */
+/* ---------------------------------------- POST ROUTES ---------------------------------------- */
 
 app.post('/register', (req, res) => {
     // your post register handler here
@@ -60,9 +61,9 @@ app.post('/register', (req, res) => {
                 res.json(4)
             }
         })
-    } else{
-            res.json(2)
-        };
+    } else {
+        res.json(2)
+    };
 });
 
 app.post('/login', (req, res) => {

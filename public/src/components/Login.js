@@ -56,13 +56,13 @@ const Login = (props) => {
       loginPost(myState.email, myState.password).then(data => {
         switch (data) {
           case 2:
-            setMyState({... myState, entriesError: true, errorElement: <p>there was a server error</p>, errorTitle: 'Server Error' });
+            setMyState({...myState, entriesError: true, errorElement: <p>there was a server error</p>, errorTitle: 'Server Error' });
             break;
           case 3:
-            setMyState({... myState, entriesError: true, errorElement: <p>Password is wrong</p>, errorTitle: 'Wrong password'});
+            setMyState({...myState, entriesError: true, errorElement: <p>Password is wrong</p>, errorTitle: 'Wrong password'});
             break;
           case 4:
-            setMyState({... myState, entriesError: true, errorElement: <p>the email that you used is not exist</p>, errorTitle: 'Email not exist' });
+            setMyState({...myState, entriesError: true, errorElement: <p>the email that you used is not exist</p>, errorTitle: 'Email not exist' });
             break;
           case 1:
             // show admin panel
@@ -75,7 +75,7 @@ const Login = (props) => {
             break;
         }
       }).catch(error => {
-        setMyState({... myState, entriesError: true, errorElement: <p>can not send the data</p>, errorTitle: 'unknown error' });
+        setMyState({...myState, entriesError: true, errorElement: <p>can not send the data</p>, errorTitle: 'unknown error' });
       })
     }
   };
