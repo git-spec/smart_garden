@@ -134,10 +134,10 @@ userRouter.post('/gethubs', (req, res) => {
 
 userRouter.post('/getdevices', (req, res) => {
     // 2 server error
-    const hubID = req.body.hubID;
+    // const hubID = req.body.hubID;
     const userID = req.session.user.id;
-    if (hubID && userID) {
-        getDevices(hubID, userID).then(data => {
+    if (userID) {
+        getDevices(userID).then(data => {
             res.json(data);
         }).catch(err => {
             res.json(2);
@@ -167,10 +167,9 @@ userRouter.post('/deletedevice', (req, res) => {
     // data: updated devices
     // 2 server error
     const deviceID = req.body.deviceID;
-    const hubID = req.body.hubID;
     const userID = req.session.user.id;
-    if (deviceID && hubID && userID) {
-        deleteDevice(deviceID, hubID, userID).then(data => {
+    if (deviceID && userID) {
+        deleteDevice(deviceID, userID).then(data => {
             res.json(data);
         }).catch(err => {
             res.json(2);

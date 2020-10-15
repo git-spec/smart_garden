@@ -117,14 +117,14 @@ export const getHubsPost = () => {
     });
 };
 
-export const getDevicesPost = hubID => {
+export const getDevicesPost = () => {
     return new Promise((resolve, reject) => {
         fetch('/user/getdevices', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({hubID})
+            // body: JSON.stringify({hubID})
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {
@@ -165,14 +165,14 @@ export const deleteHubPost = hubID => {
     });
 };
 
-export const deleteDevicePost = (deviceID, hubID) => {
+export const deleteDevicePost = deviceID => {
     return new Promise((resolve, reject) => {
         fetch('/user/deletedevice', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({deviceID, hubID})
+            body: JSON.stringify({deviceID})
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {

@@ -56,7 +56,7 @@ function addHub(hubName, hubNum, userID) {
 function addDevice(deviceName, deviceNum, hubID, userID) {
     return new Promise((resolve, reject) => {
         runQuery(`UPDATE iot_device SET name='${deviceName}', user_id=${userID}, hub_id=${hubID} WHERE sn_number='${deviceNum}'`).then(data => {
-            getDevices(hubID, userID).then(data => {
+            getDevices(userID).then(data => {
                 resolve(data);
             }).catch(err => {
                 console.log(err);
@@ -80,16 +80,16 @@ function getHubs(userID) {
     });
 }
 
-function getDevices(hubID, userID) {
+function getDevices(userID) {
     return new Promise((resolve, reject) => {
         runQuery(`SELECT iot_device.*, device_types.name AS device_name FROM iot_device 
-            INNER JOIN device_types ON iot_device.type_id=device_types.id 
-            WHERE user_id=${userID} AND hub_id=${hubID}`).then(data => {            
-            resolve(data);
-        }).catch(err => {
-            console.log(err);
-            reject(err);
-        });
+                INNER JOIN device_types ON iot_device.type_id=device_types.id 
+                WHERE user_id=${userID}`).then(data => {
+                resolve(data);
+            }).catch(err => {
+                console.log(err);
+                reject(err);
+            });
     });
 }
 
@@ -125,10 +125,10 @@ function deleteDevices(hubID) {
     });
 }
 
-function deleteDevice(deviceID, hubID, userID) {
+function deleteDevice(deviceID, userID) {
     return new Promise((resolve, reject) => {
-        runQuery(`UPDATE iot_device SET user_id=null, hub_id=null WHERE id='${deviceID}'`).then(data => {            
-            getDevices(hubID, userID).then(data => {
+        runQuery(`UPDATE iot_device SET name=null, user_id=null, hub_id=null WHERE id='${deviceID}'`).then(data => {            
+            getDevices(userID).then(data => {
                 resolve(data);
             }).catch(err => {
                 console.log(err);

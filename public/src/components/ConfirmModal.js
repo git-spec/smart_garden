@@ -9,7 +9,7 @@ const ConfirmModal = props => {
             </ModalHeader>
             <ModalBody>{props.children}</ModalBody>
             <ModalFooter>
-                <Button color="danger" onClick={() => props.delete(props.payload)}>
+                <Button color="danger" onClick={props.delete}>
                     Delete
                 </Button>{' '}
                 <Button color="secondary" onClick={props.close}>
