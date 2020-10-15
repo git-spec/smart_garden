@@ -13,12 +13,10 @@ function checkUser(user, password) {
     if (validator.isEmail(user)) {
       runQuery(`SELECT * FROM users where email like '${user}'`)
         .then((result) => {
-          // console.log(result)
           if (result.length === 0) {
             reject(4);
           } else {
             if (passwordHash.verify(password, result[0].password)) {
-              // result[0]._id = result[0].id
               if (result[0].verified) {
                 resolve(result[0]);
               }
@@ -110,9 +108,100 @@ function verifyUser(email) {
   });
 }
 
+// send verify confirm message
+function confirmVerifiedUser(email) {
+  return new Promise((resolve, reject) => {
+   // email message
+        let message = `Thank You For Register,\n`;
+        message += "Welcome to our website!\n";
+        message +=
+          "Your mail is verified now you can login and enjoy\n";
+        message += `http://localhost:3000/login`;
+        emailSender
+          .sendEmail(email, "Confirm Verifying Email", message)
+          .then(() => {
+            resolve();
+          })
+          .catch((error) => {
+            reject(error);
+          });
+  });
+}
+
+// send link to reset users password
+function sendResetLink(email) {
+  return new Promise((resolve, reject) => {
+    runQuery(
+      `SELECT * FROM users where email like '${email}'`
+    )
+      .then((result) => {
+        if (result.length) {
+          // email message
+               let message = `Click here To reset your password: \n`;
+               message += `http://localhost:3000/reset/${result[0].id * 135531}/${email}`;
+               emailSender
+                 .sendEmail(email, "Reset Password Account", message)
+                 .then(() => {
+                   resolve();
+                 })
+                 .catch((error) => {
+                   reject(error);
+                 });
+          resolve(result);
+        } else {
+          reject(4);
+        }
+      })
+      .catch((err) => {
+        reject(2);
+      });
+  });
+}
+
+
+// UPDATE `users` SET `password`= 1234 WHERE  `email` like 'hamoudshwiri@gmail.com' AND id LIKE 12  ${passwordHash.generate(pass)}
+// UPDATE `users` SET `password`= 1234 WHERE  `email` = 'hamoudshwiri@gmail.com' AND id = 12
+
+// send link to reset users password
+function resetPass(email, id, pass) {
+  return new Promise((resolve, reject) => {
+    const Id = id /135531
+    runQuery(
+      `UPDATE users SET password = '${passwordHash.generate(pass)}' WHERE email like '${email}' and id = ${Id}`
+    )
+      .then((result) => {
+        console.log('here is the result '+ result);
+        if (result) {
+          // email message
+               let message = `We have successfully changed your password\n`;
+               message += `you can login now with your new password `;
+               message += `http://localhost:3000/login`;
+               emailSender
+                 .sendEmail(email, "Reset Password is success", message)
+                 .then(() => {
+                   resolve();
+                 })
+                 .catch((error) => {
+                   reject(error);
+                 });
+          resolve(result);
+        } else {
+          reject(4);
+        }
+      })
+      .catch((err) => {
+        reject(2);
+        console.log(err);
+      });
+  });
+}
+
 /* ***************************************************** EXPORT ******************************************************* */
 module.exports = {
   checkUser,
   registerUser,
   verifyUser,
+  confirmVerifiedUser,
+  sendResetLink,
+  resetPass
 };
