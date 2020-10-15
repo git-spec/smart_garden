@@ -1,20 +1,226 @@
-* {
+:root {
+    --font-main: Helvetica, Arial;
+    --font-s-2: 1.4rem;
+    --font-s-3: 1rem;
+    --font-s-4: .8rem;
+    --text-trans: rgba(255, 255, 255, .7);
+    --color-1: rgb(36, 27, 18);
+};
+
+*, *:before, *:after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-  
-  body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-      monospace;
-  }
-  
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  height: 100vh;
+  background-color: var(--color-1);
+  background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
+  background-size: 100% auto;
+}
+
+.badge-pill {
+  border: 3px solid white !important;
+}
+
+.text-trans {
+  color: var(--text-trans);
+}
+
+.dropdown-menu {
+  background-color: rgba(255, 255, 255, .3) !important;
+}
+
+.logo {
+  width: 5rem;
+  height: 3rem;
+  fill: white;
+}
+
+/* .navbar-toggler {
+  display: block !important;
+} */
+
+svg.plus,
+svg.minus {
+  fill: white;
+  width: .5rem;
+  height: .5rem;
+}
+
+.layer {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(26, 17, 8, .8);
+  position: fixed;
+}
+
+.layer-space {
+  height: 5rem;
+}
+
+.nav-space {
+  width: 100vw;
+  height: 5rem;
+  background-color: var(--color-1);
+  background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
+  background-size: 100% auto;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+}
+
+.navbar-toggler-icon {
+  color: white; /* Changes regular toggle color */
+}
+
+h1,
+h2,
+h3 {
+  position: relative;
+}
+
+.btn {
+  position: relative;
+}
+
+.btn.btn-outline-light:hover,
+.btn.btn-outline-light:active {
+  background-color: white !important;
+  color: none;
+}
+
+/* input {
+  position: relative;
+} */
+
+.btn.plus,
+.btn.minus,
+.btn.plus-minus {
+  line-height: .4 !important;
+}
+
+.btn:hover > .plus,
+.btn:active > .plus,
+.btn:hover > .minus,
+.btn:active > .minus,
+.plus-input svg:hover,
+.plus-input svg:active {
+  filter:invert();
+}
+
+.btn.plus.badge-pill,
+.btn.minus.badge-pill,
+.btn.plus-minus.badge-pill {
+  border: 2px solid white !important;
+}
+
+.btn.plus-minus > svg.minus {
+  display: none;
+}
+
+.btn.plus-minus.change > svg.plus {
+  display: none;
+}
+
+.btn.plus-minus.change > svg.minus {
+  display: static;
+}
+
+.btn.accordion {
+  background-color: transparent;
+  border-color: transparent;
+  font-size: 1.5rem;
+  color: var(--text-trans);
+}
+
+.btn.accordion:hover,
+.btn.accordion:active,
+.btn.accordion:focus,
+.btn.accordion.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.col-md-9 {
+  border: 3px solid white;
+  border-radius: 1rem;
+}
+
+.card,
+.card .btn {
+  background-color: transparent !important;
+  border-color: transparent;
+}
+
+.collapse > .card > .card-body {
+  font-size: 1.25rem;
+  color: var(--text-trans);
+}
+
+
+
+
+
+
+
+.list-group-item {
+  background-color: transparent !important;
+}
+
+.plus-minus > input:last-of-type {
+  display: block;
+  flex: nowrap !important;
+}
+
+.col > label.checkbox {
+  position: absolute;
+  width: 2.345rem;
+  height: 2.345rem;
+}
+
+.col > .input-group > .input-group-prepend > .btn {
+  border-width: 0 !important;
+}
+
+.col > .input-group > input,
+.col > .input-group > .input-group-append > .btn {
+  display: none;
+}
+
+.col > input[type=checkbox]:checked ~ .input-group > input,
+.col > input[type=checkbox]:checked ~ .input-group > .input-group-append > .btn:last-child {
+  display: block;
+}
+
+.input-group > input {
+  border-width: 3px 0;
+  border-color: white;
+}
+
+.input-group > .input-group-prepend > .btn {
+  border-right-width: 0 !important;
+}
+
+.input-group > .input-group-append > .btn {
+  border-left-width: 0 !important;
+}
+
+.input-group > .input-group-prepend > .btn > svg.minus {
+  display: none !important;
+}

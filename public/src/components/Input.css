@@ -1,0 +1,84 @@
+input {
+    font-family: inherit;
+    border-style: solid;
+    border-radius: var(--font-s-3);
+    background-color: rgba(255, 255, 255, 0);
+    padding: 0 .5rem;
+
+    position: relative;     /* For focus state's z-index */
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;       /* https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size */
+    margin-bottom: 0;
+}
+
+input.border-w-05 {
+    border-width: .5px;
+}
+
+input.border-w-1 {
+    border-width: 1px;
+}
+
+input.border-w-2 {
+    border-width: 2px;
+}
+
+input.border-w-3 {
+    border-width: 3px;
+}
+
+input.border-w-4 {
+    border-width: 4px;
+}
+
+input.border-c-white {
+    border-color: var(--white);
+}
+
+input.border-c-light {
+    border-color: var(--light);
+}
+
+input.border-c-primary {
+    border-color: var(--primary);
+}
+
+input.border-c-secondary {
+    border-color: var(--secondary);
+}
+
+input.font-main {
+    font-family: var(--font-main);
+}
+
+input.font-s-2 {
+    font-size: var(--font-s-3);
+    border-radius: var(--font-s-3);
+}
+
+input.font-s-3 {
+    font-size: var(--font-s-3);
+    border-radius: var(--font-s-3);
+}
+
+input.font-s-4 {
+    font-size: var(--font-s-3);
+    border-radius: var(--font-s-3);
+}
+
+input.white {
+    color: var(--white);
+}
+
+input.light {
+    color: var(--light);
+}
+
+input.primary {
+    color: var(--primary);
+}
+
+input.secondary {
+    color: var(--secondary);
+}
