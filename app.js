@@ -1,5 +1,6 @@
 /* ---------------------------------------- SETUP ---------------------------------------- */
 const express = require('express');
+const session = require('express-session')
 const fs = require('fs');
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
@@ -10,13 +11,18 @@ const app = express();
 app.use(express.static(__dirname + '/public/build'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
+const sessionOptions = {
+    secret: 'bookStore',
+    cookie: {}
+}
+app.use(session(sessionOptions))
+
 app.use(cors());
 
 const port = process.env.PORT || 5000;
 
 // modules
-const {checkHubNum} = require('./modules/devicesAuth');
-const {registerUser, checkUser, verifyUser} = require('./modules/usersAuth')
+const {registerUser, checkUser, verifyUser, confirmVerifiedUser, sendResetLink, resetPass} = require('./modules/usersAuth')
 const {
     checkHubNum, 
     checkDeviceNum, 
@@ -50,7 +56,7 @@ app.post('/register', (req, res) => {
             console.log(error);
             if (error == "exist") {
                 res.json(3)
-            } else {
+            } else{
                 res.json(4)
             }
         })
@@ -66,7 +72,7 @@ app.post('/login', (req, res) => {
     // 4 user not exist
     if (req.body.email && req.body.password) {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
-            // req.session.user = user
+            req.session.user = user
             res.json(1)
         }).catch(error => {
             console.log(error);
@@ -85,12 +91,53 @@ app.post('/login', (req, res) => {
 app.post('/verification', (req, res) => {
     verifyUser(req.body.email).then(() => {
         res.json(1);
-    //   res.send("You've verified your account!");
+        // confirm the user with email 
+        confirmVerifiedUser(req.body.email).then(() => {
+            res.json(1);
+        }).catch(err => {
+            res.json(2)
+        });
     }).catch(err => {
         res.json(2)
       console.log(err);
     });
   });
+
+// Reset user Pass page
+app.post('/sendResetLink', (req, res) => {
+    // 1 sending success
+    // 2 serverError
+    // 4 user not exist
+
+    sendResetLink(req.body.email).then(() => {
+        res.json(1);
+    }).catch(err => {
+        if (err == 4) {
+            res.json(4)
+        } else {
+            res.json(2)
+        }
+      console.log(err);
+    });
+  });
+
+// Reset user Pass query
+app.post('/resetPass', (req, res) => {
+    // 1 sending success
+    // 2 serverError
+
+    resetPass(req.body.email, req.body.id, req.body.pass).then(() => {
+        res.json(1);
+    }).catch(err => {
+        if (err == 4) {
+            res.json(4)
+        } else {
+            res.json(2)
+        }
+    });
+  });
+
+
 
 app.post('/checkhubnum', (req, res) => {
     // 1 serialnumber found
