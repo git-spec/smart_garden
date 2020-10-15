@@ -12,6 +12,8 @@ import CheckLogin from './CheckLogin';
 import Register from './Register';
 import Login from './Login';
 import Verification from './Verification';
+import resetPass from './ResetPass'
+import resetPage from './ResetPage'
 
 import Products from './Products';
 
@@ -37,6 +39,8 @@ const Router = props => {
                 <Route path="/register" exact component={Register} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/verify/:email" exact component={Verification} />
+                <Route path='/resetPass' exact component={resetPass} />
+                <Route path='/reset/:id/:email' exact component={resetPage} />
                 <Route path="/user" exact component={() => <CheckLogin><Products /></CheckLogin>} />
             </Switch>
         </BrowserRouter>
