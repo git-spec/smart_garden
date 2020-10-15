@@ -9,12 +9,11 @@ const Verification = () => {
 
     useEffect(() => {
         sendParams(params.email).then(data => {
-                if (data !== 2) {
-                    history.push('/login');
-                } else {
-                    history.push('/register');
-                }
-            })
+            if (data !== 2) {
+                history.push('/login');
+            } else {
+                history.push('/register');
+            }
         }).catch(err => {
             history.push('/register');
         });
