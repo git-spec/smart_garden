@@ -168,3 +168,12 @@ app.use('/', (req, res) => {
 app.listen(port, () => {
     console.log(`App is listening to port: ${port}`);
 });
+
+
+/*
+robot.txt
+# https://www.robotstxt.org/robotstxt.html
+#User-agent: *
+#Disallow:
+
+*/ 

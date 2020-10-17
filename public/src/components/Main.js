@@ -1,12 +1,10 @@
-import React from 'react';
-import {Row, Col} from 'reactstrap'
+import React, { Fragment } from 'react';
 
 function Main() {
     return(
-        <Row>
-            <Col>Hallo Welt!</Col>
-        </Row>
-    )
+        <Fragment>
+        </Fragment>
+    );
 }
 
-export default Main
+export default Main;
