@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 import {Container, Row, Col, Button, Collapse, Card, CardBody, Input} from 'reactstrap';
 
 function User() {
@@ -8,7 +8,6 @@ function User() {
         isOpen2: false,
         inputHub: false
     };
-
     const [state, setState] = useState(initialState);
   
     const toggle1 = () => state.isOpen1 === false ? setState({...state, isOpen1: true}) : setState({...state, isOpen1: false});
@@ -17,12 +16,12 @@ function User() {
     const onBtnInputHub = () => {
         if (state.inputHub === false) {
             setState({...state, change: 'change'});
-            setState({...state, isOpen1:true});
+            setState({...state, isOpen1: true});
             setState({...state, inputHub: true});
         } else {
             setState({...state, change: ''});
             setState({...state, inputHub: false});
-            setState({...state, isOpen1:false});
+            setState({...state, isOpen1: false});
         };
     }
   
@@ -33,7 +32,7 @@ function User() {
                 <Col md="3">
                     <div>
                         <Button className="accordion text-uppercase p-0" onClick={toggle1}>
-                            hub
+                            hubs
                         </Button>
                         <Button className={`plus-minus badge-pill btn-outline-light bg-transparent ml-3 p-1 ${state.change}`} onClick={onBtnInputHub}>
                             <svg version="1.1" className="plus"
@@ -52,8 +51,8 @@ function User() {
                             {state.inputHub === true ?
                                 <Row>
                                     <Col>
-                                        <Input className="badge-pill bg-transparent py-0" placeholder="Enter the serial number." />
-                                        <Input className="badge-pill bg-transparent py-0" placeholder="Enter a name for your hub." />
+                                        <Input className="badge-pill bg-transparent py-0" placeholder="Enter the serial number" />
+                                        <Input className="badge-pill bg-transparent py-0" placeholder="Enter a name for your hub" />
                                     </Col>
                                     <Col>
                                         <Button className="plus badge-pill btn-outline-light bg-transparent ml-3 p-1">
