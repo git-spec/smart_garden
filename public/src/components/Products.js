@@ -1,10 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 import {
     InputGroup, 
     Button, 
     Input, 
-    Container
+    Container,
+    Collapse, 
+    // CardBody, 
+    // Card,
+    // CardHeader
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
@@ -24,14 +28,18 @@ const Hubs = props => {
 
     const initialState = {
         hubs: [],
-        hubName: '',
-        hubNum: '',
         devices: [],
+        hubName: '',
         deviceName: '',
+        hubNum: '',
         deviceNum: '',
+        collapseHubs: false, 
+        collapseHub: null, 
+        collapseAddHub: false,
+        collapseAddDevice: null,
         confirmModalShow: false,
         confirmModalContent: null,
-        confirmModalDelete: null
+        confirmModalDelete: null,
     };
     const [state, setState] = useState(initialState);
 
@@ -66,8 +74,35 @@ const Hubs = props => {
         });
     }, []);
 
-    // console.log(state.hubs);
-    // console.log(state.devices);
+    // toggles
+    const toggleHubs = e => {
+        setState({
+            ...state,
+            collapseHubs: !state.collapseHubs
+        });
+    }
+    const toggleHub = e => {
+        let event = e.target.dataset.event;
+        // console.log(event);
+        setState({
+            ...state,
+            collapseHub: state.collapseHub === Number(event) ? null : Number(event)
+        });
+    }
+    const toggleAddHub = e => {
+        setState({
+            ...state,
+            collapseAddHub: !state.collapseAddHub
+        });
+    }
+    const toggleAddDevice = e => {
+        let event = e.target.dataset.event;
+        // console.log(event);
+        setState({
+            ...state,
+            collapseAddDevice: state.collapseAddDevice === Number(event) ? null : Number(event)
+        });
+    }
 
     // delete hub
     const onDeleteHubBtnClick = (e, hubID) => {
@@ -220,54 +255,9 @@ const Hubs = props => {
     };
     
     if (state.hubs && state.devices) {
-        const hubsElement = state.hubs.map((hub, idx) => {
-            const devicesElement = state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                return (
-                    <div key={device.id} className="mb-3">
-                        {idx +1}. Device | name: {device.name} | type: {device.device_name} | ID: {device.id} | hubID: {device.hub_id}
-                        <Button className="ml-2" outline color="danger" size="sm" onClick={e => onDeleteDeviceBtnClick(e, device.id)}>
-                            Delete
-                        </Button>{' '}
-                    </div>
-                );
-            });
-            return (
-                <div key={hub.id} className="mb-3">
-                    <Link to={'/user/hub/' + hub.id}>
-                        {idx + 1}. Hub | name: {hub.name} | ID: {hub.id}
-                    </Link>
-                    <Button
-                        className="ml-2"
-                        outline
-                        color="danger"
-                        size="sm"
-                        onClick={e => onDeleteHubBtnClick(e, hub.id)}
-                    >
-                        Delete
-                    </Button>{' '}
-                    {devicesElement}
-                    <InputGroup className="mb-3">
-                        <Input
-                            placeholder="Insert a Name"
-                            onChange={e => setState({...state, deviceName: e.target.value})}
-                            value={state.deviceName}
-                        />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                        <Input
-                            placeholder="Insert a Serialnumber"
-                            onChange={e => setState({...state, deviceNum: e.target.value})}
-                            value={state.deviceNum}
-                        />
-                    </InputGroup>
-                    <Button className="mb-3" size="sm" outline color="primary" onClick={e => onAddDeviceBtnClick(e, hub.id)}>
-                        Add Device
-                    </Button>{' '}                
-                </div>
-            );
-        });
         return (
             <Container>
+                {/* modal */}
                 <ConfirmModal
                     className="bg-danger"
                     title="Confirm Deletion"
@@ -276,25 +266,92 @@ const Hubs = props => {
                     close={() => setState({...state, confirmModalShow: false})}
                 >{state.confirmModalContent}
                 </ConfirmModal>
-                <h3>Smart Garden</h3>
-                {hubsElement}
-                <InputGroup className="mb-3">
-                    <Input
-                        placeholder="Insert a Name"
-                        onChange={e => setState({...state, hubName: e.target.value})}
-                        value={state.hubName}
-                    />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                    <Input
-                        placeholder="Insert a Serialnumber"
-                        onChange={e => setState({...state, hubNum: e.target.value})}
-                        value={state.hubNum}
-                    />
-                </InputGroup>
-                <Button className="mb-3" size="sm" outline color="primary" onClick={onAddHubBtnClick}>
-                    Add Hub
-                </Button>{' '}
+                {/* hubs */}
+                <div onClick={toggleHubs}>
+                    Hubs
+                </div>
+                <Collapse isOpen={state.collapseHubs}>
+                    {/* hub-loop */}
+                    {state.hubs.map((hub, idx) => {
+                        return (
+                            <div key={hub.id} className="mb-3">
+                                <div onClick={toggleHub} data-event={hub.id}>
+                                    {idx + 1}. Hub {hub.name}
+                                    {/* {idx + 1}. Hub | name: {hub.name} | ID: {hub.id} */}
+                                </div>
+                                <Button
+                                    className="ml-2"
+                                    outline
+                                    color="danger"
+                                    size="sm"
+                                    onClick={e => onDeleteHubBtnClick(e, hub.id)}
+                                >
+                                    Delete
+                                </Button>{' '}
+                                <Collapse isOpen={state.collapseHub === hub.id}>
+                                    {/* device-loop */}
+                                    {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                        return (
+                                            <ul key={device.id} className="mb-3">
+                                                {idx +1}. Device {device.name} | {device.device_name}
+                                                {/* {idx +1}. Device | name: {device.name} | type: {device.device_name} | ID: {device.id} | hubID: {device.hub_id} */}
+                                                <Button className="ml-2" outline color="danger" size="sm" onClick={e => onDeleteDeviceBtnClick(e, device.id)}>
+                                                    Delete
+                                                </Button>{' '}
+                                            </ul>
+                                        );
+                                    })}
+                                    {/* add device */}
+                                    <ul onClick={toggleAddDevice} data-event={hub.id}>
+                                        Add Device
+                                    </ul>
+                                    <Collapse isOpen={state.collapseAddDevice === hub.id}>
+                                        <InputGroup className="mb-3">
+                                            <Input
+                                                placeholder="Insert a Name"
+                                                onChange={e => setState({...state, deviceName: e.target.value})}
+                                                value={state.deviceName}
+                                            />
+                                        </InputGroup>
+                                        <InputGroup className="mb-3">
+                                            <Input
+                                                placeholder="Insert a Serialnumber"
+                                                onChange={e => setState({...state, deviceNum: e.target.value})}
+                                                value={state.deviceNum}
+                                            />
+                                        </InputGroup>
+                                        <Button className="mb-3" size="sm" outline color="primary" onClick={e => onAddDeviceBtnClick(e, hub.id)}>
+                                            Add Device
+                                        </Button>{' '}  
+                                    </Collapse>              
+                                </Collapse>              
+                            </div>
+                        );
+                    })}
+                    {/* add hub */}
+                    <div onClick={toggleAddHub}>
+                        Add Hub
+                    </div>
+                    <Collapse isOpen={state.collapseAddHub}>
+                        <InputGroup className="mb-3">
+                            <Input
+                                placeholder="Insert a Name"
+                                onChange={e => setState({...state, hubName: e.target.value})}
+                                value={state.hubName}
+                            />
+                        </InputGroup>
+                        <InputGroup className="mb-3">
+                            <Input
+                                placeholder="Insert a Serialnumber"
+                                onChange={e => setState({...state, hubNum: e.target.value})}
+                                value={state.hubNum}
+                            />
+                        </InputGroup>
+                        <Button className="mb-3" size="sm" outline color="primary" onClick={onAddHubBtnClick}>
+                            Add Hub
+                        </Button>{' '}
+                    </Collapse>              
+                </Collapse>
             </Container>
         );
     } else {
