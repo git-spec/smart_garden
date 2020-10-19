@@ -17,6 +17,7 @@ import resetPage from './ResetPage'
 import ErrorPage from './ErrorPage';
 
 import Products from './Products';
+import User from './User';
 
 const Router = props => {
 
@@ -43,7 +44,8 @@ const Router = props => {
                 <Route path='/resetPass' exact component={resetPass} />
                 <Route path='/reset/:id/:email' exact component={resetPage} />
                 <Route path="/user" exact component={() => <CheckLogin><Products /></CheckLogin>} />
-                <Route path="/"  component={ErrorPage} />
+                <Route path="/products" exact component={User} />
+                <Route path="/" component={ErrorPage} />
             </Switch>
         </BrowserRouter>
     );
