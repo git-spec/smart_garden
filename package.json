@@ -1,0 +1,19 @@
+{
+  "name": "smart-garden",
+  "version": "1.0.0",
+  "description": "this is the raspberry project following to smart garden project ",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/git-spec/smart_garden.git"
+  },
+  "author": "Felix Wurst",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/git-spec/smart_garden/issues"
+  },
+  "homepage": "https://github.com/git-spec/smart_garden#readme"
+}
