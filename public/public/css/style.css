@@ -168,7 +168,7 @@ h3 {
   border-color: transparent;
 }
 
-.collapse > .card > .card-body {
+.collapse > .card-body {
   font-size: 1.25rem;
   color: var(--text-trans);
 }
