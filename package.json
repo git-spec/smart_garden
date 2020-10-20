@@ -4,7 +4,8 @@
   "description": "this is the raspberry project following to smart garden project ",
   "main": "app.js",
   "scripts": {
-    "test": "npm start"
+    "test": "npm start",
+    "start": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/git-spec/smart_garden/issues"
   },
-  "homepage": "https://github.com/git-spec/smart_garden#readme"
+  "homepage": "https://github.com/git-spec/smart_garden#readme",
+  "dependencies": {
+    "socket.io-client": "^2.3.1"
+  }
 }
