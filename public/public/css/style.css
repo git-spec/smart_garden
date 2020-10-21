@@ -1,10 +1,82 @@
+@font-face {
+  font-family: Nunito Sans Regular;
+  src: url('../fonts/NunitoSans-Regular.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Semibold;
+  src: url('../fonts/NunitoSans-SemiBold.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Bold;
+  src: url('../fonts/NunitoSans-Bold.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Extrabold;
+  src: url('../fonts/NunitoSans-ExtraBold.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Black;
+  src: url('../fonts/NunitoSans-Black.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Italic;
+  src: url('../fonts/NunitoSans-Italic.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Semibold Italic;
+  src: url('../fonts/NunitoSans-SemiBoldItalic.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Bold Italic;
+  src: url('../fonts/NunitoSans-BoldItalic.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Extrabold Italic;
+  src: url('../fonts/NunitoSans-ExtraBoldItalic.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Light;
+  src: url('../fonts/NunitoSans-Light.ttf');
+}
+
+@font-face {
+  font-family: Nunito Sans Light Italic;
+  src: url('../fonts/NunitoSans-LightItalic.ttf');
+}
+
+@font-face {
+  font-family: DSISO1;
+  src: url('../fonts/DSISO1.ttf');
+}
+
+@font-face {
+  font-family: Cuyabra;
+  src: url('../fonts/cuyabra.ttf');
+}
+
+@font-face {
+  font-family: fixed v02;
+  src: url('../fonts/911Fonts.com_fixedv02Regular__-_911fonts.com_fonts_pXwa.ttf');
+}
+
 :root {
-    --font-main: Helvetica, Arial;
+    --font-main: 'Nunito Sans';
     --font-s-2: 1.4rem;
     --font-s-3: 1rem;
     --font-s-4: .8rem;
     --text-trans: rgba(255, 255, 255, .7);
     --color-1: rgb(36, 27, 18);
+    --color-danger: red;
+    --color-success: green;
 };
 
 *, *:before, *:after {
@@ -15,22 +87,33 @@
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 #root {
+  font-family: 'Ubuntu';
+  font-weight: 300;
   height: 100vh;
   background-color: var(--color-1);
   background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
-  background-size: 100% auto;
+  background-size: cover;
+  background-position: left 5rem;
+  /* position: relative; */
+}
+
+#root > img {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  bottom: 0;
 }
 
 .badge-pill {
@@ -63,21 +146,24 @@ svg.minus {
 }
 
 .layer {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: rgba(26, 17, 8, .8);
   position: fixed;
+  /* top: 5rem; */
 }
 
 .layer-space {
   height: 5rem;
+  position: fixed;
+  top: 0;
 }
 
 .nav-space {
-  width: 100vw;
+  width: 100%;
   height: 5rem;
-  background-color: var(--color-1);
-  background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
+  /* background-color: var(--color-1); */
+  /* background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right; */
   background-size: 100% auto;
   position: fixed;
   top: 0;
@@ -91,6 +177,9 @@ svg.minus {
 h1,
 h2,
 h3 {
+  font-family: Cuyabra;
+  letter-spacing: .02rem;
+  /* font-weight: 700; */
   position: relative;
 }
 
@@ -168,10 +257,105 @@ h3 {
   border-color: transparent;
 }
 
-.collapse > .card-body {
+.collapse > .card > .card-body {
   font-size: 1.25rem;
   color: var(--text-trans);
 }
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: calc(var(--font-s-3) * 2.5);
+  height: calc(var(--font-s-3) / 2);
+  margin: .5rem 0;
+}
+
+.switch::before {
+  position: absolute;
+  cursor: pointer;
+  content: "";
+  height: var(--font-s-3);
+  width: var(--font-s-3);
+  top: calc(var(--font-s-3) / -4);
+  background-color: var(--color-danger);
+  border: .25rem solid white;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: .4s;
+  z-index: 1;
+}
+
+.switch::after {
+  position: absolute;
+  cursor: pointer;
+  content: "";
+  height: var(--font-s-3);
+  width: var(--font-s-3);
+  top: calc(var(--font-s-3) / -4);
+  right: 0;
+  background-color: var(--color-success);
+  border: .25rem solid white;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: var(--font-s-3);
+  width: var(--font-s-3);
+  top: calc(var(--font-s-3) / -4);
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  z-index: 1;
+}
+
+/* input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+} */
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(calc(var(--font-s-3) * 1.5));
+  -ms-transform: translateX(calc(var(--font-s-3) * 1.5));
+  transform: translateX(calc(var(--font-s-3) * 1.5));
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: var(--font-s-3);
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
 
 
 
