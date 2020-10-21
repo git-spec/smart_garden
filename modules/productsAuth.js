@@ -1,6 +1,6 @@
 /* ---------------------------------------- SETUP ---------------------------------------- */
 // modules
-const runQuery = require('./mysqlCon');
+const {runQuery} = require('./mysqlCon');
 
 /* ---------------------------------------- FUNCTIONS ---------------------------------------- */
 function checkHubNum(hubNum) {
