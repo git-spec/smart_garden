@@ -1,12 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Container, Row, Col, Button, Collapse, Card, CardBody, Input} from 'reactstrap';
+import LineChart from './LineChart';
+import {getData} from '../services/getData';
 
 function User() {
     const initialState = {
         change: '',
         isOpen1: false,
         isOpen2: false,
-        inputHub: false
+        inputHub: false,
+        feed: []
     };
     const [state, setState] = useState(initialState);
   
@@ -24,10 +27,21 @@ function User() {
             setState({...state, isOpen1: false});
         };
     }
+
+    useEffect(() => {
+        window.setInterval(() => {
+          setState({
+            ...state,
+            feed: getData()
+          })
+        }, 5000)
+    })
+
+    // console.log(state.feed);
   
     return(
         <Container className="mt-5 pt-5">
-            <h3 className="text-trans mb-4">Hello User</h3>
+            <h3 className="text-trans mb-4">Hello User, how are you?</h3>
             <Row>
                 <Col md="3">
                     <div>
@@ -100,6 +114,12 @@ function User() {
                     </div>
                 </Col>
                 <Col md="9">
+                    <label className="switch">
+                        <input type="checkbox" />
+                        <span className="slider round"></span>
+                    </label>
+                    <p className="text-light">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
+                    <LineChart data={getData()[0].data} title={getData()[0].label} color='white' />
                 </Col>
             </Row>
         </Container>
