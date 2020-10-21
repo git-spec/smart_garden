@@ -134,7 +134,6 @@ const Login = props => {
                                 <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                 <Input
                                     className="badge-pill bg-transparent"
-                                    className="badge-pill bg-transparent"
                                     type="password"
                                     placeholder="Password"
                                     required

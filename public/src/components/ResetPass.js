@@ -1,5 +1,14 @@
 import React, {useState} from 'react';
-import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {
+    Container, 
+    // Row, 
+    Col, 
+    Form, 
+    FormGroup, 
+    Label, 
+    Input, 
+    Button
+} from 'reactstrap';
 // import {Link, useHistory} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
 import {sendResetLink} from '../services/api';
