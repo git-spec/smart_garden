@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/git-spec/smart_garden#readme",
   "dependencies": {
+    "nrf24": "^0.1.7-beta",
     "socket.io-client": "^2.3.1"
   }
 }
