@@ -1,22 +1,46 @@
 import React, {useState} from 'react'
-import {Container,
-        Collapse,
-        Navbar,
-        NavbarToggler,
-        NavbarBrand,
-        Nav,
-        NavItem,
-        NavLink
+import {
+    Container,
+    Collapse,
+    Navbar,
+    NavbarToggler,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    NavLink
 } from 'reactstrap';
+import './Navigation.css';
 
-function Navigation() {
-    // flag for open menu
-    const [collapsed, setCollapsed] = useState(true);
+function Navigation(props) {
+
+    const toggleIconRef = React.createRef();
+    const sidebarRef = React.createRef();
+
+    const initialState = {
+        collapsed: true
+    };
+    const [state, setState] = useState(initialState);
+
+    // // flag for open menu
+    // const [collapsed, setCollapsed] = useState(true);
+
     // opens menu
-    const toggleNavbar = () => setCollapsed(!collapsed);
-  
-    return(
-        <Navbar light expand="md" fixed="top">
+    const toggleNavbar = () => {
+        setState({...state, collapsed: !state.collapsed});
+        toggleIconRef.current.classList.toggle('open');
+        sidebarRef.current.classList.toggle('active');
+    };
+    
+    return (
+        <Navbar 
+            // light
+            // dark
+            // fixed="top"
+            // color="primary" 
+            style={{backgroundColor: "rgb(36, 27, 18)"}}
+            // role=""
+            // expand="sm" 
+        >
             <Container>
                 <NavbarBrand href="/">
                     <svg version="1.1" className="logo"
@@ -51,20 +75,55 @@ function Navigation() {
                             C392.854,24.837,376.864,28.757,372.027,28.757z"/>
                     </svg>
                 </NavbarBrand>
-                <NavbarToggler onClick={toggleNavbar} />
-                <Collapse isOpen={!collapsed} navbar>
-                <Nav className="ml-auto" navbar>
-                    <NavItem>
-                    <NavLink className="text-white" href="/components/">Components</NavLink>
-                    </NavItem>
-                    <NavItem>
-                    <NavLink className="text-white" href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-                    </NavItem>
-                </Nav>
+                <NavbarToggler onClick={toggleNavbar}>
+                    <div ref={toggleIconRef} className="animated-icon"><span></span><span></span><span></span></div>
+                </NavbarToggler>
+                <div ref={sidebarRef} id="sidebar">
+                    <Nav vertical>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">home</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">products</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">news</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">account</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">logout</NavLink>
+                        </NavItem>
+                    </Nav>
+                </div>
+                <Collapse isOpen={!state.collapsed} navbar>
+                    <Nav 
+                        // navbar 
+                        // justified
+                        fill
+                        // horizontal="end"
+                    >
+                        <NavItem>
+                            <NavLink className="text-white" href="/">home</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">products</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">news</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">account</NavLink>
+                        </NavItem>
+                        <NavItem>
+                            <NavLink className="text-white" href="/">logout</NavLink>
+                        </NavItem>
+                    </Nav>
                 </Collapse>
             </Container>
         </Navbar>
     )
 }
 
-export default Navigation
+export default Navigation;
