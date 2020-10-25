@@ -9,7 +9,7 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
-import './Navigation.css';
+import '../css/Navigation.css';
 
 function Navigation(props) {
 
