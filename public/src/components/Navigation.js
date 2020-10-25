@@ -13,22 +13,26 @@ import './Navigation.css';
 
 function Navigation(props) {
 
-    const toggleIconRef = React.createRef();
+    // refs
+    const toggleMobileIconRef = React.createRef();
+    const toggleDesktopIconRef = React.createRef();
     const sidebarRef = React.createRef();
 
+    // state
     const initialState = {
         collapsed: true
     };
     const [state, setState] = useState(initialState);
 
-    // // flag for open menu
-    // const [collapsed, setCollapsed] = useState(true);
-
-    // opens menu
-    const toggleNavbar = () => {
-        setState({...state, collapsed: !state.collapsed});
-        toggleIconRef.current.classList.toggle('open');
+    // opens menu on small devices
+    const toggleMobileNavbar = () => {
+        toggleMobileIconRef.current.classList.toggle('open');
         sidebarRef.current.classList.toggle('active');
+    };
+    // opens menu on large devices
+    const toggleDesktopNavbar = () => {
+        toggleDesktopIconRef.current.classList.toggle('open');
+        setState({...state, collapsed: !state.collapsed});
     };
     
     return (
@@ -38,7 +42,6 @@ function Navigation(props) {
             // fixed="top"
             // color="primary" 
             style={{backgroundColor: "rgb(36, 27, 18)"}}
-            // role=""
             // expand="sm" 
         >
             <Container>
@@ -75,8 +78,9 @@ function Navigation(props) {
                             C392.854,24.837,376.864,28.757,372.027,28.757z"/>
                     </svg>
                 </NavbarBrand>
-                <NavbarToggler onClick={toggleNavbar}>
-                    <div ref={toggleIconRef} className="animated-icon"><span></span><span></span><span></span></div>
+                {/* navbar toggle for devices smaller than 576px */}
+                <NavbarToggler className="d-block d-sm-none" onClick={toggleMobileNavbar}>
+                    <div ref={toggleMobileIconRef} className="animated-icon2"><span></span><span></span><span></span></div>
                 </NavbarToggler>
                 <div ref={sidebarRef} id="sidebar">
                     <Nav vertical>
@@ -97,6 +101,10 @@ function Navigation(props) {
                         </NavItem>
                     </Nav>
                 </div>
+                {/* navbar toggle for devices larger than 576px */}
+                <NavbarToggler className="d-none d-sm-block" onClick={toggleDesktopNavbar}>
+                    <div ref={toggleDesktopIconRef} className="animated-icon2"><span></span><span></span><span></span></div>
+                </NavbarToggler>
                 <Collapse isOpen={!state.collapsed} navbar>
                     <Nav 
                         // navbar 
