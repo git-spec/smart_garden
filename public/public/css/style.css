@@ -1,315 +1,336 @@
 @font-face {
-  font-family: Nunito Sans Regular;
-  src: url('../fonts/NunitoSans-Regular.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Semibold;
-  src: url('../fonts/NunitoSans-SemiBold.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Bold;
-  src: url('../fonts/NunitoSans-Bold.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Extrabold;
-  src: url('../fonts/NunitoSans-ExtraBold.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Black;
-  src: url('../fonts/NunitoSans-Black.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Italic;
-  src: url('../fonts/NunitoSans-Italic.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Semibold Italic;
-  src: url('../fonts/NunitoSans-SemiBoldItalic.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Bold Italic;
-  src: url('../fonts/NunitoSans-BoldItalic.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Extrabold Italic;
-  src: url('../fonts/NunitoSans-ExtraBoldItalic.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Light;
-  src: url('../fonts/NunitoSans-Light.ttf');
-}
-
-@font-face {
-  font-family: Nunito Sans Light Italic;
-  src: url('../fonts/NunitoSans-LightItalic.ttf');
-}
-
-@font-face {
-  font-family: DSISO1;
-  src: url('../fonts/DSISO1.ttf');
-}
-
-@font-face {
   font-family: Cuyabra;
-  src: url('../fonts/cuyabra.ttf');
+  src: url("../fonts/cuyabra.ttf");
 }
-
-@font-face {
-  font-family: fixed v02;
-  src: url('../fonts/911Fonts.com_fixedv02Regular__-_911fonts.com_fonts_pXwa.ttf');
-}
-
-:root {
-    --font-main: 'Nunito Sans';
-    --font-s-2: 1.4rem;
-    --font-s-3: 1rem;
-    --font-s-4: .8rem;
-    --text-trans: rgba(255, 255, 255, .7);
-    --color-1: rgb(36, 27, 18);
-    --color-danger: red;
-    --color-success: green;
-};
 
 *, *:before, *:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+  font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: white !important;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-}
-
-#root {
+body #root {
   font-family: 'Ubuntu';
   font-weight: 300;
   height: 100vh;
-  background-color: var(--color-1);
+  background-color: #241b12;
   background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
   background-size: cover;
-  background-position: left 5rem;
-  /* position: relative; */
+  background-position: 20% 40%;
 }
 
-#root > img {
-  position: fixed;
+body #root > .navbar {
+  background-color: #241b12;
+  -webkit-box-shadow: 0 12px 30px 6px #241b12;
+          box-shadow: 0 12px 30px 6px #241b12;
+}
+
+body #root > .navbar.navbar-toggler-icon {
+  color: white;
+}
+
+body #root .gradient {
   width: 100%;
   height: 100%;
-  left: 0;
-  bottom: 0;
+  background: -webkit-gradient(linear, left top, left bottom, from(#241b12), to(rgba(255, 0, 0, 0)));
+  background: linear-gradient(to bottom, #241b12, rgba(255, 0, 0, 0));
+  position: fixed;
 }
 
-.badge-pill {
-  border: 3px solid white !important;
+body #root .opac {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(26, 17, 8, 0.8);
+  position: fixed;
 }
 
-.text-trans {
-  color: var(--text-trans);
+body #root .cover {
+  width: 100%;
+  height: 100%;
+  background-color: #241b12;
+  position: fixed;
 }
 
-.dropdown-menu {
-  background-color: rgba(255, 255, 255, .3) !important;
+body #root .container {
+  position: relative;
 }
 
-.logo {
-  width: 5rem;
-  height: 3rem;
+body #root .container > form > .row .row > .col-6.text-right {
+  padding-left: 0;
+}
+
+body #root .container > form > .row .row > .col-6.text-right > span {
+  font-size: 0.8rem;
+}
+
+body #root > .container {
+  padding-top: 6rem;
+}
+
+body #root > .container .col-lg-8 {
+  border: none;
+}
+
+body .logo {
+  width: 4rem;
+  height: 2rem;
   fill: white;
 }
 
-/* .navbar-toggler {
-  display: block !important;
-} */
-
-svg.plus,
-svg.minus {
-  fill: white;
-  width: .5rem;
-  height: .5rem;
-}
-
-.layer {
-  width: 100%;
-  height: 100%;
-  background-color: rgba(26, 17, 8, .8);
-  position: fixed;
-  /* top: 5rem; */
-}
-
-.layer-space {
-  height: 5rem;
-  position: fixed;
-  top: 0;
-}
-
-.nav-space {
-  width: 100%;
-  height: 5rem;
-  /* background-color: var(--color-1); */
-  /* background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right; */
-  background-size: 100% auto;
-  position: fixed;
-  top: 0;
-  z-index: 1;
-}
-
-.navbar-toggler-icon {
-  color: white; /* Changes regular toggle color */
-}
-
-h1,
-h2,
-h3 {
+body h1,
+body h2,
+body h3 {
   font-family: Cuyabra;
   letter-spacing: .02rem;
-  /* font-weight: 700; */
-  position: relative;
+  color: white;
 }
 
-.btn {
-  position: relative;
+body a {
+  color: #00a8e6;
 }
 
-.btn.btn-outline-light:hover,
-.btn.btn-outline-light:active {
+body a:hover, body a:active {
+  color: #00a8e6;
+}
+
+body p {
+  font-size: 1.2rem;
+}
+
+body .badge-pill {
+  border: 0.1rem solid white !important;
+}
+
+body .text-transp {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .btn {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+}
+
+body .btn:hover, body .btn:active, body .btn.visited, body .btn:focus {
+  -webkit-transform: scale(130%);
+          transform: scale(130%);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+}
+
+body .btn.btn-outline-light:hover {
+  color: white !important;
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+}
+
+body .btn.btn-outline-light:active {
   background-color: white !important;
-  color: none;
+  color: #241b12 !important;
 }
 
-/* input {
+body .btn.btn-outline-light:active.down > span,
+body .btn.btn-outline-light:active.up > span {
+  background-color: #241b12 !important;
+}
+
+body .btn.plus, body .btn.minus {
+  width: 1.2rem;
+  height: 1.2rem;
   position: relative;
-} */
-
-.btn.plus,
-.btn.minus,
-.btn.plus-minus {
-  line-height: .4 !important;
 }
 
-.btn:hover > .plus,
-.btn:active > .plus,
-.btn:hover > .minus,
-.btn:active > .minus,
-.plus-input svg:hover,
-.plus-input svg:active {
-  filter:invert();
+body .btn.plus > span, body .btn.minus > span {
+  width: 0.6rem;
+  height: 0.1rem;
+  position: absolute;
+  left: 0.2rem;
+  top: 0.45rem;
+  background-color: white;
+  border-radius: 0.1rem;
 }
 
-.btn.plus.badge-pill,
-.btn.minus.badge-pill,
-.btn.plus-minus.badge-pill {
-  border: 2px solid white !important;
+body .btn.plus > span:last-child {
+  width: 0.1rem;
+  height: 0.6rem;
+  position: absolute;
+  top: 0.2rem;
+  left: 0.45rem;
+  background-color: white;
+  border-radius: 0.1rem;
 }
 
-.btn.plus-minus > svg.minus {
-  display: none;
+body .btn.plus:active > span,
+body .btn.minus:active > span {
+  background-color: #241b12;
 }
 
-.btn.plus-minus.change > svg.plus {
-  display: none;
+body .btn.down {
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: .3rem;
 }
 
-.btn.plus-minus.change > svg.minus {
-  display: static;
+body .btn.down > span {
+  width: 0.1rem;
+  height: 0.49rem;
+  display: inline-block;
+  background-color: white;
+  border-radius: 0.1rem;
 }
 
-.btn.accordion {
+body .btn.down > span:first-child {
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  float: left;
+}
+
+body .btn.down > span:last-child {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  float: right;
+}
+
+body .btn.up {
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 .3rem .12rem .3rem;
+}
+
+body .btn.up > span {
+  width: 0.1rem;
+  height: 0.49rem;
+  display: inline-block;
+  background-color: white;
+  border-radius: 0.1rem;
+}
+
+body .btn.up > span:first-child {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  float: left;
+}
+
+body .btn.up > span:last-child {
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  float: right;
+}
+
+body .btn.accordion.btn {
   background-color: transparent;
   border-color: transparent;
   font-size: 1.5rem;
-  color: var(--text-trans);
+  color: var(--text-transp);
 }
 
-.btn.accordion:hover,
-.btn.accordion:active,
-.btn.accordion:focus,
-.btn.accordion.btn-secondary:not(:disabled):not(.disabled):active {
+body .btn.accordion.btn:hover, body .btn.accordion.btn:active, body .btn.accordion.btn:focus, body .btn.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active {
   background-color: transparent;
   border-color: transparent;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
-.col-md-9 {
-  border: 3px solid white;
-  border-radius: 1rem;
-}
-
-.card,
-.card .btn {
+body .btn.accordion .collapse .card {
   background-color: transparent !important;
   border-color: transparent;
 }
 
-.collapse > .card > .card-body {
+body .btn.accordion .collapse .card .card-body {
   font-size: 1.25rem;
-  color: var(--text-trans);
+  color: var(--text-transp);
 }
 
-/* The switch - the box around the slider */
-.switch {
+body .btn.accordion .collapse .card .card-body .btn {
+  background-color: transparent !important;
+  border-color: transparent;
+}
+
+body .btn input {
+  color: white !important;
+}
+
+body .btn input::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .btn input:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .btn input::-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .btn input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .switch {
   position: relative;
   display: inline-block;
-  width: calc(var(--font-s-3) * 2.5);
-  height: calc(var(--font-s-3) / 2);
+  width: 2.5rem;
+  height: 0.5rem;
   margin: .5rem 0;
 }
 
-.switch::before {
+body .switch > input[type=checkbox] {
+  display: none;
+}
+
+body .switch > input[type=checkbox]:checked + .slider::before {
+  -webkit-transform: translateX(1.5rem);
+  transform: translateX(1.5rem);
+}
+
+body .switch .slider.round {
+  border-radius: 1rem;
+}
+
+body .switch .slider.round::before {
+  border-radius: 50%;
+}
+
+body .switch::before {
   position: absolute;
   cursor: pointer;
   content: "";
-  height: var(--font-s-3);
-  width: var(--font-s-3);
-  top: calc(var(--font-s-3) / -4);
-  background-color: var(--color-danger);
-  border: .25rem solid white;
+  height: 1rem;
+  width: 1rem;
+  top: -0.25rem;
+  background-color: red;
+  border: 0.25rem solid white;
   border-radius: 50%;
   -webkit-transition: .4s;
   transition: .4s;
   z-index: 1;
 }
 
-.switch::after {
+body .switch::after {
   position: absolute;
   cursor: pointer;
   content: "";
-  height: var(--font-s-3);
-  width: var(--font-s-3);
-  top: calc(var(--font-s-3) / -4);
+  height: 1rem;
+  width: 1rem;
+  top: -0.25rem;
   right: 0;
-  background-color: var(--color-success);
-  border: .25rem solid white;
+  background-color: #30a256;
+  border: 0.25rem solid white;
   border-radius: 50%;
   -webkit-transition: .4s;
   transition: .4s;
 }
 
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* The slider */
-.slider {
+body .switch .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -321,90 +342,26 @@ h3 {
   transition: .4s;
 }
 
-.slider:before {
+body .switch .slider:before {
   position: absolute;
   content: "";
-  height: var(--font-s-3);
-  width: var(--font-s-3);
-  top: calc(var(--font-s-3) / -4);
+  height: 1rem;
+  width: 1rem;
+  top: -0.25rem;
   background-color: white;
   -webkit-transition: .4s;
   transition: .4s;
   z-index: 1;
 }
 
-/* input:checked + .slider {
-  background-color: #2196F3;
+body code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-} */
-
-input:checked + .slider:before {
-  -webkit-transform: translateX(calc(var(--font-s-3) * 1.5));
-  -ms-transform: translateX(calc(var(--font-s-3) * 1.5));
-  transform: translateX(calc(var(--font-s-3) * 1.5));
+@media (min-width: 992px) {
+  #root > .container .col-lg-8 {
+    border: 0.1rem solid white !important;
+    border-radius: 1.2rem;
+  }
 }
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: var(--font-s-3);
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-
-
-
-
-
-
-
-.list-group-item {
-  background-color: transparent !important;
-}
-
-.plus-minus > input:last-of-type {
-  display: block;
-  flex: nowrap !important;
-}
-
-.col > label.checkbox {
-  position: absolute;
-  width: 2.345rem;
-  height: 2.345rem;
-}
-
-.col > .input-group > .input-group-prepend > .btn {
-  border-width: 0 !important;
-}
-
-.col > .input-group > input,
-.col > .input-group > .input-group-append > .btn {
-  display: none;
-}
-
-.col > input[type=checkbox]:checked ~ .input-group > input,
-.col > input[type=checkbox]:checked ~ .input-group > .input-group-append > .btn:last-child {
-  display: block;
-}
-
-.input-group > input {
-  border-width: 3px 0;
-  border-color: white;
-}
-
-.input-group > .input-group-prepend > .btn {
-  border-right-width: 0 !important;
-}
-
-.input-group > .input-group-append > .btn {
-  border-left-width: 0 !important;
-}
-
-.input-group > .input-group-prepend > .btn > svg.minus {
-  display: none !important;
-}
+/*# sourceMappingURL=style.css.map */

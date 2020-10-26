@@ -258,7 +258,7 @@ const Products = props => {
     
     if (state.hubs && state.devices) {
         return (
-            <Container className="mt-5 pt-5">
+            <Container>
                 {/* modal */}
                 <ConfirmModal
                     className="bg-danger"
