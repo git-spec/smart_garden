@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import {useParams, Link} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
 import {resetPass} from '../services/api';
 
-const ResetPage = () => {
+const Reset = () => {
     const params = useParams();
 
     console.log(params.email);
@@ -103,58 +103,64 @@ const ResetPage = () => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <PopUpModal show={myState.entriesError} close={closeModal} className="bg-danger" title={myState.errorTitle}>
                 {myState.errorElement}
             </PopUpModal>
-            <Container className="mt-5 pt-5">
+            <Container>
                 <h1 className="text-trans mb-4">My Account /Reset Password</h1> <br />
                 <h3 className="text-trans mb-4">Please Enter The New Password</h3> <br />
                 <Form className="text-center pb-md-0 pb-5">
-                <Col>
-                        <Input
-                            className="badge-pill bg-transparent"
-                            type="password"
-                            placeholder="Enter New Password"
-                            required
-                            onChange={e => {
-                                setMyState({
-                                    ...myState,
-                                    password: e.target.value
-                                });
-                            }}
-                            value={myState.password}
-                        />
-                        <span className="required-star">*</span>
-                        </Col>
+                    <Row>
+                        <FormGroup>
+                            <Col>
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="password"
+                                    placeholder="Enter New Password"
+                                    required
+                                    onChange={e => {
+                                        setMyState({
+                                            ...myState,
+                                            password: e.target.value
+                                        });
+                                    }}
+                                    value={myState.password}
+                                />
+                                <span className="required-star">*</span>
+                            </Col>
+                            <Col>
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat Password:</Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="password"
+                                    placeholder="Repeat Password"
+                                    required
+                                    onChange={e => {
+                                        setMyState({
+                                            ...myState,
+                                            repassword: e.target.value
+                                        });
+                                    }}
+                                    value={myState.repassword}
+                                />
+                                <span className="required-star">*</span>
+                            </Col>
+                        </FormGroup>
                         <Col>
-                        <Input
-                            className="badge-pill bg-transparent"
-                            type="password"
-                            placeholder="Repeat Password"
-                            required
-                            onChange={e => {
-                                setMyState({
-                                    ...myState,
-                                    repassword: e.target.value
-                                });
-                            }}
-                            value={myState.repassword}
-                        />
-                        <span className="required-star">*</span>
+                            <Button className="badge-pill btn-outline-light bg-transparent mt-8" onClick={onConfirmBtnClick}>
+                                Confirm
+                            </Button>
                         </Col>
-                        <Col>
-                        <Button className="badge-pill btn-outline-light bg-transparent mt-8" onClick={onConfirmBtnClick}>
-                            Confirm
-                        </Button>
-                        </Col>
+                    </Row>
                 </Form>
             </Container>
-        </React.Fragment>
+        </Fragment>
     );
 };
 
-export default ResetPage;
+export default Reset;
 
 // import React, {useEffect, useState} from 'react';
 // import {useParams, Link, useHistory} from 'react-router-dom';
