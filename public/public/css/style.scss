@@ -1,0 +1,393 @@
+@font-face {
+    font-family: Cuyabra;
+    src: url('../fonts/cuyabra.ttf');
+}
+// variables
+$font-main: 'Ubuntu';
+$font-head: Cuyabra;
+$font-size-2: 1.4rem;
+$font-size-3: 1.2rem;
+$font-size-4: 1rem;
+$font-size-5: .8rem;
+$font-size-6: .6rem;
+$text-transp: rgba(255, 255, 255, .5);
+$color-1: rgb(36, 27, 18);
+$color-1-opac: rgba(26, 17, 8, .8);
+$color-2: rgb(29, 44, 34);
+$color-2-opac: rgba(29, 44, 34, .8);
+$color-3: rgb(0, 168, 230);
+$color-light: white;
+$color-danger: red;
+$color-success: rgb(48, 162, 86);
+$border: .1rem;
+
+@mixin killShadow {
+  box-shadow: none;
+  text-shadow: none;
+}
+
+@mixin roundBtn {
+  width: $font-size-3;
+  height: $font-size-3;
+}
+
+*, *:before, *:after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+    
+body {
+  font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: $color-light !important;
+  // app container
+  #root {
+    font-family: 'Ubuntu';
+    font-weight: 300;
+    height: 100vh;
+    background-color: $color-1;
+    background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
+    background-size: cover;
+    background-position: 20% 40%;
+    // navigation bar
+    & > .navbar {
+        background-color: $color-1;
+        box-shadow: 0 12px 30px 6px $color-1;                
+        // changes regular toggle color
+        &.navbar-toggler-icon {
+            color: $color-light;
+        }
+    }
+    // layer with gradient
+    & .gradient {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
+    position: fixed;
+    }
+    // layer with opac
+    & .opac {
+    width: 100%;
+    height: 100%;
+    background-color: $color-1-opac;
+    position: fixed;
+    }
+    //layer with full color
+    & .cover {
+    width: 100%;
+    height: 100%;
+    background-color: $color-1;
+    position: fixed;
+    }
+    // container
+    & .container {
+      position: relative;
+      // hint
+      & > form > .row .row > .col-6.text-right {
+        padding-left: 0;
+        & > span {
+          font-size: $font-size-5;
+        }
+      }
+    }
+    // frame border of container inside container
+    & > .container {
+      padding-top: 6rem;
+      // frame border
+      & .col-lg-8 {
+      border: none;
+    }
+    }
+  }
+  // logo svg
+  & .logo {
+    width: 4rem;
+    height: 2rem;
+    fill: $color-light;
+  }
+  // headlines
+  & h1,
+  & h2,
+  & h3 {
+    font-family: $font-head;
+    letter-spacing: .02rem;
+    color: $color-light;
+  }
+  // color of links
+  & a {
+    color: $color-3;
+    &:hover,
+    &:active {
+      color: $color-3;
+    }
+  }
+  // paragraph text
+  & p {
+    font-size: $font-size-3;
+  }
+  // round border
+  & .badge-pill {
+    border: $border solid $color-light !important;
+  }
+  // opac text
+  & .text-transp {
+    color: $text-transp !important;
+  }
+  // buttons
+  & .btn {
+    @include killShadow();
+    // scales button after hover
+    &:hover,
+    &:active,
+    &.visited,
+    &:focus {
+      transform: scale(130%);
+      @include killShadow();
+    }
+    // scale button on hover
+    &.btn-outline-light:hover {
+      color: $color-light !important;
+      transform: scale(1.05);
+    }
+    // change bg-color & color of button
+    &.btn-outline-light:active {
+      background-color: $color-light !important;
+      color: $color-1 !important;
+      // change bg-color of button icons up & down
+      &.down > span,
+      &.up > span {
+        background-color: $color-1 !important;
+      }
+    }
+    // button plus & minus
+    &.plus,
+    &.minus {
+      @include roundBtn();
+      position: relative;
+      & > span {
+        width: $font-size-6;
+        height: $border;
+        position: absolute;
+        left: (($font-size-3 - $font-size-6) / 2 - $border);
+        top: ($font-size-3 / 2 - $border - $border / 2);
+        background-color: $color-light;
+        border-radius: $border;
+      }
+    }
+    // plus bar
+    &.plus > span:last-child {
+      width: $border;
+      height: $font-size-6;
+      position: absolute;
+      top: (($font-size-3 - $font-size-6) / 2 - $border);
+      left: ($font-size-3 / 2 - ($border / 2 + $border));
+      background-color: $color-light;
+      border-radius: $border;
+
+    }
+    // inverts button after click
+    &.plus:active > span,
+    &.minus:active > span {
+      background-color: $color-1;
+    }
+    // button down
+    &.down {
+      @include roundBtn();
+      padding: .3rem;
+      // bars
+      & > span {
+        width: $border;
+        height: $font-size-6 - .11rem;
+        display: inline-block;
+        background-color: $color-light;
+        border-radius: $border;
+        &:first-child {
+          transform: rotate(-45deg);
+          float: left;
+        }
+        &:last-child {
+          transform: rotate(45deg);
+          float: right;
+        }
+      }
+    }
+    // button up
+    &.up {
+      @include roundBtn();
+      padding: 0 .3rem .12rem .3rem;
+      // bars
+      & > span {
+        width: $border;
+        height: $font-size-6 - .11rem;
+        display: inline-block;
+        background-color: $color-light;
+        border-radius: $border;
+        &:first-child {
+          transform: rotate(45deg);
+          float: left;
+        }
+        &:last-child {
+          transform: rotate(-45deg);
+          float: right;
+        }
+      }
+    }
+    // accordion
+    &.accordion {
+      &.btn {
+        background-color: transparent;
+        border-color: transparent;
+        font-size: 1.5rem;
+        color: var(--text-transp);
+      }
+      
+      &.btn:hover,
+      &.btn:active,
+      &.btn:focus,
+      &.btn.btn-secondary:not(:disabled):not(.disabled):active {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+      }
+      
+      & .collapse {
+        & .card {
+          background-color: transparent !important;
+          border-color: transparent;
+          & .card-body {
+            font-size: 1.25rem;
+            color: var(--text-transp);
+            & .btn {
+              background-color: transparent !important;
+              border-color: transparent;
+            }
+          }
+        }
+      } 
+    }
+    & input {
+      color: $color-light !important;
+    }
+    & input::placeholder {
+      color: $text-transp !important;
+    }
+  }
+  // wrap of switch on & off
+  & .switch {
+    position: relative;
+    display: inline-block;
+    width: $font-size-4 * 2.5;
+    height: ($font-size-4 / 2);
+    margin: .5rem 0;        
+    // hides checkbox of switch
+    & > input[type=checkbox] {
+      display: none;
+    }
+    // moves switch
+    & > input[type=checkbox]:checked + .slider::before {
+      -webkit-transform: translateX($font-size-4 * 1.5);
+      -ms-transform: translateX($font-size-4 * 1.5);
+      transform: translateX($font-size-4 * 1.5);
+    }
+    // makes slider round
+    & .slider.round {
+      border-radius: $font-size-4;
+      // makes switch round
+      &::before {
+        border-radius: 50%;
+      }
+    }
+    // switch label off
+    &::before {
+      position: absolute;
+      cursor: pointer;
+      content: "";
+      height: $font-size-4;
+      width: $font-size-4;
+      top: ($font-size-4 / -4);
+      background-color: $color-danger;
+      border: .25rem solid $color-light;
+      border-radius: 50%;
+      -webkit-transition: .4s;
+      transition: .4s;
+      z-index: 1;
+    }
+    // switch label on
+    &::after {
+      position: absolute;
+      cursor: pointer;
+      content: "";
+      height: $font-size-4;
+      width: $font-size-4;
+      top: ($font-size-4 / -4);
+      right: 0;
+      background-color: $color-success;
+      border: .25rem solid $color-light;
+      border-radius: 50%;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    // slider of switch
+    & .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: $color-light;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    // switch
+    & .slider:before {
+      position: absolute;
+      content: "";
+      height: $font-size-4;
+      width: $font-size-4;
+      top: ($font-size-4 / -4);
+      background-color: $color-light;
+      -webkit-transition: .4s;
+      transition: .4s;
+      z-index: 1;
+    }
+  }
+
+  code {
+      font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }
+}
+
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 576px) {}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+  // hidden frame of dashboard
+  #root > .container .col-lg-8 {
+    border: $border solid $color-light !important;
+    border-radius: $font-size-3;
+  }
+  // navigation bar
+  #root > .navbar {
+      background-color: $color-1;
+      box-shadow: 0 6px 24px 2px $color-1;                
+      // changes regular toggle color
+      &.navbar-toggler-icon {
+          color: $color-light;
+      }
+  }
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {}

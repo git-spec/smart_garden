@@ -5,11 +5,8 @@ import Router from './components/Router';
 function App() {
   return (
     <Fragment>
-      <div className="layer"></div>
+      <div className="cover"></div>
       <Navigation />
-      <div className="nav-space">
-        <div className="layer layer-space"></div>
-      </div>
       <Router />
     </Fragment>
   );

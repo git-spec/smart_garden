@@ -1,6 +1,13 @@
 // export default Register;
-import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
-import React from 'react';
+import React, {Fragment} from 'react';
+import {Container,
+        Row,
+        Col,
+        Form,
+        FormGroup,
+        Label, Input,
+        Button
+} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
 import validator from 'validator';
@@ -97,7 +104,7 @@ class Register extends React.Component {
     };
     render() {
         return (
-            <React.Fragment>
+            <Fragment>
                 <PopUpModal
                     show={this.state.showErrorModal}
                     close={this.closeModal}
@@ -107,17 +114,17 @@ class Register extends React.Component {
                     {this.state.errorComponent}
                 </PopUpModal>
 
-                <Container className="mt-5 pt-5">
+                <Container>
                     <h1 className="text-trans mb-4"> Registration </h1>
                     <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p>
-                    <Form className="text-center pb-md-0 pb-5">
+                    <Form className="pb-md-0 pb-5">
                         <div className="col-lg-12 col-md-12">{this.state.resultElement}</div>
                         <Row xs="1" sm="2">
                             <Col>
                                 <FormGroup className="mb-md-4 mb-3 text-left">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="badge-pill text-trans bg-transparent"
                                         type="text"
                                         placeholder="Enter Your first Name"
                                         required
@@ -203,70 +210,23 @@ class Register extends React.Component {
                                     />
                                 </FormGroup>
                             </Col>
+                            <Col>
+                                <h5 className="text-trans">
+                                    Registered already?	&nbsp;
+                                    <Link to="/login">Login</Link>
+                                </h5>
+                            </Col>
                         </Row>
+                        <Col className=" text-center">
+                            <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={this.onRegisterBtnClick}>
+                                Register
+                            </Button>
+                        </Col>
                     </Form>
-                    <Col  className="text-trans mb-4">
-
-                        <h5>
-                            Registered already? then Go and login
-                            <Link to="/login"> here</Link>
-                        </h5>
-                        <Button className="badge-pill btn-outline-light bg-transparent mt-4" onClick={this.onRegisterBtnClick}>
-                            Register
-                        </Button>
-                    </Col>
                 </Container>
-            </React.Fragment>
+            </Fragment>
         );
     }
 }
-// function Register() {
-//     return(
-//         <Container className="mt-5 pt-5">
-//             <h1 className="text-trans mb-4">Register</h1>
-//             <Form className="text-center pb-md-0 pb-5">
-//                 <Row xs="1" sm="2">
-//                     <Col>
-//                         <FormGroup className="mb-md-4 mb-3 text-left">
-//                             <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
-//                             <Input className="badge-pill bg-transparent" placeholder="First Name" />
-//                         </FormGroup>
-//                     </Col>
-//                     <Col>
-//                         <FormGroup className="mb-4 text-left">
-//                             <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
-//                             <Input className="badge-pill bg-transparent" placeholder="Last Name" />
-//                         </FormGroup>
-//                     </Col>
-//                     <Col>
-//                         <FormGroup className="mb-4 text-left">
-//                             <Label className="w-100 h5 text-trans mb-2 ml-2">Email:</Label>
-//                             <Input className="badge-pill bg-transparent" placeholder="Email" />
-//                         </FormGroup>
-//                     </Col>
-//                     <Col>
-//                         <FormGroup className="mb-4 text-left">
-//                             <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
-//                             <Input className="badge-pill bg-transparent" placeholder="User Name" />
-//                         </FormGroup>
-//                     </Col>
-//                     <Col>
-//                         <FormGroup className="mb-4 text-left">
-//                             <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
-//                             <Input className="badge-pill bg-transparent" placeholder="Password" />
-//                         </FormGroup>
-//                     </Col>
-//                     <Col>
-//                         <FormGroup className="mb-3 text-left">
-//                             <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat Password:</Label>
-//                             <Input className="badge-pill bg-transparent" placeholder="Repeat Password" />
-//                         </FormGroup>
-//                     </Col>
-//                 </Row>
-//                 <Button className="badge-pill btn-outline-light bg-transparent mt-4">SEND</Button>
-//             </Form>
-//         </Container>
-//     );
-// }
 
 export default Register;
