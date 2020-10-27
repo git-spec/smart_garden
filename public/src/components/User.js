@@ -1,259 +1,308 @@
-import React, {useState, useEffect} from 'react';
-import {Container, Row, Col, Button, Collapse, Card, CardBody, Input, Label, FormGroup} from 'reactstrap';
-import Image from 'react-bootstrap/Image';
-import LineChart from './LineChart';
-import {getData} from '../services/getData';
-import {Link} from 'react-router-dom';
+// export default Register;
+import React, { Fragment, useState, useEffect } from "react";
+import {
+    Container,
+    Row,
+    Col,
+    Button,
+    Collapse,
+    Card,
+    CardBody,
+    Input,
+    Form,
+    Label,
+    FormGroup,
+} from "reactstrap";
+import Image from "react-bootstrap/Image";
+import { getData } from "../services/getData";
+import { Link } from "react-router-dom";
+import PopUpModal from "./PopUpModal";
+import validator from "validator";
+import { registerPost } from "../services/api";
 
-function User() {
-    const initialState = {
-        isPlusMinus: 'plus',
-        isUpDown: 'up',
-        isOpen1: false,
-        isOpen2: false,
-        inputHub: false,
-        feed: []
+class User extends React.Component {
+    state = {
+        firstName: "",
+        lastName: "",
+        userName: "",
+        email: "",
+        password: "",
+        repassword: "",
+        errorComponent: null,
+        showErrorModal: false,
+        resultElement: null,
     };
-    const [state, setState] = useState(initialState);
 
-    const toggle1 = () =>
-        state.isOpen1 === false ? setState({...state, isOpen1: true}) : setState({...state, isOpen1: false});
-    const toggle2 = () =>
-        state.isOpen2 === false ? setState({...state, isOpen2: true}) : setState({...state, isOpen2: false});
-
-    const onBtnIsOpen = e => {
+    onRegisterBtnClick = (e) => {
         e.preventDefault();
-        if (state.inputHub === false) {
-            setState({...state, isOpen1: true});
+        if (
+            this.state.firstName.trim() === "" ||
+            this.state.lastName.trim() === "" ||
+            this.state.userName.trim() === "" ||
+            this.state.email.trim() === "" ||
+            this.state.password === "" ||
+            this.state.password !== this.state.repassword ||
+            !validator.isEmail(this.state.email.trim())
+        ) {
+            const errorsElement = (
+                <ul>
+                    {this.state.firstName.trim() === "" ? (
+                        <li>Please Enter your first name</li>
+                    ) : null}
+                    {this.state.lastName.trim() === "" ? (
+                        <li>Please Enter your last name</li>
+                    ) : null}
+                    {this.state.userName.trim() === "" ? (
+                        <li>user name should not be empty</li>
+                    ) : null}
+                    {this.state.email.trim() === "" ? (
+                        <li>Email should not be empty</li>
+                    ) : null}
+                    {!validator.isEmail(this.state.email.trim()) ? (
+                        <li>you have to enter a valid email</li>
+                    ) : null}
+                    {this.state.password === "" ? (
+                        <li>password should not be empty</li>
+                    ) : null}
+                    {this.state.password !== this.state.repassword ? (
+                        <li>password is not matching the repassword</li>
+                    ) : null}
+                </ul>
+            );
+
+            this.setState({
+                errorComponent: errorsElement,
+                showErrorModal: true,
+            });
         } else {
-            setState({...state, isOpen1: false});
+            registerPost(
+                this.state.firstName,
+                this.state.lastName,
+                this.state.userName,
+                this.state.email,
+                this.state.password,
+                this.state.repassword
+            )
+                .then((data) => {
+                    let badgeClass = "";
+                    let badgeMessage = "";
+
+                    switch (data) {
+                        case 1:
+                            badgeClass = "alert alert-success";
+                            badgeMessage =
+                                "You register successfully, Check your Mail to verify your account";
+                            break;
+                        case 2:
+                        case 4:
+                            badgeClass = "alert alert-danger";
+                            badgeMessage =
+                                "there was a server side error, please contact the administrator";
+                            break;
+                        case 3:
+                            badgeClass = "alert alert-danger";
+                            badgeMessage =
+                                "there is already a user with the same email, please choose another email";
+                            break;
+                        default:
+                            break;
+                    }
+                    const badge = (
+                        <div className={badgeClass} role="alert">
+                            {badgeMessage}
+                        </div>
+                    );
+                    this.setState({ resultElement: badge });
+                })
+                .catch((error) => {
+                    const badge = (
+                        <div className="alert alert-danger" role="alert">
+                            can not send the registration data to server
+                        </div>
+                    );
+                    this.setState({ resultElement: badge });
+                });
         }
     };
-    const onBtnInputHub = e => {
-        e.preventDefault();
-        if (state.inputHub === false) {
-            setState({...state, inputHub: true});
-        } else {
-            setState({...state, inputHub: false});
-        }
-    };
-    // change plus to minus
-    const onBtnPlusMinus = e => {
-        e.preventDefault();
-        if (state.isPlusMinus === 'plus') {
-            setState({...state, isPlusMinus: 'minus'});
-        } else {
-            setState({...state, isPlusMinus: 'plus'});
-        }
-    };
-    // change up to down
-    const onBtnUpDown = e => {
-        e.preventDefault();
-        if (state.isUpDown === 'up') {
-            setState({...state, isUpDown: 'down'});
-        } else {
-            setState({...state, isUpDown: 'up'});
-        }
-    };
 
-    useEffect(() => {
-        // window.setInterval(() => {
-        //   setState({
-        //     ...state,
-        //     feed: getData()
-        //   })
-        // }, 5000)
-    });
-
-    const data = {
-        title: 'Visits',
-        data: [
-            {
-                time: 'Tue',
-                value: 39
-            },
-            {
-                time: 'Wed',
-                value: 60
-            }
-        ]
+    closeModal = () => {
+        this.setState({ showErrorModal: false });
     };
-
     // console.log(state.feed); fluid public/src/images/FB_IMG_1592363046509.png
+    render() {
+        return (
+            <Fragment>
+                <PopUpModal
+                    show={this.state.showErrorModal}
+                    close={this.closeModal}
+                    className="bg-danger"
+                    title="Entries Error"
+                >
+                    {this.state.errorComponent}
+                </PopUpModal>
 
-    return (
-        <Container>
-            <Row>
-                {/* <Col xs={6} md={4}>
-                    
-                </Col>
-                <Col xs={6} md={4}>
-                     
-                </Col> */}
-                <Col  className="float-right" xs={6} md={4}>
-                    <Image
-                        src={require('./104591233-mint-leaves-peppermint-leaves-of-mint-on-green-background.jpg')}
-                        height={'200px'}
-                        width={'200px'}
-                        roundedCircle
-                        right
-                        alt={<Link to="/register">Add Your Photo</Link>}
-                    />
-                </Col>
-            </Row>
-            <h3 className="text-trans mb-4">Hello User, how are you?</h3>
-            <Row>
-                <Col lg="4">
-                    <div>
-                        <Button className="accordion text-uppercase p-0" onClick={toggle1}>
-                            hubs
-                        </Button>
-                        <Button
-                            className={`badge-pill btn-outline-light bg-transparent ml-3 p-0 ${state.isPlusMinus}`}
-                            onClick={e => onBtnPlusMinus(e)}
-                        >
-                            <span></span>
-                            <span></span>
-                        </Button>
-                        <Button
-                            className="minus badge-pill btn-outline-light bg-transparent ml-3 p-0"
-                            onClick={e => onBtnPlusMinus(e)}
-                        >
-                            <span></span>
-                            <span></span>
-                        </Button>
-                        <Button
-                            className={`badge-pill btn-outline-light bg-transparent ml-3 ${state.isUpDown}`}
-                            onClick={e => onBtnUpDown(e)}
-                        >
-                            <span></span>
-                            <span></span>
-                        </Button>
-                        <Collapse isOpen={state.isOpen1}>
-                            {state.inputHub === true ? (
-                                <Row>
-                                    <Col>
-                                        <Input
-                                            className="badge-pill bg-transparent py-0"
-                                            placeholder="Enter the serial number"
-                                        />
-                                        <Input
-                                            className="badge-pill bg-transparent py-0"
-                                            placeholder="Enter a name for your hub"
-                                        />
-                                    </Col>
-                                    <Col>
-                                        <Button
-                                            className={`badge-pill btn-outline-light bg-transparent ml-3 ${state.isUpDown}`}
-                                            onClick={e => onBtnUpDown(e)}
-                                        >
-                                            <span></span>
-                                            <span></span>
-                                        </Button>
-                                        <Button className="plus badge-pill btn-outline-light bg-transparent ml-3 p-1">
-                                            <svg
-                                                version="1.1"
-                                                className="plus"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                x="0px"
-                                                y="0px"
-                                                width="67px"
-                                                height="67px"
-                                                viewBox="0 0 67 67"
-                                                enableBackground="new 0 0 67 67"
-                                            >
-                                                <path
-                                                    d="M61.667,28.334H38.333V5c0-2.761-2.238-5-5-5s-5,2.239-5,5v23.334H5c-2.762,0-5,2.239-5,5s2.238,5,5,5h23.333v23.333
-                                                    c0,2.762,2.238,5,5,5s5-2.238,5-5V38.334h23.334c2.762,0,5-2.239,5-5S64.429,28.334,61.667,28.334z"
-                                                />
-                                            </svg>
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            ) : (
-                                ''
-                            )}
-                            <Card>
-                                <CardBody className="p-0 pl-1">
-                                    <Button className="accordion p-0" onClick={toggle2}>
-                                        Hub 1
-                                    </Button>
-                                    <Button className="minus badge-pill btn-outline-light bg-transparent ml-3 p-1">
-                                        <svg
-                                            version="1.1"
-                                            className="minus"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            x="0px"
-                                            y="0px"
-                                            width="67px"
-                                            height="67px"
-                                            viewBox="0 -28.334 67 67"
-                                            enableBackground="new 0 -28.334 67 67"
-                                        >
-                                            <path d="M61.667,10H5c-2.762,0-5-2.239-5-5s2.238-5,5-5h56.667c2.762,0,5,2.239,5,5S64.429,10,61.667,10z" />
-                                        </svg>
-                                    </Button>
-                                    <Collapse isOpen={state.isOpen2}>
-                                        <Card>
-                                            <CardBody className="p-0 pl-1">
-                                                Device 1
-                                                <Button className="minus badge-pill btn-outline-light bg-transparent ml-3 p-1">
-                                                    <svg
-                                                        version="1.1"
-                                                        className="minus"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        x="0px"
-                                                        y="0px"
-                                                        width="67px"
-                                                        height="67px"
-                                                        viewBox="0 -28.334 67 67"
-                                                        enableBackground="new 0 -28.334 67 67"
-                                                    >
-                                                        <path d="M61.667,10H5c-2.762,0-5-2.239-5-5s2.238-5,5-5h56.667c2.762,0,5,2.239,5,5S64.429,10,61.667,10z" />
-                                                    </svg>
-                                                </Button>
-                                            </CardBody>
-                                        </Card>
-                                    </Collapse>
-                                </CardBody>
-                            </Card>
-                        </Collapse>
-                    </div>
-                </Col>
-                <Col className="p-3" lg="8">
-                    <label className="switch">
-                        <input type="checkbox" />
-                        <span className="slider round"></span>
-                    </label>
-                    <p className="text-light">
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt
-                        ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-                        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
-                        sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                        invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-                        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-                        ipsum dolor sit amet.
-                    </p>
-                    <LineChart data={data.data} title={data.title} color="white" />
+                <Container>
+                    <Row>
+                        <Col xs={6} md={9}>
+                            <br />
+                            <h1 className="text-trans mb-4">Hello User</h1>
+                            <h3 className="text-trans mb-4">
+                                {" "}
+                                Welcome In Your Page
+                            </h3>
+                            <br />
+                            <p className="text-trans mb-4">
+                                Here you can easily edit your Profile
+                            </p>
+                        </Col>
 
-                    <FormGroup>
-                        <Label for="rangeInput">Range</Label>
-                        <Input
-                            type="range"
-                            id="rangeInput"
-                            name="rangeInput"
-                            min="0"
-                            max="100"
-                            oninput="this.output.amount.value=this.value"
-                        />
-                        <output name="amount" id="amount" htmlFor="rangeInput">
-                            0
-                        </output>
-                    </FormGroup>
-                </Col>
-            </Row>
-        </Container>
-    );
+                        <Col className="float-right" xs={6} md={3}>
+                            <Image
+                                src={require("./1.jpg")}
+                                height={"150px"}
+                                width={"150px"}
+                                roundedCircle
+                                alt={<Link to="/register">Add Your Photo</Link>}
+                            />
+                            <br />
+                            <br />
+                            <Button> Add a New Photo</Button>
+                        </Col>
+                    </Row>
+                    <Row></Row>
+                    <Form className="pb-md-0 pb-5">
+                        <div className="col-lg-12 col-md-12">
+                            {this.state.resultElement}
+                        </div>
+                        <Row xs="1" sm="2">
+                            <Col>
+                                <FormGroup className="mb-md-4 mb-3 text-left">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                        First Name:
+                                    </Label>
+                                    <Input
+                                        className="badge-pill text-trans bg-transparent"
+                                        type="text"
+                                        placeholder="Enter Your first Name"
+                                        required
+                                        onChange={(e) => {
+                                            this.setState({
+                                                firstName: e.target.value,
+                                            });
+                                        }}
+                                        value={this.state.firstName}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col>
+                                <FormGroup className="mb-4 text-left">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                        Last Name:
+                                    </Label>
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder="Enter Your last Name"
+                                        required
+                                        onChange={(e) => {
+                                            this.setState({
+                                                lastName: e.target.value,
+                                            });
+                                        }}
+                                        value={this.state.lastName}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col>
+                                <FormGroup className="mb-4 text-left">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                        Email:
+                                    </Label>
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="email"
+                                        placeholder="Enter User Mail"
+                                        required
+                                        onChange={(e) => {
+                                            this.setState({
+                                                email: e.target.value,
+                                            });
+                                        }}
+                                        value={this.state.email}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col>
+                                <FormGroup className="mb-4 text-left">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                        User Name:
+                                    </Label>
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder="Enter User Name"
+                                        required
+                                        onChange={(e) => {
+                                            this.setState({
+                                                userName: e.target.value,
+                                            });
+                                        }}
+                                        value={this.state.userName}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col>
+                                <FormGroup className="mb-4 text-left">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                        Password:
+                                    </Label>
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="password"
+                                        placeholder="Password"
+                                        required
+                                        onChange={(e) => {
+                                            this.setState({
+                                                password: e.target.value,
+                                            });
+                                        }}
+                                        value={this.state.password}
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col>
+                                <FormGroup className="mb-3 text-left">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                        Repeat Password:
+                                    </Label>
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="password"
+                                        placeholder="Repeat Password"
+                                        required
+                                        onChange={(e) => {
+                                            this.setState({
+                                                repassword: e.target.value,
+                                            });
+                                        }}
+                                        value={this.state.repassword}
+                                    />
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        <Col className=" text-center">
+                            <Button
+                                className="badge-pill btn-outline-light bg-transparent my-4"
+                                onClick={this.onRegisterBtnClick}
+                            >
+                                Edit
+                            </Button>
+                        </Col>
+                    </Form>
+                </Container>
+            </Fragment>
+        );
+    }
 }
 
 export default User;

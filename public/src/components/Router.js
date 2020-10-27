@@ -43,8 +43,8 @@ const Router = props => {
                 <Route path="/verify/:email" exact component={Verification} />
                 <Route path='/password' exact component={Password} />
                 <Route path='/reset/:id/:email' exact component={Reset} />
-                <Route path="/user" exact component={() => <CheckLogin><Products /></CheckLogin>} />
-                <Route path="/products" exact component={User} />
+                <Route path="/user" exact component={User} />
+                <Route path="/products" exact component={() => <CheckLogin><Products /></CheckLogin>} />
                 <Route path="/" component={ErrorPage} />
             </Switch>
         </BrowserRouter>
