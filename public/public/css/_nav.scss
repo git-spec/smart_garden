@@ -1,0 +1,68 @@
+// menu-icon
+.navbar-toggler {
+    padding-right: 0 !important;
+    & .menu-icon {
+        width: 30px;
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        // dots
+        & > span {
+            height: ($font-size-5 / 2);
+            width: ($font-size-5 / 2);
+            border-radius: 50%;
+            border: $border solid white;
+            // second dot
+            &:nth-child(2) {
+                position: relative;
+                // lines
+                &::before,
+                &::after {
+                    content: '';
+                    position: absolute;
+                    background: white;
+                    height: $border;
+                    width: 0;
+                    transition: width 0.3s;
+                }
+                &::before {
+                    top: ($border / 2);
+                    right: ($font-size-5 / 4);
+                }
+                &::after {
+                    top: ($border / 2);
+                    left: ($font-size-5 / 4);
+                }
+            }
+            // third dot
+            &:nth-child(3) {
+                left: 26px;
+            }
+        }
+        &.open > span:nth-child(2)::before,
+        &.open > span:nth-child(2)::after {
+            width: ($font-size-5 / 2 + $border);
+        }
+    }
+
+}
+
+/* mobile sidebar */
+#sidebar {
+    width: 100vw;
+    position: fixed;
+    top: 74px;
+    left: -101vw;
+    height: 100vh;
+    z-index: 999;
+    background: rgb(36, 27, 18);
+    /* background: pink; */
+    transition: all 0.5s;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    /* overflow-y: hidden; */
+}
+
+#sidebar.active {
+    left: 0;
+}
