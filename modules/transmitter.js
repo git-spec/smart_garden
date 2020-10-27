@@ -18,6 +18,7 @@ class Radio {
      */
     constructor(config) {
         this.radio = new rf.nRF24(24, 0);
+        this.radio.begin();
         if (!config) {
             this.radio.config(this._config, false);
         } else {
