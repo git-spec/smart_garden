@@ -37,12 +37,8 @@ function Navigation(props) {
     
     return (
         <Navbar 
-            // light
-            // dark
-            // fixed="top"
-            // color="primary" 
+            fixed="top"
             style={{backgroundColor: "rgb(36, 27, 18)"}}
-            // expand="sm" 
         >
             <Container>
                 <NavbarBrand href="/">
