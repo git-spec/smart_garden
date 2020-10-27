@@ -1,6 +1,6 @@
 @font-face {
-    font-family: Cuyabra;
-    src: url('../fonts/cuyabra.ttf');
+  font-family: Cuyabra;
+  src: url('../fonts/cuyabra.ttf');
 }
 // variables
 $font-main: 'Ubuntu';
@@ -20,17 +20,17 @@ $color-light: white;
 $color-danger: red;
 $color-success: rgb(48, 162, 86);
 $border: .1rem;
-
+// remove shadows
 @mixin killShadow {
   box-shadow: none;
   text-shadow: none;
 }
-
+// round button size
 @mixin roundBtn {
   width: $font-size-3;
   height: $font-size-3;
 }
-
+// default
 *, *:before, *:after {
     margin: 0;
     padding: 0;
@@ -90,17 +90,20 @@ body {
       & > form > .row .row > .col-6.text-right {
         padding-left: 0;
         & > span {
-          font-size: $font-size-5;
+          font-size: $font-size-4;
+        }
+      }
+      // frame border of container inside container
+      & > .container {
+        padding-top: 6rem;
+        // frame border
+        & .col-lg-8 {
+        border: none;
         }
       }
     }
-    // frame border of container inside container
     & > .container {
       padding-top: 6rem;
-      // frame border
-      & .col-lg-8 {
-      border: none;
-    }
     }
   }
   // logo svg
@@ -116,6 +119,12 @@ body {
     font-family: $font-head;
     letter-spacing: .02rem;
     color: $color-light;
+  }
+  & input.form-control {
+    color: $color-light !important;
+    &::placeholder {
+      color: $text-transp !important;
+    }
   }
   // color of links
   & a {
@@ -138,7 +147,8 @@ body {
     color: $text-transp !important;
   }
   // buttons
-  & .btn {
+  & .btn,
+  & button {
     @include killShadow();
     // scales button after hover
     &:hover,
@@ -147,6 +157,7 @@ body {
     &:focus {
       transform: scale(130%);
       @include killShadow();
+      outline: none;
     }
     // scale button on hover
     &.btn-outline-light:hover {
@@ -380,14 +391,17 @@ body {
   }
   // navigation bar
   #root > .navbar {
-      background-color: $color-1;
-      box-shadow: 0 6px 24px 2px $color-1;                
-      // changes regular toggle color
-      &.navbar-toggler-icon {
-          color: $color-light;
-      }
+    background-color: $color-1;
+    box-shadow: 0 6px 24px 2px $color-1;                
+    // changes regular toggle color
+    &.navbar-toggler-icon {
+        color: $color-light;
+    }
   }
 }
 
 // Extra large devices (large desktops, 1200px and up)
 @media (min-width: 1200px) {}
+
+/* *********************************************************** IMPORT ********************************************************* */
+@import 'nav';

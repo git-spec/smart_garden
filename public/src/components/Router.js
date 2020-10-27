@@ -7,7 +7,7 @@ import {setUserAction} from '../actions';
 import {checkLoginPost} from '../services/api';
 // components
 import Main from './Main';
-import CheckLogin from './CheckLogin';
+// import CheckLogin from './CheckLogin';
 
 import Register from './Register';
 import Login from './Login';
@@ -17,7 +17,7 @@ import Reset from './Reset'
 import ErrorPage from './ErrorPage';
 
 import Products from './Products';
-import User from './User';
+// import User from './User';
 
 const Router = props => {
 

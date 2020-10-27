@@ -92,6 +92,17 @@ function checkExist(tableName, value, condition) {
     });
 }
 
+
+/**
+ *  updateRecord("iot_hubs", {connected: true, name:"Raspi1"}, {id: 21, user_id:20}")
+ * @param {string} tableName 
+ * @param {object} values 
+ * @param {object} condition 
+ */
+function updateRecord(tableName, values, condition){
+
+}
+
 module.exports = {
     runQuery,
     checkExist
