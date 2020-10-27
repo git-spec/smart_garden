@@ -1,7 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {Container, Row, Col, Button, Collapse, Card, CardBody, Input, Label, FormGroup} from 'reactstrap';
+import {
+    Container, 
+    Row, 
+    Col, 
+    Button, 
+    Collapse, 
+    Card, 
+    CardBody, 
+    Input, 
+    Label, 
+    FormGroup
+} from 'reactstrap';
 import LineChart from './LineChart';
-import {getData} from '../services/getData';
+// import {getData} from '../services/getData';
 
 function User() {
     const initialState = {
@@ -17,22 +28,23 @@ function User() {
     const toggle1 = () => state.isOpen1 === false ? setState({...state, isOpen1: true}) : setState({...state, isOpen1: false});
     const toggle2 = () => state.isOpen2 === false ? setState({...state, isOpen2: true}) : setState({...state, isOpen2: false});
     
-    const onBtnIsOpen = e => {
-        e.preventDefault();
-        if (state.inputHub === false) {
-            setState({...state, isOpen1: true});
-        } else {
-            setState({...state, isOpen1: false});
-        };
-    }
-    const onBtnInputHub = e => {
-        e.preventDefault();
-        if (state.inputHub === false) {
-            setState({...state, inputHub: true});
-        } else {   
-            setState({...state, inputHub: false});
-        };
-    }
+    // const onBtnIsOpen = e => {
+    //     e.preventDefault();
+    //     if (state.inputHub === false) {
+    //         setState({...state, isOpen1: true});
+    //     } else {
+    //         setState({...state, isOpen1: false});
+    //     };
+    // }
+    // const onBtnInputHub = e => {
+    //     e.preventDefault();
+    //     if (state.inputHub === false) {
+    //         setState({...state, inputHub: true});
+    //     } else {   
+    //         setState({...state, inputHub: false});
+    //     };
+    // }
+
     // change plus to minus 
     const onBtnPlusMinus = e => {
         e.preventDefault();
@@ -142,7 +154,6 @@ function User() {
                     </label>
                     <p className="text-light">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
                     <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
-                    
                     <FormGroup>
                         <Label for="rangeInput">Range</Label>
                         <Input type="range" id="rangeInput" 
