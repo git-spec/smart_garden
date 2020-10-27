@@ -1,13 +1,22 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
 import {
-    InputGroup, 
+    Row,
+    Col,
+    // InputGroup, 
     Button, 
     Input, 
-    Container
+    Container,
+    Collapse, 
+    CardBody, 
+    // Card,
+    CardHeader,
+    Label, 
+    FormGroup,
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
+import LineChart from './LineChart';
 // services
 import {
     checkHubNumPost, 
@@ -19,19 +28,32 @@ import {
     getDevicesPost,
     deleteDevicePost
 } from '../services/productsApi';
+import {getData} from '../services/getData';
 
-const Hubs = props => {
+const Products = props => {
 
+    // refs
+    const addHubIconRef = React.createRef();
+    const addDeviceIconsRef = [];
+    const openHubsIconRef = React.createRef();
+    const openHubIconsRef = [];
+    
+    // state
     const initialState = {
         hubs: [],
-        hubName: '',
-        hubNum: '',
         devices: [],
+        hubName: '',
         deviceName: '',
+        hubNum: '',
         deviceNum: '',
+        collapseHubs: false, 
+        collapseHub: null, 
+        collapseAddHub: false,
+        collapseAddDevice: null,
         confirmModalShow: false,
         confirmModalContent: null,
-        confirmModalDelete: null
+        confirmModalDelete: null,
+        feed: []
     };
     const [state, setState] = useState(initialState);
 
@@ -66,8 +88,52 @@ const Hubs = props => {
         });
     }, []);
 
-    // console.log(state.hubs);
-    // console.log(state.devices);
+    // toggles
+    const toggleHubs = e => {
+        // toggle up & down button
+        openHubsIconRef.current.classList.toggle('up');
+        openHubsIconRef.current.classList.toggle('down');        
+        setState({
+            ...state,
+            collapseHubs: !state.collapseHubs
+        });
+    }
+    const toggleHub = (e, idx) => {
+        e.preventDefault();
+        // toggle up & down buttons
+        openHubIconsRef.forEach((item, index) => {
+            if (idx !== index) {
+                item.current.classList.remove('down');
+                item.current.classList.add('up');        
+            } else {
+                item.current.classList.toggle('up');
+                item.current.classList.toggle('down');        
+            }
+        });
+        setState({
+            ...state,
+            collapseHub: state.collapseHub === Number(idx) ? null : Number(idx)
+        });
+    }
+    const toggleAddHub = e => {
+        // toggle plus & minus button
+        addHubIconRef.current.classList.toggle('plus');
+        addHubIconRef.current.classList.toggle('minus');
+        setState({
+            ...state,
+            collapseAddHub: !state.collapseAddHub
+        });
+    }
+    const toggleAddDevice = (e, idx) => {
+        e.preventDefault();
+        // toggle plus & minus button
+        addDeviceIconsRef[idx].current.classList.toggle('plus');
+        addDeviceIconsRef[idx].current.classList.toggle('minus');
+        setState({
+            ...state,
+            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
+        });
+    }
 
     // delete hub
     const onDeleteHubBtnClick = (e, hubID) => {
@@ -219,82 +285,199 @@ const Hubs = props => {
         }
     };
     
+    const data = getData();
+
     if (state.hubs && state.devices) {
-        const hubsElement = state.hubs.map((hub, idx) => {
-            const devicesElement = state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                return (
-                    <div key={device.id} className="mb-3">
-                        {idx +1}. Device | name: {device.name} | type: {device.device_name} | ID: {device.id} | hubID: {device.hub_id}
-                        <Button className="ml-2" outline color="danger" size="sm" onClick={e => onDeleteDeviceBtnClick(e, device.id)}>
-                            Delete
-                        </Button>{' '}
-                    </div>
-                );
-            });
-            return (
-                <div key={hub.id} className="mb-3">
-                    <Link to={'/user/hub/' + hub.id}>
-                        {idx + 1}. Hub | name: {hub.name} | ID: {hub.id}
-                    </Link>
-                    <Button
-                        className="ml-2"
-                        outline
-                        color="danger"
-                        size="sm"
-                        onClick={e => onDeleteHubBtnClick(e, hub.id)}
-                    >
-                        Delete
-                    </Button>{' '}
-                    {devicesElement}
-                    <InputGroup className="mb-3">
-                        <Input
-                            placeholder="Insert a Name"
-                            onChange={e => setState({...state, deviceName: e.target.value})}
-                            value={state.deviceName}
-                        />
-                    </InputGroup>
-                    <InputGroup className="mb-3">
-                        <Input
-                            placeholder="Insert a Serialnumber"
-                            onChange={e => setState({...state, deviceNum: e.target.value})}
-                            value={state.deviceNum}
-                        />
-                    </InputGroup>
-                    <Button className="mb-3" size="sm" outline color="primary" onClick={e => onAddDeviceBtnClick(e, hub.id)}>
-                        Add Device
-                    </Button>{' '}                
-                </div>
-            );
-        });
         return (
             <Container>
+                {/* modal */}
                 <ConfirmModal
                     className="bg-danger"
                     title="Confirm Deletion"
                     show={state.confirmModalShow}
                     delete={state.confirmModalDelete}
                     close={() => setState({...state, confirmModalShow: false})}
-                >{state.confirmModalContent}
+                >
+                    {state.confirmModalContent}
                 </ConfirmModal>
-                <h3>Smart Garden</h3>
-                {hubsElement}
-                <InputGroup className="mb-3">
-                    <Input
-                        placeholder="Insert a Name"
-                        onChange={e => setState({...state, hubName: e.target.value})}
-                        value={state.hubName}
-                    />
-                </InputGroup>
-                <InputGroup className="mb-3">
-                    <Input
-                        placeholder="Insert a Serialnumber"
-                        onChange={e => setState({...state, hubNum: e.target.value})}
-                        value={state.hubNum}
-                    />
-                </InputGroup>
-                <Button className="mb-3" size="sm" outline color="primary" onClick={onAddHubBtnClick}>
-                    Add Hub
-                </Button>{' '}
+                <h3 className="text-trans mb-4">Hello User, how are you?</h3>
+                <Row>
+                    <Col lg="4">
+                        <div>
+                            {/* hubs */}
+                            <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>
+                                hubs
+                            </Button>
+                            <Button
+                                className="badge-pill btn-outline-light bg-transparent ml-3 up"
+                                innerRef={openHubsIconRef}
+                                onClick={toggleHubs}
+                            >
+                                <span></span><span></span>
+                            </Button>
+                            <Collapse isOpen={state.collapseHubs}>
+                                {/* hub-loop */}
+                                {state.hubs.map((hub, idx) => {
+                                    const openHubIconRef = React.createRef();
+                                    openHubIconsRef.push(openHubIconRef);
+                                    const addDeviceIconRef = React.createRef();
+                                    addDeviceIconsRef.push(addDeviceIconRef);                                                    
+                                    return (
+                                        <div key={idx}>
+                                            <CardHeader className="p-0 pl-1">
+                                                <Button
+                                                    className="accordion p-0"
+                                                    onClick={e => toggleHub(e, idx)}
+                                                >
+                                                    {idx + 1}. Hub {hub.name}
+                                                </Button>
+                                                <Button
+                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                                    onClick={e => onDeleteHubBtnClick(e, hub.id)}
+                                                >
+                                                    <span></span><span></span>
+                                                </Button>
+                                                <Button
+                                                    className="badge-pill btn-outline-light bg-transparent ml-3 up"
+                                                    innerRef={openHubIconRef}
+                                                    onClick={e => toggleHub(e, idx)}
+                                                >
+                                                    <span></span><span></span>
+                                                </Button>
+                                            </CardHeader>
+                                            <Collapse isOpen={state.collapseHub === idx}>
+                                                {/* device-loop */}
+                                                {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                                    return (
+                                                        <CardBody key={idx} className="p-0 pl-1">
+                                                            {idx + 1}. Device {device.name} | {device.device_name}
+                                                            <Button
+                                                                className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                                                onClick={e => onDeleteDeviceBtnClick(e, device.id)}
+                                                            >
+                                                                <span></span><span></span>
+                                                            </Button>
+                                                        </CardBody>
+                                                    );
+                                                })}
+                                                {/* add device */}
+                                                <CardBody className="p-0 pl-1">
+                                                    <Button
+                                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                                        innerRef={addDeviceIconRef}
+                                                        onClick={e => toggleAddDevice(e, idx)}
+                                                    >
+                                                        <span></span><span></span>
+                                                    </Button>
+                                                    <Collapse isOpen={state.collapseAddDevice === idx}>
+                                                        <Row>
+                                                            <Col>
+                                                                <Input
+                                                                    className="badge-pill bg-transparent py-0"
+                                                                    placeholder="Enter a serial number"
+                                                                    onChange={e =>
+                                                                        setState({...state, deviceNum: e.target.value})
+                                                                    }
+                                                                    value={state.deviceNum}
+                                                                />
+                                                                <Input
+                                                                    className="badge-pill bg-transparent py-0"
+                                                                    placeholder="Enter a name for your device"
+                                                                    onChange={e =>
+                                                                        setState({...state, deviceName: e.target.value})
+                                                                    }
+                                                                    value={state.deviceName}
+                                                                />
+                                                            </Col>
+                                                            <Col>
+                                                                <Button
+                                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                                                    onClick={e => onAddDeviceBtnClick(e, hub.id)}
+                                                                >
+                                                                    <span></span><span></span>
+                                                                </Button>
+                                                            </Col>
+                                                        </Row>
+                                                    </Collapse>
+                                                </CardBody>
+                                            </Collapse>
+                                        </div>
+                                    );
+                                })}
+                                {/* add hub */}
+                                <div>
+                                    <CardHeader className="p-0 pl-1">
+                                        <Button
+                                            innerRef={addHubIconRef}
+                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                            onClick={toggleAddHub}
+                                        >
+                                            <span></span><span></span>
+                                        </Button>
+                                    </CardHeader>
+                                    {/* <CardBody> */}
+                                    <Collapse isOpen={state.collapseAddHub}>
+                                        <Row>
+                                            <Col>
+                                                <Input
+                                                    className="badge-pill bg-transparent py-0"
+                                                    placeholder="Enter a serial number"
+                                                    onChange={e => setState({...state, hubNum: e.target.value})}
+                                                    value={state.hubNum}
+                                                />
+                                                <Input
+                                                    className="badge-pill bg-transparent py-0"
+                                                    placeholder="Enter a name for your hub"
+                                                    onChange={e => setState({...state, hubName: e.target.value})}
+                                                    value={state.hubName}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <Button
+                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                                    onClick={onAddHubBtnClick}
+                                                >
+                                                    <span></span><span></span>
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Collapse>
+                                    {/* </CardBody> */}
+                                </div>
+                            </Collapse>
+                        </div>
+                    </Col>
+                    <Col className="p-3" lg="8">
+                        <label className="switch">
+                            <input type="checkbox" />
+                            <span className="slider round"></span>
+                        </label>
+                        <p className="text-light">
+                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
+                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
+                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
+                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
+                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
+                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+                        </p>
+                        <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
+                        <FormGroup>
+                            <Label for="rangeInput">Range</Label>
+                            <Input
+                                type="range"
+                                id="rangeInput"
+                                name="rangeInput"
+                                min="0"
+                                max="100"
+                                onInput="this.output.amount.value=this.value"
+                            />
+                            <output name="amount" id="amount" htmlFor="rangeInput">
+                                0
+                            </output>
+                        </FormGroup>
+                    </Col>
+                </Row>
             </Container>
         );
     } else {
@@ -302,4 +485,4 @@ const Hubs = props => {
     }
 };
 
-export default Hubs;
+export default Products;

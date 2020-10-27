@@ -9,7 +9,8 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const cors = require('cors')
 const session = require('express-session');
-
+const {log} = require("console") 
+const SQL = require('./modules/mysqlCon')
 // app use
 app.use(express.static(__dirname + '/public/build'));
 app.use(express.urlencoded({extended: false}));
@@ -165,10 +166,45 @@ app.use('/', (req, res) => {
 });
 
 /* ---------------------------------------- LOCALHOST ---------------------------------------- */
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`App is listening to port: ${port}`);
 });
 
+/* ---------------------------------------- SOCKET.IO ---------------------------------------- */
+
+// configure the socket START
+const io = require('socket.io').listen(server);
+io.on('connection', socket => {
+    log('Device Is Connected');
+
+    socket.on('hub_device_connect', data => {
+        // go to database, check if the device exists, then get a device name
+        SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(device => {
+            if (device.length > 0) {
+                if (device[0].user_id) {
+                    log(`Device ${device[0].name} is connected now!`);
+                    // allow listening to this device
+                    // change the status to connected
+                    socket.emit('toDevice', `Listening to Device ${device[0].name} is allowed!`);
+                } else {
+                    log(`Device ${data.sn_number} is not registered!`);
+                    // NOT allow listening to this device
+                    // kill socket
+                }
+            } else {
+                log(`Device with ${data.sn_number} is not existing!`);
+                // kill socket
+            }
+        }).catch(error => {
+            log(error);
+        });
+    });
+
+    socket.on('disconnect', () => {
+        log('Device Is Disconnected');
+    });
+});
+// configure the socket END
 
 /*
 robot.txt

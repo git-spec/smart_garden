@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "nodemonConfig":{
-    "watch":["app.js"]
+  "nodemonConfig": {
+    "watch": [
+      "app.js"
+    ]
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon --watch app app.js "
+    "start": "nodemon --watch app app.js "
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -22,6 +23,7 @@
     "mysql": "^2.18.1",
     "nodemailer": "^6.4.13",
     "password-hash": "^1.2.2",
+    "socket.io": "^2.3.0",
     "validator": "^13.1.17"
   }
 }

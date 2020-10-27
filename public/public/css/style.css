@@ -1,226 +1,515 @@
-:root {
-    --font-main: Helvetica, Arial;
-    --font-s-2: 1.4rem;
-    --font-s-3: 1rem;
-    --font-s-4: .8rem;
-    --text-trans: rgba(255, 255, 255, .7);
-    --color-1: rgb(36, 27, 18);
-};
+@font-face {
+  font-family: Cuyabra;
+  src: url("../fonts/cuyabra.ttf");
+}
 
 *, *:before, *:after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: white !important;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-#root {
+body #root {
+  font-family: 'Ubuntu';
+  font-weight: 300;
   height: 100vh;
-  background-color: var(--color-1);
+  background-color: #241b12;
   background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
-  background-size: 100% auto;
+  background-size: cover;
+  background-position: 20% 40%;
 }
 
-.badge-pill {
-  border: 3px solid white !important;
+body #root > .navbar {
+  background-color: #241b12;
+  -webkit-box-shadow: 0 12px 30px 6px #241b12;
+          box-shadow: 0 12px 30px 6px #241b12;
 }
 
-.text-trans {
-  color: var(--text-trans);
+body #root > .navbar.navbar-toggler-icon {
+  color: white;
 }
 
-.dropdown-menu {
-  background-color: rgba(255, 255, 255, .3) !important;
-}
-
-.logo {
-  width: 5rem;
-  height: 3rem;
-  fill: white;
-}
-
-/* .navbar-toggler {
-  display: block !important;
-} */
-
-svg.plus,
-svg.minus {
-  fill: white;
-  width: .5rem;
-  height: .5rem;
-}
-
-.layer {
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(26, 17, 8, .8);
+body #root .gradient {
+  width: 100%;
+  height: 100%;
+  background: -webkit-gradient(linear, left top, left bottom, from(#241b12), to(rgba(255, 0, 0, 0)));
+  background: linear-gradient(to bottom, #241b12, rgba(255, 0, 0, 0));
   position: fixed;
 }
 
-.layer-space {
-  height: 5rem;
-}
-
-.nav-space {
-  width: 100vw;
-  height: 5rem;
-  background-color: var(--color-1);
-  background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
-  background-size: 100% auto;
+body #root .opac {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(26, 17, 8, 0.8);
   position: fixed;
-  top: 0;
-  z-index: 1;
 }
 
-.navbar-toggler-icon {
-  color: white; /* Changes regular toggle color */
+body #root .cover {
+  width: 100%;
+  height: 100%;
+  background-color: #241b12;
+  position: fixed;
 }
 
-h1,
-h2,
-h3 {
+body #root .container {
   position: relative;
 }
 
-.btn {
-  position: relative;
+body #root .container > form > .row .row > .col-6.text-right {
+  padding-left: 0;
 }
 
-.btn.btn-outline-light:hover,
-.btn.btn-outline-light:active {
+body #root .container > form > .row .row > .col-6.text-right > span {
+  font-size: 1rem;
+}
+
+body #root .container > .container {
+  padding-top: 6rem;
+}
+
+body #root .container > .container .col-lg-8 {
+  border: none;
+}
+
+body #root > .container {
+  padding-top: 6rem;
+}
+
+body .logo {
+  width: 4rem;
+  height: 2rem;
+  fill: white;
+}
+
+body h1,
+body h2,
+body h3 {
+  font-family: Cuyabra;
+  letter-spacing: .02rem;
+  color: white;
+}
+
+body input.form-control {
+  color: white !important;
+}
+
+body input.form-control::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body input.form-control:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body input.form-control::-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body input.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body a {
+  color: #00a8e6;
+}
+
+body a:hover, body a:active {
+  color: #00a8e6;
+}
+
+body p {
+  font-size: 1.2rem;
+}
+
+body .badge-pill {
+  border: 0.1rem solid white !important;
+}
+
+body .text-transp {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .btn,
+body button {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+}
+
+body .btn:hover, body .btn:active, body .btn.visited, body .btn:focus,
+body button:hover,
+body button:active,
+body button.visited,
+body button:focus {
+  -webkit-transform: scale(130%);
+          transform: scale(130%);
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+  outline: none;
+}
+
+body .btn.btn-outline-light:hover,
+body button.btn-outline-light:hover {
+  color: white !important;
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
+}
+
+body .btn.btn-outline-light:active,
+body button.btn-outline-light:active {
   background-color: white !important;
-  color: none;
+  color: #241b12 !important;
 }
 
-/* input {
+body .btn.btn-outline-light:active.down > span,
+body .btn.btn-outline-light:active.up > span,
+body button.btn-outline-light:active.down > span,
+body button.btn-outline-light:active.up > span {
+  background-color: #241b12 !important;
+}
+
+body .btn.plus, body .btn.minus,
+body button.plus,
+body button.minus {
+  width: 1.2rem;
+  height: 1.2rem;
   position: relative;
-} */
-
-.btn.plus,
-.btn.minus,
-.btn.plus-minus {
-  line-height: .4 !important;
 }
 
-.btn:hover > .plus,
-.btn:active > .plus,
-.btn:hover > .minus,
-.btn:active > .minus,
-.plus-input svg:hover,
-.plus-input svg:active {
-  filter:invert();
+body .btn.plus > span, body .btn.minus > span,
+body button.plus > span,
+body button.minus > span {
+  width: 0.6rem;
+  height: 0.1rem;
+  position: absolute;
+  left: 0.2rem;
+  top: 0.45rem;
+  background-color: white;
+  border-radius: 0.1rem;
 }
 
-.btn.plus.badge-pill,
-.btn.minus.badge-pill,
-.btn.plus-minus.badge-pill {
-  border: 2px solid white !important;
+body .btn.plus > span:last-child,
+body button.plus > span:last-child {
+  width: 0.1rem;
+  height: 0.6rem;
+  position: absolute;
+  top: 0.2rem;
+  left: 0.45rem;
+  background-color: white;
+  border-radius: 0.1rem;
 }
 
-.btn.plus-minus > svg.minus {
-  display: none;
+body .btn.plus:active > span,
+body .btn.minus:active > span,
+body button.plus:active > span,
+body button.minus:active > span {
+  background-color: #241b12;
 }
 
-.btn.plus-minus.change > svg.plus {
-  display: none;
+body .btn.down,
+body button.down {
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: .3rem;
 }
 
-.btn.plus-minus.change > svg.minus {
-  display: static;
+body .btn.down > span,
+body button.down > span {
+  width: 0.1rem;
+  height: 0.49rem;
+  display: inline-block;
+  background-color: white;
+  border-radius: 0.1rem;
 }
 
-.btn.accordion {
+body .btn.down > span:first-child,
+body button.down > span:first-child {
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  float: left;
+}
+
+body .btn.down > span:last-child,
+body button.down > span:last-child {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  float: right;
+}
+
+body .btn.up,
+body button.up {
+  width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 .3rem .12rem .3rem;
+}
+
+body .btn.up > span,
+body button.up > span {
+  width: 0.1rem;
+  height: 0.49rem;
+  display: inline-block;
+  background-color: white;
+  border-radius: 0.1rem;
+}
+
+body .btn.up > span:first-child,
+body button.up > span:first-child {
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  float: left;
+}
+
+body .btn.up > span:last-child,
+body button.up > span:last-child {
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  float: right;
+}
+
+body .btn.accordion.btn,
+body button.accordion.btn {
   background-color: transparent;
   border-color: transparent;
   font-size: 1.5rem;
-  color: var(--text-trans);
+  color: var(--text-transp);
 }
 
-.btn.accordion:hover,
-.btn.accordion:active,
-.btn.accordion:focus,
-.btn.accordion.btn-secondary:not(:disabled):not(.disabled):active {
+body .btn.accordion.btn:hover, body .btn.accordion.btn:active, body .btn.accordion.btn:focus, body .btn.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active,
+body button.accordion.btn:hover,
+body button.accordion.btn:active,
+body button.accordion.btn:focus,
+body button.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active {
   background-color: transparent;
   border-color: transparent;
-  box-shadow: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
 }
 
-.col-md-9 {
-  border: 3px solid white;
-  border-radius: 1rem;
-}
-
-.card,
-.card .btn {
+body .btn.accordion .collapse .card,
+body button.accordion .collapse .card {
   background-color: transparent !important;
   border-color: transparent;
 }
 
-.collapse > .card > .card-body {
+body .btn.accordion .collapse .card .card-body,
+body button.accordion .collapse .card .card-body {
   font-size: 1.25rem;
-  color: var(--text-trans);
+  color: var(--text-transp);
 }
 
-
-
-
-
-
-
-.list-group-item {
+body .btn.accordion .collapse .card .card-body .btn,
+body button.accordion .collapse .card .card-body .btn {
   background-color: transparent !important;
+  border-color: transparent;
 }
 
-.plus-minus > input:last-of-type {
-  display: block;
-  flex: nowrap !important;
+body .btn input,
+body button input {
+  color: white !important;
 }
 
-.col > label.checkbox {
-  position: absolute;
-  width: 2.345rem;
-  height: 2.345rem;
+body .btn input::-webkit-input-placeholder,
+body button input::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 
-.col > .input-group > .input-group-prepend > .btn {
-  border-width: 0 !important;
+body .btn input:-ms-input-placeholder,
+body button input:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 
-.col > .input-group > input,
-.col > .input-group > .input-group-append > .btn {
+body .btn input::-ms-input-placeholder,
+body button input::-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .btn input::placeholder,
+body button input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body .switch {
+  position: relative;
+  display: inline-block;
+  width: 2.5rem;
+  height: 0.5rem;
+  margin: .5rem 0;
+}
+
+body .switch > input[type=checkbox] {
   display: none;
 }
 
-.col > input[type=checkbox]:checked ~ .input-group > input,
-.col > input[type=checkbox]:checked ~ .input-group > .input-group-append > .btn:last-child {
-  display: block;
+body .switch > input[type=checkbox]:checked + .slider::before {
+  -webkit-transform: translateX(1.5rem);
+  transform: translateX(1.5rem);
 }
 
-.input-group > input {
-  border-width: 3px 0;
-  border-color: white;
+body .switch .slider.round {
+  border-radius: 1rem;
 }
 
-.input-group > .input-group-prepend > .btn {
-  border-right-width: 0 !important;
+body .switch .slider.round::before {
+  border-radius: 50%;
 }
 
-.input-group > .input-group-append > .btn {
-  border-left-width: 0 !important;
+body .switch::before {
+  position: absolute;
+  cursor: pointer;
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  top: -0.25rem;
+  background-color: red;
+  border: 0.25rem solid white;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: .4s;
+  z-index: 1;
 }
 
-.input-group > .input-group-prepend > .btn > svg.minus {
-  display: none !important;
+body .switch::after {
+  position: absolute;
+  cursor: pointer;
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  top: -0.25rem;
+  right: 0;
+  background-color: #30a256;
+  border: 0.25rem solid white;
+  border-radius: 50%;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
+
+body .switch .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+body .switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  top: -0.25rem;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  z-index: 1;
+}
+
+body code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@media (min-width: 992px) {
+  #root > .container .col-lg-8 {
+    border: 0.1rem solid white !important;
+    border-radius: 1.2rem;
+  }
+  #root > .navbar {
+    background-color: #241b12;
+    -webkit-box-shadow: 0 6px 24px 2px #241b12;
+            box-shadow: 0 6px 24px 2px #241b12;
+  }
+  #root > .navbar.navbar-toggler-icon {
+    color: white;
+  }
+}
+
+/* *********************************************************** IMPORT ********************************************************* */
+.navbar-toggler {
+  padding-right: 0 !important;
+}
+
+.navbar-toggler .menu-icon {
+  width: 30px;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  cursor: pointer;
+}
+
+.navbar-toggler .menu-icon > span {
+  height: 0.4rem;
+  width: 0.4rem;
+  border-radius: 50%;
+  border: 0.1rem solid white;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2) {
+  position: relative;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2)::before, .navbar-toggler .menu-icon > span:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  background: white;
+  height: 0.1rem;
+  width: 0;
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2)::before {
+  top: 0.05rem;
+  right: 0.2rem;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2)::after {
+  top: 0.05rem;
+  left: 0.2rem;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(3) {
+  left: 26px;
+}
+
+.navbar-toggler .menu-icon.open > span:nth-child(2)::before,
+.navbar-toggler .menu-icon.open > span:nth-child(2)::after {
+  width: 0.5rem;
+}
+
+/* mobile sidebar */
+#sidebar {
+  width: 100vw;
+  position: fixed;
+  top: 74px;
+  left: -101vw;
+  height: 100vh;
+  z-index: 999;
+  background: #241b12;
+  /* background: pink; */
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+          box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  /* overflow-y: hidden; */
+}
+
+#sidebar.active {
+  left: 0;
+}
+/*# sourceMappingURL=style.css.map */

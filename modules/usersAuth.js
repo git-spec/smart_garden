@@ -1,6 +1,6 @@
 /* ***************************************************** SETUP ******************************************************* */
 // modules
-const runQuery = require("./mysqlCon");
+const {runQuery} = require("./mysqlCon");
 const emailSender = require("./emailSender");
 var validator = require("validator");
 const passwordHash = require("password-hash");

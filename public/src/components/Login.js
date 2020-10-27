@@ -1,5 +1,13 @@
-import React, {useState} from 'react';
-import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import React, {Fragment, useState} from 'react';
+import {Container,
+        Row,
+        Col,
+        Form,
+        FormGroup,
+        Label,
+        Input,
+        Button
+} from 'reactstrap';
 import {Link, useHistory} from 'react-router-dom';
 // import {connect} from 'react-redux'
 
@@ -96,22 +104,22 @@ const Login = props => {
     //console.log(myState);
 
     return (
-        <React.Fragment>
+        <Fragment>
             <PopUpModal show={myState.entriesError} close={closeModal} className="bg-danger" title={myState.errorTitle}>
                 {myState.errorElement}
             </PopUpModal>
-            <Container className="mt-5 pt-5">
+            <Container>
                 {/* <div className="breadcrumb">
           <div className="container">
             <Link className="breadcrumb-item" to="/">Home</Link>
             <span className="breadcrumb-item active">Login</span>
           </div>
         </div> */}
-                <h1 className="text-trans mb-4">My Account / login</h1>
-                <p className="text-trans mb-4">login to start your devices management</p>
-                <Form className="text-center pb-md-0 pb-5">
+                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Login</h1>
+                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">login to start your devices management</p>
+                <Form className="pb-md-0 pb-5">
                     <Row xs="1" sm="1">
-                        <Col>
+                        <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-md-4 mb-3 text-left">
                                 <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
                                 <Input
@@ -129,11 +137,17 @@ const Login = props => {
                                 />
                             </FormGroup>
                         </Col>
-                        <Col>
+                        <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-4 text-left">
-                                <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
+                                <Row>
+                                    <Col xs="4" md="6">
+                                        <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
+                                    </Col>
+                                    <Col xs="8" md="6" className="text-right">
+                                        <span className="pr-2">Forgot Your <Link to="/Password" className="pr-1">Password</Link>?</span>
+                                    </Col>
+                                </Row>
                                 <Input
-                                    className="badge-pill bg-transparent"
                                     className="badge-pill bg-transparent"
                                     type="password"
                                     placeholder="Password"
@@ -148,26 +162,21 @@ const Login = props => {
                                 />
                             </FormGroup>
                         </Col>
+                        <Col sm="12" md={{size: 6, offset: 3}}>
+                            <h5>
+                                Not Registered?	&nbsp;
+                                <Link to="/register">Register</Link>
+                            </h5>
+                        </Col>
                     </Row>
                 </Form>
-                <Col  className="text-trans mb-4">
-                    <Button className="badge-pill btn-outline-light bg-transparent mt-4" onClick={onLoginBtnClick}>
+                <Col sm="12" className="text-center text-trans">
+                    <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={onLoginBtnClick}>
                         Login
                     </Button>
                 </Col>
-                <Col  className="text-trans mb-4">
-                    <h5>
-                        Not Registered?
-                        <Link to="/register"> register here</Link>
-                    </h5>
-                </Col>
-                <Col  className="text-trans mb-4">
-                    <h5>
-                    Forgot Your <Link to="/resetPass"> Password?</Link>
-                    </h5>
-                </Col>
             </Container>
-        </React.Fragment>
+        </Fragment>
     );
 };
 
