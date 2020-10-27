@@ -1,7 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import {Container, Row, Col, Button, Collapse, Card, CardBody, Input, Label, FormGroup} from 'reactstrap';
+import {
+    Container, 
+    Row, 
+    Col, 
+    Button, 
+    Collapse, 
+    Card, 
+    CardBody, 
+    Input, 
+    Label, 
+    FormGroup
+} from 'reactstrap';
 import LineChart from './LineChart';
-import {getData} from '../services/getData';
+// import {getData} from '../services/getData';
 
 function User() {
     const initialState = {
@@ -17,22 +28,23 @@ function User() {
     const toggle1 = () => state.isOpen1 === false ? setState({...state, isOpen1: true}) : setState({...state, isOpen1: false});
     const toggle2 = () => state.isOpen2 === false ? setState({...state, isOpen2: true}) : setState({...state, isOpen2: false});
     
-    const onBtnIsOpen = e => {
-        e.preventDefault();
-        if (state.inputHub === false) {
-            setState({...state, isOpen1: true});
-        } else {
-            setState({...state, isOpen1: false});
-        };
-    }
-    const onBtnInputHub = e => {
-        e.preventDefault();
-        if (state.inputHub === false) {
-            setState({...state, inputHub: true});
-        } else {   
-            setState({...state, inputHub: false});
-        };
-    }
+    // const onBtnIsOpen = e => {
+    //     e.preventDefault();
+    //     if (state.inputHub === false) {
+    //         setState({...state, isOpen1: true});
+    //     } else {
+    //         setState({...state, isOpen1: false});
+    //     };
+    // }
+    // const onBtnInputHub = e => {
+    //     e.preventDefault();
+    //     if (state.inputHub === false) {
+    //         setState({...state, inputHub: true});
+    //     } else {   
+    //         setState({...state, inputHub: false});
+    //     };
+    // }
+
     // change plus to minus 
     const onBtnPlusMinus = e => {
         e.preventDefault();
@@ -154,7 +166,7 @@ function User() {
         <Label for="rangeInput">Range</Label>
         <Input type="range" id="rangeInput" 
        name="rangeInput" min="0" max="100"
-       oninput="this.output.amount.value=this.value" />
+       onInput="this.output.amount.value=this.value" />
        <output name="amount" id="amount" htmlFor="rangeInput">0</output>
       </FormGroup>
                 </Col>
