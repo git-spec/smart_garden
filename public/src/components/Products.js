@@ -28,7 +28,7 @@ import {
     getDevicesPost,
     deleteDevicePost
 } from '../services/productsApi';
-// import {getData} from '../services/getData';
+import {getData} from '../services/getData';
 
 const Products = props => {
 
@@ -285,19 +285,7 @@ const Products = props => {
         }
     };
     
-    const data = {
-        title: 'Visits',
-        data: [
-            {
-                time: 'Tue',
-                value: 39
-            },
-            {
-                time: 'Wed',
-                value: 60
-            }
-        ]
-    };
+    const data = getData();
 
     if (state.hubs && state.devices) {
         return (
@@ -473,7 +461,7 @@ const Products = props => {
                             voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
                             gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
                         </p>
-                        <LineChart data={data.data} title={data.title} color="white" />
+                        <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                         <FormGroup>
                             <Label for="rangeInput">Range</Label>
                             <Input
