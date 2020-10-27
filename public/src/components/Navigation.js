@@ -9,7 +9,6 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
-import '../css/Navigation.css';
 
 function Navigation(props) {
 
@@ -36,10 +35,7 @@ function Navigation(props) {
     };
     
     return (
-        <Navbar 
-            fixed="top"
-            style={{backgroundColor: "rgb(36, 27, 18)"}}
-        >
+        <Navbar fixed="top">
             <Container>
                 <NavbarBrand href="/">
                     <svg version="1.1" className="logo"
@@ -76,10 +72,10 @@ function Navigation(props) {
                 </NavbarBrand>
                 {/* navbar toggle for devices smaller than 576px */}
                 <NavbarToggler className="d-block d-sm-none" onClick={toggleMobileNavbar}>
-                    <div ref={toggleMobileIconRef} className="animated-icon2"><span></span><span></span><span></span></div>
+                    <div ref={toggleMobileIconRef} className="menu-icon"><span></span><span></span><span></span></div>
                 </NavbarToggler>
                 <div ref={sidebarRef} id="sidebar">
-                    <Nav vertical>
+                    <Nav vertical className="mx-3">
                         <NavItem>
                             <NavLink className="text-white" href="/">home</NavLink>
                         </NavItem>
@@ -99,14 +95,14 @@ function Navigation(props) {
                 </div>
                 {/* navbar toggle for devices larger than 576px */}
                 <NavbarToggler className="d-none d-sm-block" onClick={toggleDesktopNavbar}>
-                    <div ref={toggleDesktopIconRef} className="animated-icon2"><span></span><span></span><span></span></div>
+                    <div ref={toggleDesktopIconRef} className="menu-icon"><span></span><span></span><span></span></div>
                 </NavbarToggler>
                 <Collapse isOpen={!state.collapsed} navbar>
-                    <Nav 
+                    <Nav
                         // navbar 
                         // justified
-                        fill
-                        // horizontal="end"
+                        // fill
+                        horizontal="center"
                     >
                         <NavItem>
                             <NavLink className="text-white" href="/">home</NavLink>

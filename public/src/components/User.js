@@ -54,6 +54,10 @@ function User() {
             setState({...state, isPlusMinus: 'plus'});
         };
     }
+    // minus 
+    const onBtnMinus = e => {
+        e.preventDefault();
+    }
     // change up to down
     const onBtnUpDown = e => {
         e.preventDefault();
@@ -73,19 +77,7 @@ function User() {
         // }, 5000)
     })
 
-    const data = {
-        "title": "Visits",
-        "data": [
-          {
-            "time": 'Tue',
-            "value": 39
-          },
-          {
-            "time": 'Wed',
-            "value": 60
-          }
-        ]
-      };
+    const data = getData();
 
     // console.log(state.feed);
   
@@ -99,7 +91,8 @@ function User() {
                             hubs
                         </Button>
                         <Button className={`badge-pill btn-outline-light bg-transparent ml-3 p-0 ${state.isPlusMinus}`} onClick={e => onBtnPlusMinus(e)}><span></span><span></span></Button>
-                        <Button className="minus badge-pill btn-outline-light bg-transparent ml-3 p-0" onClick={e => onBtnPlusMinus(e)}><span></span><span></span></Button>
+                        <Button className="minus badge-pill btn-outline-light bg-transparent ml-3 p-0" onClick={e => onBtnMinus(e)}><span></span><span></span></Button>
+                        <Button className={`badge-pill btn-outline-light bg-transparent ml-3 ${state.isUpDown}`} onClick={e => onBtnUpDown(e)}><span></span><span></span></Button>
                         <Button className={`badge-pill btn-outline-light bg-transparent ml-3 ${state.isUpDown}`} onClick={e => onBtnUpDown(e)}><span></span><span></span></Button>
                         <Collapse isOpen={state.isOpen1}>
                             {state.inputHub === true ?
@@ -160,15 +153,14 @@ function User() {
                         <span className="slider round"></span>
                     </label>
                     <p className="text-light">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</p>
-                    <LineChart data={data.data} title={data.title} color='white' />
-                    
-      <FormGroup>
-        <Label for="rangeInput">Range</Label>
-        <Input type="range" id="rangeInput" 
-       name="rangeInput" min="0" max="100"
-       onInput="this.output.amount.value=this.value" />
-       <output name="amount" id="amount" htmlFor="rangeInput">0</output>
-      </FormGroup>
+                    <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
+                    <FormGroup>
+                        <Label for="rangeInput">Range</Label>
+                        <Input type="range" id="rangeInput" 
+                    name="rangeInput" min="0" max="100"
+                    oninput="this.output.amount.value=this.value" />
+                    <output name="amount" id="amount" htmlFor="rangeInput">0</output>
+                    </FormGroup>
                 </Col>
             </Row>
         </Container>

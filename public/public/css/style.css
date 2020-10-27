@@ -68,15 +68,19 @@ body #root .container > form > .row .row > .col-6.text-right {
 }
 
 body #root .container > form > .row .row > .col-6.text-right > span {
-  font-size: 0.8rem;
+  font-size: 1rem;
+}
+
+body #root .container > .container {
+  padding-top: 6rem;
+}
+
+body #root .container > .container .col-lg-8 {
+  border: none;
 }
 
 body #root > .container {
   padding-top: 6rem;
-}
-
-body #root > .container .col-lg-8 {
-  border: none;
 }
 
 body .logo {
@@ -91,6 +95,26 @@ body h3 {
   font-family: Cuyabra;
   letter-spacing: .02rem;
   color: white;
+}
+
+body input.form-control {
+  color: white !important;
+}
+
+body input.form-control::-webkit-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body input.form-control:-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body input.form-control::-ms-input-placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+body input.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 
 body a {
@@ -113,43 +137,57 @@ body .text-transp {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
-body .btn {
+body .btn,
+body button {
   -webkit-box-shadow: none;
           box-shadow: none;
   text-shadow: none;
 }
 
-body .btn:hover, body .btn:active, body .btn.visited, body .btn:focus {
+body .btn:hover, body .btn:active, body .btn.visited, body .btn:focus,
+body button:hover,
+body button:active,
+body button.visited,
+body button:focus {
   -webkit-transform: scale(130%);
           transform: scale(130%);
   -webkit-box-shadow: none;
           box-shadow: none;
   text-shadow: none;
+  outline: none;
 }
 
-body .btn.btn-outline-light:hover {
+body .btn.btn-outline-light:hover,
+body button.btn-outline-light:hover {
   color: white !important;
   -webkit-transform: scale(1.05);
           transform: scale(1.05);
 }
 
-body .btn.btn-outline-light:active {
+body .btn.btn-outline-light:active,
+body button.btn-outline-light:active {
   background-color: white !important;
   color: #241b12 !important;
 }
 
 body .btn.btn-outline-light:active.down > span,
-body .btn.btn-outline-light:active.up > span {
+body .btn.btn-outline-light:active.up > span,
+body button.btn-outline-light:active.down > span,
+body button.btn-outline-light:active.up > span {
   background-color: #241b12 !important;
 }
 
-body .btn.plus, body .btn.minus {
+body .btn.plus, body .btn.minus,
+body button.plus,
+body button.minus {
   width: 1.2rem;
   height: 1.2rem;
   position: relative;
 }
 
-body .btn.plus > span, body .btn.minus > span {
+body .btn.plus > span, body .btn.minus > span,
+body button.plus > span,
+body button.minus > span {
   width: 0.6rem;
   height: 0.1rem;
   position: absolute;
@@ -159,7 +197,8 @@ body .btn.plus > span, body .btn.minus > span {
   border-radius: 0.1rem;
 }
 
-body .btn.plus > span:last-child {
+body .btn.plus > span:last-child,
+body button.plus > span:last-child {
   width: 0.1rem;
   height: 0.6rem;
   position: absolute;
@@ -170,17 +209,21 @@ body .btn.plus > span:last-child {
 }
 
 body .btn.plus:active > span,
-body .btn.minus:active > span {
+body .btn.minus:active > span,
+body button.plus:active > span,
+body button.minus:active > span {
   background-color: #241b12;
 }
 
-body .btn.down {
+body .btn.down,
+body button.down {
   width: 1.2rem;
   height: 1.2rem;
   padding: .3rem;
 }
 
-body .btn.down > span {
+body .btn.down > span,
+body button.down > span {
   width: 0.1rem;
   height: 0.49rem;
   display: inline-block;
@@ -188,25 +231,29 @@ body .btn.down > span {
   border-radius: 0.1rem;
 }
 
-body .btn.down > span:first-child {
+body .btn.down > span:first-child,
+body button.down > span:first-child {
   -webkit-transform: rotate(-45deg);
           transform: rotate(-45deg);
   float: left;
 }
 
-body .btn.down > span:last-child {
+body .btn.down > span:last-child,
+body button.down > span:last-child {
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
   float: right;
 }
 
-body .btn.up {
+body .btn.up,
+body button.up {
   width: 1.2rem;
   height: 1.2rem;
   padding: 0 .3rem .12rem .3rem;
 }
 
-body .btn.up > span {
+body .btn.up > span,
+body button.up > span {
   width: 0.1rem;
   height: 0.49rem;
   display: inline-block;
@@ -214,64 +261,79 @@ body .btn.up > span {
   border-radius: 0.1rem;
 }
 
-body .btn.up > span:first-child {
+body .btn.up > span:first-child,
+body button.up > span:first-child {
   -webkit-transform: rotate(45deg);
           transform: rotate(45deg);
   float: left;
 }
 
-body .btn.up > span:last-child {
+body .btn.up > span:last-child,
+body button.up > span:last-child {
   -webkit-transform: rotate(-45deg);
           transform: rotate(-45deg);
   float: right;
 }
 
-body .btn.accordion.btn {
+body .btn.accordion.btn,
+body button.accordion.btn {
   background-color: transparent;
   border-color: transparent;
   font-size: 1.5rem;
   color: var(--text-transp);
 }
 
-body .btn.accordion.btn:hover, body .btn.accordion.btn:active, body .btn.accordion.btn:focus, body .btn.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active {
+body .btn.accordion.btn:hover, body .btn.accordion.btn:active, body .btn.accordion.btn:focus, body .btn.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active,
+body button.accordion.btn:hover,
+body button.accordion.btn:active,
+body button.accordion.btn:focus,
+body button.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active {
   background-color: transparent;
   border-color: transparent;
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
-body .btn.accordion .collapse .card {
+body .btn.accordion .collapse .card,
+body button.accordion .collapse .card {
   background-color: transparent !important;
   border-color: transparent;
 }
 
-body .btn.accordion .collapse .card .card-body {
+body .btn.accordion .collapse .card .card-body,
+body button.accordion .collapse .card .card-body {
   font-size: 1.25rem;
   color: var(--text-transp);
 }
 
-body .btn.accordion .collapse .card .card-body .btn {
+body .btn.accordion .collapse .card .card-body .btn,
+body button.accordion .collapse .card .card-body .btn {
   background-color: transparent !important;
   border-color: transparent;
 }
 
-body .btn input {
+body .btn input,
+body button input {
   color: white !important;
 }
 
-body .btn input::-webkit-input-placeholder {
+body .btn input::-webkit-input-placeholder,
+body button input::-webkit-input-placeholder {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
-body .btn input:-ms-input-placeholder {
+body .btn input:-ms-input-placeholder,
+body button input:-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
-body .btn input::-ms-input-placeholder {
+body .btn input::-ms-input-placeholder,
+body button input::-ms-input-placeholder {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
-body .btn input::placeholder {
+body .btn input::placeholder,
+body button input::placeholder {
   color: rgba(255, 255, 255, 0.5) !important;
 }
 
@@ -363,5 +425,91 @@ body code {
     border: 0.1rem solid white !important;
     border-radius: 1.2rem;
   }
+  #root > .navbar {
+    background-color: #241b12;
+    -webkit-box-shadow: 0 6px 24px 2px #241b12;
+            box-shadow: 0 6px 24px 2px #241b12;
+  }
+  #root > .navbar.navbar-toggler-icon {
+    color: white;
+  }
+}
+
+/* *********************************************************** IMPORT ********************************************************* */
+.navbar-toggler {
+  padding-right: 0 !important;
+}
+
+.navbar-toggler .menu-icon {
+  width: 30px;
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  cursor: pointer;
+}
+
+.navbar-toggler .menu-icon > span {
+  height: 0.4rem;
+  width: 0.4rem;
+  border-radius: 50%;
+  border: 0.1rem solid white;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2) {
+  position: relative;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2)::before, .navbar-toggler .menu-icon > span:nth-child(2)::after {
+  content: '';
+  position: absolute;
+  background: white;
+  height: 0.1rem;
+  width: 0;
+  -webkit-transition: width 0.3s;
+  transition: width 0.3s;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2)::before {
+  top: 0.05rem;
+  right: 0.2rem;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(2)::after {
+  top: 0.05rem;
+  left: 0.2rem;
+}
+
+.navbar-toggler .menu-icon > span:nth-child(3) {
+  left: 26px;
+}
+
+.navbar-toggler .menu-icon.open > span:nth-child(2)::before,
+.navbar-toggler .menu-icon.open > span:nth-child(2)::after {
+  width: 0.5rem;
+}
+
+/* mobile sidebar */
+#sidebar {
+  width: 100vw;
+  position: fixed;
+  top: 74px;
+  left: -101vw;
+  height: 100vh;
+  z-index: 999;
+  background: #241b12;
+  /* background: pink; */
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  -webkit-box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+          box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+  /* overflow-y: hidden; */
+}
+
+#sidebar.active {
+  left: 0;
 }
 /*# sourceMappingURL=style.css.map */
