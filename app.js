@@ -177,20 +177,23 @@ const io = require('socket.io').listen(server);
 io.on('connection', socket => {
     log('Device Is Connected');
 
-    socket.on('device_connect', data => {
+    socket.on('hub_device_connect', data => {
         // go to database, check if the device exists, then get a device name
         SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(device => {
             if (device.length > 0) {
                 if (device[0].user_id) {
                     log(`Device ${device[0].name} is connected now!`);
                     // allow listening to this device
+                    // change the status to connected
                     socket.emit('toDevice', `Listening to Device ${device[0].name} is allowed!`);
                 } else {
                     log(`Device ${data.sn_number} is not registered!`);
                     // NOT allow listening to this device
+                    // kill socket
                 }
             } else {
                 log(`Device with ${data.sn_number} is not existing!`);
+                // kill socket
             }
         }).catch(error => {
             log(error);
