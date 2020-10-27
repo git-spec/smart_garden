@@ -140,10 +140,10 @@ const Login = props => {
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-4 text-left">
                                 <Row>
-                                    <Col xs="6">
+                                    <Col xs="4" md="6">
                                         <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                     </Col>
-                                    <Col xs="6" className="text-right">
+                                    <Col xs="8" md="6" className="text-right">
                                         <span className="pr-2">Forgot Your <Link to="/Password" className="pr-1">Password</Link>?</span>
                                     </Col>
                                 </Row>
