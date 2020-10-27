@@ -29,9 +29,10 @@ class LineChart extends React.Component {
                   unit: 'week'
                 },
                 gridLines: {
-                  color: this.props.color
+                  color: 'rgba(255, 255, 255, .5)'
                 },
-                drawBorder: true
+                drawBorder: true,
+                borderWidth: .5
               }
             ],
             yAxes: [
@@ -40,8 +41,9 @@ class LineChart extends React.Component {
                   min: 0
                 },
                 gridLines: {
-                  color: this.props.color
-                }
+                  color: 'rgba(255, 255, 255, .5)'
+                },
+                borderWidth: .5
               }
             ]
           }
