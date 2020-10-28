@@ -372,7 +372,7 @@ body .accordion > .card > .card-body .card-body .card-header > .card-subtitle {
 }
 
 body .accordion > .card > .card-body .card-text {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.7);
 }
 

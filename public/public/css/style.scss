@@ -180,7 +180,7 @@ body {
         background-color: $color-1 !important;
       }
     }
-    // button plus & minus
+    // buttons plus & minus
     &.plus,
     &.minus {
       @include roundBtn();
@@ -195,6 +195,7 @@ body {
         border-radius: $border;
       }
     }
+    // change color of buttons lpus & minus
     &.plus {
       border-color: $color-success !important;
       & > span {
@@ -347,7 +348,7 @@ body {
         }
       }
       & .card-text {
-        font-size: $font-size-4;
+        font-size: $font-size-5;
         color: $text-transp;
       }
     }
