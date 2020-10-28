@@ -25,6 +25,10 @@ class LineChart extends React.Component {
           scales: {
             xAxes: [
               {
+                ticks: {
+                  min: 0,
+                  padding: 10
+                },
                 type: 'time',
                 time: {
                   unit: 'week'
@@ -39,7 +43,8 @@ class LineChart extends React.Component {
             yAxes: [
               {
                 ticks: {
-                  min: 0
+                  min: 0,
+                  padding: 10
                 },
                 gridLines: {
                   color: 'rgba(255, 255, 255, .5)'
