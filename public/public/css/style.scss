@@ -215,6 +215,9 @@ body {
           background-color: $color-1 !important;
         }
       }
+      &:active {
+        background-color: $color-danger !important;
+      }
     }
     // plus bar
     &.plus > span:last-child {

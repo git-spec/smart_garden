@@ -234,6 +234,11 @@ body button.minus > span:active {
   background-color: #241b12 !important;
 }
 
+body .btn.minus:active,
+body button.minus:active {
+  background-color: red !important;
+}
+
 body .btn.plus > span:last-child,
 body button.plus > span:last-child {
   width: 0.1rem;
