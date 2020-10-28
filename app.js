@@ -177,21 +177,56 @@ const io = require('socket.io').listen(server);
 io.on('connection', socket => {
     log('Device Is Connected');
 
+    socket.on('user_connect', data => {
+        console.log(data);
+        socket.join(data.toString())
+    })
+
     socket.on('hub_device_connect', data => {
         // go to database, check if the device exists, then get a device name
         SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(device => {
+            // console.log(device);
             if (device.length > 0) {
                 if (device[0].user_id) {
-                    log(`Device ${device[0].name} is connected now!`);
+                    socket.join(device[0].user_id)
+                    socket.broadcast.to(device[0].user_id).emit('hub_connect', data.sn_number)
+                    socket.on('device_connect', data => {
+                        // make device connected true on database
+                        socket.broadcast.to(device[0].user_id).emit('device_connect', data)
+                    })
+                    socket.on('device_disconnect', data => {
+                        // make device connected false on database
+                        socket.broadcast.to(device[0].user_id).emit('device_disconnect', data)
+                    })
+                    socket.on('disconnect', () => {
+                        SQL.updateRecord("iot_hubs", {connected: 0}, {sn_number: data.sn_number}).then(() => {
+                            socket.broadcast.to(device[0].user_id).emit('hub_disconnect', data.sn_number)                            
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
                     // allow listening to this device
-                    // change the status to connected
-                    socket.emit('toDevice', `Listening to Device ${device[0].name} is allowed!`);
+                    log(`Device ${device[0].name} is connected now!`);
+                    // change the status in db to connected
+                    SQL.updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number}).then(() => {
+                        // socket.emit('toDevice', `Listening to Device ${device[0].name} is allowed!`);
+                        SQL.checkExist('iot_device', '*', {hub_id: device[0].id}).then(devices => {
+                            socket.emit('toDevice', devices);
+                            log(devices);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    }).catch(error => {
+                        log(error);
+                    });
                 } else {
-                    log(`Device ${data.sn_number} is not registered!`);
                     // NOT allow listening to this device
+                    // product is not registered
+                    log(`Device ${data.sn_number} is not registered!`);
                     // kill socket
                 }
             } else {
+                // no product found
                 log(`Device with ${data.sn_number} is not existing!`);
                 // kill socket
             }
@@ -205,11 +240,3 @@ io.on('connection', socket => {
     });
 });
 // configure the socket END
-
-/*
-robot.txt
-# https://www.robotstxt.org/robotstxt.html
-#User-agent: *
-#Disallow:
-
-*/ 
