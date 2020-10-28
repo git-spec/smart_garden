@@ -199,24 +199,24 @@ body {
       border-color: $color-success !important;
       & > span {
         background-color: $color-success !important;
-        &:active {
-          background-color: $color-1 !important;
-        }
       }
       &:active {
         background-color: $color-success !important;
+      }
+      &:active > span {
+        background-color: $color-1 !important;
       }
     }
     &.minus {
       border-color: $color-danger !important;
       & > span {
         background-color: $color-danger !important;
-        &:active {
-          background-color: $color-1 !important;
-        }
       }
       &:active {
         background-color: $color-danger !important;
+      }
+      &:active > span {
+        background-color: $color-1 !important;
       }
     }
     // plus bar

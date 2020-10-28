@@ -209,14 +209,14 @@ body button.plus > span {
   background-color: #30a256 !important;
 }
 
-body .btn.plus > span:active,
-body button.plus > span:active {
-  background-color: #241b12 !important;
-}
-
 body .btn.plus:active,
 body button.plus:active {
   background-color: #30a256 !important;
+}
+
+body .btn.plus:active > span,
+body button.plus:active > span {
+  background-color: #241b12 !important;
 }
 
 body .btn.minus,
@@ -229,14 +229,14 @@ body button.minus > span {
   background-color: red !important;
 }
 
-body .btn.minus > span:active,
-body button.minus > span:active {
-  background-color: #241b12 !important;
-}
-
 body .btn.minus:active,
 body button.minus:active {
   background-color: red !important;
+}
+
+body .btn.minus:active > span,
+body button.minus:active > span {
+  background-color: #241b12 !important;
 }
 
 body .btn.plus > span:last-child,
