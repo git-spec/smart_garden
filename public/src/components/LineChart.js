@@ -4,6 +4,7 @@ import Chart from 'chart.js';
 // chart stlye options
 Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
+Chart.defaults.global.defaultFontColor = 'white';
 
 class LineChart extends React.Component {
     constructor(props) {
