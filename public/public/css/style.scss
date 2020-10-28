@@ -10,7 +10,7 @@ $font-size-3: 1.2rem;
 $font-size-4: 1rem;
 $font-size-5: .8rem;
 $font-size-6: .6rem;
-$text-transp: rgba(255, 255, 255, .5);
+$text-transp: rgba(255, 255, 255, .7);
 $color-1: rgb(36, 27, 18);
 $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
@@ -20,6 +20,10 @@ $color-light: white;
 $color-danger: red;
 $color-success: rgb(48, 162, 86);
 $border: .1rem;
+// outline
+@mixin makeOutline {
+  border: $border solid $color-light !important;
+}
 // remove shadows
 @mixin killShadow {
   box-shadow: none;
@@ -93,13 +97,14 @@ body {
           font-size: $font-size-4;
         }
       }
+      // frame border
+      & .col-lg-7 > .col {
+        @include makeOutline();
+        border-radius: $font-size-4;
+      }
       // frame border of container inside container
       & > .container {
         padding-top: 6rem;
-        // frame border
-        & .col-lg-8 {
-        border: none;
-        }
       }
     }
     & > .container {
@@ -119,6 +124,7 @@ body {
     font-family: $font-head;
     letter-spacing: .02rem;
     color: $color-light;
+    padding-left: .02rem;
   }
   & input.form-control {
     color: $color-light !important;
@@ -140,7 +146,7 @@ body {
   }
   // round border
   & .badge-pill {
-    border: $border solid $color-light !important;
+    @include makeOutline();
   }
   // opac text
   & .text-transp {
@@ -187,6 +193,27 @@ body {
         top: ($font-size-3 / 2 - $border - $border / 2);
         background-color: $color-light;
         border-radius: $border;
+      }
+    }
+    &.plus {
+      border-color: $color-success !important;
+      & > span {
+        background-color: $color-success !important;
+        &:active {
+          background-color: $color-1 !important;
+        }
+      }
+      &:active {
+        background-color: $color-success !important;
+      }
+    }
+    &.minus {
+      border-color: $color-danger !important;
+      & > span {
+        background-color: $color-danger !important;
+        &:active {
+          background-color: $color-1 !important;
+        }
       }
     }
     // plus bar
@@ -247,44 +274,79 @@ body {
         }
       }
     }
-    // accordion
-    &.accordion {
-      &.btn {
-        background-color: transparent;
-        border-color: transparent;
-        font-size: 1.5rem;
-        color: var(--text-transp);
-      }
+    // // accordion
+    // &.accordion {
+    //   &.btn {
+    //     background-color: transparent;
+    //     border-color: transparent;
+    //     font-size: $font-size-2;
+    //   }
       
-      &.btn:hover,
-      &.btn:active,
-      &.btn:focus,
-      &.btn.btn-secondary:not(:disabled):not(.disabled):active {
-        background-color: transparent;
-        border-color: transparent;
-        box-shadow: none;
-      }
+    // &.btn:hover,
+    // &.btn:active,
+    // &.btn:focus,
+    // &.btn.btn-secondary:not(:disabled):not(.disabled):active {
+    //   background-color: transparent;
+    //   border-color: transparent;
+    //   box-shadow: none;
+    // }
       
-      & .collapse {
-        & .card {
-          background-color: transparent !important;
-          border-color: transparent;
-          & .card-body {
-            font-size: 1.25rem;
-            color: var(--text-transp);
-            & .btn {
-              background-color: transparent !important;
-              border-color: transparent;
-            }
-          }
-        }
-      } 
-    }
+    //   & .collapse {
+    //     & .card {
+    //       background-color: transparent !important;
+    //       border-color: transparent;
+    //       & .card-body {
+    //         font-size: $font-size-3;
+    //         color: $text-transp;
+    //         & .btn {
+    //           background-color: transparent !important;
+    //           border-color: transparent;
+    //         }
+    //       }
+    //     }
+    //   } 
+    // }
+    // inputs
     & input {
       color: $color-light !important;
     }
     & input::placeholder {
       color: $text-transp !important;
+    }
+  }
+  & .accordion {
+    & button.accordion {
+      background-color: transparent;
+      border-color: transparent;
+      font-size: $font-size-2;
+      &:hover,
+      &:active,
+      &:focus,
+      &.btn-secondary:not(:disabled):not(.disabled):active {
+        background-color: transparent;
+        border-color: transparent;
+        box-shadow: none;
+      }
+    }
+    & > .card > .card-body {
+      & button.accordion {
+        font-size: $font-size-3;
+      }
+      & .card-body .card-header {
+        & > .card-title {
+          font-size: $font-size-3 !important;
+          & > button.minus {
+            margin-right: $font-size-3 + $font-size-4;
+          }
+        }
+        & > .card-subtitle {
+          color: $text-transp;
+        }
+      }
+      & .card-text {
+        font-size: $font-size-4;
+        color: $text-transp;
+      }
     }
   }
   // wrap of switch on & off
@@ -386,7 +448,7 @@ body {
 @media (min-width: 992px) {
   // hidden frame of dashboard
   #root > .container .col-lg-8 {
-    border: $border solid $color-light !important;
+    @include makeOutline();
     border-radius: $font-size-3;
   }
   // navigation bar

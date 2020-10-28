@@ -71,12 +71,13 @@ body #root .container > form > .row .row > .col-6.text-right > span {
   font-size: 1rem;
 }
 
-body #root .container > .container {
-  padding-top: 6rem;
+body #root .container .col-lg-7 > .col {
+  border: 0.1rem solid white !important;
+  border-radius: 1rem;
 }
 
-body #root .container > .container .col-lg-8 {
-  border: none;
+body #root .container > .container {
+  padding-top: 6rem;
 }
 
 body #root > .container {
@@ -95,6 +96,7 @@ body h3 {
   font-family: Cuyabra;
   letter-spacing: .02rem;
   color: white;
+  padding-left: .02rem;
 }
 
 body input.form-control {
@@ -102,19 +104,19 @@ body input.form-control {
 }
 
 body input.form-control::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body input.form-control:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body input.form-control::-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body input.form-control::placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body a {
@@ -134,7 +136,7 @@ body .badge-pill {
 }
 
 body .text-transp {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body .btn,
@@ -195,6 +197,41 @@ body button.minus > span {
   top: 0.45rem;
   background-color: white;
   border-radius: 0.1rem;
+}
+
+body .btn.plus,
+body button.plus {
+  border-color: #30a256 !important;
+}
+
+body .btn.plus > span,
+body button.plus > span {
+  background-color: #30a256 !important;
+}
+
+body .btn.plus > span:active,
+body button.plus > span:active {
+  background-color: #241b12 !important;
+}
+
+body .btn.plus:active,
+body button.plus:active {
+  background-color: #30a256 !important;
+}
+
+body .btn.minus,
+body button.minus {
+  border-color: red !important;
+}
+
+body .btn.minus > span,
+body button.minus > span {
+  background-color: red !important;
+}
+
+body .btn.minus > span:active,
+body button.minus > span:active {
+  background-color: #241b12 !important;
 }
 
 body .btn.plus > span:last-child,
@@ -275,43 +312,6 @@ body button.up > span:last-child {
   float: right;
 }
 
-body .btn.accordion.btn,
-body button.accordion.btn {
-  background-color: transparent;
-  border-color: transparent;
-  font-size: 1.5rem;
-  color: var(--text-transp);
-}
-
-body .btn.accordion.btn:hover, body .btn.accordion.btn:active, body .btn.accordion.btn:focus, body .btn.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active,
-body button.accordion.btn:hover,
-body button.accordion.btn:active,
-body button.accordion.btn:focus,
-body button.accordion.btn.btn-secondary:not(:disabled):not(.disabled):active {
-  background-color: transparent;
-  border-color: transparent;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-}
-
-body .btn.accordion .collapse .card,
-body button.accordion .collapse .card {
-  background-color: transparent !important;
-  border-color: transparent;
-}
-
-body .btn.accordion .collapse .card .card-body,
-body button.accordion .collapse .card .card-body {
-  font-size: 1.25rem;
-  color: var(--text-transp);
-}
-
-body .btn.accordion .collapse .card .card-body .btn,
-body button.accordion .collapse .card .card-body .btn {
-  background-color: transparent !important;
-  border-color: transparent;
-}
-
 body .btn input,
 body button input {
   color: white !important;
@@ -319,22 +319,56 @@ body button input {
 
 body .btn input::-webkit-input-placeholder,
 body button input::-webkit-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body .btn input:-ms-input-placeholder,
 body button input:-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body .btn input::-ms-input-placeholder,
 body button input::-ms-input-placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
 body .btn input::placeholder,
 body button input::placeholder {
-  color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+body .accordion button.accordion {
+  background-color: transparent;
+  border-color: transparent;
+  font-size: 1.4rem;
+}
+
+body .accordion button.accordion:hover, body .accordion button.accordion:active, body .accordion button.accordion:focus, body .accordion button.accordion.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: transparent;
+  border-color: transparent;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+body .accordion > .card > .card-body button.accordion {
+  font-size: 1.2rem;
+}
+
+body .accordion > .card > .card-body .card-body .card-header > .card-title {
+  font-size: 1.2rem !important;
+}
+
+body .accordion > .card > .card-body .card-body .card-header > .card-title > button.minus {
+  margin-right: 2.2rem;
+}
+
+body .accordion > .card > .card-body .card-body .card-header > .card-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body .accordion > .card > .card-body .card-text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
 }
 
 body .switch {
