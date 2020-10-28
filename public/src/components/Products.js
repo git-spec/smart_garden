@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import io from 'socket.io-client'
 // import {Link} from 'react-router-dom';
 import {
     Row,
@@ -58,6 +59,30 @@ const Products = props => {
     const [state, setState] = useState(initialState);
 
     // get hubs & devices data from db at initial render
+    //const socket = io(window.location.origin)
+    const socket = io('http://localhost:5000')
+
+    socket.on('connect', () => {
+        console.log('connected');
+        socket.emit('user_connect', '3')
+    })
+
+    socket.on('hub_connect', data => {
+        console.log('hub connected', data);
+    })
+
+    socket.on('hub_disconnect', data => {
+        console.log('hub disconnected', data);
+    })
+
+    socket.on('device_connect', data => {
+        console.log('device connected', data);
+    })
+
+    socket.on('device_disconnect', data => {
+        console.log('device disconnected', data);
+    })
+
     useEffect(() => {
         getHubsPost().then(hubs => {
             switch (hubs) {
