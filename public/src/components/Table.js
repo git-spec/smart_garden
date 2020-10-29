@@ -3,13 +3,13 @@ import {Table} from 'reactstrap';
 
 const ReactTable = (props) => {
   return (
-    <Table borderless size="sm">
+    <Table borderless size="sm" className="mb-5">
       <thead>
         <tr>
-          <th></th>
-          <th>Temperature</th>
-          <th>Air Humidity</th>
-          <th>Soil Humidity</th>
+          <th className="align-bottom"><h3 className="mb-0">kitchen</h3></th>
+          <th><i class="fas fa-thermometer-half"></i></th>
+          <th><i class="fas fa-cloud"></i></th>
+          <th><i class="fas fa-tint"></i></th>
         </tr>
       </thead>
       <tbody>

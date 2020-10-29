@@ -473,7 +473,7 @@ if (state.hubs && state.devices) {
 {/* ******************************************************** MONITOR ********************************************************* */}
                     <Col className="px-3" lg="7">
                         <Col className="p-3">
-                            <h3 className="text-center">kitchen</h3>
+                            {/* <h3 className="text-center">kitchen</h3> */}
                             <ReactTable />
                             <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                             <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />

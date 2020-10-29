@@ -453,10 +453,13 @@ body {
     font-weight: 300;
     & tr {
       color: $color-light;
-      border-top: $border solid $text-transp;
+      border-bottom: $border solid $text-transp;
     }
     & thead > tr > th {
       text-align: right;
+      &:first-child {
+        text-align: left;
+      }
     }
     & tbody {
       & td {

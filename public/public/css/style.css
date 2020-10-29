@@ -486,11 +486,15 @@ body .table {
 
 body .table tr {
   color: white;
-  border-top: 0.1rem solid rgba(255, 255, 255, 0.7);
+  border-bottom: 0.1rem solid rgba(255, 255, 255, 0.7);
 }
 
 body .table thead > tr > th {
   text-align: right;
+}
+
+body .table thead > tr > th:first-child {
+  text-align: left;
 }
 
 body .table tbody td {
