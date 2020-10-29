@@ -342,6 +342,13 @@ body button input::placeholder {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
+body .accordion {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+  border: none !important;
+}
+
 body .accordion button.accordion {
   background-color: transparent;
   border-color: transparent;
@@ -355,6 +362,13 @@ body .accordion button.accordion:hover, body .accordion button.accordion:active,
           box-shadow: none;
 }
 
+body .accordion > .card > .card-body {
+  -webkit-box-shadow: none;
+          box-shadow: none;
+  text-shadow: none;
+  border: none !important;
+}
+
 body .accordion > .card > .card-body button.accordion {
   font-size: 1.2rem;
 }
@@ -363,8 +377,12 @@ body .accordion > .card > .card-body .card-body .card-header > .card-title {
   font-size: 1.2rem !important;
 }
 
-body .accordion > .card > .card-body .card-body .card-header > .card-title > button.minus {
+body .accordion > .card > .card-body .card-body .card-header > .card-title > button.plus {
   margin-right: 2.2rem;
+}
+
+body .accordion > .card > .card-body .card-body .card-header > .card-title > button.minus {
+  margin-right: 4.4rem;
 }
 
 body .accordion > .card > .card-body .card-body .card-header > .card-subtitle {
@@ -373,6 +391,14 @@ body .accordion > .card > .card-body .card-body .card-header > .card-subtitle {
 
 body .accordion > .card > .card-body .card-text {
   font-size: 0.8rem;
+}
+
+body .active-light {
+  display: inline-block;
+  height: 0.4rem;
+  width: 0.4rem;
+  border-radius: 0.4rem;
+  background-color: #30a256;
 }
 
 body .switch {
@@ -452,6 +478,27 @@ body .switch .slider:before {
   -webkit-transition: .4s;
   transition: .4s;
   z-index: 1;
+}
+
+body .table {
+  font-weight: 300;
+}
+
+body .table tr {
+  color: white;
+  border-top: 0.1rem solid rgba(255, 255, 255, 0.7);
+}
+
+body .table thead > tr > th {
+  text-align: right;
+}
+
+body .table tbody td {
+  text-align: right;
+}
+
+body th {
+  font-weight: 500;
 }
 
 body code {

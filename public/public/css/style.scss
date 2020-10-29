@@ -10,6 +10,7 @@ $font-size-3: 1.2rem;
 $font-size-4: 1rem;
 $font-size-5: .8rem;
 $font-size-6: .6rem;
+$font-size-7: .4rem;
 $text-transp: rgba(255, 255, 255, .7);
 $color-1: rgb(36, 27, 18);
 $color-1-opac: rgba(26, 17, 8, .8);
@@ -319,6 +320,8 @@ body {
     }
   }
   & .accordion {
+    @include killShadow;
+    border: none !important;
     & button.accordion {
       background-color: transparent;
       border-color: transparent;
@@ -333,14 +336,19 @@ body {
       }
     }
     & > .card > .card-body {
+      @include killShadow;
+      border: none !important;
       & button.accordion {
         font-size: $font-size-3;
       }
       & .card-body .card-header {
         & > .card-title {
           font-size: $font-size-3 !important;
-          & > button.minus {
+          & > button.plus {
             margin-right: $font-size-3 + $font-size-4;
+          }
+          & > button.minus {
+            margin-right: ($font-size-3 + $font-size-4) * 2;
           }
         }
         & > .card-subtitle {
@@ -351,6 +359,14 @@ body {
         font-size: $font-size-5;
       }
     }
+  }
+  // active light {
+  & .active-light {
+    display: inline-block;
+    height: $font-size-7;
+    width: $font-size-7;
+    border-radius: $font-size-7;
+    background-color: $color-success;
   }
   // wrap of switch on & off
   & .switch {
@@ -431,6 +447,25 @@ body {
       transition: .4s;
       z-index: 1;
     }
+  }
+  // tables
+  & .table {
+    font-weight: 300;
+    & tr {
+      color: $color-light;
+      border-top: $border solid $text-transp;
+    }
+    & thead > tr > th {
+      text-align: right;
+    }
+    & tbody {
+      & td {
+        text-align: right;
+      }
+    }
+  }
+  & th {
+    font-weight: 500;
   }
 
   code {
