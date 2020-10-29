@@ -7,9 +7,9 @@ const ReactTable = (props) => {
       <thead>
         <tr>
           <th className="align-bottom"><h3 className="mb-0">kitchen</h3></th>
-          <th><i class="fas fa-thermometer-half"></i></th>
-          <th><i class="fas fa-cloud"></i></th>
-          <th><i class="fas fa-tint"></i></th>
+          <th><i className="fas fa-thermometer-half mr-2 mb-2"></i></th>
+          <th><i className="fas fa-cloud mr-2 mb-2"></i></th>
+          <th><i className="fas fa-tint mr-2 mb-2"></i></th>
         </tr>
       </thead>
       <tbody>

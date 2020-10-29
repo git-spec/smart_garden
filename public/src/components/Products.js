@@ -327,6 +327,33 @@ if (state.hubs && state.devices) {
                                     </Button>
                                 </CardSubtitle>
                             </CardHeader>
+{/* ******************************************************** ADD HUB ********************************************************* */}
+                            <Collapse isOpen={state.collapseAddHub}>
+                                <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                    <CardTitle className="flex-grow-1 m-0">
+                                        <Input
+                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            placeholder="Enter a serial number"
+                                            onChange={e => setState({...state, hubNum: e.target.value})}
+                                            value={state.hubNum}
+                                        />
+                                        <Input
+                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            placeholder="Enter a name for your hub"
+                                            onChange={e => setState({...state, hubName: e.target.value})}
+                                            value={state.hubName}
+                                        />
+                                    </CardTitle>
+                                    <CardSubtitle>
+                                        <Button
+                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                            onClick={onAddHubBtnClick}
+                                        >
+                                            <span></span><span></span>
+                                        </Button>
+                                    </CardSubtitle>
+                                </CardHeader>
+                            </Collapse>
                             <CardBody className="p-0">
                                 <Collapse isOpen={state.collapseHubs}>
 {/* ******************************************************** LOOP HUB ********************************************************* */}
@@ -370,6 +397,39 @@ if (state.hubs && state.devices) {
                                                         </Button>
                                                     </CardSubtitle>
                                                 </CardHeader>
+{/* ******************************************************** ADD DEVICE ********************************************************* */}
+                                                <CardBody className="p-0 pl-2">
+                                                    <Collapse isOpen={state.collapseAddDevice === idx}>
+                                                        <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                                            <CardTitle className="flex-grow-1 m-0">
+                                                                <Input
+                                                                    className="badge-pill bg-transparent py-0 mb-3"
+                                                                    placeholder="Enter a serial number"
+                                                                    onChange={e =>
+                                                                        setState({...state, deviceNum: e.target.value})
+                                                                    }
+                                                                    value={state.deviceNum}
+                                                                />
+                                                                <Input
+                                                                    className="badge-pill bg-transparent py-0 mb-3"
+                                                                    placeholder="Enter a name for your device"
+                                                                    onChange={e =>
+                                                                        setState({...state, deviceName: e.target.value})
+                                                                    }
+                                                                    value={state.deviceName}
+                                                                />
+                                                            </CardTitle>
+                                                            <CardSubtitle>
+                                                                <Button
+                                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                                                    onClick={e => onAddDeviceBtnClick(e, hub.id)}
+                                                                >
+                                                                    <span></span><span></span>
+                                                                </Button>
+                                                            </CardSubtitle>
+                                                        </CardHeader>
+                                                    </Collapse>
+                                                </CardBody>
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ******************************************************** LOOP DEVICE ********************************************************* */}
@@ -401,71 +461,11 @@ if (state.hubs && state.devices) {
                                                                 </CardHeader>
                                                             );
                                                         })}
-{/* ******************************************************** ADD DEVICE ********************************************************* */}
-                                                        <CardBody className="p-0 pl-2">
-                                                            <Collapse isOpen={state.collapseAddDevice === idx}>
-                                                                <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
-                                                                    <CardTitle className="flex-grow-1 m-0">
-                                                                        <Input
-                                                                            className="badge-pill bg-transparent py-0 mb-3"
-                                                                            placeholder="Enter a serial number"
-                                                                            onChange={e =>
-                                                                                setState({...state, deviceNum: e.target.value})
-                                                                            }
-                                                                            value={state.deviceNum}
-                                                                        />
-                                                                        <Input
-                                                                            className="badge-pill bg-transparent py-0 mb-3"
-                                                                            placeholder="Enter a name for your device"
-                                                                            onChange={e =>
-                                                                                setState({...state, deviceName: e.target.value})
-                                                                            }
-                                                                            value={state.deviceName}
-                                                                        />
-                                                                    </CardTitle>
-                                                                    <CardSubtitle>
-                                                                        <Button
-                                                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                                            onClick={e => onAddDeviceBtnClick(e, hub.id)}
-                                                                        >
-                                                                            <span></span><span></span>
-                                                                        </Button>
-                                                                    </CardSubtitle>
-                                                                </CardHeader>
-                                                            </Collapse>
-                                                        </CardBody>
                                                     </Collapse>
                                                 </CardBody>
                                             </div>
                                         );
                                     })}
-{/* ******************************************************** ADD HUB ********************************************************* */}
-                                    <Collapse isOpen={state.collapseAddHub}>
-                                        <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
-                                            <CardTitle className="flex-grow-1 m-0">
-                                                <Input
-                                                    className="badge-pill bg-transparent py-0 mb-3"
-                                                    placeholder="Enter a serial number"
-                                                    onChange={e => setState({...state, hubNum: e.target.value})}
-                                                    value={state.hubNum}
-                                                />
-                                                <Input
-                                                    className="badge-pill bg-transparent py-0 mb-3"
-                                                    placeholder="Enter a name for your hub"
-                                                    onChange={e => setState({...state, hubName: e.target.value})}
-                                                    value={state.hubName}
-                                                />
-                                            </CardTitle>
-                                            <CardSubtitle>
-                                                <Button
-                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                    onClick={onAddHubBtnClick}
-                                                >
-                                                    <span></span><span></span>
-                                                </Button>
-                                            </CardSubtitle>
-                                        </CardHeader>
-                                    </Collapse>
                                 </Collapse>
                             </CardBody>
                         </Card>
