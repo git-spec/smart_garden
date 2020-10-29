@@ -66,6 +66,10 @@ body {
         &.navbar-toggler-icon {
             color: $color-light;
         }
+        & #sidebar {
+          top: 60px;
+          padding-top: $font-size-5;
+        }
     }
     // layer with gradient
     & .gradient {

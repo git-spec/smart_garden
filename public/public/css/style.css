@@ -37,6 +37,11 @@ body #root > .navbar.navbar-toggler-icon {
   color: white;
 }
 
+body #root > .navbar #sidebar {
+  top: 60px;
+  padding-top: 0.8rem;
+}
+
 body #root .gradient {
   width: 100%;
   height: 100%;
