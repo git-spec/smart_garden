@@ -36,7 +36,7 @@ function Navigation(props) {
     
     return (
         <Navbar fixed="top">
-            <Container>
+            <Container className="px-sm-3 px-0">
                 <NavbarBrand href="/">
                     <svg version="1.1" className="logo"
                         xmlns="http://www.w3.org/2000/svg"
