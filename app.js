@@ -29,7 +29,7 @@ app.use(session({
 }));
 
 // modules
-const {registerUser, checkUser, verifyUser, confirmVerifiedUser, sendResetLink, resetPass} = require('./modules/usersAuth')
+const {registerUser, editUser, checkUser, verifyUser, confirmVerifiedUser, sendResetLink, resetPass} = require('./modules/usersAuth')
 
 // user
 const userRoutes = require('./routes/userRoutes');
@@ -55,7 +55,34 @@ app.post('/register', (req, res) => {
         registerUser(entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(email), password).then(() => {
             res.json(1)
         }).catch(error => {
-            console.log(error);
+            if (error == "exist") {
+                res.json(3)
+            } else{
+                res.json(4)
+            }
+        })
+    } else {
+        res.json(2)
+    };
+});
+
+app.post('/edit', (req, res) => {
+    // your post register handler here
+    // console.log(req.body)
+    // 2 data error
+    // 1 user edited successfully
+    // 4 server error
+    const id = req.body.id;
+    const firstName = req.body.firstName.trim();
+    const lastName = req.body.lastName.trim();
+    const userName = req.body.userName.trim();
+    const city = req.body.city.trim();
+    const password = req.body.password;
+    const repassword = req.body.repassword;
+    if (id && firstName && lastName && userName && city && password && password == repassword){
+        editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
+            res.json(1)
+        }).catch(error => {
             if (error == "exist") {
                 res.json(3)
             } else{
@@ -75,17 +102,17 @@ app.post('/login', (req, res) => {
     if (req.body.email && req.body.password) {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
             req.session.user = user
-            res.json(1)
+            res.json({result: 1, id: user.id})
         }).catch(error => {
             console.log(error);
             if (error == 3) {
-                res.json(3)
+                res.json({result: 3})
             } else {
-                res.json(4)
+                res.json({result: 4})
             };
         })
     } else {
-        res.json(2)
+        res.json({result: 2})
     };
 });
 
@@ -150,8 +177,15 @@ app.post('/checklogin', (req, res) => {
         verified: 1
     };
     // console.log(req.session.user);
+    // if (req.session.user) {
+    //     res.json(req.session.user.username);
+    // } else {
+    //     res.json(10);
+    // }
+
     if (req.session.user) {
-        res.json(req.session.user.username);
+        const user = req.session.user
+        res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname});
     } else {
         res.json(10);
     }
@@ -174,25 +208,79 @@ const server = app.listen(port, () => {
 
 // configure the socket START
 const io = require('socket.io').listen(server);
-io.on('connection', socket => {
-    log('Device Is Connected');
 
-    socket.on('hub_device_connect', data => {
-        // go to database, check if the device exists, then get a device name
-        SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(device => {
-            if (device.length > 0) {
-                if (device[0].user_id) {
-                    log(`Device ${device[0].name} is connected now!`);
-                    // allow listening to this device
-                    // change the status to connected
-                    socket.emit('toDevice', `Listening to Device ${device[0].name} is allowed!`);
+io.on('connection', socket => {
+    // log('Device Is Connected');
+
+    socket.on('user_connect', userID => {
+        // console.log('userID: ', userID);
+        socket.join(userID.toString());
+    });
+
+    socket.on('hub_connect', data => {
+        // check in the database if the hub exists
+        SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(hubs => {
+            // console.log('hub: ', hubs[0]);
+            if (hubs.length > 0) {
+                if (hubs[0].user_id) {
+                    // join user twice?
+                    socket.join(hubs[0].user_id);
+
+                    // change the status from hub to connected in db
+                    SQL.updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number}).then(() => {
+                        socket.broadcast.to(hubs[0].user_id).emit('hub_connect', data.sn_number)
+                        log(`Hub ${hubs[0].name} is connected now!`);
+                        // get the devices that belong to this hub
+                        SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
+                            // log(devices);
+                            socket.emit('toDevice', devices);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    }).catch(error => {
+                        log(error);
+                    });
+
+                    // listening to info from raspberry
+                    socket.on('device_connect', sn_number => {
+                        // change the status from device to connected in DB
+                        SQL.updateRecord('iot_device', {connected: 1}, {sn_number: sn_number}).then(() => {
+                            socket.broadcast.to(hubs[0].user_id).emit('device_connect', sn_number);
+                            log(`Device "${sn_number}" is connected now`);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
+
+                    // listening to info from raspberry
+                    socket.on('device_disconnect', sn_number => {
+                        // change the status from device to disconnected in DB
+                        SQL.updateRecord('iot_device', {connected: 0}, {sn_number: sn_number}).then(() => {
+                            socket.broadcast.to(hubs[0].user_id).emit('device_disconnect', sn_number);
+                            log(`Device "${sn_number}" is disconnected now`);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
+                    
+                    // disconnect hub
+                    socket.on('disconnect', () => {
+                        // change the status from hub to disconnected in DB
+                        SQL.updateRecord("iot_hubs", {connected: 0}, {sn_number: data.sn_number}).then(() => {
+                            socket.broadcast.to(hubs[0].user_id).emit('hub_disconnect', data.sn_number);
+                            log(`Hub "${hubs[0].name}" is disconnected now`);                        
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
                 } else {
-                    log(`Device ${data.sn_number} is not registered!`);
-                    // NOT allow listening to this device
+                    // hub is not registered
+                    log(`Hub ${data.sn_number} is not registered!`);
                     // kill socket
                 }
             } else {
-                log(`Device with ${data.sn_number} is not existing!`);
+                // hub not found
+                log(`Hub with ${data.sn_number} is not existing!`);
                 // kill socket
             }
         }).catch(error => {
@@ -200,16 +288,10 @@ io.on('connection', socket => {
         });
     });
 
+    // disconnected twice?
     socket.on('disconnect', () => {
-        log('Device Is Disconnected');
+        log('Hub is disconnected');
     });
+
 });
 // configure the socket END
-
-/*
-robot.txt
-# https://www.robotstxt.org/robotstxt.html
-#User-agent: *
-#Disallow:
-
-*/ 

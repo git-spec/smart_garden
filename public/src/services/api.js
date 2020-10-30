@@ -29,6 +29,38 @@ export const registerPost = (firstName, lastName, userName, email, password, rep
         });
     });
 };
+export const editPost = (id, firstName, lastName, userName, city, password, repassword) => {
+    const sendData = {
+        id,
+        firstName,
+        lastName,
+        userName,
+        city,
+        password,
+        repassword
+    }
+    return new Promise((resolve, reject) => {
+        fetch('/edit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(sendData)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(receivedData => {
+                    resolve(receivedData)
+                }).catch(err => {
+                    reject(err)
+                })
+            } else {
+                reject(new Error('can not send data to server. response number is: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error)
+        });
+    });
+};
 
 export const loginPost = (email, password) => {
     return new Promise((resolve, reject) => {
