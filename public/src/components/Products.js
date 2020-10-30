@@ -1,12 +1,12 @@
 /* ******************************************************** IMPORT ********************************************************* */
 import React, {useState, useEffect} from 'react';
+import io from 'socket.io-client';
 // import {Link} from 'react-router-dom';
 import {
     Row,
     Col,
-    // InputGroup, 
-    Button, 
-    Input, 
+    Button,
+    Input,
     Container,
     Collapse, 
     CardBody, 
@@ -26,23 +26,28 @@ import LineChartMultiple from './LineChartMultiple';
 import BarChartHorizontal from './BarChartHorizontal';
 // services
 import {
-    checkHubNumPost, 
+    checkHubNumPost,
     addHubPost,
     getHubsPost,
     deleteHubPost,
-    checkDeviceNumPost, 
+    checkDeviceNumPost,
     addDevicePost,
     getDevicesPost,
     deleteDevicePost
 } from '../services/productsApi';
 import {getData} from '../services/getData';
+
 /* ******************************************************** COMPONENT ********************************************************* */
 const Products = props => {
+  
 /* ******************************************************** REFFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
-    const addDeviceIconsRef = [];
+    const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
-    const openHubIconsRef = [];
+    const openHubIconRefs = [];
+    const hubStatusRefs = [];
+    const deviceStatusRefs = [];
+
 /* ******************************************************** STATE ********************************************************* */
     const initialState = {
         hubs: [],
@@ -51,8 +56,8 @@ const Products = props => {
         deviceName: '',
         hubNum: '',
         deviceNum: '',
-        collapseHubs: false, 
-        collapseHub: null, 
+        collapseHubs: false,
+        collapseHub: null,
         collapseAddHub: false,
         collapseAddDevice: null,
         confirmModalShow: false,
@@ -61,6 +66,7 @@ const Products = props => {
         feed: []
     };
     const [state, setState] = useState(initialState);
+
 /* ******************************************************** USE EFFECT ********************************************************* */
     useEffect(() => {
         // get hubs & devices data from db at initial render
@@ -92,33 +98,95 @@ const Products = props => {
             alert(err);
         });
     }, []);
+
+/* ******************************************************** SOCKET.IO ********************************************************* */
+
+    const socket = io('http://localhost:5000');
+
+    socket.on('connect', () => {
+        console.log('connected');
+        socket.emit('user_connect', '3');
+    });
+
+    socket.on('hub_connect', sn => {
+        // console.log(hubStatusRefs);
+        // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
+        // if (idx !== -1) {
+        //     hubStatusRefs[idx].ref.current.classList.remove('text-danger');
+        //     hubStatusRefs[idx].ref.current.classList.add('text-success');
+        // }
+        console.log('hub connected', sn);
+        // if (hubStatusRefs[0]) {
+        //     if (hubStatusRefs[0].current) {
+        //         hubStatusRefs[0].current.classList.remove('text-danger');
+        //         hubStatusRefs[0].current.classList.add('text-success');
+        //         console.log('hub connected.....', sn);
+        //     }
+        // }
+    });
+
+    socket.on('hub_disconnect', sn => {
+        // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
+        // if (idx !== -1) {
+        //     hubStatusRefs[idx].ref.current.classList.remove('text-success');
+        //     hubStatusRefs[idx].ref.current.classList.add('text-danger');
+        // }
+        console.log('hub disconnected', sn);
+    });
+
+    socket.on('device_connect', sn => {
+        // console.log(deviceStatusRefs);
+        // if (deviceStatusRefs.length > 0) {
+        //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
+        //     if (idx !== -1) {
+        //         deviceStatusRefs[idx].ref.current.classList.remove('text-danger');
+        //         deviceStatusRefs[idx].ref.current.classList.add('text-success');
+        //     }
+        // }
+        console.log('device connected', sn);
+    });
+
+    socket.on('device_disconnect', sn => {
+        // console.log(deviceStatusRefs);
+        // if (deviceStatusRefs.length > 0) {
+        //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
+        //     if (idx !== -1) {
+        //         deviceStatusRefs[idx].ref.current.classList.remove('text-success');
+        //         deviceStatusRefs[idx].ref.current.classList.add('text-danger');
+        //     }
+        // }
+        console.log('device disconnected', sn);
+    });
+
 /* ******************************************************** TOGGLES ********************************************************* */
     const toggleHubs = e => {
         // toggle up & down button
         openHubsIconRef.current.classList.toggle('up');
-        openHubsIconRef.current.classList.toggle('down');        
+        openHubsIconRef.current.classList.toggle('down');
         setState({
             ...state,
             collapseHubs: !state.collapseHubs
         });
-    }
+    };
+
     const toggleHub = (e, idx) => {
         e.preventDefault();
         // toggle up & down buttons
-        openHubIconsRef.forEach((item, index) => {
+        openHubIconRefs.forEach((item, index) => {
             if (idx !== index) {
                 item.current.classList.remove('down');
-                item.current.classList.add('up');        
+                item.current.classList.add('up');
             } else {
                 item.current.classList.toggle('up');
-                item.current.classList.toggle('down');        
+                item.current.classList.toggle('down');
             }
         });
         setState({
             ...state,
             collapseHub: state.collapseHub === Number(idx) ? null : Number(idx)
         });
-    }
+    };
+
     const toggleAddHub = e => {
         // toggle plus & minus button
         addHubIconRef.current.classList.toggle('plus');
@@ -127,17 +195,19 @@ const Products = props => {
             ...state,
             collapseAddHub: !state.collapseAddHub
         });
-    }
+    };
+
     const toggleAddDevice = (e, idx) => {
         e.preventDefault();
         // toggle plus & minus button
-        addDeviceIconsRef[idx].current.classList.toggle('plus');
-        addDeviceIconsRef[idx].current.classList.toggle('minus');
+        addDeviceIconRefs[idx].current.classList.toggle('plus');
+        addDeviceIconRefs[idx].current.classList.toggle('minus');
         setState({
             ...state,
             collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
-    }
+    };
+
 /* ******************************************************** DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -145,7 +215,7 @@ const Products = props => {
             deleteHubPost(hubID).then(data => {
                 if (data !== 2) {
                     setState({
-                        ...state, 
+                        ...state,
                         hubs: data,
                         confirmModalShow: false
                     });
@@ -161,7 +231,8 @@ const Products = props => {
             confirmModalShow: true,
             confirmModalContent: (
                 <p>
-                    Are you sure you want to delete this hub?<br />
+                    Are you sure you want to delete this hub?
+                    <br />
                     All your devices connected to this hub will also be deleted.
                 </p>
             ),
@@ -175,15 +246,14 @@ const Products = props => {
             deleteDevicePost(deviceID).then(data => {
                 if (data !== 2) {
                     setState({
-                        ...state, 
-                        devices: data, 
+                        ...state,
+                        devices: data,
                         confirmModalShow: false
                     });
                 } else {
                     alert('Server error!');
                 }
-            })
-            .catch(err => {
+            }).catch(err => {
                 alert(err);
             });
         };
@@ -208,7 +278,7 @@ const Products = props => {
                         addHubPost(state.hubName.trim(), state.hubNum.trim()).then(data => {
                             if (data !== 2) {
                                 setState({
-                                    ...state, 
+                                    ...state,
                                     hubs: data,
                                     hubName: '',
                                     hubNum: ''
@@ -218,7 +288,7 @@ const Products = props => {
                             }
                         }).catch(err => {
                             alert(err);
-                        })
+                        });
                         break;
                     case 2:
                         alert('Server error!');
@@ -234,7 +304,7 @@ const Products = props => {
                 }
             }).catch(err => {
                 alert(err);
-            });    
+            });
         } else {
             alert('Please fill out all inputs!');
         }
@@ -253,7 +323,7 @@ const Products = props => {
                         addDevicePost(state.deviceName.trim(), state.deviceNum.trim(), hubID).then(data => {
                             if (data !== 2) {
                                 setState({
-                                    ...state, 
+                                    ...state,
                                     devices: data,
                                     deviceName: '',
                                     deviceNum: ''
@@ -263,7 +333,7 @@ const Products = props => {
                             }
                         }).catch(err => {
                             alert(err);
-                        })
+                        });
                         break;
                     case 2:
                         alert('Server error!');
@@ -279,13 +349,14 @@ const Products = props => {
                 }
             }).catch(err => {
                 alert(err);
-            });    
+            });
         } else {
             alert('Please fill out all inputs!');
         }
     };
     
     const data = getData();
+  
 /* ******************************************************** RETURN ********************************************************* */
 if (state.hubs && state.devices) {
         return (
@@ -359,9 +430,11 @@ if (state.hubs && state.devices) {
 {/* ******************************************************** LOOP HUB ********************************************************* */}
                                     {state.hubs.map((hub, idx) => {
                                         const openHubIconRef = React.createRef();
-                                        openHubIconsRef.push(openHubIconRef);
+                                        openHubIconRefs.push(openHubIconRef);
                                         const addDeviceIconRef = React.createRef();
-                                        addDeviceIconsRef.push(addDeviceIconRef);
+                                        addDeviceIconRefs.push(addDeviceIconRef);
+                                        const hubStatusRef = React.createRef();
+                                        hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
                                         return (
                                             <div key={idx}>
                                                 <CardHeader className="p-0 pl-2 mb-1 d-flex align-items-center">
@@ -372,7 +445,10 @@ if (state.hubs && state.devices) {
                                                         >
                                                             {hub.name}
                                                         </Button>
-                                                        <span className="active-light mx-2"></span>
+                                                        <span 
+                                                            ref={hubStatusRef}
+                                                            className="active-light mx-2">
+                                                        </span>
                                                     </CardTitle>
                                                     <CardSubtitle>
                                                         <Button
@@ -434,12 +510,17 @@ if (state.hubs && state.devices) {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ******************************************************** LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                                            const deviceStatusRef = React.createRef();
+                                                            deviceStatusRefs.push({ref: deviceStatusRef, sn: device.sn_number});
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
                                                                         <div className="d-flex align-items-center">
                                                                             {device.name}
-                                                                            <span className="active-light mx-2"></span>
+                                                                            <span 
+                                                                                ref={deviceStatusRef} 
+                                                                                className="active-light mx-2">
+                                                                            </span>
                                                                         </div>
                                                                         <Button
                                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
