@@ -3,7 +3,7 @@ import {Table} from 'reactstrap';
 
 const ReactTable = (props) => {
   return (
-    <Table borderless size="sm" className="mb-5">
+    <Table borderless size="sm" className="mb-4">
       <thead>
         <tr>
           <th className="align-bottom"><h3 className="mb-0">kitchen</h3></th>

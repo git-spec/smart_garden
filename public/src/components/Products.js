@@ -24,6 +24,7 @@ import ReactTable from './Table';
 import LineChart from './LineChart';
 import LineChartMultiple from './LineChartMultiple';
 import BarChartHorizontal from './BarChartHorizontal';
+import BarChartHorizontalMixed from './BarChartHorizontalMixed';
 // services
 import {
     checkHubNumPost, 
@@ -419,7 +420,7 @@ if (state.hubs && state.devices) {
                                                                     value={state.deviceName}
                                                                 />
                                                             </CardTitle>
-                                                            <CardSubtitle>
+                                                            <CardSubtitle className="p-0">
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
                                                                     onClick={e => onAddDeviceBtnClick(e, hub.id)}
@@ -456,7 +457,7 @@ if (state.hubs && state.devices) {
                                                                             <input type="checkbox" />
                                                                             <span className="slider round"></span>
                                                                         </label>
-                                                                        <span className="ml-3">ON / OFF</span>
+                                                                        <span className="ml-3">OFF / ON</span>
                                                                     </CardText>
                                                                 </CardHeader>
                                                             );
@@ -471,13 +472,14 @@ if (state.hubs && state.devices) {
                         </Card>
                     </Col>
 {/* ******************************************************** MONITOR ********************************************************* */}
-                    <Col className="px-3" lg="7">
+                    <Col className="px-3 mt-md-0 mt-3" lg="7">
                         <Col className="p-3">
                             {/* <h3 className="text-center">kitchen</h3> */}
                             <ReactTable />
                             <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                             <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                             <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
+                            <BarChartHorizontalMixed data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
                             <FormGroup>
                                 <Label for="rangeInput">Range</Label>
                                 <Input

@@ -37,7 +37,7 @@ function Navigation(props) {
     return (
         <Navbar fixed="top">
             <Container className="px-sm-3 px-0">
-                <NavbarBrand href="/">
+                <NavbarBrand href="/" className="flex-grow-1">
                     <svg version="1.1" className="logo"
                         xmlns="http://www.w3.org/2000/svg"
                         x="0px" y="0px" width="461px" height="223px" viewBox="0 0 461 223" enableBackground="new 0 0 461 223">
@@ -70,6 +70,7 @@ function Navigation(props) {
                             C392.854,24.837,376.864,28.757,372.027,28.757z"/>
                     </svg>
                 </NavbarBrand>
+                <NavLink href="./login"><i className="far fa-user-circle"></i></NavLink>
                 {/* navbar toggle for devices smaller than 576px */}
                 <NavbarToggler className="d-block d-sm-none" onClick={toggleMobileNavbar}>
                     <div ref={toggleMobileIconRef} className="menu-icon"><span></span><span></span><span></span></div>
