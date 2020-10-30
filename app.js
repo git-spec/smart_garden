@@ -208,25 +208,79 @@ const server = app.listen(port, () => {
 
 // configure the socket START
 const io = require('socket.io').listen(server);
-io.on('connection', socket => {
-    log('Device Is Connected');
 
-    socket.on('hub_device_connect', data => {
-        // go to database, check if the device exists, then get a device name
-        SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(device => {
-            if (device.length > 0) {
-                if (device[0].user_id) {
-                    log(`Device ${device[0].name} is connected now!`);
-                    // allow listening to this device
-                    // change the status to connected
-                    socket.emit('toDevice', `Listening to Device ${device[0].name} is allowed!`);
+io.on('connection', socket => {
+    // log('Device Is Connected');
+
+    socket.on('user_connect', userID => {
+        // console.log('userID: ', userID);
+        socket.join(userID.toString());
+    });
+
+    socket.on('hub_connect', data => {
+        // check in the database if the hub exists
+        SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(hubs => {
+            // console.log('hub: ', hubs[0]);
+            if (hubs.length > 0) {
+                if (hubs[0].user_id) {
+                    // join user twice?
+                    socket.join(hubs[0].user_id);
+
+                    // change the status from hub to connected in db
+                    SQL.updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number}).then(() => {
+                        socket.broadcast.to(hubs[0].user_id).emit('hub_connect', data.sn_number)
+                        log(`Hub ${hubs[0].name} is connected now!`);
+                        // get the devices that belong to this hub
+                        SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
+                            // log(devices);
+                            socket.emit('toDevice', devices);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    }).catch(error => {
+                        log(error);
+                    });
+
+                    // listening to info from raspberry
+                    socket.on('device_connect', sn_number => {
+                        // change the status from device to connected in DB
+                        SQL.updateRecord('iot_device', {connected: 1}, {sn_number: sn_number}).then(() => {
+                            socket.broadcast.to(hubs[0].user_id).emit('device_connect', sn_number);
+                            log(`Device "${sn_number}" is connected now`);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
+
+                    // listening to info from raspberry
+                    socket.on('device_disconnect', sn_number => {
+                        // change the status from device to disconnected in DB
+                        SQL.updateRecord('iot_device', {connected: 0}, {sn_number: sn_number}).then(() => {
+                            socket.broadcast.to(hubs[0].user_id).emit('device_disconnect', sn_number);
+                            log(`Device "${sn_number}" is disconnected now`);
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
+                    
+                    // disconnect hub
+                    socket.on('disconnect', () => {
+                        // change the status from hub to disconnected in DB
+                        SQL.updateRecord("iot_hubs", {connected: 0}, {sn_number: data.sn_number}).then(() => {
+                            socket.broadcast.to(hubs[0].user_id).emit('hub_disconnect', data.sn_number);
+                            log(`Hub "${hubs[0].name}" is disconnected now`);                        
+                        }).catch(error => {
+                            log(error);
+                        });
+                    });
                 } else {
-                    log(`Device ${data.sn_number} is not registered!`);
-                    // NOT allow listening to this device
+                    // hub is not registered
+                    log(`Hub ${data.sn_number} is not registered!`);
                     // kill socket
                 }
             } else {
-                log(`Device with ${data.sn_number} is not existing!`);
+                // hub not found
+                log(`Hub with ${data.sn_number} is not existing!`);
                 // kill socket
             }
         }).catch(error => {
@@ -234,16 +288,10 @@ io.on('connection', socket => {
         });
     });
 
+    // disconnected twice?
     socket.on('disconnect', () => {
-        log('Device Is Disconnected');
+        log('Hub is disconnected');
     });
+
 });
 // configure the socket END
-
-/*
-robot.txt
-# https://www.robotstxt.org/robotstxt.html
-#User-agent: *
-#Disallow:
-
-*/ 
