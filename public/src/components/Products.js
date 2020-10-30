@@ -1,5 +1,4 @@
-/* ---------------------------------------- IMPORT ---------------------------------------- */
-
+/* ******************************************************** IMPORT ********************************************************* */
 import React, {useState, useEffect} from 'react';
 import io from 'socket.io-client';
 // import {Link} from 'react-router-dom';
@@ -10,16 +9,22 @@ import {
     Button,
     Input,
     Container,
-    Collapse,
-    CardBody,
-    // Card,
+    Collapse, 
+    CardBody, 
+    Card,
     CardHeader,
-    Label,
-    FormGroup
+    Label, 
+    FormGroup,
+    CardTitle,
+    CardSubtitle,
+    CardText
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
+import ReactTable from './Table';
 import LineChart from './LineChart';
+import LineChartMultiple from './LineChartMultiple';
+import BarChartHorizontal from './BarChartHorizontal';
 // services
 import {
     checkHubNumPost,
@@ -33,13 +38,10 @@ import {
 } from '../services/productsApi';
 import {getData} from '../services/getData';
 
-/* ---------------------------------------- SETUP ---------------------------------------- */
-
+/* ******************************************************** COMPONENT ********************************************************* */
 const Products = props => {
-
-    const data = getData();
-
-    // refs
+  
+/* ******************************************************** REFFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
@@ -47,7 +49,7 @@ const Products = props => {
     const hubStatusRefs = [];
     const deviceStatusRefs = [];
 
-    // state
+/* ******************************************************** STATE ********************************************************* */
     const initialState = {
         hubs: [],
         devices: [],
@@ -66,10 +68,9 @@ const Products = props => {
     };
     const [state, setState] = useState(initialState);
 
-    /* ---------------------------------------- USE EFFECT ---------------------------------------- */
-
-    // get hubs & devices data from db at initial render
+/* ******************************************************** USE EFFECT ********************************************************* */
     useEffect(() => {
+        // get hubs & devices data from db at initial render
         getHubsPost().then(hubs => {
             switch (hubs) {
                 case 2:
@@ -99,7 +100,7 @@ const Products = props => {
         });
     }, []);
 
-/* ---------------------------------------- SOCKET.IO ---------------------------------------- */
+/* ******************************************************** SOCKET.IO ********************************************************* */
 
     const socket = io('http://localhost:5000');
 
@@ -158,8 +159,7 @@ const Products = props => {
         console.log('device disconnected', sn);
     });
 
-/* ---------------------------------------- TOGGLES ---------------------------------------- */
-
+/* ******************************************************** TOGGLES ********************************************************* */
     const toggleHubs = e => {
         // toggle up & down button
         openHubsIconRef.current.classList.toggle('up');
@@ -209,9 +209,7 @@ const Products = props => {
         });
     };
 
-/* ---------------------------------------- BUTTONS ---------------------------------------- */
-
-    // delete hub
+/* ******************************************************** DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
         const deleteHub = hubID => {
@@ -242,8 +240,7 @@ const Products = props => {
             confirmModalDelete: () => deleteHub(hubID)
         });
     };
-
-    // delete device
+/* ******************************************************** DELETE DEVICE ********************************************************* */
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
         const deleteDevice = deviceID => {
@@ -268,8 +265,7 @@ const Products = props => {
             confirmModalDelete: () => deleteDevice(deviceID)
         });
     };
-
-    // add hub
+/* ******************************************************** ADD HUB ********************************************************* */
     const onAddHubBtnClick = e => {
         e.preventDefault();
         if (state.hubName.trim() && state.hubNum.trim()) {
@@ -314,8 +310,7 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
-
-    // add device
+/* ******************************************************** ADD DEVICE ********************************************************* */
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
         if (state.deviceName.trim() && state.deviceNum.trim()) {
@@ -360,13 +355,14 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
-
-    /* ---------------------------------------- STRUCTURE ---------------------------------------- */
-
-    if (state.hubs && state.devices) {
+    
+    const data = getData();
+  
+/* ******************************************************** RETURN ********************************************************* */
+if (state.hubs && state.devices) {
         return (
             <Container>
-                {/* modal */}
+{/* ******************************************************** MODAL ********************************************************* */}
                 <ConfirmModal
                     className="bg-danger"
                     title="Confirm Deletion"
@@ -378,86 +374,113 @@ const Products = props => {
                 </ConfirmModal>
                 <h3 className="text-trans mb-4">Hello User, how are you?</h3>
                 <Row>
-                    <Col lg="4">
-                        <div>
-                            {/* hubs */}
-                            <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>
-                                hubs
-                            </Button>
-                            <Button
-                                className="badge-pill btn-outline-light bg-transparent ml-3 up"
-                                innerRef={openHubsIconRef}
-                                onClick={toggleHubs}
-                            >
-                                <span></span><span></span>
-                            </Button>
-                            <Collapse isOpen={state.collapseHubs}>
-                                {/* hub-loop */}
-                                {state.hubs.map((hub, idx) => {
-                                    const openHubIconRef = React.createRef();
-                                    openHubIconRefs.push(openHubIconRef);
-                                    const addDeviceIconRef = React.createRef();
-                                    addDeviceIconRefs.push(addDeviceIconRef);
-                                    const hubStatusRef = React.createRef();
-                                    hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
-                                    return (
-                                        <div key={idx}>
-                                            <CardHeader className="p-0 pl-1">
-                                                <Button
-                                                    innerRef={hubStatusRef}
-                                                    className="accordion p-0 text-danger"
-                                                    onClick={e => toggleHub(e, idx)}
-                                                >
-                                                    {idx + 1}. Hub {hub.name}
-                                                </Button>
-                                                <Button
-                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                                    onClick={e => onDeleteHubBtnClick(e, hub.id)}
-                                                >
-                                                    <span></span><span></span>
-                                                </Button>
-                                                <Button
-                                                    className="badge-pill btn-outline-light bg-transparent ml-3 up"
-                                                    innerRef={openHubIconRef}
-                                                    onClick={e => toggleHub(e, idx)}
-                                                >
-                                                    <span></span><span></span>
-                                                </Button>
-                                            </CardHeader>
-                                            <Collapse isOpen={state.collapseHub === idx}>
-                                                {/* device-loop */}
-                                                {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                                                    const deviceStatusRef = React.createRef();
-                                                    deviceStatusRefs.push({ref: deviceStatusRef, sn: device.sn_number});
-                                                    return (
-                                                        <CardBody key={idx} className="p-0 pl-1">
-                                                            {/* <div ref={ref => { deviceStatusRef.current[idx] = ref; }} className="text-danger"> */}
-                                                            <div ref={deviceStatusRef} className="text-danger">
-                                                                {idx + 1}. Device {device.name} | {device.device_name}
-                                                            </div>
-                                                            <Button
-                                                                className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                                                onClick={e => onDeleteDeviceBtnClick(e, device.id)}
-                                                            >
-                                                                <span></span><span></span>
-                                                            </Button>
-                                                        </CardBody>
-                                                    );
-                                                })}
-                                                {/* add device */}
-                                                <CardBody className="p-0 pl-1">
-                                                    <Button
-                                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                        innerRef={addDeviceIconRef}
-                                                        onClick={e => toggleAddDevice(e, idx)}
-                                                    >
-                                                        <span></span><span></span>
-                                                    </Button>
+                    <Col lg="5" className="accordion">
+                        <Card color="transparent" className="border-0">
+{/* ******************************************************** HUBS ********************************************************* */}
+                            <CardHeader className="p-0 d-flex align-items-center">
+                                <CardTitle className="m-0 flex-grow-1">
+                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>hubs</Button>
+                                    <span className="active-light mx-2"></span>
+                                </CardTitle>
+                                <CardSubtitle>
+                                    <Button
+                                        innerRef={addHubIconRef}
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 my-auto p-0 plus"
+                                        onClick={toggleAddHub}
+                                    >
+                                        <span></span><span></span>
+                                    </Button>
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 my-auto up"
+                                        innerRef={openHubsIconRef}
+                                        onClick={toggleHubs}
+                                    >
+                                        <span></span><span></span>
+                                    </Button>
+                                </CardSubtitle>
+                            </CardHeader>
+{/* ******************************************************** ADD HUB ********************************************************* */}
+                            <Collapse isOpen={state.collapseAddHub}>
+                                <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                    <CardTitle className="flex-grow-1 m-0">
+                                        <Input
+                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            placeholder="Enter a serial number"
+                                            onChange={e => setState({...state, hubNum: e.target.value})}
+                                            value={state.hubNum}
+                                        />
+                                        <Input
+                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            placeholder="Enter a name for your hub"
+                                            onChange={e => setState({...state, hubName: e.target.value})}
+                                            value={state.hubName}
+                                        />
+                                    </CardTitle>
+                                    <CardSubtitle>
+                                        <Button
+                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                            onClick={onAddHubBtnClick}
+                                        >
+                                            <span></span><span></span>
+                                        </Button>
+                                    </CardSubtitle>
+                                </CardHeader>
+                            </Collapse>
+                            <CardBody className="p-0">
+                                <Collapse isOpen={state.collapseHubs}>
+{/* ******************************************************** LOOP HUB ********************************************************* */}
+                                    {state.hubs.map((hub, idx) => {
+
+                                      ///////////////
+                                      const openHubIconRef = React.createRef();
+                                      openHubIconRefs.push(openHubIconRef);
+                                      const addDeviceIconRef = React.createRef();
+                                      addDeviceIconRefs.push(addDeviceIconRef);
+                                      const hubStatusRef = React.createRef();
+                                      hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
+                                   
+                                        return (
+                                            <div key={idx}>
+                                                <CardHeader className="p-0 pl-2 mb-1 d-flex align-items-center">
+                                                    <CardTitle className="m-0 flex-grow-1">
+                                                        <Button
+                                                            className="accordion p-0"
+                                                            onClick={e => toggleHub(e, idx)}
+                                                        >
+                                                            {hub.name}
+                                                        </Button>
+                                                        <span className="active-light mx-2"></span>
+                                                    </CardTitle>
+                                                    <CardSubtitle>
+                                                        <Button
+                                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                                            onClick={e => onDeleteHubBtnClick(e, hub.id)}
+                                                        >
+                                                            <span></span><span></span>
+                                                        </Button>
+                                                        <Button
+                                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
+                                                            innerRef={addDeviceIconRef}
+                                                            onClick={e => toggleAddDevice(e, idx)}
+                                                        >
+                                                            <span></span><span></span>
+                                                        </Button>
+                                                        <Button
+                                                            className="badge-pill btn-outline-light bg-transparent ml-3 up"
+                                                            innerRef={openHubIconRef}
+                                                            onClick={e => toggleHub(e, idx)}
+                                                        >
+                                                            <span></span><span></span>
+                                                        </Button>
+                                                    </CardSubtitle>
+                                                </CardHeader>
+{/* ******************************************************** ADD DEVICE ********************************************************* */}
+                                                <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseAddDevice === idx}>
-                                                        <Row>
-                                                            <Col>
+                                                        <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                                            <CardTitle className="flex-grow-1 m-0">
                                                                 <Input
-                                                                    className="badge-pill bg-transparent py-0"
+                                                                    className="badge-pill bg-transparent py-0 mb-3"
                                                                     placeholder="Enter a serial number"
                                                                     onChange={e =>
                                                                         setState({...state, deviceNum: e.target.value})
@@ -465,102 +488,88 @@ const Products = props => {
                                                                     value={state.deviceNum}
                                                                 />
                                                                 <Input
-                                                                    className="badge-pill bg-transparent py-0"
+                                                                    className="badge-pill bg-transparent py-0 mb-3"
                                                                     placeholder="Enter a name for your device"
                                                                     onChange={e =>
                                                                         setState({...state, deviceName: e.target.value})
                                                                     }
                                                                     value={state.deviceName}
                                                                 />
-                                                            </Col>
-                                                            <Col>
+                                                            </CardTitle>
+                                                            <CardSubtitle>
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
                                                                     onClick={e => onAddDeviceBtnClick(e, hub.id)}
                                                                 >
                                                                     <span></span><span></span>
                                                                 </Button>
-                                                            </Col>
-                                                        </Row>
+                                                            </CardSubtitle>
+                                                        </CardHeader>
                                                     </Collapse>
                                                 </CardBody>
-                                            </Collapse>
-                                        </div>
-                                    );
-                                })}
-                                {/* add hub */}
-                                {/* {console.log(hubStatusRefs)} */}
-                                <div>
-                                    <CardHeader className="p-0 pl-1">
-                                        <Button
-                                            innerRef={addHubIconRef}
-                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                            onClick={toggleAddHub}
-                                        >
-                                            <span></span><span></span>
-                                        </Button>
-                                    </CardHeader>
-                                    {/* <CardBody> */}
-                                    <Collapse isOpen={state.collapseAddHub}>
-                                        <Row>
-                                            <Col>
-                                                <Input
-                                                    className="badge-pill bg-transparent py-0"
-                                                    placeholder="Enter a serial number"
-                                                    onChange={e => setState({...state, hubNum: e.target.value})}
-                                                    value={state.hubNum}
-                                                />
-                                                <Input
-                                                    className="badge-pill bg-transparent py-0"
-                                                    placeholder="Enter a name for your hub"
-                                                    onChange={e => setState({...state, hubName: e.target.value})}
-                                                    value={state.hubName}
-                                                />
-                                            </Col>
-                                            <Col>
-                                                <Button
-                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                    onClick={onAddHubBtnClick}
-                                                >
-                                                    <span></span><span></span>
-                                                </Button>
-                                            </Col>
-                                        </Row>
-                                    </Collapse>
-                                    {/* </CardBody> */}
-                                </div>
-                            </Collapse>
-                        </div>
+                                                <CardBody className="p-0 pl-2">
+                                                    <Collapse isOpen={state.collapseHub === idx}>
+{/* ******************************************************** LOOP DEVICE ********************************************************* */}
+                                                        {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                                            return (
+                                                                <CardHeader key={idx} className="p-0 pl-3 mb-2">
+                                                                    <CardTitle className="m-0 d-flex justify-content-between align-items-center">
+                                                                        <div className="d-flex align-items-center">
+                                                                            {device.name}
+                                                                            <span className="active-light mx-2"></span>
+                                                                        </div>
+                                                                        <Button
+                                                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                                                            onClick={e => onDeleteDeviceBtnClick(e, device.id)}
+                                                                        >
+                                                                            <span></span><span></span>
+                                                                        </Button>
+                                                                    </CardTitle>
+                                                                    <CardSubtitle>
+                                                                        {device.device_name}
+                                                                    </CardSubtitle>
+                                                                    <CardText className="d-flex align-items-center">
+                                                                        <label className="switch">
+                                                                            <input type="checkbox" />
+                                                                            <span className="slider round"></span>
+                                                                        </label>
+                                                                        <span className="ml-3">ON / OFF</span>
+                                                                    </CardText>
+                                                                </CardHeader>
+                                                            );
+                                                        })}
+                                                    </Collapse>
+                                                </CardBody>
+                                            </div>
+                                        );
+                                    })}
+                                </Collapse>
+                            </CardBody>
+                        </Card>
                     </Col>
-                    <Col className="p-3" lg="8">
-                        <label className="switch">
-                            <input type="checkbox" />
-                            <span className="slider round"></span>
-                        </label>
-                        <p className="text-light">
-                            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-                            invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-                            et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-                            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                            diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam
-                            voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd
-                            gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-                        </p>
-                        <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
-                        <FormGroup>
-                            <Label for="rangeInput">Range</Label>
-                            <Input
-                                type="range"
-                                id="rangeInput"
-                                name="rangeInput"
-                                min="0"
-                                max="100"
-                                // onInput="this.output.amount.value=this.value"
-                            />
-                            <output name="amount" id="amount" htmlFor="rangeInput">
-                                0
-                            </output>
-                        </FormGroup>
+{/* ******************************************************** MONITOR ********************************************************* */}
+                    <Col className="px-3" lg="7">
+                        <Col className="p-3">
+                            {/* <h3 className="text-center">kitchen</h3> */}
+                            <ReactTable />
+                            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
+                            <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
+                            <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
+                            <FormGroup>
+                                <Label for="rangeInput">Range</Label>
+                                <Input
+                                    type="range"
+                                    id="rangeInput"
+                                    name="rangeInput"
+                                    min="0"
+                                    max="100"
+                                    onInput="this.output.amount.value=this.value"
+                                />
+                                <output name="amount" id="amount" htmlFor="rangeInput">
+                                    0
+                                </output>
+                            </FormGroup>
+                        </Col>
                     </Col>
                 </Row>
             </Container>

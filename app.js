@@ -29,7 +29,7 @@ app.use(session({
 }));
 
 // modules
-const {registerUser, checkUser, verifyUser, confirmVerifiedUser, sendResetLink, resetPass} = require('./modules/usersAuth')
+const {registerUser, editUser, checkUser, verifyUser, confirmVerifiedUser, sendResetLink, resetPass} = require('./modules/usersAuth')
 
 // user
 const userRoutes = require('./routes/userRoutes');
@@ -55,7 +55,34 @@ app.post('/register', (req, res) => {
         registerUser(entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(email), password).then(() => {
             res.json(1)
         }).catch(error => {
-            console.log(error);
+            if (error == "exist") {
+                res.json(3)
+            } else{
+                res.json(4)
+            }
+        })
+    } else {
+        res.json(2)
+    };
+});
+
+app.post('/edit', (req, res) => {
+    // your post register handler here
+    // console.log(req.body)
+    // 2 data error
+    // 1 user edited successfully
+    // 4 server error
+    const id = req.body.id;
+    const firstName = req.body.firstName.trim();
+    const lastName = req.body.lastName.trim();
+    const userName = req.body.userName.trim();
+    const city = req.body.city.trim();
+    const password = req.body.password;
+    const repassword = req.body.repassword;
+    if (id && firstName && lastName && userName && city && password && password == repassword){
+        editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
+            res.json(1)
+        }).catch(error => {
             if (error == "exist") {
                 res.json(3)
             } else{
@@ -75,17 +102,17 @@ app.post('/login', (req, res) => {
     if (req.body.email && req.body.password) {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
             req.session.user = user
-            res.json(1)
+            res.json({result: 1, id: user.id})
         }).catch(error => {
             console.log(error);
             if (error == 3) {
-                res.json(3)
+                res.json({result: 3})
             } else {
-                res.json(4)
+                res.json({result: 4})
             };
         })
     } else {
-        res.json(2)
+        res.json({result: 2})
     };
 });
 
@@ -140,18 +167,25 @@ app.post('/resetPass', (req, res) => {
 // checklogin
 app.post('/checklogin', (req, res) => {
     // just for development, delete for production!!!
-    req.session.user = {
-        id: 3,
-        firstname: 'Felix',
-        lastname: 'Wurst',
-        username: 'felix',
-        email: 'felix.wurst@gmail.com',
-        password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
-        verified: 1
-    };
+    // req.session.user = {
+    //     id: 3,
+    //     firstname: 'Felix',
+    //     lastname: 'Wurst',
+    //     username: 'felix',
+    //     email: 'felix.wurst@gmail.com',
+    //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
+    //     verified: 1
+    // };
     // console.log(req.session.user);
+    // if (req.session.user) {
+    //     res.json(req.session.user.username);
+    // } else {
+    //     res.json(10);
+    // }
+
     if (req.session.user) {
-        res.json(req.session.user.username);
+        const user = req.session.user
+        res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname});
     } else {
         res.json(10);
     }

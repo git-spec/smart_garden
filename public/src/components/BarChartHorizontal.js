@@ -6,21 +6,21 @@ Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
 
-class LineChart extends React.Component {
+class BarChartHorizontal extends React.Component {
     constructor(props) {
       super(props);
       this.chartRef = React.createRef();
     }
   
     componentDidUpdate() {
-      this.myChart.data.labels = this.props.data.map(d => d.time);
+      this.myChart.data.labels = this.props.data.map(d => d.label);
       this.myChart.data.datasets[0].data = this.props.data.map(d => d.value);
       this.myChart.update();
     }
   
     componentDidMount() {
       this.myChart = new Chart(this.chartRef.current, {
-        type: 'line',
+        type: 'horizontalBar',
         options: {
           scales: {
             xAxes: [
@@ -28,10 +28,6 @@ class LineChart extends React.Component {
                 ticks: {
                   min: 0,
                   padding: 10
-                },
-                type: 'time',
-                time: {
-                  unit: 'week'
                 },
                 gridLines: {
                   color: 'rgba(255, 255, 255, .5)'
@@ -55,14 +51,14 @@ class LineChart extends React.Component {
           }
         },
         data: {
-          labels: this.props.data.map(d => d.time),
+          labels: this.props.data.map(d => d.label),
           datasets: [{
             label: this.props.title,
             data: this.props.data.map(d => d.value),
             fill: 'none',
-            backgroundColor: 0,
+            backgroundColor: this.props.color,
             pointRadius: 2,
-            borderColor: this.props.color,
+            borderColor: 0,
             borderWidth: 1,
             lineTension: 0
           }]
@@ -75,4 +71,4 @@ class LineChart extends React.Component {
     }
   }
 
-  export default LineChart;
+  export default BarChartHorizontal;
