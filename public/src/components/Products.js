@@ -5,7 +5,6 @@ import io from 'socket.io-client';
 import {
     Row,
     Col,
-    // InputGroup,
     Button,
     Input,
     Container,
@@ -105,17 +104,17 @@ const Products = props => {
     const socket = io('http://localhost:5000');
 
     socket.on('connect', () => {
-        // console.log('connected');
+        console.log('connected');
         socket.emit('user_connect', '3');
     });
 
     socket.on('hub_connect', sn => {
-        console.log(hubStatusRefs);
-        const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-        if (idx !== -1) {
-            hubStatusRefs[idx].ref.current.classList.remove('text-danger');
-            hubStatusRefs[idx].ref.current.classList.add('text-success');
-        }
+        // console.log(hubStatusRefs);
+        // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
+        // if (idx !== -1) {
+        //     hubStatusRefs[idx].ref.current.classList.remove('text-danger');
+        //     hubStatusRefs[idx].ref.current.classList.add('text-success');
+        // }
         console.log('hub connected', sn);
         // if (hubStatusRefs[0]) {
         //     if (hubStatusRefs[0].current) {
@@ -127,16 +126,16 @@ const Products = props => {
     });
 
     socket.on('hub_disconnect', sn => {
-        const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-        if (idx !== -1) {
-            hubStatusRefs[idx].ref.current.classList.remove('text-success');
-            hubStatusRefs[idx].ref.current.classList.add('text-danger');
-        }
+        // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
+        // if (idx !== -1) {
+        //     hubStatusRefs[idx].ref.current.classList.remove('text-success');
+        //     hubStatusRefs[idx].ref.current.classList.add('text-danger');
+        // }
         console.log('hub disconnected', sn);
     });
 
     socket.on('device_connect', sn => {
-        console.log(deviceStatusRefs);
+        // console.log(deviceStatusRefs);
         // if (deviceStatusRefs.length > 0) {
         //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
         //     if (idx !== -1) {
@@ -148,7 +147,7 @@ const Products = props => {
     });
 
     socket.on('device_disconnect', sn => {
-        console.log(deviceStatusRefs);
+        // console.log(deviceStatusRefs);
         // if (deviceStatusRefs.length > 0) {
         //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
         //     if (idx !== -1) {
@@ -430,15 +429,12 @@ if (state.hubs && state.devices) {
                                 <Collapse isOpen={state.collapseHubs}>
 {/* ******************************************************** LOOP HUB ********************************************************* */}
                                     {state.hubs.map((hub, idx) => {
-
-                                      ///////////////
-                                      const openHubIconRef = React.createRef();
-                                      openHubIconRefs.push(openHubIconRef);
-                                      const addDeviceIconRef = React.createRef();
-                                      addDeviceIconRefs.push(addDeviceIconRef);
-                                      const hubStatusRef = React.createRef();
-                                      hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
-                                   
+                                        const openHubIconRef = React.createRef();
+                                        openHubIconRefs.push(openHubIconRef);
+                                        const addDeviceIconRef = React.createRef();
+                                        addDeviceIconRefs.push(addDeviceIconRef);
+                                        const hubStatusRef = React.createRef();
+                                        hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
                                         return (
                                             <div key={idx}>
                                                 <CardHeader className="p-0 pl-2 mb-1 d-flex align-items-center">
@@ -449,7 +445,10 @@ if (state.hubs && state.devices) {
                                                         >
                                                             {hub.name}
                                                         </Button>
-                                                        <span className="active-light mx-2"></span>
+                                                        <span 
+                                                            ref={hubStatusRef}
+                                                            className="active-light mx-2">
+                                                        </span>
                                                     </CardTitle>
                                                     <CardSubtitle>
                                                         <Button
@@ -511,12 +510,17 @@ if (state.hubs && state.devices) {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ******************************************************** LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                                            const deviceStatusRef = React.createRef();
+                                                            deviceStatusRefs.push({ref: deviceStatusRef, sn: device.sn_number});
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
                                                                         <div className="d-flex align-items-center">
                                                                             {device.name}
-                                                                            <span className="active-light mx-2"></span>
+                                                                            <span 
+                                                                                ref={deviceStatusRef} 
+                                                                                className="active-light mx-2">
+                                                                            </span>
                                                                         </div>
                                                                         <Button
                                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
