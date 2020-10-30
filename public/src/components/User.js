@@ -1,30 +1,37 @@
 // export default Register;
-import React, { Fragment, useState, useEffect } from "react";
+import React, { 
+    Fragment, 
+    useState, 
+    // useEffect 
+} from "react";
 import {
     Container,
     Row,
     Col,
     Button,
-    Collapse,
-    Card,
-    CardBody,
+    // Collapse,
+    // Card,
+    // CardBody,
     Input,
     Form,
     Label,
     FormGroup,
 } from "reactstrap";
 import Image from "react-bootstrap/Image";
-import { getData } from "../services/getData";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import { 
+    Link, 
+    // useLocation, 
+    // useHistory 
+} from "react-router-dom";
 import PopUpModal from "./PopUpModal";
-import validator from "validator";
+// import validator from "validator";
 import { editPost } from "../services/api";
 
 import {connect} from 'react-redux'
 
 const User = (props) => {
     // const location = useLocation()
-    const history = useHistory()
+    // const history = useHistory()
     const user = {...props.user}
     // console.log(props.user);
     // console.log('location.state '+location.state);

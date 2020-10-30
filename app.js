@@ -167,15 +167,15 @@ app.post('/resetPass', (req, res) => {
 // checklogin
 app.post('/checklogin', (req, res) => {
     // just for development, delete for production!!!
-    // req.session.user = {
-    //     id: 3,
-    //     firstname: 'Felix',
-    //     lastname: 'Wurst',
-    //     username: 'felix',
-    //     email: 'felix.wurst@gmail.com',
-    //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
-    //     verified: 1
-    // };
+    req.session.user = {
+        id: 3,
+        firstname: 'Felix',
+        lastname: 'Wurst',
+        username: 'felix',
+        email: 'felix.wurst@gmail.com',
+        password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
+        verified: 1
+    };
     // console.log(req.session.user);
     // if (req.session.user) {
     //     res.json(req.session.user.username);
