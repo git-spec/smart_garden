@@ -15,73 +15,78 @@ import {
 } from "reactstrap";
 import Image from "react-bootstrap/Image";
 import { getData } from "../services/getData";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
 import validator from "validator";
-import { registerPost } from "../services/api";
+import { editPost } from "../services/api";
 
-class User extends React.Component {
-    state = {
+import {connect} from 'react-redux'
+
+const User = (props) => {
+    // const location = useLocation()
+    const history = useHistory()
+    const user = {...props.user}
+    // console.log(props.user);
+    // console.log('location.state '+location.state);
+    // if(!location.state){
+    //     history.push('/login')
+    // }
+    const initialState = {
         firstName: "",
         lastName: "",
         userName: "",
-        email: "",
+        City: "",
         password: "",
         repassword: "",
         errorComponent: null,
         showErrorModal: false,
         resultElement: null,
     };
+    const [myState, setMyState] = useState(initialState);
 
-    onRegisterBtnClick = (e) => {
+    const onEditBtnClick = (e) => {
         e.preventDefault();
         if (
-            this.state.firstName.trim() === "" ||
-            this.state.lastName.trim() === "" ||
-            this.state.userName.trim() === "" ||
-            this.state.email.trim() === "" ||
-            this.state.password === "" ||
-            this.state.password !== this.state.repassword ||
-            !validator.isEmail(this.state.email.trim())
+            myState.firstName.trim() === "" ||
+            myState.lastName.trim() === "" ||
+            myState.userName.trim() === "" ||
+            myState.password === "" ||
+            myState.password !== myState.repassword 
         ) {
             const errorsElement = (
                 <ul>
-                    {this.state.firstName.trim() === "" ? (
+                    {myState.firstName.trim() === "" ? (
                         <li>Please Enter your first name</li>
                     ) : null}
-                    {this.state.lastName.trim() === "" ? (
+                    {myState.lastName.trim() === "" ? (
                         <li>Please Enter your last name</li>
                     ) : null}
-                    {this.state.userName.trim() === "" ? (
+                    {myState.userName.trim() === "" ? (
                         <li>user name should not be empty</li>
                     ) : null}
-                    {this.state.email.trim() === "" ? (
-                        <li>Email should not be empty</li>
-                    ) : null}
-                    {!validator.isEmail(this.state.email.trim()) ? (
-                        <li>you have to enter a valid email</li>
-                    ) : null}
-                    {this.state.password === "" ? (
+                    {myState.password === "" ? (
                         <li>password should not be empty</li>
                     ) : null}
-                    {this.state.password !== this.state.repassword ? (
+                    {myState.password !== myState.repassword ? (
                         <li>password is not matching the repassword</li>
                     ) : null}
                 </ul>
             );
 
-            this.setState({
+            setMyState({
+                ...myState,
                 errorComponent: errorsElement,
                 showErrorModal: true,
             });
         } else {
-            registerPost(
-                this.state.firstName,
-                this.state.lastName,
-                this.state.userName,
-                this.state.email,
-                this.state.password,
-                this.state.repassword
+            editPost(
+                user.id,
+                myState.firstName,
+                myState.lastName,
+                myState.userName,
+                myState.City,
+                myState.password,
+                myState.repassword
             )
                 .then((data) => {
                     let badgeClass = "";
@@ -91,7 +96,7 @@ class User extends React.Component {
                         case 1:
                             badgeClass = "alert alert-success";
                             badgeMessage =
-                                "You register successfully, Check your Mail to verify your account";
+                                "You changed your Profile successfully";
                             break;
                         case 2:
                         case 4:
@@ -102,7 +107,7 @@ class User extends React.Component {
                         case 3:
                             badgeClass = "alert alert-danger";
                             badgeMessage =
-                                "there is already a user with the same email, please choose another email";
+                                "there is already a user with the same email / Username, please choose another email";
                             break;
                         default:
                             break;
@@ -112,7 +117,8 @@ class User extends React.Component {
                             {badgeMessage}
                         </div>
                     );
-                    this.setState({ resultElement: badge });
+                    setMyState({
+                        ...myState, resultElement: badge });
                 })
                 .catch((error) => {
                     const badge = (
@@ -120,32 +126,33 @@ class User extends React.Component {
                             can not send the registration data to server
                         </div>
                     );
-                    this.setState({ resultElement: badge });
+                    setMyState({
+                        ...myState, resultElement: badge });
                 });
         }
     };
 
-    closeModal = () => {
-        this.setState({ showErrorModal: false });
+    const closeModal = () => {
+        setMyState({
+            ...myState, showErrorModal: false });
     };
     // console.log(state.feed); fluid public/src/images/FB_IMG_1592363046509.png
-    render() {
         return (
             <Fragment>
                 <PopUpModal
-                    show={this.state.showErrorModal}
-                    close={this.closeModal}
+                    show={myState.showErrorModal}
+                    close={closeModal}
                     className="bg-danger"
                     title="Entries Error"
                 >
-                    {this.state.errorComponent}
+                    {myState.errorComponent}
                 </PopUpModal>
 
                 <Container>
                     <Row>
                         <Col xs={6} md={9}>
                             <br />
-                            <h1 className="text-trans mb-4">Hello User</h1>
+        <h1 className="text-trans mb-4">Hello {user.firstName+' '+user.lastName}</h1>
                             <h3 className="text-trans mb-4">
                                 {" "}
                                 Welcome In Your Page
@@ -172,7 +179,7 @@ class User extends React.Component {
                     <Row></Row>
                     <Form className="pb-md-0 pb-5">
                         <div className="col-lg-12 col-md-12">
-                            {this.state.resultElement}
+                            {myState.resultElement}
                         </div>
                         <Row xs="1" sm="2">
                             <Col>
@@ -183,14 +190,15 @@ class User extends React.Component {
                                     <Input
                                         className="badge-pill text-trans bg-transparent"
                                         type="text"
-                                        placeholder="Enter Your first Name"
+                                        placeholder={user.firstName}
                                         required
                                         onChange={(e) => {
-                                            this.setState({
+                                            setMyState({
+                                            ...myState,
                                                 firstName: e.target.value,
                                             });
                                         }}
-                                        value={this.state.firstName}
+                                        value={myState.firstName}
                                     />
                                 </FormGroup>
                             </Col>
@@ -202,33 +210,35 @@ class User extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
-                                        placeholder="Enter Your last Name"
+                                        placeholder={user.lastName}
                                         required
                                         onChange={(e) => {
-                                            this.setState({
+                                            setMyState({
+                                            ...myState,
                                                 lastName: e.target.value,
                                             });
                                         }}
-                                        value={this.state.lastName}
+                                        value={myState.lastName}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col>
                                 <FormGroup className="mb-4 text-left">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        Email:
+                                        City:
                                     </Label>
                                     <Input
                                         className="badge-pill bg-transparent"
-                                        type="email"
-                                        placeholder="Enter User Mail"
+                                        type="city"
+                                        placeholder="Enter Your City"
                                         required
                                         onChange={(e) => {
-                                            this.setState({
-                                                email: e.target.value,
+                                            setMyState({
+                                            ...myState,
+                                                City: e.target.value,
                                             });
                                         }}
-                                        value={this.state.email}
+                                        value={myState.City}
                                     />
                                 </FormGroup>
                             </Col>
@@ -240,33 +250,35 @@ class User extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
-                                        placeholder="Enter User Name"
+                                        placeholder={user.userName}
                                         required
                                         onChange={(e) => {
-                                            this.setState({
+                                            setMyState({
+                                            ...myState,
                                                 userName: e.target.value,
                                             });
                                         }}
-                                        value={this.state.userName}
+                                        value={myState.userName}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col>
                                 <FormGroup className="mb-4 text-left">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        Password:
+                                       Change Password:
                                     </Label>
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="password"
-                                        placeholder="Password"
+                                        placeholder="Write a New Password"
                                         required
                                         onChange={(e) => {
-                                            this.setState({
+                                            setMyState({
+                                            ...myState,
                                                 password: e.target.value,
                                             });
                                         }}
-                                        value={this.state.password}
+                                        value={myState.password}
                                     />
                                 </FormGroup>
                             </Col>
@@ -281,11 +293,12 @@ class User extends React.Component {
                                         placeholder="Repeat Password"
                                         required
                                         onChange={(e) => {
-                                            this.setState({
+                                            setMyState({
+                                            ...myState,
                                                 repassword: e.target.value,
                                             });
                                         }}
-                                        value={this.state.repassword}
+                                        value={myState.repassword}
                                     />
                                 </FormGroup>
                             </Col>
@@ -293,7 +306,7 @@ class User extends React.Component {
                         <Col className=" text-center">
                             <Button
                                 className="badge-pill btn-outline-light bg-transparent my-4"
-                                onClick={this.onRegisterBtnClick}
+                                onClick={onEditBtnClick}
                             >
                                 Edit
                             </Button>
@@ -303,6 +316,10 @@ class User extends React.Component {
             </Fragment>
         );
     }
+
+const mapStateToProps = state => {
+    return {user: state.user}
 }
 
-export default User;
+// export default User;
+  export default connect(mapStateToProps)(User)
