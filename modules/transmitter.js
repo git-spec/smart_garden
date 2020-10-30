@@ -73,21 +73,24 @@ class Radio {
         return new Promise((resolve, reject) => {
             const interval = setInterval(() => {
                 attempt--;
-                this.radio.useWritePipe(pipe, true);
+                //this.stop()
                 //this.radio.addReadPipe(this._reading_pipe);
-                this.radio.write(Buffer.from(data), success => {
-                    if (success) {
-                        clearInterval(interval);
-                        //this.radio.removeWritePipe(pipe);
-                        resolve();
-                    } else {
-                        if (attempt === 0) {
+                //setTimeout(()=>{
+                    this.radio.useWritePipe(pipe, true);
+                    this.radio.write(Buffer.from(data), success => {
+                        if (success) {
                             clearInterval(interval);
                             //this.radio.removeWritePipe(pipe);
-                            reject('error');
+                            resolve();
+                        } else {
+                            if (attempt === 0) {
+                                clearInterval(interval);
+                                //this.radio.removeWritePipe(pipe);
+                                reject('error');
+                            }
                         }
-                    }
-                });
+                    });
+                //}, 200)
                 //this.radio.stopWrite()
             }, 100);
         });
