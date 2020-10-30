@@ -7,7 +7,7 @@ import {setUserAction} from '../actions';
 import {checkLoginPost} from '../services/api';
 // components
 import Main from './Main';
-// import CheckLogin from './CheckLogin';
+import CheckLogin from './CheckLogin';
 
 import Register from './Register';
 import Login from './Login';
@@ -17,7 +17,7 @@ import Reset from './Reset'
 import ErrorPage from './ErrorPage';
 
 import Products from './Products';
-// import User from './User';
+import User from './User';
 
 const Router = props => {
 
@@ -43,8 +43,8 @@ const Router = props => {
                 <Route path="/verify/:email" exact component={Verification} />
                 <Route path='/password' exact component={Password} />
                 <Route path='/reset/:id/:email' exact component={Reset} />
-                {/* <Route path="/user" exact component={() => <CheckLogin><User /></CheckLogin>} /> */}
-                <Route path="/products" exact component={Products} />
+                <Route path="/user" exact component={() => <CheckLogin><User /></CheckLogin>} />
+                <Route path="/products" exact component={() => <CheckLogin><Products /></CheckLogin>} />
                 <Route path="/" component={ErrorPage} />
             </Switch>
         </BrowserRouter>

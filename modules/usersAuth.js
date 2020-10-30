@@ -91,6 +91,25 @@ function registerUser(firstName, lastName, userName, email, password) {
   });
 }
 
+// edit user
+function editUser(id, firstName, lastName, userName, city, password) {
+  return new Promise((resolve, reject) => {
+    runQuery(
+      `UPDATE users SET users.firstname = '${firstName}', users.lastname = '${lastName}', users.username = '${userName}', users.city = '${city}', users.password = '${passwordHash.generate(password)}' WHERE users.id = ${id}`
+    )
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((err) => {
+        if (err.errno === 1062) {
+          reject("exist");
+        } else {
+          reject(err);
+        }
+      });
+  });
+}
+
 // verify user
 function verifyUser(email) {
   return new Promise((resolve, reject) => {
@@ -196,6 +215,7 @@ function resetPass(email, id, pass) {
 
 /* ***************************************************** EXPORT ******************************************************* */
 module.exports = {
+  editUser,
   checkUser,
   registerUser,
   verifyUser,
