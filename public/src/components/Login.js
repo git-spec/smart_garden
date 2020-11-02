@@ -1,4 +1,6 @@
-import React, {Fragment, useState} from 'react';
+// react
+import React, {Fragment, useState, useEffect} from 'react';
+// reactstrap
 import {Container,
         Row,
         Col,
@@ -8,26 +10,31 @@ import {Container,
         Input,
         Button
 } from 'reactstrap';
+// router dom
 import {Link, useHistory} from 'react-router-dom';
-// import {connect} from 'react-redux'
-
+// redux
+import {connect} from 'react-redux';
+import {setUserAction} from '../actions';
+// components
 import PopUpModal from './PopUpModal';
+// services
 import {loginPost} from '../services/api';
-// import {setUserAction} from '../actions'
 
 const Login = props => {
-    // useEffect(() => {
-    //   props.setUserAction(null)
 
-    // }, []);
+    const {setUserAction} = props;
+    useEffect(() => {
+        setUserAction(null)
+    }, [setUserAction]);
 
     const history = useHistory();
+
     const initialState = {
         email: '',
         password: '',
         entriesError: false,
-        errorElement: null,
-        errorTitle: ''
+        errorTitle: '',
+        errorElement: null
     };
     const [myState, setMyState] = useState(initialState);
 
@@ -36,72 +43,65 @@ const Login = props => {
         if (myState.email.trim() === '' || myState.password === '') {
             const errorElement = (
                 <ul>
-                    {myState.email.trim() === '' ? <li>Email should not be empty</li> : null}
-                    {myState.password === '' ? <li>Password should not be empty</li> : null}
+                    {myState.email.trim() === '' ? <li>Please enter your email</li> : null}
+                    {myState.password === '' ? <li>Please enter your password</li> : null}
                 </ul>
             );
             setMyState({
                 ...myState,
                 entriesError: true,
-                errorElement,
-                errorTitle: 'Entries Error'
+                errorTitle: 'Entry Error',
+                errorElement
             });
         } else {
-            loginPost(myState.email, myState.password)
-                .then(data => {
-                    switch (data) {
-                        case 2:
-                            setMyState({
-                                ...myState,
-                                entriesError: true,
-                                errorElement: <p>there was a server error</p>,
-                                errorTitle: 'Server Error'
-                            });
-                            break;
-                        case 3:
-                            setMyState({
-                                ...myState,
-                                entriesError: true,
-                                errorElement: <p>Password is wrong</p>,
-                                errorTitle: 'Wrong password'
-                            });
-                            break;
-                        case 4:
-                            setMyState({
-                                ...myState,
-                                entriesError: true,
-                                errorElement: <p>the email that you used is not exist</p>,
-                                errorTitle: 'Email not exist'
-                            });
-                            break;
-                        case 1:
-                            // show admin panel
-                            // props.setUserAction(myState.email)
-                            history.push('/user');
-                            // console.log('ok ok ok');
-                            break;
-                        default:
-                            break;
-                    }
-                })
-                .catch(error => {
-                    setMyState({
-                        ...myState,
-                        entriesError: true,
-                        errorElement: <p>can not send the data</p>,
-                        errorTitle: 'unknown error'
-                    });
+            loginPost(myState.email, myState.password).then(data => {
+                switch (data) {
+                    case 2:
+                        setMyState({
+                            ...myState,
+                            entriesError: true,
+                            errorTitle: 'Server Error',
+                            errorElement: <p>There was a server error</p>
+                        });
+                        break;
+                    case 3:
+                        setMyState({
+                            ...myState,
+                            entriesError: true,
+                            errorTitle: 'Wrong Password',
+                            errorElement: <p>Your password is wrong</p>
+                        });
+                        break;
+                    case 4:
+                        setMyState({
+                            ...myState,
+                            entriesError: true,
+                            errorTitle: 'Email Does Not Exist',
+                            errorElement: <p>The email you have used does not exist</p>
+                        });
+                        break;
+                    default:
+                        setUserAction(data);
+                        history.push('/user/dashboard');
+                        break;
+                }
+            }).catch(error => {
+                setMyState({
+                    ...myState,
+                    entriesError: true,
+                    errorTitle: 'Unknown Error',
+                    errorElement: <p>Can not send the data</p>
                 });
+            });
         }
     };
+    
     const closeModal = () => {
         setMyState({
             ...myState,
             entriesError: false
         });
     };
-
-    //console.log(myState);
 
     return (
         <Fragment>
@@ -110,22 +110,22 @@ const Login = props => {
             </PopUpModal>
             <Container>
                 {/* <div className="breadcrumb">
-          <div className="container">
-            <Link className="breadcrumb-item" to="/">Home</Link>
-            <span className="breadcrumb-item active">Login</span>
-          </div>
-        </div> */}
+                <div className="container">
+                    <Link className="breadcrumb-item" to="/">Home</Link>
+                    <span className="breadcrumb-item active">Login</span>
+                </div>
+                </div> */}
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Login</h1>
-                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">login to start your devices management</p>
+                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Log in to access your device management.</p>
                 <Form className="pb-md-0 pb-5">
                     <Row xs="1" sm="1">
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-md-4 mb-3 text-left">
-                                <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">Email / User Name:</Label>
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="email"
-                                    placeholder="Enter User Name"
+                                    placeholder="Enter your email or user name"
                                     required
                                     onChange={e => {
                                         setMyState({
@@ -140,17 +140,17 @@ const Login = props => {
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-4 text-left">
                                 <Row>
-                                    <Col xs="4" md="6">
+                                    <Col xs="4" lg="6">
                                         <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                     </Col>
-                                    <Col xs="8" md="6" className="text-right">
-                                        <span className="pr-2">Forgot Your <Link to="/Password" className="pr-1">Password</Link>?</span>
+                                    <Col xs="8" lg="6" className="text-right">
+                                        <span className="pr-2">Forgot your <Link to="/password" className="pr-1">Password</Link>?</span>
                                     </Col>
                                 </Row>
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="password"
-                                    placeholder="Password"
+                                    placeholder="Enter your password"
                                     required
                                     onChange={e => {
                                         setMyState({
@@ -164,7 +164,7 @@ const Login = props => {
                         </Col>
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <h5>
-                                Not Registered?	&nbsp;
+                                Not registered?&nbsp;
                                 <Link to="/register">Register</Link>
                             </h5>
                         </Col>
@@ -180,5 +180,4 @@ const Login = props => {
     );
 };
 
-// export default connect(null,{setUserAction})(Login)
-export default Login;
+export default connect(null, {setUserAction})(Login);

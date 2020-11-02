@@ -8,17 +8,17 @@ import {Container,
         Input,
         Button
 } from 'reactstrap';
-// import {Link, useHistory} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
 import {sendResetLink} from '../services/api';
 
 const Password = props => {
-    //   const history = useHistory()
+
     const initialState = {
         email: '',
         entriesError: false,
         errorElement: null,
-        errorTitle: ''
+        errorTitle: '',
+        modalClass: ''
     };
     const [myState, setMyState] = useState(initialState);
 
@@ -27,69 +27,61 @@ const Password = props => {
         if (myState.email.trim() === '') {
             const errorElement = (
                 <ul>
-                    {myState.email.trim() === '' ? (
-                        <li>
-                            Please enter your Email , <br></br> Email should not be empty
-                        </li>
-                    ) : null}
+                    {myState.email.trim() === '' ? <li>Please enter your email</li> : null}
                 </ul>
             );
             setMyState({
                 ...myState,
                 entriesError: true,
+                errorTitle: 'Entry Error',
                 errorElement,
-                errorTitle: 'Entries Error'
+                modalClass: 'bg-danger'
             });
         } else {
-            sendResetLink(myState.email)
-                .then(data => {
-                    switch (data) {
-                        case 2:
-                            setMyState({
-                                ...myState,
-                                entriesError: true,
-                                errorElement: <p>there was a server error</p>,
-                                errorTitle: 'Server Error'
-                            });
-                            break;
-                        case 4:
-                            setMyState({
-                                ...myState,
-                                entriesError: true,
-                                errorElement: <p>the email that you used is not exist</p>,
-                                errorTitle: 'Email not exist'
-                            });
-                            break;
-                        case 1:
-                            // show admin panel
-                            // props.setUserAction(myState.email)
-                            setMyState({
-                                ...myState,
-                                entriesError: true,
-                                errorElement: (
-                                    <p>
-                                        We have sent you a reset email, <br></br> Check your Email{' '}
-                                    </p>
-                                ),
-                                errorTitle: 'Email not exist'
-                            });
-                            console.log('ok ok ok');
-                            break;
-
-                        default:
-                            break;
-                    }
-                })
-                .catch(error => {
-                    setMyState({
-                        ...myState,
-                        entriesError: true,
-                        errorElement: <p>can not send the data</p>,
-                        errorTitle: 'unknown error'
-                    });
+            sendResetLink(myState.email).then(data => {
+                switch (data) {
+                    case 1:
+                        setMyState({
+                            ...myState,
+                            entriesError: true,
+                            errorTitle: 'Reset Email Sent',
+                            errorElement: <p>We have sent you a reset email,<br/>please check your emails!</p>,
+                            modalClass: 'bg-success'
+                        });
+                        break;
+                    case 2:
+                        setMyState({
+                            ...myState,
+                            entriesError: true,
+                            errorTitle: 'Server Error',
+                            errorElement: <p>There was a server error</p>,
+                            modalClass: 'bg-danger'
+                        });
+                        break;
+                    case 4:
+                        setMyState({
+                            ...myState,
+                            entriesError: true,
+                            errorTitle: 'Email Does Not Exist',
+                            errorElement: <p>The email you have used does not exist</p>,
+                            modalClass: 'bg-danger'
+                        });
+                        break;
+                    default:
+                        break;
+                }
+            }).catch(error => {
+                setMyState({
+                    ...myState,
+                    entriesError: true,
+                    errorTitle: 'Unknown Error',
+                    errorElement: <p>Can not send the data</p>,
+                    modalClass: 'bg-danger'
                 });
+            });
         }
     };
+
     const closeModal = () => {
         setMyState({
             ...myState,
@@ -97,17 +89,15 @@ const Password = props => {
         });
     };
 
-    //console.log(myState);
-
     return (
         <Fragment>
-            <PopUpModal show={myState.entriesError} close={closeModal} className="bg-danger" title={myState.errorTitle}>
+            <PopUpModal show={myState.entriesError} close={closeModal} className={myState.modalClass} title={myState.errorTitle}>
                 {myState.errorElement}
             </PopUpModal>
             <Container>
                 <Col sm="12" md={{size: 6, offset: 3}}>
                     <h1 className="text-trans mb-4">Password</h1>
-                    <p className="text-trans mb-4">Forgot your password? Enter your email to receive a link where you can reset your password.</p>
+                    <p className="text-trans mb-4">Forgot your password? Enter your email address to receive a link to reset it.</p>
                 </Col>
                 <Form className="pb-md-0 pb-5">
                     <Row>

@@ -1,27 +1,14 @@
-import React from "react";
-import { 
-  // InputGroup, 
-  // Button, 
-  // Input, 
-  Container 
-} from "reactstrap";
-// import { Link } from "react-router-dom";
-// import PopUpModal from "./PopUpModal";
-// import validator from "validator";
-// import { registerPost } from "../services/api";
+import React from 'react';
+import {Container} from 'reactstrap';
 
 class Register extends React.Component {
- 
-  render() {
-    return (
-      <React.Fragment>
-        <Container>
-        <div>
-            Sorry This Page Is Not Exist Make Sure That You Use The Right Link
-        </div>
-        </Container>
-      </React.Fragment>
-    );
-  }
+    render() {
+        return (
+            <Container>
+                <div>Sorry, this page does not exist! Make sure you have used the correct link.</div>
+            </Container>
+        );
+    }
 }
+
 export default Register;

@@ -7,7 +7,7 @@ const ConfirmModal = props => {
             <ModalHeader toggle={props.close} className={props.className}>
                 {props.title}
             </ModalHeader>
-            <ModalBody>{props.children}</ModalBody>
+            <ModalBody className="text-dark">{props.children}</ModalBody>
             <ModalFooter>
                 <Button color="danger" onClick={props.delete}>
                     Delete
