@@ -179,5 +179,10 @@ userRouter.post('/deletedevice', (req, res) => {
     }
 });
 
+userRouter.post('/logout', (req, res) => {
+    req.session.destroy(); // destroys session & logs user out
+    res.json(10);
+});
+
 /* ---------------------------------------- EXPORT ---------------------------------------- */
 module.exports = userRouter;

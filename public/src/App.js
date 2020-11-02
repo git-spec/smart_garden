@@ -1,15 +1,16 @@
 import React, {Fragment} from 'react';
-import Navigation from './components/Navigation';
 import Router from './components/Router';
+// import Navigation from './components/Navigation';
 
 function App() {
-  return (
-    <Fragment>
-      <div className="cover"></div>
-      <Navigation />
-      <Router />
-    </Fragment>
-  );
+    return (
+        <Fragment>
+            <div className="cover"></div>
+            <Router>
+                {/* <Navigation /> */}
+            </Router>
+        </Fragment>
+    );
 }
 
 export default App;
