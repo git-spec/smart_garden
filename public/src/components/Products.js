@@ -3,7 +3,7 @@
 import React, {useState, useEffect} from 'react';
 // redux
 import {connect} from 'react-redux';
-// import {setUserAction} from '../actions';
+import {setSocketAction} from '../actions';
 // socket
 import io from 'socket.io-client';
 // router dom
@@ -84,12 +84,20 @@ const Products = props => {
 
         socket.on('connect', () => {
             console.log('connected');
+            props.setSocketAction(socket);
             console.log(props.user);
-            socket.emit('user_connect', '3');
+            if (props.user.id) {
+                socket.emit('user_connect', props.user.id);
+            }
+        });
+
+        socket.on('disconnect', () => {
+            console.log('disconnected');
+            socket.emit('user_disconnect', '3');
         });
 
         socket.on('hub_connect', sn => {
-            console.log(hubStatusRefs);
+            // console.log(hubStatusRefs);
             // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
             // if (idx !== -1) {
             //     hubStatusRefs[idx].ref.current.classList.remove('d-none');
@@ -102,7 +110,7 @@ const Products = props => {
         });
 
         socket.on('hub_disconnect', sn => {
-            console.log(hubStatusRefs);
+            // console.log(hubStatusRefs);
             // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
             // if (idx !== -1) {
             //     hubStatusRefs[idx].ref.current.classList.add('d-none');
@@ -112,23 +120,23 @@ const Products = props => {
 
         socket.on('device_connect', sn => {
             console.log(deviceStatusRefs);
-            // if (deviceStatusRefs.length > 0) {
-            //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-            //     if (idx !== -1) {
-            //         deviceStatusRefs[idx].ref.current.classList.remove('d-none');
-            //     }
-            // }
+            if (deviceStatusRefs.length > 0) {
+                const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
+                if (idx !== -1) {
+                    deviceStatusRefs[idx].ref.current.classList.remove('d-none');
+                }
+            }
             console.log('device connected', sn);
         });
 
         socket.on('device_disconnect', sn => {
             console.log(deviceStatusRefs);
-            // if (deviceStatusRefs.length > 0) {
-            //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-            //     if (idx !== -1) {
-            //         deviceStatusRefs[idx].ref.current.classList.add('d-none');
-            //     }
-            // }
+            if (deviceStatusRefs.length > 0) {
+                const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
+                if (idx !== -1) {
+                    deviceStatusRefs[idx].ref.current.classList.add('d-none');
+                }
+            }
             console.log('device disconnected', sn);
         });
 
@@ -165,6 +173,10 @@ const Products = props => {
         }).catch(err => {
             alert(err);
         });
+        // return ()=>{
+        //     console.log("Unmount Component")
+        //     socket.disconnect()
+        // }
     }, []);
 
 /* ********************************************************* TOGGLES ********************************************************* */
@@ -593,4 +605,4 @@ if (state.hubs && state.devices) {
 const mapStateToProps = state => {
     return ({user: state.user});
 };
-export default connect(mapStateToProps)(Products);
+export default connect(mapStateToProps, {setSocketAction})(Products);
