@@ -57,6 +57,7 @@ function Navigation(props) {
         logoutPost().then(data => {
             if (data === 10) {
                 history.push('/login');
+                props.socket.disconnect();
             }
         }).catch(err => {
             console.log(err);
@@ -162,6 +163,9 @@ function Navigation(props) {
 }
 
 const mapStateToProps = state => {
-    return {user: state.user};
+    return {
+        user: state.user,
+        socket: state.socket
+    };
 };
 export default connect(mapStateToProps)(Navigation);
