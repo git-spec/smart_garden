@@ -7,6 +7,16 @@ const hub_info = {
 };
 // list of all devices in the cloud
 let devices = [];
+// [
+// {
+//     id: 0,
+//     name: "name",
+//     sn_number: "0xABCDABCDABCD",
+//     user_id: 1,
+//     hub_id: 5,
+//     connected: 1
+// },....
+// ]
 
 socket.on('connect', () => {
     log('connected');
@@ -14,7 +24,7 @@ socket.on('connect', () => {
     // checking all devices every 20 seconds
     setInterval(() => {
         checkAllDevices();
-    }, 20 * 1000)
+    }, 20 * 1000);
 });
 
 socket.on('toDevice', receivedDevices => {
@@ -27,6 +37,22 @@ const radio = new Transmitter();
 
 radio.setReadingPipe('0xABCDABCD71');
 
+// user is online now
+socket.on('user_connect', () => {
+    // send order to all devices to get realtime data
+    log('The user is online now & asking for realtime data');
+    requestRealTimeDataFromAllDevices();
+});
+
+socket.on('user_disconnect', () => {
+    stopRequestRealTimeDataFromAllDevices();
+});
+
+/**
+ * test to send order data request to AR c
+ *
+ */
+//radio.send("realTimeData", 10, "0x744d52687C").then(()=>{log("request data sent")})
 radio.read(data => {
     // log('sent data from arduino: ', data);
     const sn = data.substr(0, data.indexOf('-'));
@@ -38,13 +64,14 @@ radio.read(data => {
             devices[devices.map(device => device.sn_number).indexOf(sn)].connected = true;
             socket.emit('device_connect', sn);
         }
+        log(`Message from "${sn}": ${message}`);
     }
 });
 
 // check connection for each device connected to this hub
 /**
- * 
- * @param {*} device 
+ *
+ * @param {*} device
  */
 const checkConnected = device => {
     return new Promise((resolve, reject) => {
@@ -70,9 +97,39 @@ const checkConnected = device => {
     });
 };
 
+// request realtime data from devices
+function requestRealTimeDataFromAllDevices() {
+    recursivePromises(0, requestRealTimeData);
+}
+function requestRealTimeData(device) {
+    return new Promise((resolve, reject) => {
+        radio.send('realTimeData', 10, device.sn_number).then(() => {
+            resolve();
+        }).catch(error => {
+            log(error);
+            reject(error);
+        });
+    });
+}
+
+// stop request realtime data from devices 
+function stopRequestRealTimeDataFromAllDevices() {
+    recursivePromises(0, stopRequestRealTimeData);
+}
+function stopRequestRealTimeData(device) {
+    return new Promise((resolve, reject) => {
+        radio.send('stopRealTimeData', 10, device.sn_number).then(() => {
+            resolve();
+        }).catch(error => {
+            log(error);
+            reject(error);
+        });
+    });
+}
+
 /**
- * 
- * @param {*} i 
+ *
+ * @param {*} i
  */
 function recursivePromises(i, promiseToDo) {
     if (i < devices.length) {
@@ -90,8 +147,17 @@ function recursivePromises(i, promiseToDo) {
 }
 
 /**
- * 
+ *
  */
 function checkAllDevices() {
     recursivePromises(0, checkConnected);
 }
+
+//{
+//     name: 'dht',
+//     device_id: 4,
+//     {
+//         h: 75,
+//         t: 32
+//     }
+// };
