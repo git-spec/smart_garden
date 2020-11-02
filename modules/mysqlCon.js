@@ -1,8 +1,6 @@
 const mySql = require('mysql');
-
-
-
 let con = null;
+
 function connect() {
     return new Promise((resolve, reject) => {
         if (con) {
@@ -92,7 +90,6 @@ function checkExist(tableName, value, condition) {
     });
 }
 
-
 /**
  * EX: updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number})
  * @param {string} tableName 
@@ -127,11 +124,6 @@ function updateRecord(tableName, value, condition){
         query += ';';
         runQuery(query).then(() => {
             resolve();
-            // if (data.length > 0) {
-            //     resolve(data);
-            // } else {
-            //     reject('No Data Found');
-            // }
         }).catch(error => {
             reject(error);
         });

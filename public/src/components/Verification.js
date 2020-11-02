@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {useParams, Link, useHistory} from 'react-router-dom';
-
 import {sendParams} from '../services/api';
 
 const Verification = () => {
@@ -22,7 +21,7 @@ const Verification = () => {
     return (
         <React.Fragment>
             <div className="breadcrumb">
-                <p>Thanks For Your Register</p>
+                <p>Thanks for registering!</p>
                 <div className="container">
                     <Link className="breadcrumb-item" to="/login">
                         Login
