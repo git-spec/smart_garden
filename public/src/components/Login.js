@@ -1,20 +1,21 @@
 // react
 import React, {Fragment, useState, useEffect} from 'react';
 // reactstrap
-import {Container,
-        Row,
-        Col,
-        Form,
-        FormGroup,
-        Label,
-        Input,
-        Button
+import {
+    Container,
+    Row,
+    Col,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+    Button
 } from 'reactstrap';
 // router dom
 import {Link, useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
-import {setUserAction} from '../actions';
+import {setUserAction, setSocketAction} from '../actions';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -22,9 +23,10 @@ import {loginPost} from '../services/api';
 
 const Login = props => {
 
-    const {setUserAction} = props;
+    const {setUserAction, setSocketAction} = props;
     useEffect(() => {
-        setUserAction(null)
+        setUserAction(null);
+        setSocketAction(null);
     }, [setUserAction]);
 
     const history = useHistory();
@@ -180,4 +182,4 @@ const Login = props => {
     );
 };
 
-export default connect(null, {setUserAction})(Login);
+export default connect(null, {setUserAction, setSocketAction})(Login);
