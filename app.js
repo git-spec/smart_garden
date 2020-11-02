@@ -224,9 +224,21 @@ io.on('connection', socket => {
     // log('Device Is Connected');
 
     socket.on('user_connect', userID => {
-        // console.log('userID: ', userID);
         socket.join(userID.toString());
-    });
+        log(`user ${userID} connected`);
+        socket.broadcast.to(userID).emit('user_connect');
+        // user is online now and asks for realtime data
+        socket.on('realTimeData', realtimeData => {
+            log(realtimeData);
+            // emit to the user while he connected
+        });
+        // user is not online anymore
+        socket.on('disconnect', () => {
+            socket.disconnect();
+            log('user disconnected');
+            socket.broadcast.to(userID).emit('user_disconnect');
+        });
+    });  
 
     socket.on('hub_connect', data => {
         // check in the database if the hub exists
@@ -244,6 +256,7 @@ io.on('connection', socket => {
                         // get the devices that belong to this hub
                         SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
                             // log(devices);
+                            // send all devices to raspberry
                             socket.emit('toDevice', devices);
                         }).catch(error => {
                             log(error);
