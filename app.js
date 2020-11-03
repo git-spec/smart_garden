@@ -7,6 +7,7 @@ const hub_info = {
 };
 // list of all devices in the cloud
 let devices = [];
+
 // [
 // {
 //     id: 0,
@@ -34,18 +35,27 @@ socket.on('toDevice', receivedDevices => {
 });
 
 const radio = new Transmitter();
-
 radio.setReadingPipe('0xABCDABCD71');
 
 // user is online now
 socket.on('user_connect', () => {
     // send order to all devices to get realtime data
     log('The user is online now & asking for realtime data');
-    requestRealTimeDataFromAllDevices();
+    //requestRealTimeDataFromAllDevices();
 });
 
 socket.on('user_disconnect', () => {
     stopRequestRealTimeDataFromAllDevices();
+});
+
+// incoming order for realtime date
+socket.on('realTimeRequest', sn => {
+    // log(sn);
+    radio.send('realTimeData', 10, sn).then(() => {
+        log(`Real time request sent to "${sn}"`);
+    }).catch(error => {
+        log(error);
+    });
 });
 
 /**
@@ -59,12 +69,22 @@ radio.read(data => {
     const message = data.substr(data.indexOf('-') + 1, data.length);
     const device = devices.find(device => device.sn_number === sn);
     if (device && message) {
-        if (message.toString().replace(/\x00/gi, '') === 'hi') {
+        if (message.toString().replace(/\x00/gi, '') === 'yup') {
+            // this case to check if connected
             // set the device from which data was received to connected
             devices[devices.map(device => device.sn_number).indexOf(sn)].connected = true;
             socket.emit('device_connect', sn);
+        } else {
+            // this case the device sending data
+            log(`Message from "${sn}": ${message}`);
+            //send the data back to the server
+            let str = message.replace(/\0/g, '');
+            let data = [];
+            str.split('|').forEach(d => {
+                data.push(d);
+            });
+            socket.emit('realTimeData', {sn_number: sn, data: data});
         }
-        log(`Message from "${sn}": ${message}`);
     }
 });
 
@@ -112,7 +132,7 @@ function requestRealTimeData(device) {
     });
 }
 
-// stop request realtime data from devices 
+// stop request realtime data from devices
 function stopRequestRealTimeDataFromAllDevices() {
     recursivePromises(0, stopRequestRealTimeData);
 }
