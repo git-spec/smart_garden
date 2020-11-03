@@ -21,12 +21,11 @@ import User from './User';
 const Router = props => {
 
     const {setUserAction} = props;
-    // run at initial render
     useEffect(() => {
         checkLoginPost().then(data => {
             // console.log('user:', data);
             if (data !== 10) { // user is logged in
-                setUserAction(data);
+                // setUserAction(data);
             }
         });
     }, [setUserAction]);
