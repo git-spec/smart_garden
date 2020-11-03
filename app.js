@@ -225,7 +225,7 @@ io.on('connection', socket => {
 
     socket.on('user_connect', userID => {
         socket.join(userID.toString());
-        log(`user ${userID} connected`);
+        log(`user ${userID} is connected`);
         socket.broadcast.to(userID).emit('user_connect');
         // user is online now and asks for realtime data
         socket.on('realTimeData', realtimeData => {
@@ -246,8 +246,9 @@ io.on('connection', socket => {
             // console.log('hub: ', hubs[0]);
             if (hubs.length > 0) {
                 if (hubs[0].user_id) {
-                    // join user twice?
-                    socket.join(hubs[0].user_id);
+
+                    // join user twice???
+                    // socket.join(hubs[0].user_id);
 
                     // change the status from hub to connected in db
                     SQL.updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number}).then(() => {
