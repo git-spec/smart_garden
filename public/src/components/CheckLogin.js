@@ -16,7 +16,7 @@ const CheckLogin = props => {
             if (data === 10) {
                 history.push('/login');
             } else {
-                setUserAction(data);
+                // setUserAction(data);
             }
         }).catch(err => {
             history.push('/login');
