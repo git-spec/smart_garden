@@ -1,8 +1,6 @@
 const mySql = require('mysql');
-
-
-
 let con = null;
+
 function connect() {
     return new Promise((resolve, reject) => {
         if (con) {
@@ -59,7 +57,7 @@ function runQuery(queryString) {
 
 /**
  * This function returns the value that was searched for
- * EX: checkExist("tableName", "*", {sn_number: 444, id: 20})
+ * EX: checkExist('iot_hubs', '*', {sn_number: data.sn_number})
  * @param {string} tableName 
  * @param {string} value EX: * for all rows
  * @param {object} condition EX: {col_name: value}
@@ -76,7 +74,7 @@ function checkExist(tableName, value, condition) {
                     query += `${key} = '${condition[`${key}`]}' AND `;
                 }
             });
-            query = query.substring(0, query.length - 4) + ';';
+            query = query.substring(0, query.length - 5) + ';';
         } else {
             query += ';';
         }
@@ -92,18 +90,48 @@ function checkExist(tableName, value, condition) {
     });
 }
 
-
 /**
- *  updateRecord("iot_hubs", {connected: true, name:"Raspi1"}, {id: 21, user_id:20}")
+ * EX: updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number})
  * @param {string} tableName 
- * @param {object} values 
+ * @param {object} value
  * @param {object} condition 
  */
-function updateRecord(tableName, values, condition){
-
+function updateRecord(tableName, value, condition){
+    return new Promise((resolve, reject) => {
+        let query = `UPDATE ${tableName}`;
+        if (value) {
+            query += ' SET ';
+            Object.keys(value).forEach(key => {
+                if (typeof value[`${key}`] === 'number') {
+                    query += `${key} = ${value[`${key}`]} AND `;
+                } else {
+                    query += `${key} = '${value[`${key}`]}' AND `;
+                }
+            });
+            query = query.substring(0, query.length - 5);
+        } 
+        if (condition) {
+            query += ' WHERE ';
+            Object.keys(condition).forEach(key => {
+                if (typeof condition[`${key}`] === 'number') {
+                    query += `${key} = ${condition[`${key}`]} AND `;
+                } else {
+                    query += `${key} = '${condition[`${key}`]}' AND `;
+                }
+            });
+            query = query.substring(0, query.length - 5);
+        } 
+        query += ';';
+        runQuery(query).then(() => {
+            resolve();
+        }).catch(error => {
+            reject(error);
+        });
+    });
 }
 
 module.exports = {
     runQuery,
-    checkExist
+    checkExist,
+    updateRecord
 };

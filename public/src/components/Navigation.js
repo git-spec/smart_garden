@@ -1,4 +1,10 @@
-import React, {useState} from 'react'
+import React, {useState, Fragment} from 'react';
+import { connect } from "react-redux";
+import {
+    Link, 
+    // useLocation, 
+    useHistory
+} from 'react-router-dom';
 import {
     Container,
     Collapse,
@@ -9,19 +15,31 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
+import {logoutPost} from '../services/api'
 
 function Navigation(props) {
+
+    // console.log(useLocation().pathname);
+
+    // history
+    const history = useHistory();
 
     // refs
     const toggleMobileIconRef = React.createRef();
     const toggleDesktopIconRef = React.createRef();
     const sidebarRef = React.createRef();
+    const loginLinkRef = React.createRef();
+    const registerLinkRef = React.createRef();
+    const dashboardLinkRef = React.createRef();
+    const accountLinkRef = React.createRef();
+    const logoutLinkRef = React.createRef();
 
     // state
     const initialState = {
         collapsed: true
     };
     const [state, setState] = useState(initialState);
+
 
     // opens menu on small devices
     const toggleMobileNavbar = () => {
@@ -33,11 +51,61 @@ function Navigation(props) {
         toggleDesktopIconRef.current.classList.toggle('open');
         setState({...state, collapsed: !state.collapsed});
     };
+
+    const logoutBtnClick = e => {
+        e.preventDefault();
+        logoutPost().then(data => {
+            if (data === 10) {
+                history.push('/login');
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    };
+    
+    const navLinksElement = (
+        <Fragment>
+                    {/* {
+            props.user ? 
+            loginLinkRef.current.classList.add('d-none') &&
+            registerLinkRef.current.classList.add('d-none')
+            :
+            dashboardLinkRef.current.classList.remove('d-none') &&
+            accountLinkRef.current.classList.remove('d-none') &&
+            logoutLinkRef.current.classList.remove('d-none')
+        } */}
+            <NavItem>
+                <NavLink className="text-white" tag={Link} to="/">home</NavLink>
+            </NavItem>
+            {props.user ?
+                <Fragment>
+                    <NavItem>
+                        <NavLink innerRef={dashboardLinkRef} className="text-white" tag={Link} to="/user/dashboard">dashboard</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink innerRef={accountLinkRef} className="text-white" tag={Link} to="/user/profile">profile</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink innerRef={logoutLinkRef} className="text-white" href="#" onClick={logoutBtnClick}>logout</NavLink>
+                    </NavItem>
+                </Fragment>
+            :
+                <Fragment>
+                    <NavItem>
+                        <NavLink innerRef={loginLinkRef} className="text-white" tag={Link} to="/login">login</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink innerRef={registerLinkRef} className="text-white" tag={Link} to="/register">register</NavLink>
+                    </NavItem>
+                </Fragment>
+            }
+        </Fragment>
+    );
     
     return (
         <Navbar fixed="top">
-            <Container>
-                <NavbarBrand href="/">
+            <Container className="px-sm-3 px-0">
+                <NavbarBrand tag={Link} to="/">
                     <svg version="1.1" className="logo"
                         xmlns="http://www.w3.org/2000/svg"
                         x="0px" y="0px" width="461px" height="223px" viewBox="0 0 461 223" enableBackground="new 0 0 461 223">
@@ -76,21 +144,7 @@ function Navigation(props) {
                 </NavbarToggler>
                 <div ref={sidebarRef} id="sidebar">
                     <Nav vertical className="mx-3">
-                        <NavItem>
-                            <NavLink className="text-white" href="/">home</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">products</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">news</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">account</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">logout</NavLink>
-                        </NavItem>
+                        {navLinksElement}
                     </Nav>
                 </div>
                 {/* navbar toggle for devices larger than 576px */}
@@ -98,27 +152,8 @@ function Navigation(props) {
                     <div ref={toggleDesktopIconRef} className="menu-icon"><span></span><span></span><span></span></div>
                 </NavbarToggler>
                 <Collapse isOpen={!state.collapsed} navbar>
-                    <Nav
-                        // navbar 
-                        // justified
-                        // fill
-                        horizontal="center"
-                    >
-                        <NavItem>
-                            <NavLink className="text-white" href="/">home</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">products</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">news</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">account</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink className="text-white" href="/">logout</NavLink>
-                        </NavItem>
+                    <Nav horizontal="center">
+                        {navLinksElement}
                     </Nav>
                 </Collapse>
             </Container>
@@ -126,4 +161,7 @@ function Navigation(props) {
     )
 }
 
-export default Navigation;
+const mapStateToProps = state => {
+    return {user: state.user};
+};
+export default connect(mapStateToProps)(Navigation);

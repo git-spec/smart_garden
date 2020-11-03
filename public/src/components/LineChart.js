@@ -4,6 +4,7 @@ import Chart from 'chart.js';
 // chart stlye options
 Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
+Chart.defaults.global.defaultFontColor = 'white';
 
 class LineChart extends React.Component {
     constructor(props) {
@@ -24,6 +25,10 @@ class LineChart extends React.Component {
           scales: {
             xAxes: [
               {
+                ticks: {
+                  min: 0,
+                  padding: 10
+                },
                 type: 'time',
                 time: {
                   unit: 'week'
@@ -38,7 +43,8 @@ class LineChart extends React.Component {
             yAxes: [
               {
                 ticks: {
-                  min: 0
+                  min: 0,
+                  padding: 10
                 },
                 gridLines: {
                   color: 'rgba(255, 255, 255, .5)'

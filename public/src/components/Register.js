@@ -1,18 +1,21 @@
-// export default Register;
 import React, {Fragment} from 'react';
-import {Container,
-        Row,
-        Col,
-        Form,
-        FormGroup,
-        Label, Input,
-        Button
+import {
+    Container,
+    Row,
+    Col,
+    Form,
+    FormGroup,
+    Label, 
+    Input,
+    Button
 } from 'reactstrap';
 import {Link} from 'react-router-dom';
 import PopUpModal from './PopUpModal';
 import validator from 'validator';
 import {registerPost} from '../services/api';
+
 class Register extends React.Component {
+
     state = {
         firstName: '',
         lastName: '',
@@ -38,18 +41,15 @@ class Register extends React.Component {
         ) {
             const errorsElement = (
                 <ul>
-                    {this.state.firstName.trim() === '' ? <li>Please Enter your first name</li> : null}
-                    {this.state.lastName.trim() === '' ? <li>Please Enter your last name</li> : null}
-                    {this.state.userName.trim() === '' ? <li>user name should not be empty</li> : null}
-                    {this.state.email.trim() === '' ? <li>Email should not be empty</li> : null}
-                    {!validator.isEmail(this.state.email.trim()) ? <li>you have to enter a valid email</li> : null}
-                    {this.state.password === '' ? <li>password should not be empty</li> : null}
-                    {this.state.password !== this.state.repassword ? (
-                        <li>password is not matching the repassword</li>
-                    ) : null}
+                    {this.state.firstName.trim() === '' ? <li>Please enter your first name</li> : null}
+                    {this.state.lastName.trim() === '' ? <li>Please enter your last name</li> : null}
+                    {this.state.userName.trim() === '' ? <li>Please enter an user name</li> : null}
+                    {this.state.email.trim() === '' ? <li>Please enter your email</li> : null}
+                    {!validator.isEmail(this.state.email.trim()) ? <li>Please enter a valid email</li> : null}
+                    {this.state.password === '' ? <li>Please enter a password</li> : null}
+                    {this.state.password !== this.state.repassword ? <li>Passwords do not match</li> : null}
                 </ul>
             );
-
             this.setState({errorComponent: errorsElement, showErrorModal: true});
         } else {
             registerPost(
@@ -59,49 +59,50 @@ class Register extends React.Component {
                 this.state.email,
                 this.state.password,
                 this.state.repassword
-            )
-                .then(data => {
-                    let badgeClass = '';
-                    let badgeMessage = '';
-
-                    switch (data) {
-                        case 1:
-                            badgeClass = 'alert alert-success';
-                            badgeMessage = 'You register successfully, Check your Mail to verify your account';
-                            break;
-                        case 2:
-                        case 4:
-                            badgeClass = 'alert alert-danger';
-                            badgeMessage = 'there was a server side error, please contact the administrator';
-                            break;
-                        case 3:
-                            badgeClass = 'alert alert-danger';
-                            badgeMessage = 'there is already a user with the same email, please choose another email';
-                            break;
-                        default:
-                            break;
-                    }
-                    const badge = (
-                        <div className={badgeClass} role="alert">
-                            {badgeMessage}
-                        </div>
-                    );
-                    this.setState({resultElement: badge});
-                })
-                .catch(error => {
-                    const badge = (
-                        <div className="alert alert-danger" role="alert">
-                            can not send the registration data to server
-                        </div>
-                    );
-                    this.setState({resultElement: badge});
-                });
+            ).then(data => {
+                let badgeClass = '';
+                let badgeMessage = '';
+                switch (data) {
+                    case 1:
+                        badgeClass = 'alert alert-success';
+                        badgeMessage = 'You registered successfully, please check your mails to verify your account!';
+                        break;
+                    case 2:
+                        badgeClass = 'alert alert-danger';
+                        badgeMessage = 'Server error, please contact the administrator!';
+                        break;
+                    case 4:
+                        badgeClass = 'alert alert-danger';
+                        badgeMessage = 'Server error, please contact the administrator!';
+                        break;
+                    case 3:
+                        badgeClass = 'alert alert-danger';
+                        badgeMessage = 'There is already a user with this email, please choose another one!';
+                        break;
+                    default:
+                        break;
+                }
+                const badge = (
+                    <div className={badgeClass} role="alert">
+                        {badgeMessage}
+                    </div>
+                );
+                this.setState({resultElement: badge});
+            }).catch(error => {
+                const badge = (
+                    <div className="alert alert-danger" role="alert">
+                        Can not send the registration data to server!
+                    </div>
+                );
+                this.setState({resultElement: badge});
+            });
         }
     };
 
     closeModal = () => {
         this.setState({showErrorModal: false});
     };
+
     render() {
         return (
             <Fragment>
@@ -109,14 +110,14 @@ class Register extends React.Component {
                     show={this.state.showErrorModal}
                     close={this.closeModal}
                     className="bg-danger"
-                    title="Entries Error"
+                    title="Entry Error"
                 >
                     {this.state.errorComponent}
                 </PopUpModal>
-
                 <Container>
-                    <h1 className="text-trans mb-4"> Registration </h1>
-                    <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p>
+                    <h1 className="text-trans mb-4">Registration</h1>
+                    {/* <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p> */}
+                    <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
                     <Form className="pb-md-0 pb-5">
                         <div className="col-lg-12 col-md-12">{this.state.resultElement}</div>
                         <Row xs="1" sm="2">
@@ -126,7 +127,7 @@ class Register extends React.Component {
                                     <Input
                                         className="badge-pill text-trans bg-transparent"
                                         type="text"
-                                        placeholder="Enter Your first Name"
+                                        placeholder="Enter your first name"
                                         required
                                         onChange={e => {
                                             this.setState({firstName: e.target.value});
@@ -141,7 +142,7 @@ class Register extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
-                                        placeholder="Enter Your last Name"
+                                        placeholder="Enter your last name"
                                         required
                                         onChange={e => {
                                             this.setState({lastName: e.target.value});
@@ -156,7 +157,7 @@ class Register extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="email"
-                                        placeholder="Enter User Mail"
+                                        placeholder="Enter your email"
                                         required
                                         onChange={e => {
                                             this.setState({email: e.target.value});
@@ -171,7 +172,7 @@ class Register extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
-                                        placeholder="Enter User Name"
+                                        placeholder="Enter an user name"
                                         required
                                         onChange={e => {
                                             this.setState({userName: e.target.value});
@@ -186,7 +187,7 @@ class Register extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="password"
-                                        placeholder="Password"
+                                        placeholder="Enter a password"
                                         required
                                         onChange={e => {
                                             this.setState({password: e.target.value});
@@ -201,7 +202,7 @@ class Register extends React.Component {
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="password"
-                                        placeholder="Repeat Password"
+                                        placeholder="Repeat your password"
                                         required
                                         onChange={e => {
                                             this.setState({repassword: e.target.value});
@@ -212,7 +213,7 @@ class Register extends React.Component {
                             </Col>
                             <Col>
                                 <h5 className="text-trans">
-                                    Registered already?	&nbsp;
+                                    Already registered?&nbsp;
                                     <Link to="/login">Login</Link>
                                 </h5>
                             </Col>
