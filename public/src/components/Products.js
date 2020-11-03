@@ -29,7 +29,7 @@ import {
 import ConfirmModal from './ConfirmModal';
 import ReactTable from './Table';
 import LineChart from './LineChart';
-import LineChartMultiple from './LineChartMultiple';
+// import LineChartMultiple from './LineChartMultiple';
 import BarChartHorizontal from './BarChartHorizontal';
 // services
 import {
@@ -78,74 +78,87 @@ const Products = props => {
 
 /* ********************************************************* SOCKET.IO ********************************************************* */
 
-    // useEffect(() => {
+    const {setSocketAction, user} = props;
 
+    useEffect(() => {
         const socket = io('http://localhost:5000');
 
         socket.on('connect', () => {
-            console.log('connected');
-            props.setSocketAction(socket);
-            console.log(props.user);
-            if (props.user.id) {
-                socket.emit('user_connect', props.user.id);
+            setSocketAction(socket);
+            if (user) {
+                socket.emit('user_connect', user.id);
             }
+            console.log('connected');
         });
 
         socket.on('disconnect', () => {
+            if (user) {
+                socket.emit('user_disconnect', user.id);
+            }
             console.log('disconnected');
-            socket.emit('user_disconnect', '3');
         });
 
         socket.on('hub_connect', sn => {
-            // console.log(hubStatusRefs);
-            // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-            // if (idx !== -1) {
-            //     hubStatusRefs[idx].ref.current.classList.remove('d-none');
-            // }
+            if (state.hubs) {
+                const hubs = [...state.hubs];
+                const hub = hubs.find(hub => hub.sn_number === sn);
+                const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
+                if (hub) {
+                    hub.connected = 1;
+                    hubs[idx] = hub;
+                    setState(state => ({...state, hubs}));
+                }
+            }
             console.log('hub connected', sn);
-            // if (hubStatusRefs[0]) {
-            //     if (hubStatusRefs[0].current) {
-            //     }
-            // }
         });
 
         socket.on('hub_disconnect', sn => {
-            // console.log(hubStatusRefs);
-            // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-            // if (idx !== -1) {
-            //     hubStatusRefs[idx].ref.current.classList.add('d-none');
-            // }
+            if (state.hubs) {
+                const hubs = [...state.hubs];
+                const hub = hubs.find(hub => hub.sn_number === sn);
+                const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
+                if (hub) {
+                    hub.connected = 0;
+                    hubs[idx] = hub;
+                    setState(state => ({...state, hubs}));
+                }
+            }
             console.log('hub disconnected', sn);
         });
 
         socket.on('device_connect', sn => {
-            console.log(deviceStatusRefs);
-            if (deviceStatusRefs.length > 0) {
-                const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-                if (idx !== -1) {
-                    deviceStatusRefs[idx].ref.current.classList.remove('d-none');
+            if (state.devices) {
+                const devices = [...state.devices];
+                const device = devices.find(device => device.sn_number === sn);
+                const idx = devices.map(device => device.sn_number).indexOf(sn);
+                if (device) {
+                    device.connected = 1;
+                    devices[idx] = device;
+                    setState(state => ({...state, devices}));
                 }
             }
             console.log('device connected', sn);
         });
 
         socket.on('device_disconnect', sn => {
-            console.log(deviceStatusRefs);
-            if (deviceStatusRefs.length > 0) {
-                const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-                if (idx !== -1) {
-                    deviceStatusRefs[idx].ref.current.classList.add('d-none');
+            if (state.devices) {
+                const devices = [...state.devices];
+                const device = devices.find(device => device.sn_number === sn);
+                const idx = devices.map(device => device.sn_number).indexOf(sn);
+                if (device) {
+                    device.connected = 0;
+                    devices[idx] = device;
+                    setState(state => ({...state, devices}));
                 }
             }
             console.log('device disconnected', sn);
         });
-
-    // }, []);
-
+    }, [setSocketAction, user, state.hubs, state.devices]);
 
 /* ********************************************************* USE EFFECT ********************************************************* */
+
+    // get hubs & devices data from db at initial render
     useEffect(() => {
-        // get hubs & devices data from db at initial render
         getHubsPost().then(hubs => {
             switch (hubs) {
                 case 2:
@@ -390,7 +403,7 @@ if (state.hubs && state.devices) {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                <h3 className="text-trans mb-4">Hello User, how are you?</h3>
+                <h3 className="text-trans mb-4">Hello {user ? user.userName : ''}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
@@ -398,7 +411,7 @@ if (state.hubs && state.devices) {
                             <CardHeader className="p-0 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
                                     <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>hubs</Button>
-                                    <span className="active-light mx-2"></span>
+                                    {/* <span className="active-light mx-2"></span> */}
                                 </CardTitle>
                                 <CardSubtitle>
                                     <Button
@@ -466,7 +479,7 @@ if (state.hubs && state.devices) {
                                                         </Button>
                                                         <span 
                                                             ref={hubStatusRef}
-                                                            className="active-light mx-2 d-none">
+                                                            className={hub.connected ? "active-light mx-2" : "inactive-light mx-2"}>
                                                         </span>
                                                     </CardTitle>
                                                     <CardSubtitle>
@@ -538,7 +551,7 @@ if (state.hubs && state.devices) {
                                                                             {device.name}
                                                                             <span 
                                                                                 ref={deviceStatusRef} 
-                                                                                className="active-light mx-2 d-none">
+                                                                                className={device.connected ? "active-light mx-2" : "inactive-light mx-2"}>
                                                                             </span>
                                                                         </div>
                                                                         <Button
