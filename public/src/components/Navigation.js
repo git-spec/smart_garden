@@ -1,10 +1,15 @@
+// react
 import React, {useState, Fragment} from 'react';
+// redux
 import { connect } from "react-redux";
+import {setUserAction} from '../actions';
+// router dom
 import {
     Link, 
     // useLocation, 
     useHistory
 } from 'react-router-dom';
+// reactstrap
 import {
     Container,
     Collapse,
@@ -15,6 +20,7 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
+// services
 import {logoutPost} from '../services/api'
 
 function Navigation(props) {
@@ -40,7 +46,6 @@ function Navigation(props) {
     };
     const [state, setState] = useState(initialState);
 
-
     // opens menu on small devices
     const toggleMobileNavbar = () => {
         toggleMobileIconRef.current.classList.toggle('open');
@@ -56,8 +61,9 @@ function Navigation(props) {
         e.preventDefault();
         logoutPost().then(data => {
             if (data === 10) {
-                history.push('/login');
                 props.socket.disconnect();
+                props.setUserAction(null);
+                history.push('/login');
             }
         }).catch(err => {
             console.log(err);
@@ -168,4 +174,4 @@ const mapStateToProps = state => {
         socket: state.socket
     };
 };
-export default connect(mapStateToProps)(Navigation);
+export default connect(mapStateToProps, {setUserAction})(Navigation);
