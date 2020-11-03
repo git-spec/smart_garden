@@ -27,7 +27,7 @@ const Login = props => {
     useEffect(() => {
         setUserAction(null);
         setSocketAction(null);
-    }, [setUserAction]);
+    }, [setUserAction, setSocketAction]);
 
     const history = useHistory();
 
