@@ -2,8 +2,14 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <dht.h>
 // finish require for R24
 
+
+
+// setting up the DHT sensor
+#define dht_apin A1
+dht DHT;
 // RF pins
 RF24 radio(10, 9);
 
@@ -14,7 +20,7 @@ char dataReceived[32]; // must match dataToSend in master
 String token = "0x744d52687C";
 String sendData = "hi"; // the two values to be sent to the master
 bool newData = false;
-
+bool realTimeData = false;
 unsigned long currentMillis;
 unsigned long prevMillis;
 unsigned long txIntervalMillis = 1000; // send once per second
@@ -39,6 +45,14 @@ void loop() {
   getData();
   showData();
   send();
+  if(realTimeData){
+    // send the data back to Raspberrz
+    DHT.read11(dht_apin);
+    sendData = (String)DHT.humidity + "|" + (String)DHT.temperature;
+    delay(500);
+    
+  }
+  //DHTReading();
 }
 
 void send() {
@@ -81,9 +95,33 @@ void showData() {
     String message = (String)dataReceived;
     if(message == "hi"){
       sendData = "yup";
+    }else if(message == "realTimeData"){
+     realTimeData = true;
+    }else if(message == "stopRealTimeData"){
+      realTimeData = false;
     }
     Serial.print((String)dataReceived);
     
     newData = false;
   }
 }
+
+// DHT function define
+void DHTReading(){
+  DHT.read11(dht_apin);
+  Serial.print("Current Humidity = ");
+  Serial.print(DHT.humidity);
+  Serial.print("%");
+  Serial.print("Temperature = ");
+  Serial.print(DHT.temperature);
+  Serial.print("C\n");
+  delay(500);
+}
+
+
+
+
+
+
+
+
