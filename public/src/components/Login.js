@@ -23,11 +23,11 @@ import {loginPost} from '../services/api';
 
 const Login = props => {
 
-    const {setUserAction, setSocketAction} = props;
+    const {setUserAction} = props;
     useEffect(() => {
         setUserAction(null);
-        setSocketAction(null);
-    }, [setUserAction, setSocketAction]);
+        // setSocketAction(null);
+    }, [setUserAction]);
 
     const history = useHistory();
 
