@@ -2,7 +2,7 @@
 import React, {useState, Fragment} from 'react';
 // redux
 import { connect } from "react-redux";
-import {setUserAction} from '../actions';
+import {setSocketAction, setUserAction} from '../actions';
 // router dom
 import {
     Link, 
@@ -62,6 +62,7 @@ function Navigation(props) {
         logoutPost().then(data => {
             if (data === 10) {
                 props.socket.disconnect();
+                props.setSocketAction(null)
                 props.setUserAction(null);
                 history.push('/login');
             }
@@ -174,4 +175,4 @@ const mapStateToProps = state => {
         socket: state.socket
     };
 };
-export default connect(mapStateToProps, {setUserAction})(Navigation);
+export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);
