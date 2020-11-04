@@ -6,8 +6,6 @@ import {connect} from 'react-redux';
 import {setSocketAction} from '../actions';
 // socket
 import io from 'socket.io-client';
-// router dom
-// import {Link} from 'react-router-dom';
 // reactstrap
 import {
     Row,
@@ -15,11 +13,11 @@ import {
     Button,
     Input,
     Container,
-    Collapse, 
-    CardBody, 
+    Collapse,
+    CardBody,
     Card,
     CardHeader,
-    Label, 
+    Label,
     FormGroup,
     CardTitle,
     CardSubtitle,
@@ -46,7 +44,6 @@ import {getData} from '../services/getData';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
-  
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
@@ -70,13 +67,17 @@ const Products = props => {
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-        feed: []
+        feed: [],
+        realTimeData: {},
+        deviceTitle: ''
     };
     const [state, setState] = useState(initialState);
 
     const data = getData();
 
 /* ********************************************************* SOCKET.IO ********************************************************* */
+
+/* ********************************************************* USE EFFECT ********************************************************* */
 
     const {setSocketAction, user} = props;
 
@@ -89,73 +90,79 @@ const Products = props => {
                 socket.emit('user_connect', user.id);
             }
             console.log('connected');
-        });
 
-        socket.on('disconnect', () => {
-            if (user) {
-                socket.emit('user_disconnect', user.id);
-            }
-            console.log('disconnected');
-        });
-
-        socket.on('hub_connect', sn => {
-            if (state.hubs) {
-                const hubs = [...state.hubs];
-                const hub = hubs.find(hub => hub.sn_number === sn);
-                const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
-                if (hub) {
-                    hub.connected = 1;
-                    hubs[idx] = hub;
-                    setState(state => ({...state, hubs}));
+            socket.on('disconnect', () => {
+                console.log('disconnect');
+                if (user) {
+                    socket.emit('user_disconnect', user.id);
                 }
-            }
-            console.log('hub connected', sn);
-        });
+                socket.disconnect();
+                setSocketAction(null);
+            });
 
-        socket.on('hub_disconnect', sn => {
-            if (state.hubs) {
-                const hubs = [...state.hubs];
-                const hub = hubs.find(hub => hub.sn_number === sn);
-                const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
-                if (hub) {
-                    hub.connected = 0;
-                    hubs[idx] = hub;
-                    setState(state => ({...state, hubs}));
+            socket.on('realTimeIncomingdata', data => {
+                console.log(data);
+                setState(state => ({...state, realTimeData: data.data}));
+                console.log(state.realTimeData);
+            });
+
+            socket.on('hub_connect', sn => {
+                if (state.hubs) {
+                    const hubs = [...state.hubs];
+                    const hub = hubs.find(hub => hub.sn_number === sn);
+                    const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
+                    if (hub) {
+                        hub.connected = 1;
+                        hubs[idx] = hub;
+                        setState(state => ({...state, hubs}));
+                    }
                 }
-            }
-            console.log('hub disconnected', sn);
-        });
+                console.log('hub connected', sn);
+            });
 
-        socket.on('device_connect', sn => {
-            if (state.devices) {
-                const devices = [...state.devices];
-                const device = devices.find(device => device.sn_number === sn);
-                const idx = devices.map(device => device.sn_number).indexOf(sn);
-                if (device) {
-                    device.connected = 1;
-                    devices[idx] = device;
-                    setState(state => ({...state, devices}));
+            socket.on('hub_disconnect', sn => {
+                if (state.hubs) {
+                    const hubs = [...state.hubs];
+                    const hub = hubs.find(hub => hub.sn_number === sn);
+                    const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
+                    if (hub) {
+                        hub.connected = 0;
+                        hubs[idx] = hub;
+                        setState(state => ({...state, hubs}));
+                    }
                 }
-            }
-            console.log('device connected', sn);
-        });
+                console.log('hub disconnected', sn);
+            });
 
-        socket.on('device_disconnect', sn => {
-            if (state.devices) {
-                const devices = [...state.devices];
-                const device = devices.find(device => device.sn_number === sn);
-                const idx = devices.map(device => device.sn_number).indexOf(sn);
-                if (device) {
-                    device.connected = 0;
-                    devices[idx] = device;
-                    setState(state => ({...state, devices}));
+            socket.on('device_connect', sn => {
+                if (state.devices) {
+                    const devices = [...state.devices];
+                    const device = devices.find(device => device.sn_number === sn);
+                    const idx = devices.map(device => device.sn_number).indexOf(sn);
+                    if (device) {
+                        device.connected = 1;
+                        devices[idx] = device;
+                        setState(state => ({...state, devices}));
+                    }
                 }
-            }
-            console.log('device disconnected', sn);
-        });
-    }, [setSocketAction, user, state.hubs, state.devices]);
+                console.log('device connected', sn);
+            });
 
-/* ********************************************************* USE EFFECT ********************************************************* */
+            socket.on('device_disconnect', sn => {
+                if (state.devices) {
+                    const devices = [...state.devices];
+                    const device = devices.find(device => device.sn_number === sn);
+                    const idx = devices.map(device => device.sn_number).indexOf(sn);
+                    if (device) {
+                        device.connected = 0;
+                        devices[idx] = device;
+                        setState(state => ({...state, devices}));
+                    }
+                }
+                console.log('device disconnected', sn);
+            });
+        });
+    }, []);
 
     // get hubs & devices data from db at initial render
     useEffect(() => {
@@ -186,10 +193,11 @@ const Products = props => {
         }).catch(err => {
             alert(err);
         });
-        // return ()=>{
-        //     console.log("Unmount Component")
-        //     socket.disconnect()
-        // }
+        return () => {
+            console.log('Unmount Component');
+            // socket.disconnect()
+            // setSocketAction(null);
+        };
     }, []);
 
 /* ********************************************************* TOGGLES ********************************************************* */
@@ -273,6 +281,7 @@ const Products = props => {
             confirmModalDelete: () => deleteHub(hubID)
         });
     };
+
 /* ********************************************************* DELETE DEVICE ********************************************************* */
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
@@ -298,6 +307,7 @@ const Products = props => {
             confirmModalDelete: () => deleteDevice(deviceID)
         });
     };
+
 /* ********************************************************* ADD HUB ********************************************************* */
     const onAddHubBtnClick = e => {
         e.preventDefault();
@@ -343,6 +353,7 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
+
 /* ********************************************************* ADD DEVICE ********************************************************* */
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -388,9 +399,24 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
-      
+
+/* ********************************************************* SHOW DEVICE DATA ********************************************************* */
+
+    const showDeviceData = (e, name, sn) => {
+        // rerender the data section
+        // 1- from database: fetch request
+        // 2- real time data: socket emit to send the order to raspberry
+        setState({
+            ...state,
+            deviceTitle: name
+        });
+        console.log(sn);
+        // console.log(user)
+        if (user) props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+    };
+
 /* ********************************************************* RETURN ********************************************************* */
-if (state.hubs && state.devices) {
+    if (state.hubs && state.devices) {
         return (
             <Container>
 {/* ********************************************************* MODAL ********************************************************* */}
@@ -410,7 +436,9 @@ if (state.hubs && state.devices) {
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>hubs</Button>
+                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>
+                                        hubs
+                                    </Button>
                                     {/* <span className="active-light mx-2"></span> */}
                                 </CardTitle>
                                 <CardSubtitle>
@@ -477,10 +505,10 @@ if (state.hubs && state.devices) {
                                                         >
                                                             {hub.name}
                                                         </Button>
-                                                        <span 
+                                                        <span
                                                             ref={hubStatusRef}
-                                                            className={hub.connected ? "active-light mx-2" : "inactive-light mx-2"}>
-                                                        </span>
+                                                            className={hub.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
+                                                        ></span>
                                                     </CardTitle>
                                                     <CardSubtitle>
                                                         <Button
@@ -513,17 +541,13 @@ if (state.hubs && state.devices) {
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0 mb-3"
                                                                     placeholder="Enter a serial number"
-                                                                    onChange={e =>
-                                                                        setState({...state, deviceNum: e.target.value})
-                                                                    }
+                                                                    onChange={e => setState({...state, deviceNum: e.target.value})}
                                                                     value={state.deviceNum}
                                                                 />
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0 mb-3"
                                                                     placeholder="Enter a name for your device"
-                                                                    onChange={e =>
-                                                                        setState({...state, deviceName: e.target.value})
-                                                                    }
+                                                                    onChange={e => setState({...state, deviceName: e.target.value})}
                                                                     value={state.deviceName}
                                                                 />
                                                             </CardTitle>
@@ -547,12 +571,15 @@ if (state.hubs && state.devices) {
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
-                                                                        <div className="d-flex align-items-center">
+                                                                        <div
+                                                                            className="d-flex align-items-center"
+                                                                            onClick={e => showDeviceData(e, device.name, device.sn_number)}
+                                                                        >
                                                                             {device.name}
-                                                                            <span 
-                                                                                ref={deviceStatusRef} 
-                                                                                className={device.connected ? "active-light mx-2" : "inactive-light mx-2"}>
-                                                                            </span>
+                                                                            <span
+                                                                                ref={deviceStatusRef}
+                                                                                className={device.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
+                                                                            ></span>
                                                                         </div>
                                                                         <Button
                                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
@@ -587,7 +614,8 @@ if (state.hubs && state.devices) {
                     <Col className="px-3" lg="7">
                         <Col className="p-3">
                             {/* <h3 className="text-center">kitchen</h3> */}
-                            <ReactTable />
+                            {/* //{{title: "temperatue", data:{Temperature: "21", Humidity: "61%" }} */}
+                            <ReactTable data={{title: state.deviceTitle, data: state.realTimeData}} />
                             <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                             {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" /> */}
                             <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
@@ -616,6 +644,6 @@ if (state.hubs && state.devices) {
 };
 
 const mapStateToProps = state => {
-    return ({user: state.user});
+    return {user: state.user, socket: state.socket};
 };
 export default connect(mapStateToProps, {setSocketAction})(Products);
