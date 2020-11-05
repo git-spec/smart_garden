@@ -1,8 +1,9 @@
 // export default Register;
-import React, { 
-    Fragment, 
-    useState, 
-    // useEffect 
+import React, {
+    Fragment,
+    useState,
+    useEffect,
+    useRef
 } from "react";
 import {
     Container,
@@ -18,38 +19,45 @@ import {
     FormGroup,
 } from "reactstrap";
 import Image from "react-bootstrap/Image";
-import { 
-    Link, 
-    // useLocation, 
-    // useHistory 
+import {
+    Link,
+    // useLocation,
+    useHistory
 } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
 // import validator from "validator";
-import { editPost } from "../services/api";
+import { editPost, getUser} from "../services/api";
 
-import {connect} from 'react-redux'
+import { connect } from "react-redux";
 
 const User = (props) => {
     // const location = useLocation()
-    // const history = useHistory()
-    const user = {...props.user}
-    // console.log(props.user);
-    // console.log('location.state '+location.state);
-    // if(!location.state){
-    //     history.push('/login')
-    // }
+    const history = useHistory()
+
     const initialState = {
-        firstName: "",
-        lastName: "",
-        userName: "",
-        City: "",
-        password: "",
-        repassword: "",
+       
         errorComponent: null,
         showErrorModal: false,
         resultElement: null,
     };
+  
+    const firstNameRef = useRef()
+
+
+
     const [myState, setMyState] = useState(initialState);
+    if(props.user){
+    // console.log(props.user);
+    
+    // console.log('location.state '+location.state);
+    // if(!location.state){
+    //     history.push('/login')
+    // }
+    console.log(firstNameRef.current.props.value); 
+    
+
+
+    
 
     const onEditBtnClick = (e) => {
         e.preventDefault();
@@ -58,7 +66,7 @@ const User = (props) => {
             myState.lastName.trim() === "" ||
             myState.userName.trim() === "" ||
             myState.password === "" ||
-            myState.password !== myState.repassword 
+            myState.password !== myState.repassword
         ) {
             const errorsElement = (
                 <ul>
@@ -87,7 +95,7 @@ const User = (props) => {
             });
         } else {
             editPost(
-                user.id,
+                props.user.id,
                 myState.firstName,
                 myState.lastName,
                 myState.userName,
@@ -125,7 +133,9 @@ const User = (props) => {
                         </div>
                     );
                     setMyState({
-                        ...myState, resultElement: badge });
+                        ...myState,
+                        resultElement: badge,
+                    });
                 })
                 .catch((error) => {
                     const badge = (
@@ -134,199 +144,207 @@ const User = (props) => {
                         </div>
                     );
                     setMyState({
-                        ...myState, resultElement: badge });
+                        ...myState,
+                        resultElement: badge,
+                    });
                 });
         }
     };
 
     const closeModal = () => {
         setMyState({
-            ...myState, showErrorModal: false });
+            ...myState,
+            showErrorModal: false,
+        });
     };
     // console.log(state.feed); fluid public/src/images/FB_IMG_1592363046509.png
-        return (
-            <Fragment>
-                <PopUpModal
-                    show={myState.showErrorModal}
-                    close={closeModal}
-                    className="bg-danger"
-                    title="Entries Error"
-                >
-                    {myState.errorComponent}
-                </PopUpModal>
+    return (
+        <Fragment>
+            <PopUpModal
+                show={myState.showErrorModal}
+                close={closeModal}
+                className="bg-danger"
+                title="Entries Error"
+            >
+                {myState.errorComponent}
+            </PopUpModal>
 
-                <Container>
-                    <Row>
-                        <Col xs={6} md={9}>
-                            <br />
-        <h1 className="text-trans mb-4">Hello {user.firstName+' '+user.lastName}</h1>
-                            <h3 className="text-trans mb-4">
-                                {" "}
-                                Welcome In Your Page
-                            </h3>
-                            <br />
-                            <p className="text-trans mb-4">
-                                Here you can easily edit your Profile
-                            </p>
+            <Container>
+                <Row>
+                    <Col xs={6} md={9}>
+                        <br />
+                        <h1 className="text-trans mb-4">
+                            Hello {props.user.firstName + " " + props.user.lastName}
+                        </h1>
+                        <h3 className="text-trans mb-4">
+                            {" "}
+                            Welcome In Your Page
+                        </h3>
+                        <br />
+                        <p className="text-trans mb-4">
+                            Here you can easily edit your Profile
+                        </p>
+                    </Col>
+
+                    <Col className="float-right" xs={6} md={3}>
+                        <Image
+                            // src={require("../../public/imgs/1.jpg")}
+                            src={require("./1.jpg")}
+                            height={"150px"}
+                            width={"150px"}
+                            roundedCircle
+                            alt={<Link to="/register">Add Your Photo</Link>}
+                        />
+                        <br />
+                        <br />
+                        <Input
+                            // ref={imagesFileInpRef}
+                            id="exampleFormControlFile1"
+                            type="file"
+                            className="form-control-file"
+                            multiple
+                            accept="image/x-png,image/gif,image/jpeg"
+                        />
+                    </Col>
+                </Row>
+                <Row></Row>
+                <Form className="pb-md-0 pb-5">
+                    <div className="col-lg-12 col-md-12">
+                        {myState.resultElement}
+                    </div>
+                    <Row xs="1" sm="2">
+                        <Col>
+                            <FormGroup className="mb-md-4 mb-3 text-left">
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                    First Name:
+                                </Label>
+                                <Input
+                                    className="badge-pill text-trans bg-transparent"
+                                    type="text"
+                                    required
+                                    ref={firstNameRef}
+                                    value={props.user.firstName}
+                                />
+                            </FormGroup>
                         </Col>
-
-                        <Col className="float-right" xs={6} md={3}>
-                            <Image
-                                src={require("./1.jpg")}
-                                height={"150px"}
-                                width={"150px"}
-                                roundedCircle
-                                alt={<Link to="/register">Add Your Photo</Link>}
-                            />
-                            <br />
-                            <br />
-                            <Button> Add a New Photo</Button>
+                        <Col>
+                            <FormGroup className="mb-4 text-left">
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                    Last Name:
+                                </Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="text"
+                                    required
+                                    onChange={(e) => {
+                                        setMyState({
+                                            ...myState,
+                                            lastName: e.target.value,
+                                        });
+                                    }}
+                                    value={props.user.lastName}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                            <FormGroup className="mb-4 text-left">
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                    City:
+                                </Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="city"
+                                    placeholder="Enter Your City"
+                                    required
+                                    onChange={(e) => {
+                                        setMyState({
+                                            ...myState,
+                                            City: e.target.value,
+                                        });
+                                    }}
+                                    value={props.user.City}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                            <FormGroup className="mb-4 text-left">
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                    User Name:
+                                </Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="text"
+                                    required
+                                    onChange={(e) => {
+                                        setMyState({
+                                            ...myState,
+                                            userName: e.target.value,
+                                        });
+                                    }}
+                                    value={props.user.userName}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                            <FormGroup className="mb-4 text-left">
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                    Change Password:
+                                </Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="password"
+                                    placeholder="Write a New Password"
+                                    required
+                                    onChange={(e) => {
+                                        setMyState({
+                                            ...myState,
+                                            password: e.target.value,
+                                        });
+                                    }}
+                                />
+                            </FormGroup>
+                        </Col>
+                        <Col>
+                            <FormGroup className="mb-3 text-left">
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                    Repeat Password:
+                                </Label>
+                                <Input
+                                    className="badge-pill bg-transparent"
+                                    type="password"
+                                    placeholder="Repeat Password"
+                                    required
+                                    onChange={(e) => {
+                                        setMyState({
+                                            ...myState,
+                                            repassword: e.target.value,
+                                        });
+                                    }}
+                                    value={myState.repassword}
+                                />
+                            </FormGroup>
                         </Col>
                     </Row>
-                    <Row></Row>
-                    <Form className="pb-md-0 pb-5">
-                        <div className="col-lg-12 col-md-12">
-                            {myState.resultElement}
-                        </div>
-                        <Row xs="1" sm="2">
-                            <Col>
-                                <FormGroup className="mb-md-4 mb-3 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        First Name:
-                                    </Label>
-                                    <Input
-                                        className="badge-pill text-trans bg-transparent"
-                                        type="text"
-                                        placeholder={user.firstName}
-                                        required
-                                        onChange={(e) => {
-                                            setMyState({
-                                            ...myState,
-                                                firstName: e.target.value,
-                                            });
-                                        }}
-                                        value={myState.firstName}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup className="mb-4 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        Last Name:
-                                    </Label>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={user.lastName}
-                                        required
-                                        onChange={(e) => {
-                                            setMyState({
-                                            ...myState,
-                                                lastName: e.target.value,
-                                            });
-                                        }}
-                                        value={myState.lastName}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup className="mb-4 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        City:
-                                    </Label>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="city"
-                                        placeholder="Enter Your City"
-                                        required
-                                        onChange={(e) => {
-                                            setMyState({
-                                            ...myState,
-                                                City: e.target.value,
-                                            });
-                                        }}
-                                        value={myState.City}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup className="mb-4 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        User Name:
-                                    </Label>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={user.userName}
-                                        required
-                                        onChange={(e) => {
-                                            setMyState({
-                                            ...myState,
-                                                userName: e.target.value,
-                                            });
-                                        }}
-                                        value={myState.userName}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup className="mb-4 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                       Change Password:
-                                    </Label>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="password"
-                                        placeholder="Write a New Password"
-                                        required
-                                        onChange={(e) => {
-                                            setMyState({
-                                            ...myState,
-                                                password: e.target.value,
-                                            });
-                                        }}
-                                        value={myState.password}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col>
-                                <FormGroup className="mb-3 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                        Repeat Password:
-                                    </Label>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="password"
-                                        placeholder="Repeat Password"
-                                        required
-                                        onChange={(e) => {
-                                            setMyState({
-                                            ...myState,
-                                                repassword: e.target.value,
-                                            });
-                                        }}
-                                        value={myState.repassword}
-                                    />
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <Col className=" text-center">
-                            <Button
-                                className="badge-pill btn-outline-light bg-transparent my-4"
-                                onClick={onEditBtnClick}
-                            >
-                                Edit
-                            </Button>
-                        </Col>
-                    </Form>
-                </Container>
-            </Fragment>
-        );
-    }
+                    <Col className=" text-center">
+                        <Button
+                            className="badge-pill btn-outline-light bg-transparent my-4"
+                            onClick={onEditBtnClick}
+                        >
+                            Edit
+                        </Button>
+                    </Col>
+                </Form>
+            </Container>
+        </Fragment>
+    );
+                                }else{
+                                    return(<div>Loading...</div>)
+                                }
+};
 
-const mapStateToProps = state => {
-    return {user: state.user}
-}
+const mapStateToProps = (state) => {
+    return { user: state.user };
+};
 
 // export default User;
-  export default connect(mapStateToProps)(User)
+export default connect(mapStateToProps)(User);

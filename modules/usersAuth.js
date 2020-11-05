@@ -50,8 +50,8 @@ function checkUser(user, password) {
 function registerUser(firstName, lastName, userName, email, password) {
     return new Promise((resolve, reject) => {
         runQuery(
-            `INSERT INTO users (firstname, lastname, username, email, password, verified) 
-            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0)`
+            `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
+            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
         ).then(() => {
             // email message
             let message = `Hello ${firstName} ${lastName},\n`;
@@ -169,6 +169,68 @@ function resetPass(email, id, pass) {
     });
 }
 
+// get all users
+function getAllUsers() {
+    return new Promise((resolve, reject) => {
+            runQuery(`SELECT * FROM users`).then(users => {
+                if (users.length === 0) {
+                    reject(2);
+                } else {
+                    // console.log(users[0]);
+                    resolve(users);
+                }
+
+                // resolve(users);
+
+            }).catch(error => {
+                reject(error);
+            });
+    });
+}
+
+// get user for edit page
+function getUser(id) {
+    return new Promise((resolve, reject) => {
+            runQuery(`SELECT * FROM users WHERE id = ${id}`).then(users => {
+                if (users.length === 0) {
+                    reject(2);
+                } else {
+                    resolve(users[0]);
+                }
+            }).catch(error => {
+                reject(error);
+            });
+    });
+}
+
+// changeVerificationPost
+function changeVerificationPost(id) {
+    return new Promise((resolve, reject) => {
+        runQuery(
+            `UPDATE users SET verified = !verified  WHERE users.id=${id}`
+        ).then(result => {
+            resolve(result);
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
+
+function tellUserAboutAccountState(email) {
+    return new Promise((resolve, reject) => {
+        // email message
+        let message = 'Your email is Blocked!\n';
+        message += 'You can not log in on our site:\n';
+        message += 'Please call the Administrator to solve this issues \n';
+        message += 'http://localhost:3000/login\n';
+        emailSender.sendEmail(email, 'Email verification confirmed', message).then(() => {
+            resolve();
+        }).catch(error => {
+            reject(error);
+        });
+    });
+}
 /* ***************************************************** EXPORT ******************************************************* */
 module.exports = {
     editUser,
@@ -177,5 +239,9 @@ module.exports = {
     verifyUser,
     confirmVerifiedUser,
     sendResetLink,
-    resetPass
+    resetPass,
+    getAllUsers,
+    getUser,
+    changeVerificationPost,
+    tellUserAboutAccountState
 };

@@ -36,7 +36,11 @@ const {
     verifyUser, 
     confirmVerifiedUser, 
     sendResetLink, 
-    resetPass
+    resetPass,
+    getAllUsers,
+    getUser,
+    changeVerificationPost,
+    tellUserAboutAccountState,
 } = require('./modules/usersAuth');
 
 // user router
@@ -114,7 +118,7 @@ app.post('/login', (req, res) => {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
             req.session.user = user;
             // res.json({result: 1, id: user.id})
-            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname});
+            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role});
         }).catch(error => {
             if (error == 3) {
                 // res.json({result: 3})
@@ -200,6 +204,65 @@ app.post('/checklogin', (req, res) => {
         res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname});
     } else {
         res.json(10);
+    }
+});
+
+
+// get All Users
+app.post('/getAllUsers', (req, res) => {
+    // 1 sending success
+    // 2 no users founded
+    getAllUsers().then((users) => {
+        res.json(users);
+    }).catch(err => {
+        if (err == 2) {
+            res.json(2);
+        } else {
+            res.json(err);
+        }
+    });
+});
+
+// get User for Edit page 
+app.post('/getuser', (req, res) => {
+    // 1 sending success
+    // 2 no users founded
+    getUser(req.body.id).then(user => {
+        res.json(user);
+    }).catch(err => {
+        if (err == 2) {
+            res.json(2);
+        } else {
+            res.json(err);
+        }
+    });
+});
+
+// change Verification for a user
+app.post('/changeVerificationPost', (req, res) => {
+    // user updated successfully to verified 
+    // 2 server error
+    console.log(req.body);
+    if (req.body.verified) {
+        changeVerificationPost(req.body.id).then(() => {
+            // confirm the user with email 
+            // 1 email successfully sent
+            // 2 email NOT sent
+            tellUserAboutAccountState(req.body.email).then(() => {
+                // tell the user that his account is blocked and he have to speak with the admin
+                res.json(1);
+            }).catch(err => {
+                res.json(2);
+            });
+        }).catch(err => {
+            res.json(2)
+        });
+    }else{
+        changeVerificationPost(req.body.id).then(() => {
+           res.json(1)
+        }).catch(err => {
+            res.json(2)
+        });
     }
 });
 
