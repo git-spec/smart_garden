@@ -21,7 +21,7 @@ import {
     NavLink
 } from 'reactstrap';
 // services
-import {logoutPost} from '../services/api'
+import {logoutPost} from '../services/api';
 
 function Navigation(props) {
 
