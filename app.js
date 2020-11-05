@@ -310,17 +310,17 @@ io.on('connection', socket => {
                     // listener for the incoming data
                     socket.on("realTimeData", info => {
                         // send the data back to the client
-                        socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingdata", info);
+                        socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
                     });
                 } else {
                     // hub is not registered
                     log(`Hub ${data.sn_number} is not registered!`);
-                    // kill socket
+                    socket.disconnect();
                 }
             } else {
                 // hub not found
                 log(`Hub with ${data.sn_number} is not existing!`);
-                // kill socket
+                socket.disconnect();
             }
         }).catch(error => {
             log(error);
