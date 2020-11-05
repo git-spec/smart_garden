@@ -27,7 +27,8 @@ const Login = props => {
     useEffect(() => {
         setUserAction(null);
         // setSocketAction(null);
-    }, [setUserAction]);
+    // eslint-disable-next-line
+    }, []);
 
     const history = useHistory();
 

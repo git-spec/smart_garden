@@ -25,10 +25,11 @@ const Router = props => {
         checkLoginPost().then(data => {
             // console.log('user:', data);
             if (data !== 10) { // user is logged in
-                // setUserAction(data);
+                setUserAction(data);
             }
         });
-    }, [setUserAction]);
+    // eslint-disable-next-line
+    }, []);
 
     return (
         <BrowserRouter>
