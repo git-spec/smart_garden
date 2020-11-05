@@ -77,92 +77,101 @@ const Products = props => {
 
 /* ********************************************************* SOCKET.IO ********************************************************* */
 
-/* ********************************************************* USE EFFECT ********************************************************* */
-
     const {setSocketAction, user} = props;
 
     useEffect(() => {
         const socket = io('http://localhost:5000');
 
         socket.on('connect', () => {
-            setSocketAction(socket);
-            if (user) {
-                socket.emit('user_connect', user.id);
-            }
             console.log('connected');
+            setSocketAction(socket);
+            socket.emit('user_connect', user.id);
+        });
 
-            socket.on('disconnect', () => {
-                console.log('disconnect');
-                if (user) {
-                    socket.emit('user_disconnect', user.id);
-                }
-                socket.disconnect();
-                setSocketAction(null);
-            });
+        socket.on('disconnect', () => {
+            console.log('disconnect');
+            socket.emit('user_disconnect', user.id);
+            setSocketAction(null);
+            socket.disconnect();
+        });
 
-            socket.on('realTimeIncomingdata', data => {
-                console.log(data);
-                setState(state => ({...state, realTimeData: data.data}));
-                console.log(state.realTimeData);
-            });
-
-            socket.on('hub_connect', sn => {
-                if (state.hubs) {
+        socket.on('hub_connect', sn => {
+            if (state.hubs) {
+                setState(state => {
                     const hubs = [...state.hubs];
                     const hub = hubs.find(hub => hub.sn_number === sn);
                     const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
                     if (hub) {
                         hub.connected = 1;
                         hubs[idx] = hub;
-                        setState(state => ({...state, hubs}));
+                        console.log('hub connected', sn);
                     }
-                }
-                console.log('hub connected', sn);
-            });
+                    return ({...state, hubs});
+                });
+            }
+        });
 
-            socket.on('hub_disconnect', sn => {
-                if (state.hubs) {
+        socket.on('hub_disconnect', sn => {
+            if (state.hubs) {
+                setState(state => {
                     const hubs = [...state.hubs];
                     const hub = hubs.find(hub => hub.sn_number === sn);
                     const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
                     if (hub) {
                         hub.connected = 0;
                         hubs[idx] = hub;
-                        setState(state => ({...state, hubs}));
+                        console.log('hub disconnected', sn);
                     }
-                }
-                console.log('hub disconnected', sn);
-            });
+                    return ({...state, hubs});
+                });
+            }
+        });
 
-            socket.on('device_connect', sn => {
-                if (state.devices) {
-                    const devices = [...state.devices];
+        socket.on('device_connect', sn => {
+            if (state.devices) {
+                setState(state => {
+                    let devices = [...state.devices];
                     const device = devices.find(device => device.sn_number === sn);
                     const idx = devices.map(device => device.sn_number).indexOf(sn);
                     if (device) {
                         device.connected = 1;
                         devices[idx] = device;
-                        setState(state => ({...state, devices}));
+                        console.log('device connected', sn);
                     }
-                }
-                console.log('device connected', sn);
-            });
+                    return ({...state, devices});
+                });
+            }
+        });
 
-            socket.on('device_disconnect', sn => {
-                if (state.devices) {
-                    const devices = [...state.devices];
+        socket.on('device_disconnect', sn => {
+            if (state.devices) {
+                setState(state => {
+                    let devices = [...state.devices];
                     const device = devices.find(device => device.sn_number === sn);
                     const idx = devices.map(device => device.sn_number).indexOf(sn);
                     if (device) {
                         device.connected = 0;
                         devices[idx] = device;
-                        setState(state => ({...state, devices}));
+                        console.log('device disconnected', sn);
                     }
-                }
-                console.log('device disconnected', sn);
-            });
+                    return ({...state, devices});
+                });
+            }
         });
+
+        socket.on('realTimeIncomingData', data => {
+            setState(state => ({...state, realTimeData: data.data}));
+        });
+
+        // cleanup
+        return () => {
+            socket.disconnect();
+            setSocketAction(null);
+        };
+    // eslint-disable-next-line
     }, []);
+
+/* ********************************************************* USE EFFECT ********************************************************* */
 
     // get hubs & devices data from db at initial render
     useEffect(() => {
@@ -193,11 +202,6 @@ const Products = props => {
         }).catch(err => {
             alert(err);
         });
-        return () => {
-            console.log('Unmount Component');
-            // socket.disconnect()
-            // setSocketAction(null);
-        };
     }, []);
 
 /* ********************************************************* TOGGLES ********************************************************* */
@@ -402,7 +406,7 @@ const Products = props => {
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
 
-    const showDeviceData = (e, name, sn) => {
+    const onShowDeviceDataClick = (name, sn) => {
         // rerender the data section
         // 1- from database: fetch request
         // 2- real time data: socket emit to send the order to raspberry
@@ -411,12 +415,11 @@ const Products = props => {
             deviceTitle: name
         });
         console.log(sn);
-        // console.log(user)
-        if (user) props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+        props.socket.emit('getRealTimeData', {userId: user.id, sn: sn});
     };
 
 /* ********************************************************* RETURN ********************************************************* */
-    if (state.hubs && state.devices) {
+    if (state.hubs && state.devices && user) {
         return (
             <Container>
 {/* ********************************************************* MODAL ********************************************************* */}
@@ -429,7 +432,7 @@ const Products = props => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                <h3 className="text-trans mb-4">Hello {user ? user.userName : ''}, how are you?</h3>
+                <h3 className="text-trans mb-4">Hello {user.userName}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
@@ -571,16 +574,16 @@ const Products = props => {
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
-                                                                        <div
+                                                                        <Button
                                                                             className="d-flex align-items-center"
-                                                                            onClick={e => showDeviceData(e, device.name, device.sn_number)}
+                                                                            onClick={() => onShowDeviceDataClick(device.name, device.sn_number)}
                                                                         >
                                                                             {device.name}
                                                                             <span
                                                                                 ref={deviceStatusRef}
                                                                                 className={device.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
                                                                             ></span>
-                                                                        </div>
+                                                                        </Button>
                                                                         <Button
                                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
                                                                             onClick={e => onDeleteDeviceBtnClick(e, device.id)}
