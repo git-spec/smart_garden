@@ -1,4 +1,5 @@
-import {useEffect} from 'react';
+// react
+import React, {useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
@@ -16,14 +17,22 @@ const CheckLogin = props => {
             if (data === 10) {
                 history.push('/login');
             } else {
-                // setUserAction(data);
+                setUserAction(data);
             }
         }).catch(err => {
             history.push('/login');
         });
-    }, [history, setUserAction]);
+    // eslint-disable-next-line
+    }, []);
 
-    return props.children;
+    if (props.user) {
+        return props.children;
+    } else {
+        return <div>Loading...</div>;
+    }
 };
 
-export default connect(null, {setUserAction})(CheckLogin);
+const mapStateToProps = state => {
+    return {user: state.user};
+};
+export default connect(mapStateToProps, {setUserAction})(CheckLogin);
