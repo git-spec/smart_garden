@@ -17,7 +17,7 @@ import {
     Label,
     FormGroup,
 } from "reactstrap";
-import Image from "react-bootstrap/Image";
+import Dummy from "../imgs/11.jpg";
 import { 
     Link, 
     // useLocation, 
@@ -171,8 +171,8 @@ const User = (props) => {
                         </Col>
 
                         <Col className="float-right" xs={6} md={3}>
-                            <Image
-                                src={require("./1.jpg")}
+                            <img
+                                src={Dummy}
                                 height={"150px"}
                                 width={"150px"}
                                 roundedCircle

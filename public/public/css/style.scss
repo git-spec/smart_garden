@@ -510,13 +510,19 @@ body {
 }
 
 // Extra small devices (portrait phones, less than 576px)
-@media (max-width: 576px) {}
+@media (max-width: 576px) {
+  html { font-size: 12px; }
+}
 
 // Small devices (landscape phones, 576px and up)
-@media (min-width: 576px) {}
+@media (min-width: 576px) {
+  html { font-size: 13px; }
+}
 
 // Medium devices (tablets, 768px and up)
-@media (min-width: 768px) {}
+@media (min-width: 768px) {
+  html { font-size: 15px; }
+}
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
@@ -541,3 +547,4 @@ body {
 
 /* *********************************************************** IMPORT ********************************************************* */
 @import 'nav';
+@import 'range';

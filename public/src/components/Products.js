@@ -2,6 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import io from 'socket.io-client';
 // import {Link} from 'react-router-dom';
+// import Range from './Range';
 import {
     Row,
     Col,
@@ -12,11 +13,9 @@ import {
     CardBody, 
     Card,
     CardHeader,
-    Label, 
-    FormGroup,
+    Label,
     CardTitle,
-    CardSubtitle,
-    CardText
+    CardSubtitle
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
@@ -48,6 +47,7 @@ const Products = props => {
     const openHubIconRefs = [];
     const hubStatusRefs = [];
     const deviceStatusRefs = [];
+    const rangeStatusRefs = [];
 
 /* ******************************************************** STATE ********************************************************* */
     const initialState = {
@@ -64,9 +64,18 @@ const Products = props => {
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-        feed: []
+        feed: [],
+        inputRange: null,
+        inputRangeMax: "100",
+        graphHeightMax: 160,
+        graphHeightMin: 20
     };
     const [state, setState] = useState(initialState);
+
+
+    // const styles = { 
+    //     transform: `translate(${state.inputRange})` 
+    // };
 
 /* ******************************************************** USE EFFECT ********************************************************* */
     useEffect(() => {
@@ -208,6 +217,30 @@ const Products = props => {
             collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
     };
+
+/* ******************************************************** FUNCTIONS ********************************************************* */
+    const onBtnInputRange = (e, output) => {
+        e.preventDefault();
+        // const rangeValue = Number(e.target.value);
+        // const leftValue = rangeValue * (200 / 100);
+        // output.current.style.left = leftValue + 'px';
+        // let range = e.target.value * 1.9 - output.current.offsetWidth / (200 - e.target.value * 2) + (15 / 2 - 15 / (e.target.value * 2)) - (15 / 2 - 15 / (200 - e.target.value * 2));
+        let range = (13 / 2 - output.current.offsetWidth / 2) + e.target.value * 1.87;
+        // output.current.style.left = range + 'px';
+        output.current.innerText = e.target.value;
+        setState({
+            ...state,
+            inputRange: e.target.value
+        });
+        // output.current.style.transform = `translateX(${e.target.value}%)`;
+console.log(output.current.nextElementSibling.lastElementChild.offsetWidth);
+console.log(output.current.offsetWidth);
+        output.current.style.setProperty('--thumb-input', e.target.value);
+        output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
+        // const styles = { 
+        //     transform: `translate(${e.target.value})` 
+        // };
+    }
 
 /* ******************************************************** DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
@@ -512,6 +545,10 @@ if (state.hubs && state.devices) {
 {/* ******************************************************** LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
                                                             const deviceStatusRef = React.createRef();
+                                                            const rangeStatusMinRef = React.createRef();
+                                                            const rangeStatusMaxRef = React.createRef();
+                                                            rangeStatusRefs.push({ref: rangeStatusMinRef, sn: device.sn_number});
+                                                            rangeStatusRefs.push({ref: rangeStatusMaxRef, sn: device.sn_number});
                                                             deviceStatusRefs.push({ref: deviceStatusRef, sn: device.sn_number});
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
@@ -533,13 +570,53 @@ if (state.hubs && state.devices) {
                                                                     <CardSubtitle>
                                                                         {device.device_name}
                                                                     </CardSubtitle>
-                                                                    <CardText className="d-flex align-items-center">
-                                                                        <label className="switch">
-                                                                            <input type="checkbox" />
-                                                                            <span className="slider round"></span>
-                                                                        </label>
-                                                                        <span className="ml-3">OFF / ON</span>
-                                                                    </CardText>
+                                                                    <CardSubtitle className="mt-2">
+                                                                        <div className="d-flex align-items-center">
+                                                                            <label className="switch">
+                                                                                <input type="checkbox" />
+                                                                                <span className="slider round"></span>
+                                                                            </label>
+                                                                            <span className="ml-3">OFF / ON</span>
+                                                                        </div>
+                                                                        <div className="range mt-2 min">
+                                                                            <Label for="rangeInput">min.</Label>
+                                                                            <output ref={rangeStatusMinRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <div>
+                                                                                <Input
+                                                                                    type="range"
+                                                                                    id="rangeInput"
+                                                                                    name="rangeInput"
+                                                                                    min="0"
+                                                                                    max={state.inputRangeMax}
+                                                                                    defaultValue="0"
+                                                                                    // onInput= {function (e) {e.preventDefault()
+                                                                                    //     this.output.amount.value=this.value}}
+                                                                                    // onInput={amount.value = parseInt(this.value)}
+                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMinRef)}
+                                                                                />
+                                                                            </div>
+                                                                            <output>{state.inputRangeMax}</output>
+                                                                        </div>
+                                                                        <div className="range mt-2 max">
+                                                                            <Label for="rangeInput">max.</Label>
+                                                                            <output ref={rangeStatusMaxRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <div>
+                                                                                <Input
+                                                                                    type="range"
+                                                                                    id="rangeInput"
+                                                                                    name="rangeInput"
+                                                                                    min="0"
+                                                                                    max={state.inputRangeMax}
+                                                                                    defaultValue="0"
+                                                                                    // onInput= {function (e) {e.preventDefault()
+                                                                                    //     this.output.amount.value=this.value}}
+                                                                                    // onInput={amount.value = parseInt(this.value)}
+                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMaxRef)}
+                                                                                />
+                                                                            </div>
+                                                                            <output>{state.inputRangeMax}</output>
+                                                                        </div>
+                                                                    </CardSubtitle>
                                                                 </CardHeader>
                                                             );
                                                         })}
@@ -555,26 +632,13 @@ if (state.hubs && state.devices) {
 {/* ******************************************************** MONITOR ********************************************************* */}
                     <Col className="px-3 mt-md-0 mt-3" lg="7">
                         <Col className="p-3">
-                            {/* <h3 className="text-center">kitchen</h3> */}
+                            <h3 className="text-center">kitchen</h3>
                             <ReactTable />
-                            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
+                            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" max={state.graphHeightMax} min={state.graphHeightMin} />
                             <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                             <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
                             <BarChartHorizontalMixed data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
-                            <FormGroup>
-                                <Label for="rangeInput">Range</Label>
-                                <Input
-                                    type="range"
-                                    id="rangeInput"
-                                    name="rangeInput"
-                                    min="0"
-                                    max="100"
-                                    onInput="this.output.amount.value=this.value"
-                                />
-                                <output name="amount" id="amount" htmlFor="rangeInput">
-                                    0
-                                </output>
-                            </FormGroup>
+                            {/* <Range /> */}
                         </Col>
                     </Col>
                 </Row>

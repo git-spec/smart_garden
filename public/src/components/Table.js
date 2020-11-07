@@ -6,7 +6,7 @@ const ReactTable = (props) => {
     <Table borderless size="sm" className="mb-4">
       <thead>
         <tr>
-          <th className="align-bottom"><h3 className="mb-0">kitchen</h3></th>
+          <th className="align-bottom"></th>
           <th><i className="fas fa-thermometer-half mr-2 mb-2"></i></th>
           <th><i className="fas fa-cloud mr-2 mb-2"></i></th>
           <th><i className="fas fa-tint mr-2 mb-2"></i></th>
