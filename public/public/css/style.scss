@@ -1,20 +1,66 @@
+// font Cuyabra
 @font-face {
   font-family: Cuyabra;
-  src:  url('../fonts/cuyabra.ttf'),
-        url('../fonts/cuyabra-bold.ttf'),
-        url('../fonts/cuyabra-oblique.ttf'),
-        url('../fonts/cuyabra-bold-oblique.ttf');
+  src:  url('../fonts/cuyabra.ttf') format('truetype');
 }
 @font-face {
+  font-family: Cuyabra;
+  src:  url('../fonts/cuyabra-bold.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: Cuyabra;
+  src:  url('../fonts/cuyabra-oblique.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: Cuyabra;
+  src:  url('../fonts/cuyabra-bold-oblique.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+// font Ubuntu       
+@font-face {
   font-family: Ubuntu;
-  src:  url('../fonts/Ubuntu-Regular.ttf'), 
-        url('../fonts/Ubuntu-Italic.ttf'),
-        url('../fonts/Ubuntu-Medium.ttf'),
-        url('../fonts/Ubuntu-MediumItalic.ttf'),
-        url('../fonts/Ubuntu-Bold.ttf'),
-        url('../fonts/Ubuntu-BoldItalic.ttf'),
-        url('../fonts/Ubuntu-Light.ttf'),
-        url('../fonts/Ubuntu-LightItalic.ttf');
+  src:  url('../fonts/Ubuntu-Regular.ttf') format('truetype');
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Italic.ttf') format('truetype');
+  font-style: italic;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Medium.ttf') format('truetype');
+  font-weight: bold;
+}            
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Medium.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}    
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Bold.ttf') format('truetype');
+  font-weight: bolder;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-BoldItalic.ttf') format('truetype');
+  font-weight: bolder;
+  font-style: italic;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Light.ttf') format('truetype');
+  font-weight: small;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-LightItalic.ttf') format('truetype');
+  font-weight: small;
+  font-style: italic;
 }
 // variables
 $font-main: Ubuntu;
@@ -70,7 +116,6 @@ body {
   // app container
   #root {
     font-family: Ubuntu;
-    font-weight: 300;
     height: 100vh;
     background-color: $color-1;
     background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
@@ -200,6 +245,7 @@ body {
   & button {
     @include killShadow();
     background-color: none;
+    font-weight: bold;
     // scales button after hover
     &:hover,
     &:active,

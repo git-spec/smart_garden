@@ -225,7 +225,7 @@ const Products = props => {
         // const leftValue = rangeValue * (200 / 100);
         // output.current.style.left = leftValue + 'px';
         // let range = e.target.value * 1.9 - output.current.offsetWidth / (200 - e.target.value * 2) + (15 / 2 - 15 / (e.target.value * 2)) - (15 / 2 - 15 / (200 - e.target.value * 2));
-        let range = (13 / 2 - output.current.offsetWidth / 2) + e.target.value * 1.87;
+        // let range = (13 / 2 - output.current.offsetWidth / 2) + e.target.value * 1.87;
         // output.current.style.left = range + 'px';
         output.current.innerText = e.target.value;
         setState({
