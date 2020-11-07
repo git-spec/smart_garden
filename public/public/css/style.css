@@ -1,6 +1,11 @@
 @font-face {
   font-family: Cuyabra;
-  src: url("../fonts/cuyabra.ttf");
+  src: url("../fonts/cuyabra.ttf"), url("../fonts/cuyabra-bold.ttf"), url("../fonts/cuyabra-oblique.ttf"), url("../fonts/cuyabra-bold-oblique.ttf");
+}
+
+@font-face {
+  font-family: Ubuntu;
+  src: url("../fonts/Ubuntu-Regular.ttf"), url("../fonts/Ubuntu-Italic.ttf"), url("../fonts/Ubuntu-Medium.ttf"), url("../fonts/Ubuntu-MediumItalic.ttf"), url("../fonts/Ubuntu-Bold.ttf"), url("../fonts/Ubuntu-BoldItalic.ttf"), url("../fonts/Ubuntu-Light.ttf"), url("../fonts/Ubuntu-LightItalic.ttf");
 }
 
 *, *:before, *:after {
@@ -15,14 +20,14 @@
 }
 
 body {
-  font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: Ubuntu, 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: white !important;
 }
 
 body #root {
-  font-family: 'Ubuntu';
+  font-family: Ubuntu;
   font-weight: 300;
   height: 100vh;
   background-color: #241b12;
