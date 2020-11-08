@@ -194,8 +194,7 @@ const Products = props => {
     const toggleAddHub = e => {
         e.preventDefault();
         // toggle plus hidden
-        addHubIconRef.current.classList.toggle('plus');
-        addHubIconRef.current.classList.toggle('hidden');
+        addHubIconRef.current.classList.add('hidden');
         setState({
             ...state,
             collapseAddHub: !state.collapseAddHub
@@ -205,7 +204,7 @@ const Products = props => {
     const toggleDeleteHub = e => {
         e.preventDefault();
         // toggle plus visible
-        addHubIconRef.current.classList.toggle('plus');
+        addHubIconRef.current.classList.toggle('show');
         addHubIconRef.current.classList.toggle('hidden');
         setState({
             ...state,
@@ -216,7 +215,7 @@ const Products = props => {
     const toggleAddDevice = (e, idx) => {
         e.preventDefault();
         // toggle plus hidden
-        addDeviceIconRefs[idx].current.classList.toggle('plus');
+        addDeviceIconRefs[idx].current.classList.toggle('show');
         addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,
@@ -227,7 +226,7 @@ const Products = props => {
     const toggleDeleteDevice = (e, idx) => {
         e.preventDefault();
         // toggle plus visible
-        addDeviceIconRefs[idx].current.classList.toggle('plus');
+        addDeviceIconRefs[idx].current.classList.toggle('show');
         addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,

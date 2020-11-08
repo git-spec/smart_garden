@@ -270,10 +270,6 @@ body {
         background-color: $color-1 !important;
       }
     }
-    // buton hidden
-    &.hidden {
-      visibility: hidden;
-    }
     // buttons plus & minus
     &.plus,
     &.minus {
@@ -292,6 +288,16 @@ body {
     // change color of buttons lpus & minus
     &.plus {
       border-color: $color-success !important;
+      transition: opacity .2s ease-out .1s;
+      // show button plus
+      &.show {
+        opacity: 1;
+      }
+      // hide button plus
+      &.hidden {
+        transition: none;
+        opacity: 0;
+      }
       & > span {
         background-color: $color-success !important;
       }

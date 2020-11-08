@@ -280,11 +280,6 @@ body button.btn-outline-light:active.up > span {
   background-color: #241b12 !important;
 }
 
-body .btn.hidden,
-body button.hidden {
-  visibility: hidden;
-}
-
 body .btn.plus, body .btn.minus,
 body button.plus,
 body button.minus {
@@ -308,6 +303,20 @@ body button.minus > span {
 body .btn.plus,
 body button.plus {
   border-color: #30a256 !important;
+  -webkit-transition: opacity .2s ease-out .1s;
+  transition: opacity .2s ease-out .1s;
+}
+
+body .btn.plus.show,
+body button.plus.show {
+  opacity: 1;
+}
+
+body .btn.plus.hidden,
+body button.plus.hidden {
+  -webkit-transition: none;
+  transition: none;
+  opacity: 0;
 }
 
 body .btn.plus > span,
