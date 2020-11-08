@@ -270,6 +270,10 @@ body {
         background-color: $color-1 !important;
       }
     }
+    // buton hidden
+    &.hidden {
+      visibility: hidden;
+    }
     // buttons plus & minus
     &.plus,
     &.minus {
@@ -561,7 +565,7 @@ body {
     }
   }
   & th {
-    font-weight: 500;
+    font-weight: bold;
   }
 
   code {

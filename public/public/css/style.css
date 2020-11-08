@@ -280,6 +280,11 @@ body button.btn-outline-light:active.up > span {
   background-color: #241b12 !important;
 }
 
+body .btn.hidden,
+body button.hidden {
+  visibility: hidden;
+}
+
 body .btn.plus, body .btn.minus,
 body button.plus,
 body button.minus {
@@ -607,7 +612,7 @@ body .table tbody td {
 }
 
 body th {
-  font-weight: 500;
+  font-weight: bold;
 }
 
 body code {

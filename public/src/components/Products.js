@@ -2,7 +2,6 @@
 import React, {useState, useEffect} from 'react';
 import io from 'socket.io-client';
 // import {Link} from 'react-router-dom';
-// import Range from './Range';
 import {
     Row,
     Col,
@@ -71,11 +70,6 @@ const Products = props => {
         graphHeightMin: 20
     };
     const [state, setState] = useState(initialState);
-
-
-    // const styles = { 
-    //     transform: `translate(${state.inputRange})` 
-    // };
 
 /* ******************************************************** USE EFFECT ********************************************************* */
     useEffect(() => {
@@ -198,48 +192,61 @@ const Products = props => {
     };
 
     const toggleAddHub = e => {
-        // toggle plus & minus button
+        e.preventDefault();
+        // toggle plus hidden
         addHubIconRef.current.classList.toggle('plus');
-        addHubIconRef.current.classList.toggle('minus');
+        addHubIconRef.current.classList.toggle('hidden');
         setState({
             ...state,
             collapseAddHub: !state.collapseAddHub
         });
     };
 
+    const toggleDeleteHub = e => {
+        e.preventDefault();
+        // toggle plus visible
+        addHubIconRef.current.classList.toggle('plus');
+        addHubIconRef.current.classList.toggle('hidden');
+        setState({
+            ...state,
+            collapseAddHub: !state.collapseAddHub
+        });
+    }
+
     const toggleAddDevice = (e, idx) => {
         e.preventDefault();
-        // toggle plus & minus button
+        // toggle plus hidden
         addDeviceIconRefs[idx].current.classList.toggle('plus');
-        addDeviceIconRefs[idx].current.classList.toggle('minus');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,
             collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
-    };
+    }
+
+    const toggleDeleteDevice = (e, idx) => {
+        e.preventDefault();
+        // toggle plus visible
+        addDeviceIconRefs[idx].current.classList.toggle('plus');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
+        setState({
+            ...state,
+            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
+        });
+    }
 
 /* ******************************************************** FUNCTIONS ********************************************************* */
     const onBtnInputRange = (e, output) => {
         e.preventDefault();
-        // const rangeValue = Number(e.target.value);
-        // const leftValue = rangeValue * (200 / 100);
-        // output.current.style.left = leftValue + 'px';
-        // let range = e.target.value * 1.9 - output.current.offsetWidth / (200 - e.target.value * 2) + (15 / 2 - 15 / (e.target.value * 2)) - (15 / 2 - 15 / (200 - e.target.value * 2));
-        // let range = (13 / 2 - output.current.offsetWidth / 2) + e.target.value * 1.87;
-        // output.current.style.left = range + 'px';
+        // output of current value
         output.current.innerText = e.target.value;
         setState({
             ...state,
             inputRange: e.target.value
         });
-        // output.current.style.transform = `translateX(${e.target.value}%)`;
-console.log(output.current.nextElementSibling.lastElementChild.offsetWidth);
-console.log(output.current.offsetWidth);
+        // send current propperties to css
         output.current.style.setProperty('--thumb-input', e.target.value);
         output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
-        // const styles = { 
-        //     transform: `translate(${e.target.value})` 
-        // };
     }
 
 /* ******************************************************** DELETE HUB ********************************************************* */
@@ -434,7 +441,15 @@ if (state.hubs && state.devices) {
                             </CardHeader>
 {/* ******************************************************** ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
-                                <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                    <CardSubtitle>
+                                        <Button
+                                            className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
+                                            onClick={toggleDeleteHub}
+                                        >
+                                            <span></span><span></span>
+                                        </Button>
+                                    </CardSubtitle>
                                     <CardTitle className="flex-grow-1 m-0">
                                         <Input
                                             className="badge-pill bg-transparent py-0 mb-3"
@@ -443,7 +458,7 @@ if (state.hubs && state.devices) {
                                             value={state.hubNum}
                                         />
                                         <Input
-                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            className="badge-pill bg-transparent py-0"
                                             placeholder="Enter a name for your hub"
                                             onChange={e => setState({...state, hubName: e.target.value})}
                                             value={state.hubName}
@@ -510,7 +525,15 @@ if (state.hubs && state.devices) {
 {/* ******************************************************** ADD DEVICE ********************************************************* */}
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseAddDevice === idx}>
-                                                        <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                                        <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                                            <CardSubtitle className="p-0">
+                                                                <Button
+                                                                    className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
+                                                                    onClick={e => toggleDeleteDevice(e, idx)}
+                                                                >
+                                                                    <span></span><span></span>
+                                                                </Button>
+                                                            </CardSubtitle>
                                                             <CardTitle className="flex-grow-1 m-0">
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0 mb-3"
@@ -521,7 +544,7 @@ if (state.hubs && state.devices) {
                                                                     value={state.deviceNum}
                                                                 />
                                                                 <Input
-                                                                    className="badge-pill bg-transparent py-0 mb-3"
+                                                                    className="badge-pill bg-transparent py-0"
                                                                     placeholder="Enter a name for your device"
                                                                     onChange={e =>
                                                                         setState({...state, deviceName: e.target.value})
