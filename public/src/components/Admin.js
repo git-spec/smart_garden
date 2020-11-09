@@ -1,13 +1,6 @@
 // export default Register;
 import React, { Fragment, useState, useEffect } from "react";
-import {
-    Container,
-    Row,
-    Col,
-    Button,
-    Table,
-    ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem,
-} from "reactstrap";
+import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
 import Image from "react-bootstrap/Image";
 import {
     Link,
@@ -16,12 +9,17 @@ import {
 } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
 // import validator from "validator";
-import { getAllUsers, changeVerificationPost } from "../services/api";
+import {
+    getAllUsers,
+    changeVerificationPost,
+    deleteUserPost,
+    changeUserRolePost,
+} from "../services/api";
+import ConfirmModal from "./ConfirmModal";
 
 import { connect } from "react-redux";
 
 const Admin = (props) => {
-
     const initialState = {
         users: [],
         lastName: "",
@@ -29,10 +27,16 @@ const Admin = (props) => {
         City: "",
         password: "",
         repassword: "",
+        confirmModalShow: false,
+        confirmModalContent: null,
+        confirmModalDelete: null,
+
+        dropdownOpen: false,
         errorComponent: null,
         showErrorModal: false,
         resultElement: null,
     };
+
     const [myState, setMyState] = useState(initialState);
 
     useEffect(() => {
@@ -40,7 +44,7 @@ const Admin = (props) => {
             .then((data) => {
                 setMyState({
                     ...myState,
-                    users: data, 
+                    users: data,
                 });
             })
             .catch((err) => {
@@ -48,84 +52,90 @@ const Admin = (props) => {
             });
     }, []);
 
-/* ********************************************************* Change User Verification ********************************************************* */
+    /* ********************************************************* Change User Verification ********************************************************* */
 
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        console.log(userID);
         changeVerificationPost(userID, email, verified)
-        .then(data=>{
-            let newUsers = myState.users.map(user=>{
-                if (user.id == userID) {
-                    user.verified = !user.verified
-                }
-                return user
+            .then((data) => {
+                // changing user array in the component state
+                let newUsers = myState.users.map((user) => {
+                    if (user.id == userID) {
+                        user.verified = !user.verified;
+                    }
+                    return user;
+                });
+                setMyState({
+                    ...myState,
+                    users: newUsers,
+                });
             })
-
-            setMyState({
-                ...myState,
-                users: newUsers, 
+            .catch((err) => {
+                console.log(err);
             });
-            
-        })
-        .catch(err=>{
-            console.log(err);
-        })
     };
 
-/* ********************************************************* DELETE User ********************************************************* */
+    /* ********************************************************* DELETE User ********************************************************* */
 
-    // const showUsers = ()=>{
-    //     return(
-
-    //     )
-    // }
-
-    // const location = useLocation()
-    // const history = useHistory()
-    // const user = { ...props.user };
-    // console.log(props.user);
-    // console.log('location.state '+location.state);
-    // if(!location.state){
-    //     history.push('/login')
-    // }
-
-    const onDeleteBtnClick = (e) => {
+    const onDeleteBtnClick = (e, userID, idx) => {
         e.preventDefault();
-        if (
-            myState.firstName.trim() === "" ||
-            myState.lastName.trim() === "" ||
-            myState.userName.trim() === "" ||
-            myState.password === "" ||
-            myState.password !== myState.repassword
-        ) {
-            const errorsElement = (
-                <ul>
-                    {myState.firstName.trim() === "" ? (
-                        <li>Please Enter your first name</li>
-                    ) : null}
-                    {myState.lastName.trim() === "" ? (
-                        <li>Please Enter your last name</li>
-                    ) : null}
-                    {myState.userName.trim() === "" ? (
-                        <li>user name should not be empty</li>
-                    ) : null}
-                    {myState.password === "" ? (
-                        <li>password should not be empty</li>
-                    ) : null}
-                    {myState.password !== myState.repassword ? (
-                        <li>password is not matching the repassword</li>
-                    ) : null}
-                </ul>
-            );
+        const deleteUser = (userID) => {
+            deleteUserPost(userID)
+                .then((data) => {
+                    if (data == 1) {
+                        myState.users.splice(idx, 1);
+                        // changing user array in the component state
+                        setMyState({
+                            ...myState,
+                            users: myState.users,
+                            confirmModalShow: false,
+                        });
+                    } else {
+                        alert("Server error!");
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
+        setMyState({
+            ...myState,
+            confirmModalShow: true,
+            confirmModalContent: (
+                <p>
+                    Are you sure you want to delete this Users?
+                    <br />
+                    You can not get it back after deleting.
+                </p>
+            ),
+            confirmModalDelete: () => deleteUser(userID),
+        });
+    };
 
-            setMyState({
-                ...myState,
-                errorComponent: errorsElement,
-                showErrorModal: true,
+    /* ********************************************************* Role Dropdown Button ********************************************************* */
+
+    const changeUserRole = (e, role, userID, idx) => {
+        e.preventDefault();
+        changeUserRolePost(userID, role)
+            .then((data) => {
+                // changing user array in the component state
+                let newUsers = myState.users.map((user) => {
+                    if (user.id == userID) {
+                        user.role = role;
+                    }
+                    return user;
+                });
+                setMyState({
+                    ...myState,
+                    users: newUsers,
+                });
+            })
+            .catch((err) => {
+                console.log(err);
             });
-        } 
-    }
+    };
+
+    /* ********************************************************* PopupModal ********************************************************* */
 
     const closeModal = () => {
         setMyState({
@@ -133,9 +143,25 @@ const Admin = (props) => {
             showErrorModal: false,
         });
     };
-    // console.log(state.feed); fluid public/src/images/FB_IMG_1592363046509.png
+
+    /* ********************************************************* start Rendering ********************************************************* */
+
     return (
         <Fragment>
+            {/* ********************************************************* ConfirmModal ********************************************************* */}
+            <ConfirmModal
+                className="bg-danger"
+                title="Confirm Deletion"
+                show={myState.confirmModalShow}
+                delete={myState.confirmModalDelete}
+                close={() =>
+                    setMyState({ ...myState, confirmModalShow: false })
+                }
+            >
+                {myState.confirmModalContent}
+            </ConfirmModal>
+            {/* ********************************************************* ConfirmModal ********************************************************* */}
+
             <PopUpModal
                 show={myState.showErrorModal}
                 close={closeModal}
@@ -180,6 +206,84 @@ const Admin = (props) => {
                         </thead>
                         <tbody>
                             {myState.users.map((user, idx) => {
+                                let userRole = null;
+                                if (myState.users[idx].role === "admin") {
+                                    userRole = (
+                                        <Button
+                                            outline
+                                            color="warning"
+                                            disabled
+                                        >
+                                            {"  '  "} Administrator {"  ' "}
+                                        </Button>
+                                    );
+                                } else {
+                                    userRole = (
+                                        <ButtonGroup>
+                                            <Button
+                                                outline={
+                                                    myState.users[idx].role ===
+                                                    "user"
+                                                        ? false
+                                                        : true
+                                                }
+                                                color={
+                                                    myState.users[idx].role ===
+                                                    "user"
+                                                        ? "info"
+                                                        : "secondary"
+                                                }
+                                                onClick={(e) =>
+                                                    changeUserRole(
+                                                        e,
+                                                        "user",
+                                                        user.id,
+                                                        idx
+                                                    )
+                                                }
+                                                active={
+                                                    myState.users[idx].role ===
+                                                    "user"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                User
+                                            </Button>
+                                            <Button
+                                                outline={
+                                                    myState.users[idx].role ===
+                                                    "subadmin"
+                                                        ? false
+                                                        : true
+                                                }
+                                                color={
+                                                    myState.users[idx].role ===
+                                                    "subadmin"
+                                                        ? "info"
+                                                        : "secondary"
+                                                }
+                                                onClick={(e) =>
+                                                    changeUserRole(
+                                                        e,
+                                                        "subadmin",
+                                                        user.id,
+                                                        idx
+                                                    )
+                                                }
+                                                active={
+                                                    myState.users[idx].role ===
+                                                    "subadmin"
+                                                        ? true
+                                                        : false
+                                                }
+                                            >
+                                                SAdmin
+                                            </Button>
+                                        </ButtonGroup>
+                                        /* <p>Selected: {myState.users[idx].role}</p> */
+                                    );
+                                }
                                 return (
                                     <tr key={user.id}>
                                         <td>{user.firstname}</td>
@@ -187,20 +291,49 @@ const Admin = (props) => {
                                         <td>{user.username}</td>
                                         <td>{user.email}</td>
                                         <td>
-                                            <Button 
-                                            onClick={e => onVerifiedBtnClick(e, user.id, user.email, user.verified)}
+                                            <Button
+                                                outline={
+                                                    user.verified ? false : true
+                                                }
+                                                color={
+                                                    user.verified
+                                                        ? "info"
+                                                        : "secondary"
+                                                }
+                                                disabled={
+                                                    user.role === "admin"
+                                                        ? true
+                                                        : false
+                                                }
+                                                onClick={(e) =>
+                                                    onVerifiedBtnClick(
+                                                        e,
+                                                        user.id,
+                                                        user.email,
+                                                        user.verified
+                                                    )
+                                                }
                                             >
                                                 {user.verified ? "Yes" : "No"}
                                             </Button>
                                         </td>
-                                        <td>
-                                            {user.role}
-                                        </td>
+                                        <td>{userRole}</td>
                                         <td>
                                             <Button
-                                                onClick={onDeleteBtnClick}
+                                                onClick={(e) =>
+                                                    onDeleteBtnClick(
+                                                        e,
+                                                        user.id,
+                                                        idx
+                                                    )
+                                                }
                                                 outline
                                                 color="danger"
+                                                disabled={
+                                                    user.role === "admin"
+                                                        ? true
+                                                        : false
+                                                }
                                             >
                                                 Delete
                                             </Button>

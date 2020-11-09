@@ -41,6 +41,8 @@ const {
     getUser,
     changeVerificationPost,
     tellUserAboutAccountState,
+    deleteUser,
+    changeUserRole,
 } = require('./modules/usersAuth');
 
 // user router
@@ -86,6 +88,7 @@ app.post('/edit', (req, res) => {
     // 2 data error
     // 3 user exists
     // 4 server error
+    console.log(req.body);
     const id = req.body.id;
     const firstName = req.body.firstName.trim();
     const lastName = req.body.lastName.trim();
@@ -93,7 +96,7 @@ app.post('/edit', (req, res) => {
     const city = req.body.city.trim();
     const password = req.body.password;
     const repassword = req.body.repassword;
-    if (id && firstName && lastName && userName && city && password && password == repassword) {
+    if (id && firstName && lastName && userName ) {
         editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
             res.json(1);
         }).catch(error => {
@@ -240,9 +243,6 @@ app.post('/getuser', (req, res) => {
 
 // change Verification for a user
 app.post('/changeVerificationPost', (req, res) => {
-    // user updated successfully to verified 
-    // 2 server error
-    console.log(req.body);
     if (req.body.verified) {
         changeVerificationPost(req.body.id).then(() => {
             // confirm the user with email 
@@ -266,6 +266,27 @@ app.post('/changeVerificationPost', (req, res) => {
     }
 });
 
+// Delete user Account 
+app.post('/deleteUserPost', (req, res) => {
+    // 1 mean deleting is success
+    // 2 mean deleting is not success
+    deleteUser(req.body.id).then(() => {
+        res.json(1)
+    }).catch(err => {
+        res.json(2)
+    });
+});
+
+
+//Change user Role 
+app.post('/changeUserRolePost', (req, res) => {
+    // console.log('body id is '+req.body.id ,'body role is '+req.body.role );
+    changeUserRole(req.body.id, req.body.role).then(() => {
+        res.json(1)
+    }).catch(err => {
+        res.json(2)
+    });
+});
 /* ********************************************************* USE ROUTES ********************************************************* */
 app.use('/user', userRoutes);
 
