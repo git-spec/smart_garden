@@ -130,8 +130,62 @@ function updateRecord(tableName, value, condition){
     });
 }
 
+/**
+ * 
+ * @param {String} tableName 
+ * @param {Array} columns  
+ * @param {Array} values 
+ * @returns {Object} inserted records
+ */
+function insertMulti(tableName, columns, values) {
+    return new Promise((resolve, reject) => {
+        let query = `INSERT INTO ${tableName} (`;
+        columns.forEach(col => {
+            query += `${col}, `;
+        });
+        query = query.substring(0, query.length - 2);
+        query += `) VALUES (`;
+        values.forEach(val => {
+            query += `'${val}', `;
+        });
+        query = query.substring(0, query.length - 2);
+        query += `);`;
+        console.log(query);
+        runQuery(query).then(result => {
+            resolve(result);
+        }).catch(error => {
+            reject(new Error(error));
+        });
+    });
+}
+
+function twoDigits(d) {
+    if (0 <= d && d < 10) return '0' + d.toString();
+    if (-10 < d && d < 0) return '-0' + (-1 * d).toString();
+    return d.toString();
+}
+
+const toMysqlFormat = function () {
+    let date = new Date();
+    return (
+        date.getUTCFullYear() +
+        '-' +
+        twoDigits(1 + date.getUTCMonth()) +
+        '-' +
+        twoDigits(date.getUTCDate()) +
+        ' ' +
+        twoDigits(date.getUTCHours() + 1) +
+        ':' +
+        twoDigits(date.getUTCMinutes()) +
+        ':' +
+        twoDigits(date.getUTCSeconds())
+    );
+};
+
 module.exports = {
     runQuery,
     checkExist,
-    updateRecord
+    updateRecord,
+    insertMulti,
+    toMysqlFormat
 };

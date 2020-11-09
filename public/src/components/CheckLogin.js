@@ -1,4 +1,6 @@
+// react
 import React, {useEffect} from 'react';
+// router dom
 import {useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
@@ -20,13 +22,14 @@ const CheckLogin = props => {
         });
     // eslint-disable-next-line
     }, []);
-    // }, [history, setUserAction]);
-    let output = (<><h1>Loading...</h1></>)
+
     if (props.user) {
-        output = props.children;
+        return props.children;
+    } else {
+        return <div>Loading...</div>;
     }
-    return output
 };
+
 const mapStateToProps = state => {
     return {user: state.user};
 };

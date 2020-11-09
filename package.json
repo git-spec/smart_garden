@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch app app.js "
+    "start": "nodemon --watch ./app.js app.js"
   },
   "keywords": [],
   "author": "",

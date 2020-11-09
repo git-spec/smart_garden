@@ -1,11 +1,14 @@
+// react
 import React, {useState, Fragment} from 'react';
-import { connect } from "react-redux";
+// redux
+import {connect} from "react-redux";
+import {setSocketAction, setUserAction} from '../actions';
+// router dom
 import {
     Link, 
-    // useLocation, 
     useHistory
 } from 'react-router-dom';
-
+// reactstrap
 import {
     Container,
     Collapse,
@@ -16,8 +19,8 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
-
-import {logoutPost} from '../services/api'
+// services
+import {logoutPost} from '../services/api';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
@@ -32,6 +35,20 @@ const initialState = {
     };
     const [state, setState] = useState(initialState);
 
+    const logoutBtnClick = e => {
+        e.preventDefault();
+        logoutPost().then(data => {
+            if (data === 10) {
+                // props.socket.disconnect();
+                // props.setSocketAction(null);
+                props.setUserAction(null);
+                history.push('/login');
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    };
+    
 /* *********************************************************** TOGGLES ********************************************************* */
 const toggleNavbar = () => {
         toggleNavbarRef.current.classList.toggle('active');
@@ -113,45 +130,60 @@ return (
                 <div ref={toggleNavbarRef} className="sidebar">
                     <Nav vertical className="mx-3">
                         <NavItem>
-                            <NavLink href="/">home</NavLink>
+                            <NavLink tag={Link} to="/">home</NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink href="/">products</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">news</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">account</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">logout</NavLink>
-                        </NavItem>
+                        {props.user ?
+                            <Fragment>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/user/dashboard">dashboard</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/user/profile">profile</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink href="#" onClick={logoutBtnClick}>logout</NavLink>
+                                </NavItem>
+                            </Fragment>
+                        :
+                            <Fragment>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/login">login</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/register">register</NavLink>
+                                </NavItem>
+                            </Fragment>
+                        }
                     </Nav>
                 </div>
 {/* *********************************************************** TOPBAR ********************************************************* */}
                 <Collapse className="topbar" isOpen={!state.collapsed} navbar>
-                    <Nav
-                        // navbar
-                        // justified
-                        // fill
-                        horizontal="center"
-                    >
+                    <Nav horizontal="center">
                         <NavItem>
-                            <NavLink href="/">home</NavLink>
+                            <NavLink tag={Link} to="/">home</NavLink>
                         </NavItem>
-                        <NavItem>
-                            <NavLink href="/">products</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">news</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">account</NavLink>
-                        </NavItem>
-                        <NavItem>
-                            <NavLink href="/">logout</NavLink>
-                        </NavItem>
+                        {props.user ?
+                            <Fragment>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/user/dashboard">dashboard</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/user/profile">profile</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink href="#" onClick={logoutBtnClick}>logout</NavLink>
+                                </NavItem>
+                            </Fragment>
+                        :
+                            <Fragment>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/login">login</NavLink>
+                                </NavItem>
+                                <NavItem>
+                                    <NavLink tag={Link} to="/register">register</NavLink>
+                                </NavItem>
+                            </Fragment>
+                        }
                     </Nav>
                 </Collapse>
             </Container>
@@ -160,6 +192,9 @@ return (
 }
 
 const mapStateToProps = state => {
-    return {user: state.user};
+    return {
+        user: state.user,
+        socket: state.socket
+    };
 };
-export default connect(mapStateToProps)(Navigation);
+export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);
