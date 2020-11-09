@@ -1,12 +1,7 @@
 // export default Register;
-import React, { Fragment, useState, useEffect } from "react";
-import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
-import Image from "react-bootstrap/Image";
-import {
-    Link,
-    // useLocation,
-    // useHistory
-} from "react-router-dom";
+import React, {Fragment, useState, useEffect} from "react";
+import {Container, Row, Col, Button, Table} from "reactstrap";
+// import Image from "react-bootstrap/Image";
 import PopUpModal from "./PopUpModal";
 // import validator from "validator";
 import {
@@ -40,39 +35,36 @@ const SubAdmin = (props) => {
     const [myState, setMyState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers()
-            .then((data) => {
-                setMyState({
-                    ...myState,
-                    users: data,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
+        getAllUsers().then((data) => {
+            setMyState({
+                ...myState,
+                users: data,
             });
+        }).catch((err) => {
+            console.log(err);
+        });
+    // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
 
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        changeVerificationPost(userID, email, verified)
-            .then((data) => {
-                // changing user array in the component state
-                let newUsers = myState.users.map((user) => {
-                    if (user.id == userID) {
-                        user.verified = !user.verified;
-                    }
-                    return user;
-                });
-                setMyState({
-                    ...myState,
-                    users: newUsers,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
+        changeVerificationPost(userID, email, verified).then((data) => {
+            // changing user array in the component state
+            let newUsers = myState.users.map((user) => {
+                if (user.id === userID) {
+                    user.verified = !user.verified;
+                }
+                return user;
             });
+            setMyState({
+                ...myState,
+                users: newUsers,
+            });
+        }).catch((err) => {
+            console.log(err);
+        });
     };
 
     /* ********************************************************* DELETE User ********************************************************* */
@@ -82,7 +74,7 @@ const SubAdmin = (props) => {
         const deleteUser = (userID) => {
             deleteUserPost(userID)
                 .then((data) => {
-                    if (data == 1) {
+                    if (data === 1) {
                         myState.users.splice(idx, 1);
                         // changing user array in the component state
                         setMyState({
@@ -114,13 +106,14 @@ const SubAdmin = (props) => {
 
     /* ********************************************************* Role Dropdown Button ********************************************************* */
 
+    // eslint-disable-next-line
     const changeUserRole = (e, role, userID, idx) => {
         e.preventDefault();
         changeUserRolePost(userID, role)
             .then((data) => {
                 // changing user array in the component state
                 let newUsers = myState.users.map((user) => {
-                    if (user.id == userID) {
+                    if (user.id === userID) {
                         user.role = role;
                     }
                     return user;
