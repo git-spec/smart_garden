@@ -1,6 +1,8 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {useState, useEffect} from 'react';
+// router dom
+import {useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
 import {setSocketAction} from '../actions';
@@ -17,18 +19,17 @@ import {
     CardBody,
     Card,
     CardHeader,
-    Label,
-    FormGroup,
     CardTitle,
     CardSubtitle,
     CardText
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
-import ReactTable from './Table';
-import LineChart from './LineChart';
-// import LineChartMultiple from './LineChartMultiple';
-import BarChartHorizontal from './BarChartHorizontal';
+import MonitorAll from './MonitorAll';
+import MonitorSoil from './MonitorSoil';
+import MonitorWater from './MonitorWater';
+import MonitorTempHum from './MonitorTempHum';
+import MonitorLight from './MonitorLight';
 // services
 import {
     checkHubNumPost,
@@ -40,59 +41,79 @@ import {
     getDevicesPost,
     deleteDevicePost
 } from '../services/productsApi';
-import {getData} from '../services/getData';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
+
+    const history = useHistory();
+
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
     const openHubIconRefs = [];
-    const hubStatusRefs = [];
-    const deviceStatusRefs = [];
 
 /* ********************************************************* STATE ********************************************************* */
     const initialState = {
+        // hubs & devices
         hubs: [],
         devices: [],
         hubName: '',
         deviceName: '',
         hubNum: '',
         deviceNum: '',
+        // collapse
         collapseHubs: false,
         collapseHub: null,
         collapseAddHub: false,
         collapseAddDevice: null,
+        // modal
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-        feed: [],
+        // monitor
+        showHub: '',
+        showDevice: '',
         realTimeData: {},
-        deviceTitle: ''
+        showDeviceType: ''
     };
     const [state, setState] = useState(initialState);
 
-    const data = getData();
+/* ********************************************************* USE EFFECT ********************************************************* */
+    // get hubs & devices data from db at initial render
+    useEffect(() => {
+        getHubsPost().then(hubs => {
+            if (hubs === 2) {
+                alert('Server error');
+            } else if (hubs === 10) {
+                history.push('/login');
+            } else {
+                getDevicesPost().then(devices => {
+                    if (devices === 2) {
+                        alert('Server error');
+                    } else if (devices === 10) {
+                        history.push('/login');
+                    } else {
+                        setState({...state, hubs, devices});
+                    }
+                }).catch(err => {
+                    alert(err);
+                });
+            }
+        }).catch(err => {
+            alert(err);
+        });
+    // eslint-disable-next-line
+    }, []);
 
 /* ********************************************************* SOCKET.IO ********************************************************* */
-
-    const {setSocketAction, user} = props;
-
     useEffect(() => {
         const socket = io('http://localhost:5000');
 
         socket.on('connect', () => {
             console.log('connected');
-            setSocketAction(socket);
-            socket.emit('user_connect', user.id);
-        });
-
-        socket.on('disconnect', () => {
-            console.log('disconnect');
-            socket.emit('user_disconnect', user.id);
-            setSocketAction(null);
-            socket.disconnect();
+            props.setSocketAction(socket);
+            socket.emit('user_connect', props.user.id);
         });
 
         socket.on('hub_connect', sn => {
@@ -160,48 +181,27 @@ const Products = props => {
         });
 
         socket.on('realTimeIncomingData', data => {
+            console.log(data);
             setState(state => ({...state, realTimeData: data.data}));
         });
 
+        // socket.on('disconnect', () => {
+        //     console.log('disconnected');
+        //     // socket.emit('user_disconnect', props.user.id);
+        //     props.setSocketAction(null);
+        //     socket.disconnect();
+        // });
+
         // cleanup
         return () => {
+            console.log('disconnected');
+            // ?????????????????????????????
+            // socket.emit('user_disconnect', props.user.id);
+            props.setSocketAction(null);
             socket.disconnect();
-            setSocketAction(null);
         };
+
     // eslint-disable-next-line
-    }, []);
-
-/* ********************************************************* USE EFFECT ********************************************************* */
-
-    // get hubs & devices data from db at initial render
-    useEffect(() => {
-        getHubsPost().then(hubs => {
-            switch (hubs) {
-                case 2:
-                    alert('Server error');
-                    break;
-                case 10:
-                    break;
-                default:
-                    getDevicesPost().then(devices => {
-                        switch (devices) {
-                            case 2:
-                                alert('Server error');
-                                break;
-                            case 10:
-                                break;
-                            default:
-                                setState(state => ({...state, hubs, devices}));
-                                break;
-                        }
-                    }).catch(err => {
-                        alert(err);
-                    });
-                    break;
-            }
-        }).catch(err => {
-            alert(err);
-        });
     }, []);
 
 /* ********************************************************* TOGGLES ********************************************************* */
@@ -405,21 +405,22 @@ const Products = props => {
     };
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-
-    const onShowDeviceDataClick = (name, sn) => {
+const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
+        e.preventDefault();
         // rerender the data section
-        // 1- from database: fetch request
-        // 2- real time data: socket emit to send the order to raspberry
+        // 1 from database: fetch request
+        // 2 real time data: socket emit to send the order to raspberry
         setState({
             ...state,
-            deviceTitle: name
+            showHub: hubName,
+            showDevice: deviceName,
+            showDeviceType: deviceType
         });
-        console.log(sn);
-        props.socket.emit('getRealTimeData', {userId: user.id, sn: sn});
+        props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
     };
 
 /* ********************************************************* RETURN ********************************************************* */
-    if (state.hubs && state.devices && user) {
+    if (state.hubs && state.devices && props.user) {
         return (
             <Container>
 {/* ********************************************************* MODAL ********************************************************* */}
@@ -432,7 +433,7 @@ const Products = props => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                <h3 className="text-trans mb-4">Hello {user.userName}, how are you?</h3>
+                <h3 className="text-trans mb-4">Hello {props.user.userName}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
@@ -496,8 +497,6 @@ const Products = props => {
                                         openHubIconRefs.push(openHubIconRef);
                                         const addDeviceIconRef = React.createRef();
                                         addDeviceIconRefs.push(addDeviceIconRef);
-                                        const hubStatusRef = React.createRef();
-                                        hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
                                         return (
                                             <div key={idx}>
                                                 <CardHeader className="p-0 pl-2 mb-1 d-flex align-items-center">
@@ -509,7 +508,6 @@ const Products = props => {
                                                             {hub.name}
                                                         </Button>
                                                         <span
-                                                            ref={hubStatusRef}
                                                             className={hub.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
                                                         ></span>
                                                     </CardTitle>
@@ -569,18 +567,15 @@ const Products = props => {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                                                            const deviceStatusRef = React.createRef();
-                                                            deviceStatusRefs.push({ref: deviceStatusRef, sn: device.sn_number});
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
                                                                         <Button
                                                                             className="d-flex align-items-center"
-                                                                            onClick={() => onShowDeviceDataClick(device.name, device.sn_number)}
+                                                                            onClick={e => onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number)}
                                                                         >
                                                                             {device.name}
                                                                             <span
-                                                                                ref={deviceStatusRef}
                                                                                 className={device.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
                                                                             ></span>
                                                                         </Button>
@@ -616,26 +611,21 @@ const Products = props => {
 {/* ********************************************************* MONITOR ********************************************************* */}
                     <Col className="px-3" lg="7">
                         <Col className="p-3">
-                            {/* <h3 className="text-center">kitchen</h3> */}
-                            {/* //{{title: "temperatue", data:{Temperature: "21", Humidity: "61%" }} */}
-                            <ReactTable data={{title: state.deviceTitle, data: state.realTimeData}} />
-                            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
-                            {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" /> */}
-                            <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
-                            <FormGroup>
-                                <Label for="rangeInput">Range</Label>
-                                <Input
-                                    type="range"
-                                    id="rangeInput"
-                                    name="rangeInput"
-                                    min="0"
-                                    max="100"
-                                    // onInput="this.output.amount.value=this.value"
-                                />
-                                <output name="amount" id="amount" htmlFor="rangeInput">
-                                    0
-                                </output>
-                            </FormGroup>
+                            {state.showDeviceType === '' && (
+                                <MonitorAll hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            )}
+                            {state.showDeviceType === 1 && (
+                                <MonitorSoil hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            )}
+                            {state.showDeviceType === 2 && (
+                                <MonitorWater hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            )}
+                            {state.showDeviceType === 3 && (
+                                <MonitorTempHum hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            )}
+                            {state.showDeviceType === 4 && (
+                                <MonitorLight hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            )}
                         </Col>
                     </Col>
                 </Row>
