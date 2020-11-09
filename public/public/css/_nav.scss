@@ -2,7 +2,7 @@
 .navbar-toggler {
     padding-right: 0 !important;
     & .menu-icon {
-        width: 30px;
+        width: 2rem;
         position: relative;
         display: flex;
         justify-content: space-between;
@@ -27,11 +27,13 @@
                     transition: width 0.3s;
                 }
                 &::before {
-                    top: ($border / 2);
+                    top: 50%;
+                    transform: translateY(-50%);
                     right: ($font-size-5 / 4);
                 }
                 &::after {
-                    top: ($border / 2);
+                    top: 50%;
+                    transform: translateY(-50%);
                     left: ($font-size-5 / 4);
                 }
             }

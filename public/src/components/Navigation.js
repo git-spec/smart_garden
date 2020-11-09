@@ -12,9 +12,12 @@ import {
 } from 'reactstrap';
 // import useViewport from '../services/useViewport';
 
+/* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
+
 /* *********************************************************** REFERENCES ********************************************************* */
     const toggleNavbarRef = React.createRef();
+    const toggleMenuIconRef = React.createRef();
 
 /* *********************************************************** STATES ********************************************************* */
 const initialState = {
@@ -25,6 +28,7 @@ const initialState = {
 /* *********************************************************** TOGGLES ********************************************************* */
 const toggleNavbar = () => {
         toggleNavbarRef.current.classList.toggle('active');
+        toggleMenuIconRef.current.classList.toggle('open');
         setState({...state, collapsed: !state.collapsed});
     };
 
@@ -95,8 +99,8 @@ return (
 {/* *********************************************************** ACCOUNT ********************************************************* */}
                 <NavLink href="./login"><h4 className="m-0"><i className="far fa-user-circle"></i></h4></NavLink>
                 {/* navbar toggle for devices smaller than 576px */}
-                <NavbarToggler className="d-block" onClick={toggleNavbar}>
-                    <div className="menu-icon"><span></span><span></span><span></span></div>
+                <NavbarToggler className="d-block p-0 ml-2" onClick={toggleNavbar}>
+                    <div ref={toggleMenuIconRef} className="menu-icon"><span></span><span></span><span></span></div>
                 </NavbarToggler>
 {/* *********************************************************** SIDEBAR ********************************************************* */}
                 <div ref={toggleNavbarRef} className="sidebar">
