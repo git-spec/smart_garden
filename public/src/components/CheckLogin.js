@@ -7,12 +7,9 @@ import {connect} from 'react-redux';
 import {setUserAction} from '../actions';
 // services
 import {checkLoginPost} from '../services/api';
-
 const CheckLogin = props => {
-
     const {setUserAction} = props;
     const history = useHistory();
-
     useEffect(() => {
         checkLoginPost().then(data => {
             if (data === 10) {

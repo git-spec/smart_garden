@@ -19,9 +19,9 @@ import {
     CardBody,
     Card,
     CardHeader,
+    Label,
     CardTitle,
-    CardSubtitle,
-    CardText
+    CardSubtitle
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
@@ -52,6 +52,7 @@ const Products = props => {
     const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
     const openHubIconRefs = [];
+    const rangeStatusRefs = [];
 
 /* ********************************************************* STATE ********************************************************* */
     const initialState = {
@@ -76,7 +77,13 @@ const Products = props => {
         shownHub: '',
         shownDevice: '',
         shownDeviceType: '',
-        shownDeviceSn: ''
+        shownDeviceSn: '',
+        // range
+        feed: [],
+        inputRange: null,
+        inputRangeMax: "100",
+        graphHeightMax: 160,
+        graphHeightMin: 20
     };
     const [state, setState] = useState(initialState);
 
@@ -235,25 +242,61 @@ const Products = props => {
     };
 
     const toggleAddHub = e => {
-        // toggle plus & minus button
-        addHubIconRef.current.classList.toggle('plus');
-        addHubIconRef.current.classList.toggle('minus');
+        e.preventDefault();
+        // toggle plus hidden
+        addHubIconRef.current.classList.add('hidden');
         setState({
             ...state,
             collapseAddHub: !state.collapseAddHub
         });
     };
 
+    const toggleDeleteHub = e => {
+        e.preventDefault();
+        // toggle plus visible
+        addHubIconRef.current.classList.toggle('show');
+        addHubIconRef.current.classList.toggle('hidden');
+        setState({
+            ...state,
+            collapseAddHub: !state.collapseAddHub
+        });
+    }
+
     const toggleAddDevice = (e, idx) => {
         e.preventDefault();
-        // toggle plus & minus button
-        addDeviceIconRefs[idx].current.classList.toggle('plus');
-        addDeviceIconRefs[idx].current.classList.toggle('minus');
+        // toggle plus hidden
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,
             collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
-    };
+    }
+
+    const toggleDeleteDevice = (e, idx) => {
+        e.preventDefault();
+        // toggle plus visible
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
+        setState({
+            ...state,
+            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
+        });
+    }
+
+/* ******************************************************** FUNCTIONS ********************************************************* */
+    const onBtnInputRange = (e, output) => {
+        e.preventDefault();
+        // output of current value
+        output.current.innerText = e.target.value;
+        setState({
+            ...state,
+            inputRange: e.target.value
+        });
+        // send current propperties to css
+        output.current.style.setProperty('--thumb-input', e.target.value);
+        output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
+    }
 
 /* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
@@ -471,7 +514,15 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                             </CardHeader>
 {/* ********************************************************* ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
-                                <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                    <CardSubtitle>
+                                        <Button
+                                            className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
+                                            onClick={toggleDeleteHub}
+                                        >
+                                            <span></span><span></span>
+                                        </Button>
+                                    </CardSubtitle>
                                     <CardTitle className="flex-grow-1 m-0">
                                         <Input
                                             className="badge-pill bg-transparent py-0 mb-3"
@@ -480,7 +531,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                             value={state.hubNum}
                                         />
                                         <Input
-                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            className="badge-pill bg-transparent py-0"
                                             placeholder="Enter a name for your hub"
                                             onChange={e => setState({...state, hubName: e.target.value})}
                                             value={state.hubName}
@@ -544,7 +595,15 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
 {/* ********************************************************* ADD DEVICE ********************************************************* */}
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseAddDevice === idx}>
-                                                        <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                                        <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                                            <CardSubtitle className="p-0">
+                                                                <Button
+                                                                    className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
+                                                                    onClick={e => toggleDeleteDevice(e, idx)}
+                                                                >
+                                                                    <span></span><span></span>
+                                                                </Button>
+                                                            </CardSubtitle>
                                                             <CardTitle className="flex-grow-1 m-0">
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0 mb-3"
@@ -553,13 +612,13 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                                     value={state.deviceNum}
                                                                 />
                                                                 <Input
-                                                                    className="badge-pill bg-transparent py-0 mb-3"
+                                                                    className="badge-pill bg-transparent py-0"
                                                                     placeholder="Enter a name for your device"
                                                                     onChange={e => setState({...state, deviceName: e.target.value})}
                                                                     value={state.deviceName}
                                                                 />
                                                             </CardTitle>
-                                                            <CardSubtitle>
+                                                            <CardSubtitle className="p-0">
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
                                                                     onClick={e => onAddDeviceBtnClick(e, hub.id)}
@@ -574,6 +633,10 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                                            const rangeStatusMinRef = React.createRef();
+                                                            const rangeStatusMaxRef = React.createRef();
+                                                            rangeStatusRefs.push({ref: rangeStatusMinRef, sn: device.sn_number});
+                                                            rangeStatusRefs.push({ref: rangeStatusMaxRef, sn: device.sn_number});
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
@@ -596,13 +659,53 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                                     <CardSubtitle>
                                                                         {device.device_name}
                                                                     </CardSubtitle>
-                                                                    <CardText className="d-flex align-items-center">
-                                                                        <label className="switch">
-                                                                            <input type="checkbox" />
-                                                                            <span className="slider round"></span>
-                                                                        </label>
-                                                                        <span className="ml-3">ON / OFF</span>
-                                                                    </CardText>
+                                                                    <CardSubtitle className="mt-2">
+                                                                        <div className="d-flex align-items-center">
+                                                                            <label className="switch">
+                                                                                <input type="checkbox" />
+                                                                                <span className="slider round"></span>
+                                                                            </label>
+                                                                            <span className="ml-3">OFF / ON</span>
+                                                                        </div>
+                                                                        <div className="range mt-2 min">
+                                                                            <Label for="rangeInput">min.</Label>
+                                                                            <output ref={rangeStatusMinRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <div>
+                                                                                <Input
+                                                                                    type="range"
+                                                                                    id="rangeInput"
+                                                                                    name="rangeInput"
+                                                                                    min="0"
+                                                                                    max={state.inputRangeMax}
+                                                                                    defaultValue="0"
+                                                                                    // onInput= {function (e) {e.preventDefault()
+                                                                                    //     this.output.amount.value=this.value}}
+                                                                                    // onInput={amount.value = parseInt(this.value)}
+                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMinRef)}
+                                                                                />
+                                                                            </div>
+                                                                            <output>{state.inputRangeMax}</output>
+                                                                        </div>
+                                                                        <div className="range mt-2 max">
+                                                                            <Label for="rangeInput">max.</Label>
+                                                                            <output ref={rangeStatusMaxRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <div>
+                                                                                <Input
+                                                                                    type="range"
+                                                                                    id="rangeInput"
+                                                                                    name="rangeInput"
+                                                                                    min="0"
+                                                                                    max={state.inputRangeMax}
+                                                                                    defaultValue="0"
+                                                                                    // onInput= {function (e) {e.preventDefault()
+                                                                                    //     this.output.amount.value=this.value}}
+                                                                                    // onInput={amount.value = parseInt(this.value)}
+                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMaxRef)}
+                                                                                />
+                                                                            </div>
+                                                                            <output>{state.inputRangeMax}</output>
+                                                                        </div>
+                                                                    </CardSubtitle>
                                                                 </CardHeader>
                                                             );
                                                         })}
@@ -615,8 +718,8 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                             </CardBody>
                         </Card>
                     </Col>
-{/* ********************************************************* MONITOR ********************************************************* */}
-                    <Col className="px-3" lg="7">
+{/* ******************************************************** MONITOR ********************************************************* */}
+                    <Col className="px-3 mt-md-0 mt-3" lg="7">
                         <Col className="p-3">
                             {state.shownDeviceType === '' && (
                                 <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
@@ -636,7 +739,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                         </Col>
                     </Col>
                 </Row>
-            </Container>
+           </Container>
         );
     } else {
         return <div>Loading...</div>;

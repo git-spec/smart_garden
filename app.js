@@ -36,7 +36,13 @@ const {
     verifyUser, 
     confirmVerifiedUser, 
     sendResetLink, 
-    resetPass
+    resetPass,
+    getAllUsers,
+    getUser,
+    changeVerificationPost,
+    tellUserAboutAccountState,
+    deleteUser,
+    changeUserRole,
 } = require('./modules/usersAuth');
 
 // user router
@@ -82,6 +88,7 @@ app.post('/edit', (req, res) => {
     // 2 data error
     // 3 user exists
     // 4 server error
+    console.log(req.body);
     const id = req.body.id;
     const firstName = req.body.firstName.trim();
     const lastName = req.body.lastName.trim();
@@ -89,7 +96,7 @@ app.post('/edit', (req, res) => {
     const city = req.body.city.trim();
     const password = req.body.password;
     const repassword = req.body.repassword;
-    if (id && firstName && lastName && userName && city && password && password == repassword) {
+    if (id && firstName && lastName && userName ) {
         editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
             res.json(1);
         }).catch(error => {
@@ -114,7 +121,7 @@ app.post('/login', (req, res) => {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
             req.session.user = user;
             // res.json({result: 1, id: user.id})
-            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname});
+            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role});
         }).catch(error => {
             if (error == 3) {
                 // res.json({result: 3})
@@ -202,6 +209,83 @@ app.post('/checklogin', (req, res) => {
     }
 });
 
+
+// get All Users
+app.post('/getAllUsers', (req, res) => {
+    // 1 sending success
+    // 2 no users founded
+    getAllUsers().then((users) => {
+        res.json(users);
+    }).catch(err => {
+        if (err == 2) {
+            res.json(2);
+        } else {
+            res.json(err);
+        }
+    });
+});
+
+// get User for Edit page 
+app.post('/getuser', (req, res) => {
+    // 1 sending success
+    // 2 no users founded
+    getUser(req.body.id).then(user => {
+        res.json(user);
+    }).catch(err => {
+        if (err == 2) {
+            res.json(2);
+        } else {
+            res.json(err);
+        }
+    });
+});
+
+// change Verification for a user
+app.post('/changeVerificationPost', (req, res) => {
+    if (req.body.verified) {
+        changeVerificationPost(req.body.id).then(() => {
+            // confirm the user with email 
+            // 1 email successfully sent
+            // 2 email NOT sent
+            tellUserAboutAccountState(req.body.email).then(() => {
+                // tell the user that his account is blocked and he have to speak with the admin
+                res.json(1);
+            }).catch(err => {
+                res.json(2);
+            });
+        }).catch(err => {
+            res.json(2)
+        });
+    }else{
+        changeVerificationPost(req.body.id).then(() => {
+           res.json(1)
+        }).catch(err => {
+            res.json(2)
+        });
+    }
+});
+
+// Delete user Account 
+app.post('/deleteUserPost', (req, res) => {
+    // 1 mean deleting is success
+    // 2 mean deleting is not success
+    deleteUser(req.body.id).then(() => {
+        res.json(1)
+    }).catch(err => {
+        res.json(2)
+    });
+});
+
+
+//Change user Role 
+app.post('/changeUserRolePost', (req, res) => {
+    // console.log('body id is '+req.body.id ,'body role is '+req.body.role );
+    changeUserRole(req.body.id, req.body.role).then(() => {
+        res.json(1)
+    }).catch(err => {
+        res.json(2)
+    });
+});
 /* ********************************************************* USE ROUTES ********************************************************* */
 app.use('/user', userRoutes);
 

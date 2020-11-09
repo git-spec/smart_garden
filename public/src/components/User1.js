@@ -1,81 +1,87 @@
 // export default Register;
-import React, { Fragment, useState, useEffect, useRef } from "react";
+import React, {
+    Fragment,
+    useState,
+    useEffect,
+    useRef
+} from "react";
 import {
     Container,
     Row,
     Col,
     Button,
-    Collapse,
-    Card,
-    CardBody,
+    // Collapse,
+    // Card,
+    // CardBody,
     Input,
     Form,
     Label,
     FormGroup,
 } from "reactstrap";
 import Image from "react-bootstrap/Image";
-import { getData } from "../services/getData";
-import { Link, useLocation, useHistory } from "react-router-dom";
+import {
+    Link,
+    // useLocation,
+    useHistory
+} from "react-router-dom";
 import PopUpModal from "./PopUpModal";
-import validator from "validator";
-import { editPost, getUser } from "../services/api";
+// import validator from "validator";
+import { editPost, getUser} from "../services/api";
 
 import { connect } from "react-redux";
 
 const User = (props) => {
-    
-    useEffect(() => {
-        getUser(props.user.id).then(user => {
-            setMyState({...myState,firstName: user.firstname, lastName: user.lastname, userName: user.username, city: user.city})
-        }).catch(err=>{
-            console.log(err);
-        })
-    },[]);
-    const imagesFileInpRef = useRef();
+    // const location = useLocation()
+    const history = useHistory()
 
-
-    const user = { ...props.user };
-    // const firstName = user.firstName
-    // const lastName = user.lastName
-    // const userName = user.userName
-    // console.log(user.firstName);
-    // console.log('location.state '+location.state);
-    // if(!location.state){
-    //     history.push('/login')
-    // }
     const initialState = {
-        firstName: '',
-        lastName: '',
-        userName: '',
-        city: "",
-        password: "",
-        repassword: "",
+       
         errorComponent: null,
         showErrorModal: false,
         resultElement: null,
     };
+  
+    const firstNameRef = useRef()
+
+
+
     const [myState, setMyState] = useState(initialState);
-    // setMyState({...myState,firstName: user.firstName, lastName: user.lastName, userName: user.userName})
-    // if (myState.firstName.trim() === "") {
-    //     setMyState({...myState,firstName: user.firstName })
+    if(props.user){
+    // console.log(props.user);
+    
+    // console.log('location.state '+location.state);
+    // if(!location.state){
+    //     history.push('/login')
     // }
-    // if (myState.lastName.trim() === "") {
-    //     setMyState({...myState,lastName: user.lastName })
-    // }
-    // if (myState.userName.trim() === "") {
-    //     setMyState({...myState,userName: user.userName })
-    // }
+    console.log(firstNameRef.current.props.value); 
+    
+
+
+    
 
     const onEditBtnClick = (e) => {
-        console.log(initialState);
         e.preventDefault();
         if (
+            myState.firstName.trim() === "" ||
+            myState.lastName.trim() === "" ||
+            myState.userName.trim() === "" ||
+            myState.password === "" ||
             myState.password !== myState.repassword
         ) {
             const errorsElement = (
-
                 <ul>
-                    <br/>
+                    {myState.firstName.trim() === "" ? (
+                        <li>Please Enter your first name</li>
+                    ) : null}
+                    {myState.lastName.trim() === "" ? (
+                        <li>Please Enter your last name</li>
+                    ) : null}
+                    {myState.userName.trim() === "" ? (
+                        <li>user name should not be empty</li>
+                    ) : null}
+                    {myState.password === "" ? (
+                        <li>password should not be empty</li>
+                    ) : null}
                     {myState.password !== myState.repassword ? (
                         <li>password is not matching the repassword</li>
                     ) : null}
@@ -87,17 +93,15 @@ const User = (props) => {
                 errorComponent: errorsElement,
                 showErrorModal: true,
             });
-            } else {
+        } else {
             editPost(
-                user.id,
+                props.user.id,
                 myState.firstName,
                 myState.lastName,
                 myState.userName,
                 myState.City,
                 myState.password,
                 myState.repassword
-                // imagesFileInpRef.current.files.length ?
-                // imagesFileInpRef.current.files : null
             )
                 .then((data) => {
                     let badgeClass = "";
@@ -133,20 +137,10 @@ const User = (props) => {
                         resultElement: badge,
                     });
                 })
-                .catch((err) => {
-                    console.log(err);
-                    console.log({
-                        a: user.id,
-                        b: myState.firstName,
-                        c: myState.lastName,
-                        d: myState.userName,
-                        e: myState.City,
-                        f: myState.password,
-                        g: myState.repassword,
-                    });
+                .catch((error) => {
                     const badge = (
                         <div className="alert alert-danger" role="alert">
-                            can not send the data to server
+                            can not send the registration data to server
                         </div>
                     );
                     setMyState({
@@ -163,6 +157,7 @@ const User = (props) => {
             showErrorModal: false,
         });
     };
+    // console.log(state.feed); fluid public/src/images/FB_IMG_1592363046509.png
     return (
         <Fragment>
             <PopUpModal
@@ -179,7 +174,7 @@ const User = (props) => {
                     <Col xs={6} md={9}>
                         <br />
                         <h1 className="text-trans mb-4">
-                            Hello {user.firstName + " " + user.lastName}
+                            Hello {props.user.firstName + " " + props.user.lastName}
                         </h1>
                         <h3 className="text-trans mb-4">
                             {" "}
@@ -190,17 +185,20 @@ const User = (props) => {
                             Here you can easily edit your Profile
                         </p>
                     </Col>
+
                     <Col className="float-right" xs={6} md={3}>
                         <Image
+                            // src={require("../../public/imgs/1.jpg")}
                             src={require("./1.jpg")}
                             height={"150px"}
                             width={"150px"}
                             roundedCircle
+                            alt={<Link to="/register">Add Your Photo</Link>}
                         />
                         <br />
                         <br />
                         <Input
-                            ref={imagesFileInpRef}
+                            // ref={imagesFileInpRef}
                             id="exampleFormControlFile1"
                             type="file"
                             className="form-control-file"
@@ -223,15 +221,9 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill text-trans bg-transparent"
                                     type="text"
-                                    placeholder={myState.firstName}
                                     required
-                                    onChange={(e) => {
-                                        setMyState({
-                                            ...myState,
-                                            firstName: e.target.value,
-                                        });
-                                    }}
-                                    value={myState.firstName}
+                                    ref={firstNameRef}
+                                    value={props.user.firstName}
                                 />
                             </FormGroup>
                         </Col>
@@ -243,7 +235,6 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="text"
-                                    placeholder={myState.lastName}
                                     required
                                     onChange={(e) => {
                                         setMyState({
@@ -251,7 +242,7 @@ const User = (props) => {
                                             lastName: e.target.value,
                                         });
                                     }}
-                                    value={myState.lastName}
+                                    value={props.user.lastName}
                                 />
                             </FormGroup>
                         </Col>
@@ -263,7 +254,7 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="city"
-                                    placeholder={myState.city?myState.city:"Enter Your City"}
+                                    placeholder="Enter Your City"
                                     required
                                     onChange={(e) => {
                                         setMyState({
@@ -271,7 +262,7 @@ const User = (props) => {
                                             City: e.target.value,
                                         });
                                     }}
-                                    value={myState.City}
+                                    value={props.user.City}
                                 />
                             </FormGroup>
                         </Col>
@@ -283,7 +274,6 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="text"
-                                    placeholder={myState.userName}
                                     required
                                     onChange={(e) => {
                                         setMyState({
@@ -291,7 +281,7 @@ const User = (props) => {
                                             userName: e.target.value,
                                         });
                                     }}
-                                    value={myState.userName}
+                                    value={props.user.userName}
                                 />
                             </FormGroup>
                         </Col>
@@ -303,7 +293,7 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="password"
-                                    placeholder="Write a New Password if you wont to change it"
+                                    placeholder="Write a New Password"
                                     required
                                     onChange={(e) => {
                                         setMyState({
@@ -311,7 +301,6 @@ const User = (props) => {
                                             password: e.target.value,
                                         });
                                     }}
-                                    value={myState.password}
                                 />
                             </FormGroup>
                         </Col>
@@ -348,6 +337,9 @@ const User = (props) => {
             </Container>
         </Fragment>
     );
+                                }else{
+                                    return(<div>Loading...</div>)
+                                }
 };
 
 const mapStateToProps = (state) => {

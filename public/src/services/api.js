@@ -220,3 +220,138 @@ export const logoutPost = () => {
         });
     });
 };
+
+export const getAllUsers = () => {
+    return new Promise((resolve, reject) => {
+        fetch('/getAllUsers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(new Error('Can not send data to server. Response number: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+};
+
+export const getUser = (id) => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            id,
+        };
+        fetch('/getUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(new Error('Can not send data to server. Response number: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+};
+
+
+export const changeVerificationPost = (id, email, verified)  => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            id,
+            email,
+            verified
+        };
+        fetch('/changeVerificationPost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(new Error('can not get the data, response number is: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+};
+
+export const deleteUserPost = (id)  => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            id,
+        };
+        fetch('/deleteUserPost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(new Error('can not get the data, response number is: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+};
+
+export const changeUserRolePost = (id, role)  => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            id,
+            role
+        };
+        fetch('/changeUserRolePost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(new Error('can not get the data, response number is: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+};
