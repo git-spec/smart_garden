@@ -1,9 +1,9 @@
 // export default Register;
 import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
-import Image from "react-bootstrap/Image";
+// import Image from "react-bootstrap/Image";
 import {
-    Link,
+    // Link,
     // useLocation,
     // useHistory
 } from "react-router-dom";
@@ -50,6 +50,7 @@ const Admin = (props) => {
             .catch((err) => {
                 console.log(err);
             });
+    // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
@@ -60,7 +61,7 @@ const Admin = (props) => {
             .then((data) => {
                 // changing user array in the component state
                 let newUsers = myState.users.map((user) => {
-                    if (user.id == userID) {
+                    if (user.id === userID) {
                         user.verified = !user.verified;
                     }
                     return user;
@@ -82,7 +83,7 @@ const Admin = (props) => {
         const deleteUser = (userID) => {
             deleteUserPost(userID)
                 .then((data) => {
-                    if (data == 1) {
+                    if (data === 1) {
                         myState.users.splice(idx, 1);
                         // changing user array in the component state
                         setMyState({
@@ -120,7 +121,7 @@ const Admin = (props) => {
             .then((data) => {
                 // changing user array in the component state
                 let newUsers = myState.users.map((user) => {
-                    if (user.id == userID) {
+                    if (user.id === userID) {
                         user.role = role;
                     }
                     return user;

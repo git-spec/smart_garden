@@ -30,10 +30,13 @@ function Navigation(props) {
     const toggleMenuIconRef = React.createRef();
 
 /* *********************************************************** STATES ********************************************************* */
-const initialState = {
+    const initialState = {
         collapsed: true
     };
     const [state, setState] = useState(initialState);
+
+/* *********************************************************** LOGOUT ********************************************************* */
+    const history = useHistory();
 
     const logoutBtnClick = e => {
         e.preventDefault();
