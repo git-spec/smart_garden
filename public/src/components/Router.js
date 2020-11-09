@@ -17,6 +17,10 @@ import Reset from './Reset'
 import ErrorPage from './ErrorPage';
 import Products from './Products';
 import User from './User';
+import Admin from './Admin';
+import SubAdmin from './SubAdmin';
+
+
 
 const Router = props => {
 
@@ -41,6 +45,8 @@ const Router = props => {
                 <Route path="/verify/:email" exact component={Verification} />
                 <Route path='/password' exact component={Password} />
                 <Route path='/reset/:id/:email' exact component={Reset} />
+                <Route path="/admin/dashboard" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
+                <Route path="/subadmin/dashboard" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
                 <Route path="/user/profile" exact component={() => <CheckLogin><User /></CheckLogin>} />
                 <Route path="/user/dashboard" exact component={() => <CheckLogin><Products /></CheckLogin>} />
                 <Route path="/" component={ErrorPage} />

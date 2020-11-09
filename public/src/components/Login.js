@@ -82,7 +82,13 @@ const Login = props => {
                         break;
                     default:
                         setUserAction(data);
-                        history.push('/user/dashboard');
+                        if (data.role === 'admin') {
+                            history.push('/admin/dashboard');
+                        } else if(data.role === 'subadmin'){
+                            history.push('/subadmin/dashboard');
+                        }else {
+                            history.push('/user/dashboard');
+                        }
                         break;
                 }
             }).catch(error => {
