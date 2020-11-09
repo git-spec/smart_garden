@@ -190,7 +190,6 @@ const User = (props) => {
                             Here you can easily edit your Profile
                         </p>
                     </Col>
-
                     <Col className="float-right" xs={6} md={3}>
                         <Image
                             src={require("./1.jpg")}

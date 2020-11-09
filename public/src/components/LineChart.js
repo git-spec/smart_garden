@@ -11,15 +11,25 @@ class LineChart extends React.Component {
       super(props);
       this.chartRef = React.createRef();
     }
-  
+    // get timestamp for labels and dataset from props
     componentDidUpdate() {
       this.myChart.data.labels = this.props.data.map(d => d.time);
       this.myChart.data.datasets[0].data = this.props.data.map(d => d.value);
       this.myChart.update();
     }
-  
+    
     componentDidMount() {
-      this.myChart = new Chart(this.chartRef.current, {
+      // get canvas
+      const myChartRef = this.chartRef.current.getContext("2d");
+      // const {height: graphHeight} = myChartRef.canvas;
+      // set gradient line
+      let gradientLine = myChartRef.createLinearGradient(0, this.props.min, 0, this.props.max);
+      gradientLine.addColorStop(0, "rgb(255, 0, 0)");
+      gradientLine.addColorStop(.2, "rgb(0, 168, 230)");
+      gradientLine.addColorStop(.8, "rgb(0, 168, 230)");
+      gradientLine.addColorStop(1, "rgb(255, 0, 0)");
+      // create chart
+      this.myChart = new Chart(myChartRef, {
         type: 'line',
         options: {
           scales: {
@@ -27,14 +37,15 @@ class LineChart extends React.Component {
               {
                 ticks: {
                   min: 0,
-                  padding: 10
+                  padding: 10,
+                  fontSize: 12
                 },
                 type: 'time',
                 time: {
                   unit: 'week'
                 },
                 gridLines: {
-                  color: 'rgba(255, 255, 255, .5)'
+                  color: 'rgba(255, 255, 255, .3)'
                 },
                 drawBorder: true,
                 borderWidth: .5
@@ -44,10 +55,11 @@ class LineChart extends React.Component {
               {
                 ticks: {
                   min: 0,
-                  padding: 10
+                  padding: 10,
+                  fontSize: 12
                 },
                 gridLines: {
-                  color: 'rgba(255, 255, 255, .5)'
+                  color: 'rgba(255, 255, 255, .3)'
                 },
                 borderWidth: .5
               }
@@ -62,17 +74,32 @@ class LineChart extends React.Component {
             fill: 'none',
             backgroundColor: 0,
             pointRadius: 2,
-            borderColor: this.props.color,
+            borderColor: gradientLine,
             borderWidth: 1,
             lineTension: 0
           }]
+        },
+        plugins: {
+          indexlabels: {
+            fontSize: function(context) {
+              var width = context.chart.width;
+              var size = Math.round(width / 32);
+               return {
+                 size: size
+              };
+            }
+          }
         }
       });
     }
   
     render() {
-      return <canvas ref={this.chartRef} />;
+      return(
+        <div className="lineGraph">
+          <canvas ref={this.chartRef} />
+        </div>
+      );
     }
-  }
+}
 
   export default LineChart;
