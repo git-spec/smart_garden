@@ -37,7 +37,8 @@ class LineChart extends React.Component {
               {
                 ticks: {
                   min: 0,
-                  padding: 10
+                  padding: 10,
+                  fontSize: 12
                 },
                 type: 'time',
                 time: {
@@ -54,7 +55,8 @@ class LineChart extends React.Component {
               {
                 ticks: {
                   min: 0,
-                  padding: 10
+                  padding: 10,
+                  fontSize: 12
                 },
                 gridLines: {
                   color: 'rgba(255, 255, 255, .3)'
@@ -76,6 +78,17 @@ class LineChart extends React.Component {
             borderWidth: 1,
             lineTension: 0
           }]
+        },
+        plugins: {
+          indexlabels: {
+            fontSize: function(context) {
+              var width = context.chart.width;
+              var size = Math.round(width / 32);
+               return {
+                 size: size
+              };
+            }
+          }
         }
       });
     }

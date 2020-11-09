@@ -20,9 +20,9 @@ import {
 import ConfirmModal from './ConfirmModal';
 import ReactTable from './Table';
 import LineChart from './LineChart';
-import LineChartMultiple from './LineChartMultiple';
-import BarChartHorizontal from './BarChartHorizontal';
-import BarChartHorizontalMixed from './BarChartHorizontalMixed';
+// import LineChartMultiple from './LineChartMultiple';
+// import BarChartHorizontal from './BarChartHorizontal';
+// import BarChartHorizontalMixed from './BarChartHorizontalMixed';
 // services
 import {
     checkHubNumPost,
@@ -657,9 +657,9 @@ if (state.hubs && state.devices) {
                             <h3 className="text-center">kitchen</h3>
                             <ReactTable />
                             <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" max={state.graphHeightMax} min={state.graphHeightMin} />
-                            <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
+                            {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
                             <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
-                            <BarChartHorizontalMixed data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
+                            <BarChartHorizontalMixed data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" /> */}
                             {/* <Range /> */}
                         </Col>
                     </Col>

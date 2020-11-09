@@ -26,7 +26,7 @@ $input-h: 2rem;
   height: $track-h;
   border-radius: $track-h;
   // box-shadow: inset 0 0 0 .25em $input-c;
-  // background: linear-gradient(90deg, $color-3, $color-danger);
+  // background: linear-gradient(90deg, $color-6, $color-danger);
   background-color: transparent;
 }
 
@@ -67,7 +67,7 @@ $input-h: 2rem;
     padding: 0 $input-pad;
     width: calc(#{$input-w} - #{$thumb-size} / 2);
     height: $border * 4;
-    background: linear-gradient(90deg, $color-3, $color-danger);
+    background: linear-gradient(90deg, $color-6, $color-danger);
     border: $border * 2.5 solid $color-light;
     &::before {
       content: "";
@@ -77,7 +77,7 @@ $input-h: 2rem;
       padding: 0 $input-pad;
       width: calc(#{$input-w} - #{$thumb-size});
       height: $border * 4;
-      background: linear-gradient(90deg, $color-3, $color-danger);
+      background: linear-gradient(90deg, $color-6, $color-danger);
       border: $border * 2.5 solid $color-light;
     }
     // left point
@@ -88,7 +88,7 @@ $input-h: 2rem;
       position: absolute;
       top: 50%;
       left: 0;
-      background-color: $color-3;
+      background-color: $color-6;
       border: $border * 2.5 solid $color-light;
       // padding: 0 $input-pad;
       border-radius: $thumb-size;
@@ -113,7 +113,7 @@ $input-h: 2rem;
   //   padding: 0 $input-pad;
   //   width: $input-w - $thumb-size;
   //   height: $border * 4;
-  //   background: linear-gradient(90deg, $color-3, $color-danger);
+  //   background: linear-gradient(90deg, $color-6, $color-danger);
   //   border: $border * 2.5 solid $color-light;
   // }
   // &::after {
@@ -124,14 +124,14 @@ $input-h: 2rem;
   //   padding: 0 $input-pad;
   //   width: $input-w - $thumb-size;
   //   height: $border * 2;
-  //   background: linear-gradient(90deg, $color-3, $color-danger);
+  //   background: linear-gradient(90deg, $color-6, $color-danger);
   // // }
   // &::after {
   //   content: '';
   //   display: inline-block;
   //   width: $thumb-size;
   //   height: $thumb-size;
-  //   background-color: $color-3;
+  //   background-color: $color-6;
   //   border-radius: $thumb-size;
   //   border: $border * 2.5 solid $color-light;
   //   position: absolute;
@@ -210,7 +210,7 @@ input[type='range'] {
     padding: 0 $input-pad;
     width: calc(#{$input-w} - #{$thumb-size});
     height: $border * 2;
-    background: linear-gradient(90deg, $color-3, $color-danger);
+    background: linear-gradient(90deg, $color-6, $color-danger);
   }
   &::after {
     content: '';

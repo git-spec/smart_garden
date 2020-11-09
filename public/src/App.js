@@ -1,14 +1,15 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import Navigation from './components/Navigation';
 import Router from './components/Router';
+import ViewportProvider from './components/ViewportProvider';
 
 function App() {
   return (
-    <Fragment>
+    <ViewportProvider>
       <div className="cover"></div>
       <Navigation />
       <Router />
-    </Fragment>
+    </ViewportProvider>
   );
 }
 
