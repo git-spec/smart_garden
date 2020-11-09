@@ -1,5 +1,11 @@
-/* *********************************************************** IMPORTS ********************************************************* */
-import React, {useState} from 'react';
+import React, {useState, Fragment} from 'react';
+import { connect } from "react-redux";
+import {
+    Link, 
+    // useLocation, 
+    useHistory
+} from 'react-router-dom';
+
 import {
     Container,
     Collapse,
@@ -10,7 +16,8 @@ import {
     NavItem,
     NavLink
 } from 'reactstrap';
-// import useViewport from '../services/useViewport';
+
+import {logoutPost} from '../services/api'
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
@@ -152,4 +159,7 @@ return (
     )
 }
 
-export default Navigation;
+const mapStateToProps = state => {
+    return {user: state.user};
+};
+export default connect(mapStateToProps)(Navigation);

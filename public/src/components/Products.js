@@ -1,7 +1,14 @@
-/* ******************************************************** IMPORT ********************************************************* */
+/* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {useState, useEffect} from 'react';
+// redux
+import {connect} from 'react-redux';
+// import {setUserAction} from '../actions';
+// socket
 import io from 'socket.io-client';
+// router dom
 // import {Link} from 'react-router-dom';
+// reactstrap
 import {
     Row,
     Col,
@@ -36,10 +43,10 @@ import {
 } from '../services/productsApi';
 import {getData} from '../services/getData';
 
-/* ******************************************************** COMPONENT ********************************************************* */
+/* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
   
-/* ******************************************************** REFFERENCES ********************************************************* */
+/* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
@@ -48,7 +55,7 @@ const Products = props => {
     const deviceStatusRefs = [];
     const rangeStatusRefs = [];
 
-/* ******************************************************** STATE ********************************************************* */
+/* ********************************************************* STATE ********************************************************* */
     const initialState = {
         hubs: [],
         devices: [],
@@ -71,7 +78,68 @@ const Products = props => {
     };
     const [state, setState] = useState(initialState);
 
-/* ******************************************************** USE EFFECT ********************************************************* */
+    const data = getData();
+
+/* ********************************************************* SOCKET.IO ********************************************************* */
+
+    // useEffect(() => {
+
+        const socket = io('http://localhost:5000');
+
+        socket.on('connect', () => {
+            console.log('connected');
+            console.log(props.user);
+            socket.emit('user_connect', '3');
+        });
+
+        socket.on('hub_connect', sn => {
+            console.log(hubStatusRefs);
+            // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
+            // if (idx !== -1) {
+            //     hubStatusRefs[idx].ref.current.classList.remove('d-none');
+            // }
+            console.log('hub connected', sn);
+            // if (hubStatusRefs[0]) {
+            //     if (hubStatusRefs[0].current) {
+            //     }
+            // }
+        });
+
+        socket.on('hub_disconnect', sn => {
+            console.log(hubStatusRefs);
+            // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
+            // if (idx !== -1) {
+            //     hubStatusRefs[idx].ref.current.classList.add('d-none');
+            // }
+            console.log('hub disconnected', sn);
+        });
+
+        socket.on('device_connect', sn => {
+            console.log(deviceStatusRefs);
+            // if (deviceStatusRefs.length > 0) {
+            //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
+            //     if (idx !== -1) {
+            //         deviceStatusRefs[idx].ref.current.classList.remove('d-none');
+            //     }
+            // }
+            console.log('device connected', sn);
+        });
+
+        socket.on('device_disconnect', sn => {
+            console.log(deviceStatusRefs);
+            // if (deviceStatusRefs.length > 0) {
+            //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
+            //     if (idx !== -1) {
+            //         deviceStatusRefs[idx].ref.current.classList.add('d-none');
+            //     }
+            // }
+            console.log('device disconnected', sn);
+        });
+
+    // }, []);
+
+
+/* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
         // get hubs & devices data from db at initial render
         getHubsPost().then(hubs => {
@@ -103,66 +171,7 @@ const Products = props => {
         });
     }, []);
 
-/* ******************************************************** SOCKET.IO ********************************************************* */
-
-    const socket = io('http://localhost:5000');
-
-    socket.on('connect', () => {
-        console.log('connected');
-        socket.emit('user_connect', '3');
-    });
-
-    socket.on('hub_connect', sn => {
-        // console.log(hubStatusRefs);
-        // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-        // if (idx !== -1) {
-        //     hubStatusRefs[idx].ref.current.classList.remove('text-danger');
-        //     hubStatusRefs[idx].ref.current.classList.add('text-success');
-        // }
-        console.log('hub connected', sn);
-        // if (hubStatusRefs[0]) {
-        //     if (hubStatusRefs[0].current) {
-        //         hubStatusRefs[0].current.classList.remove('text-danger');
-        //         hubStatusRefs[0].current.classList.add('text-success');
-        //         console.log('hub connected.....', sn);
-        //     }
-        // }
-    });
-
-    socket.on('hub_disconnect', sn => {
-        // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-        // if (idx !== -1) {
-        //     hubStatusRefs[idx].ref.current.classList.remove('text-success');
-        //     hubStatusRefs[idx].ref.current.classList.add('text-danger');
-        // }
-        console.log('hub disconnected', sn);
-    });
-
-    socket.on('device_connect', sn => {
-        // console.log(deviceStatusRefs);
-        // if (deviceStatusRefs.length > 0) {
-        //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-        //     if (idx !== -1) {
-        //         deviceStatusRefs[idx].ref.current.classList.remove('text-danger');
-        //         deviceStatusRefs[idx].ref.current.classList.add('text-success');
-        //     }
-        // }
-        console.log('device connected', sn);
-    });
-
-    socket.on('device_disconnect', sn => {
-        // console.log(deviceStatusRefs);
-        // if (deviceStatusRefs.length > 0) {
-        //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-        //     if (idx !== -1) {
-        //         deviceStatusRefs[idx].ref.current.classList.remove('text-success');
-        //         deviceStatusRefs[idx].ref.current.classList.add('text-danger');
-        //     }
-        // }
-        console.log('device disconnected', sn);
-    });
-
-/* ******************************************************** TOGGLES ********************************************************* */
+/* ********************************************************* TOGGLES ********************************************************* */
     const toggleHubs = e => {
         // toggle up & down button
         openHubsIconRef.current.classList.toggle('up');
@@ -248,7 +257,7 @@ const Products = props => {
         output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
     }
 
-/* ******************************************************** DELETE HUB ********************************************************* */
+/* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
         const deleteHub = hubID => {
@@ -279,7 +288,7 @@ const Products = props => {
             confirmModalDelete: () => deleteHub(hubID)
         });
     };
-/* ******************************************************** DELETE DEVICE ********************************************************* */
+/* ********************************************************* DELETE DEVICE ********************************************************* */
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
         const deleteDevice = deviceID => {
@@ -304,7 +313,7 @@ const Products = props => {
             confirmModalDelete: () => deleteDevice(deviceID)
         });
     };
-/* ******************************************************** ADD HUB ********************************************************* */
+/* ********************************************************* ADD HUB ********************************************************* */
     const onAddHubBtnClick = e => {
         e.preventDefault();
         if (state.hubName.trim() && state.hubNum.trim()) {
@@ -349,7 +358,7 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
-/* ******************************************************** ADD DEVICE ********************************************************* */
+/* ********************************************************* ADD DEVICE ********************************************************* */
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
         if (state.deviceName.trim() && state.deviceNum.trim()) {
@@ -394,14 +403,12 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
-    
-    const data = getData();
-  
-/* ******************************************************** RETURN ********************************************************* */
+      
+/* ********************************************************* RETURN ********************************************************* */
 if (state.hubs && state.devices) {
         return (
             <Container>
-{/* ******************************************************** MODAL ********************************************************* */}
+{/* ********************************************************* MODAL ********************************************************* */}
                 <ConfirmModal
                     className="bg-danger"
                     title="Confirm Deletion"
@@ -415,7 +422,7 @@ if (state.hubs && state.devices) {
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
-{/* ******************************************************** HUBS ********************************************************* */}
+{/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
                                     <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>hubs</Button>
@@ -438,7 +445,7 @@ if (state.hubs && state.devices) {
                                     </Button>
                                 </CardSubtitle>
                             </CardHeader>
-{/* ******************************************************** ADD HUB ********************************************************* */}
+{/* ********************************************************* ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
                                 <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
                                     <CardSubtitle>
@@ -475,7 +482,7 @@ if (state.hubs && state.devices) {
                             </Collapse>
                             <CardBody className="p-0">
                                 <Collapse isOpen={state.collapseHubs}>
-{/* ******************************************************** LOOP HUB ********************************************************* */}
+{/* ********************************************************* LOOP HUBS ********************************************************* */}
                                     {state.hubs.map((hub, idx) => {
                                         const openHubIconRef = React.createRef();
                                         openHubIconRefs.push(openHubIconRef);
@@ -495,7 +502,7 @@ if (state.hubs && state.devices) {
                                                         </Button>
                                                         <span 
                                                             ref={hubStatusRef}
-                                                            className="active-light mx-2">
+                                                            className="active-light mx-2 d-none">
                                                         </span>
                                                     </CardTitle>
                                                     <CardSubtitle>
@@ -521,7 +528,7 @@ if (state.hubs && state.devices) {
                                                         </Button>
                                                     </CardSubtitle>
                                                 </CardHeader>
-{/* ******************************************************** ADD DEVICE ********************************************************* */}
+{/* ********************************************************* ADD DEVICE ********************************************************* */}
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseAddDevice === idx}>
                                                         <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
@@ -564,7 +571,7 @@ if (state.hubs && state.devices) {
                                                 </CardBody>
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseHub === idx}>
-{/* ******************************************************** LOOP DEVICE ********************************************************* */}
+{/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
                                                             const deviceStatusRef = React.createRef();
                                                             const rangeStatusMinRef = React.createRef();
@@ -579,7 +586,7 @@ if (state.hubs && state.devices) {
                                                                             {device.name}
                                                                             <span 
                                                                                 ref={deviceStatusRef} 
-                                                                                className="active-light mx-2">
+                                                                                className="active-light mx-2 d-none">
                                                                             </span>
                                                                         </div>
                                                                         <Button
@@ -664,11 +671,14 @@ if (state.hubs && state.devices) {
                         </Col>
                     </Col>
                 </Row>
-            </Container>
+           </Container>
         );
     } else {
         return <div>Loading...</div>;
     }
 };
 
-export default Products;
+const mapStateToProps = state => {
+    return ({user: state.user});
+};
+export default connect(mapStateToProps)(Products);
