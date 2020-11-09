@@ -2,12 +2,6 @@ const socket = require('socket.io-client')('http://felix.local:5000');
 const Transmitter = require('./modules/transmitter');
 const {log} = require('console');
 
-const hub_info = {
-    sn_number: '0xABCDABCD71'
-};
-// list of all devices in the cloud
-let devices = [];
-
 // [
 // {
 //     id: 0,
@@ -19,6 +13,9 @@ let devices = [];
 // },....
 // ]
 
+const hub_info = {
+    sn_number: '0xABCDABCD71'
+};
 socket.on('connect', () => {
     log('connected');
     socket.emit('hub_connect', hub_info);
@@ -28,6 +25,8 @@ socket.on('connect', () => {
     }, 20 * 1000);
 });
 
+// list of all devices in the cloud
+let devices = [];
 socket.on('toDevice', receivedDevices => {
     // log(receivedDevices);
     // save received devices to devices array
@@ -69,20 +68,23 @@ radio.read(data => {
     const message = data.substr(data.indexOf('-') + 1, data.length);
     const device = devices.find(device => device.sn_number === sn);
     if (device && message) {
-        if (message.toString().replace(/\x00/gi, '') === 'yup') {
-            // this case to check if connected
-            // set the device from which data was received to connected
+        // message hi???
+        if (message.toString().replace(/\x00/gi, '') === 'yup') { 
+            // device is connected 
+            // set the device from which the data was received to connected
             devices[devices.map(device => device.sn_number).indexOf(sn)].connected = true;
-            socket.emit('device_connect', sn);
-        } else {
-            // this case the device sending data
+            // send the info back to the server
+            // ??????????????????????????????
+            // socket.emit('device_connect', sn);
+        } else { 
+            // device is sending realtime data
             log(`Message from "${sn}": ${message}`);
-            //send the data back to the server
             let str = message.replace(/\0/g, '');
             let data = [];
             str.split('|').forEach(d => {
                 data.push(d);
             });
+            // send the data back to the server
             socket.emit('realTimeData', {sn_number: sn, data: data});
         }
     }
