@@ -222,32 +222,26 @@ const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
     // log('Device Is Connected');
-    log("Someone is connected now ...."); // should kill from React
 
     socket.on('user_connect', userID => {
+
         socket.join(userID.toString());
         log(`user ${userID} is connected`);
         socket.broadcast.to(userID).emit('user_connect');
 
-        // user is online now and asks for realtime data
-        // socket.on('requestRealTimeData', realtimeData => {
-        //     log(realtimeData);
-        //     // emit to the user while he connected
-        // });
+        // incoming request for realtime data from raspberry
+        socket.on("getRealTimeData", request => {
+            log(request);
+            socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
+        });
 
         // user is not online anymore
         socket.on('disconnect', () => {
+            log('user is disconnected');
             socket.broadcast.to(userID).emit('user_disconnect');
             socket.disconnect();
-            log('user disconnected');
         });
     }); 
-
-    // incoming request for realtime data from raspberry
-    socket.on("getRealTimeData", request => {
-        log(request);
-        socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
-    });
 
     socket.on('hub_connect', data => {
         // check in the database if the hub exists
@@ -264,7 +258,6 @@ io.on('connection', socket => {
                         log(`Hub ${hubs[0].name} is connected now!`);
                         // get the devices that belong to this hub
                         SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
-                            // log(devices);
                             // send all devices to raspberry
                             socket.emit('toDevice', devices);
                         }).catch(error => {
@@ -296,6 +289,12 @@ io.on('connection', socket => {
                         });
                     });
                     
+                    // listener for the incoming data
+                    socket.on("realTimeData", info => {
+                        // send the data back to the client
+                        socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
+                    });
+
                     // disconnect hub
                     socket.on('disconnect', () => {
                         // change the status from hub to disconnected in DB
@@ -307,18 +306,13 @@ io.on('connection', socket => {
                         });
                     });
                     
-                    // listener for the incoming data
-                    socket.on("realTimeData", info => {
-                        // send the data back to the client
-                        socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
-                    });
                 } else {
                     // hub is not registered
                     log(`Hub ${data.sn_number} is not registered!`);
                     socket.disconnect();
                 }
             } else {
-                // hub not found
+                // hub is not found
                 log(`Hub with ${data.sn_number} is not existing!`);
                 socket.disconnect();
             }
@@ -329,6 +323,7 @@ io.on('connection', socket => {
 
     socket.on('disconnect', () => {
         log('Hub is disconnected');
+        socket.disconnect();
     });
 
 });
