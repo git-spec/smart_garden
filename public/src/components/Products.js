@@ -640,7 +640,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
-                                                                        <Button
+                                                                        <div
                                                                             className="d-flex align-items-center"
                                                                             onClick={e => onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number)}
                                                                         >
@@ -648,7 +648,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                                             <span
                                                                                 className={device.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
                                                                             ></span>
-                                                                        </Button>
+                                                                        </div>
                                                                         <Button
                                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
                                                                             onClick={e => onDeleteDeviceBtnClick(e, device.id)}
@@ -722,19 +722,19 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                     <Col className="px-3 mt-md-0 mt-3" lg="7">
                         <Col className="p-3">
                             {state.shownDeviceType === '' && (
-                                <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
                             )}
                             {state.shownDeviceType === 1 && (
-                                <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
                             )}
                             {state.shownDeviceType === 2 && (
-                                <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
                             )}
                             {state.shownDeviceType === 3 && (
-                                <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
                             )}
                             {state.shownDeviceType === 4 && (
-                                <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
                             )}
                         </Col>
                     </Col>

@@ -5,19 +5,19 @@ import {
     Row,
     Col,
     Button,
-    Collapse,
-    Card,
-    CardBody,
+    // Collapse,
+    // Card,
+    // CardBody,
     Input,
     Form,
     Label,
     FormGroup,
 } from "reactstrap";
 import Image from "react-bootstrap/Image";
-import { getData } from "../services/getData";
-import { Link, useLocation, useHistory } from "react-router-dom";
+// import { getData } from "../services/getData";
+// import { Link, useLocation, useHistory } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
-import validator from "validator";
+// import validator from "validator";
 import { editPost, getUser } from "../services/api";
 
 import { connect } from "react-redux";
@@ -30,6 +30,7 @@ const User = (props) => {
         }).catch(err=>{
             console.log(err);
         })
+    // eslint-disable-next-line
     },[]);
     const imagesFileInpRef = useRef();
 
@@ -192,7 +193,7 @@ const User = (props) => {
                     </Col>
                     <Col className="float-right" xs={6} md={3}>
                         <Image
-                            src={require("./1.jpg")}
+                            src={require("../imgs/1.jpg")}
                             height={"150px"}
                             width={"150px"}
                             roundedCircle
@@ -353,6 +354,4 @@ const User = (props) => {
 const mapStateToProps = (state) => {
     return { user: state.user };
 };
-
-// export default User;
 export default connect(mapStateToProps)(User);
