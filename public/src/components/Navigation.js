@@ -1,7 +1,7 @@
 // react
 import React, {useState, Fragment} from 'react';
 // redux
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import {setSocketAction, setUserAction} from '../actions';
 // router dom
 import {
@@ -61,8 +61,9 @@ function Navigation(props) {
         e.preventDefault();
         logoutPost().then(data => {
             if (data === 10) {
-                props.socket.disconnect();
-                props.setSocketAction(null)
+                // ??????????????????????????
+                // props.socket.disconnect();
+                // props.setSocketAction(null);
                 props.setUserAction(null);
                 history.push('/login');
             }
