@@ -5,8 +5,6 @@
 #include <dht.h>
 // finish require for R24
 
-
-
 // setting up the DHT sensor
 #define dht_apin A1
 dht DHT;
@@ -117,11 +115,4 @@ void DHTReading(){
   Serial.print("C\n");
   delay(500);
 }
-
-
-
-
-
-
-
 
