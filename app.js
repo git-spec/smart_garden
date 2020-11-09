@@ -192,7 +192,6 @@ app.post('/checklogin', (req, res) => {
     //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
     //     verified: 1
     // };
-    // console.log(req.session.user);
     
     // 10 session does not exist
     if (req.session.user) {
@@ -229,17 +228,27 @@ io.on('connection', socket => {
         log(`user ${userID} is connected`);
         socket.broadcast.to(userID).emit('user_connect');
 
-        // incoming request for realtime data from raspberry
+        // request for realtime data
         socket.on("getRealTimeData", request => {
-            log(request);
+            // log(request);
             socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
         });
+
+        // request for stopping incoming data
+        socket.on("stopRealTimeData", request => {
+            // log(request);
+            socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
+        });
+
+        // user disconnected
+        socket.on('user_disconnect', userId => {
+            socket.broadcast.to(userId).emit("user_disconnect");
+        })
 
         // user is not online anymore
         socket.on('disconnect', () => {
             log('user is disconnected');
             socket.broadcast.to(userID).emit('user_disconnect');
-            socket.disconnect();
         });
     }); 
 
@@ -295,14 +304,24 @@ io.on('connection', socket => {
                         socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
                     });
 
+                    socket.on("deviceDataInterval", info => {
+                        // log(info);
+                        // log(SQL.toMysqlFormat())
+                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, SQL.toMysqlFormat()]).then(result => {
+                            log(result);
+                        });
+                    });
+
                     // disconnect hub
                     socket.on('disconnect', () => {
                         // change the status from hub to disconnected in DB
                         SQL.updateRecord("iot_hubs", {connected: 0}, {sn_number: data.sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('hub_disconnect', data.sn_number);
-                            log(`Hub "${hubs[0].name}" is disconnected now`);                        
+                            log(`Hub "${hubs[0].name}" is disconnected now`);  
+                            socket.disconnect();                      
                         }).catch(error => {
                             log(error);
+                            socket.disconnect();
                         });
                     });
                     
@@ -318,6 +337,7 @@ io.on('connection', socket => {
             }
         }).catch(error => {
             log(error);
+            socket.disconnect();
         });
     });
 
