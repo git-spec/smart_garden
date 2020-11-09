@@ -72,10 +72,11 @@ const Products = props => {
         confirmModalContent: null,
         confirmModalDelete: null,
         // monitor
-        showHub: '',
-        showDevice: '',
         realTimeData: {},
-        showDeviceType: ''
+        shownHub: '',
+        shownDevice: '',
+        shownDeviceType: '',
+        shownDeviceSn: ''
     };
     const [state, setState] = useState(initialState);
 
@@ -185,22 +186,22 @@ const Products = props => {
             setState(state => ({...state, realTimeData: data.data}));
         });
 
-        // socket.on('disconnect', () => {
-        //     console.log('disconnected');
-        //     // socket.emit('user_disconnect', props.user.id);
-        //     props.setSocketAction(null);
-        //     socket.disconnect();
-        // });
+        socket.on('disconnect', () => {
+            // the connection was lost, may have been caused by the server, the network...
+            console.log('disconnected');
+            socket.emit('user_disconnect', props.user.id);
+            props.setSocketAction(null);
+            socket.disconnect();
+        });
 
         // cleanup
         return () => {
-            console.log('disconnected');
-            // ?????????????????????????????
-            // socket.emit('user_disconnect', props.user.id);
+            // the user leaves the component
+            console.log('cleanup');
+            socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
         };
-
     // eslint-disable-next-line
     }, []);
 
@@ -409,12 +410,18 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
         e.preventDefault();
         // rerender the data section
         // 1 from database: fetch request
-        // 2 real time data: socket emit to send the order to raspberry
+
+        // 2 send order to RPI to stop the previous device
+        if(state.shownDeviceSn){
+            props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.shownDeviceSn});
+        }
+        // 3 real time data: socket emit to send the order to raspberry
         setState({
             ...state,
-            showHub: hubName,
-            showDevice: deviceName,
-            showDeviceType: deviceType
+            shownHub: hubName,
+            shownDevice: deviceName,
+            shownDeviceType: deviceType,
+            shownDeviceSn: sn
         });
         props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
     };
@@ -611,20 +618,20 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
 {/* ********************************************************* MONITOR ********************************************************* */}
                     <Col className="px-3" lg="7">
                         <Col className="p-3">
-                            {state.showDeviceType === '' && (
-                                <MonitorAll hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            {state.shownDeviceType === '' && (
+                                <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                             )}
-                            {state.showDeviceType === 1 && (
-                                <MonitorSoil hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            {state.shownDeviceType === 1 && (
+                                <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                             )}
-                            {state.showDeviceType === 2 && (
-                                <MonitorWater hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            {state.shownDeviceType === 2 && (
+                                <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                             )}
-                            {state.showDeviceType === 3 && (
-                                <MonitorTempHum hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            {state.shownDeviceType === 3 && (
+                                <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                             )}
-                            {state.showDeviceType === 4 && (
-                                <MonitorLight hub={state.showHub} device={state.showDevice} data={state.realTimeData} />
+                            {state.shownDeviceType === 4 && (
+                                <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                             )}
                         </Col>
                     </Col>
