@@ -41,6 +41,8 @@ import {
     getDevicesPost,
     deleteDevicePost
 } from '../services/productsApi';
+// delete after integrating!!!
+import '../css/Products.css';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
