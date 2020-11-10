@@ -461,6 +461,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
         // 3 real time data: socket emit to send the order to raspberry
         setState({
             ...state,
+            realTimeData: {},
             shownHub: hubName,
             shownDevice: deviceName,
             shownDeviceType: deviceType,
