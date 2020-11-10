@@ -1,19 +1,18 @@
 // export default Register;
 import React, { Fragment, useState, useEffect } from "react";
-import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
-import Image from "react-bootstrap/Image";
-import {
-    Link,
-    // useLocation,
-    // useHistory
-} from "react-router-dom";
+import { Container, Row, Col, Button, Table} from "reactstrap";
+// import Image from "react-bootstrap/Image";
+// import {
+//     Link,
+//     // useLocation,
+//     // useHistory
+// } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
 // import validator from "validator";
 import {
     getAllUsers,
     changeVerificationPost,
     deleteUserPost,
-    changeUserRolePost,
 } from "../services/api";
 import ConfirmModal from "./ConfirmModal";
 
@@ -50,6 +49,7 @@ const SubAdmin = (props) => {
             .catch((err) => {
                 console.log(err);
             });
+        // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
@@ -60,7 +60,7 @@ const SubAdmin = (props) => {
             .then((data) => {
                 // changing user array in the component state
                 let newUsers = myState.users.map((user) => {
-                    if (user.id == userID) {
+                    if (user.id === userID) {
                         user.verified = !user.verified;
                     }
                     return user;
@@ -82,7 +82,7 @@ const SubAdmin = (props) => {
         const deleteUser = (userID) => {
             deleteUserPost(userID)
                 .then((data) => {
-                    if (data == 1) {
+                    if (data === 1) {
                         myState.users.splice(idx, 1);
                         // changing user array in the component state
                         setMyState({
@@ -112,30 +112,7 @@ const SubAdmin = (props) => {
         });
     };
 
-    /* ********************************************************* Role Dropdown Button ********************************************************* */
-
-    const changeUserRole = (e, role, userID, idx) => {
-        e.preventDefault();
-        changeUserRolePost(userID, role)
-            .then((data) => {
-                // changing user array in the component state
-                let newUsers = myState.users.map((user) => {
-                    if (user.id == userID) {
-                        user.role = role;
-                    }
-                    return user;
-                });
-                setMyState({
-                    ...myState,
-                    users: newUsers,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    /* ********************************************************* PopupModal ********************************************************* */
+   /* ********************************************************* PopupModal ********************************************************* */
 
     const closeModal = () => {
         setMyState({
