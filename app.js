@@ -1,17 +1,8 @@
 const socket = require('socket.io-client')('http://felix.local:5000');
 const Transmitter = require('./modules/transmitter');
+const radio = new Transmitter();
+radio.setReadingPipe('0xABCDABCD71');
 const {log} = require('console');
-
-// [
-// {
-//     id: 0,
-//     name: "name",
-//     sn_number: "0xABCDABCDABCD",
-//     user_id: 1,
-//     hub_id: 5,
-//     connected: 1
-// },....
-// ]
 
 const hub_info = {
     sn_number: '0xABCDABCD71'
@@ -22,34 +13,50 @@ socket.on('connect', () => {
     // checking all devices every 20 seconds
     setInterval(() => {
         checkAllDevices();
-    }, 20 * 1000);
+    }, 20 * 1000); // 20 s
+    setInterval(() => {
+        requestDataInterval();
+    }, 30 * 60 * 1000); // 30 mins  
 });
+
+// [{
+//     id: 0,
+//     name: "name",
+//     sn_number: "0xABCDABCDABCD",
+//     user_id: 1,
+//     hub_id: 5,
+//     connected: 1,
+//     requestDataInterval: false,
+//     focus: false
+// },....]
 
 // list of all devices in the cloud
 let devices = [];
 socket.on('toDevice', receivedDevices => {
-    // log(receivedDevices);
     // save received devices to devices array
     devices = receivedDevices;
+    devices.forEach(device => {device.requestDataInterval = false; device.focus = false});
 });
 
-const radio = new Transmitter();
-radio.setReadingPipe('0xABCDABCD71');
-
+let userConnected = false;
 // user is online now
 socket.on('user_connect', () => {
-    // send order to all devices to get realtime data
     log('The user is online now & asking for realtime data');
-    //requestRealTimeDataFromAllDevices();
+    userConnected = true;
+    // send order to all devices to get realtime data
+    // requestRealTimeDataFromAllDevices();
 });
 
 socket.on('user_disconnect', () => {
+    userConnected = false;
     stopRequestRealTimeDataFromAllDevices();
 });
 
 // incoming order for realtime date
 socket.on('realTimeRequest', sn => {
-    // log(sn);
+    // change focus
+    devices[devices.map(device => device.sn_number).indexOf(sn)].focus = true;
+    // log(devices);
     radio.send('realTimeData', 10, sn).then(() => {
         log(`Real time request sent to "${sn}"`);
     }).catch(error => {
@@ -57,25 +64,42 @@ socket.on('realTimeRequest', sn => {
     });
 });
 
+// stop real time data for some device
+socket.on('stopRealTimeData', sn => {
+    devices[devices.map(device => device.sn_number).indexOf(sn)].focus = false;
+    radio.send('stopRealTimeData', 10, sn).then(() => {
+        log(`stop real time data for device "${sn}"`);
+    }).catch(error => {
+        log(error);
+    })
+})
+
+// interval request data from devices
+function requestDataInterval(){
+    requestRealTimeDataFromAllDevices()
+}
+
 /**
  * test to send order data request to AR c
  *
  */
-//radio.send("realTimeData", 10, "0x744d52687C").then(()=>{log("request data sent")})
+// radio.send("realTimeData", 10, "0x744d52687C").then(()=>{log("request data sent")})
 radio.read(data => {
     // log('sent data from arduino: ', data);
     const sn = data.substr(0, data.indexOf('-'));
     const message = data.substr(data.indexOf('-') + 1, data.length);
     const device = devices.find(device => device.sn_number === sn);
     if (device && message) {
-        // message hi???
         if (message.toString().replace(/\x00/gi, '') === 'yup') { 
             // device is connected 
-            // set the device from which the data was received to connected
-            devices[devices.map(device => device.sn_number).indexOf(sn)].connected = true;
-            // send the info back to the server
-            // ??????????????????????????????
-            // socket.emit('device_connect', sn);
+            let dev = devices.find(item => item.sn_number === device.sn_number && !item.connected);
+            if (dev) {
+                // set the device from which the data was received to connected
+                dev.connected = 1;
+                devices[devices.map(device => device.id).indexOf(device.id)] = dev;
+                log(`Device "${device.name}" is connected now`);
+                socket.emit('device_connect', device.sn_number);
+            }
         } else { 
             // device is sending realtime data
             log(`Message from "${sn}": ${message}`);
@@ -84,8 +108,24 @@ radio.read(data => {
             str.split('|').forEach(d => {
                 data.push(d);
             });
-            // send the data back to the server
-            socket.emit('realTimeData', {sn_number: sn, data: data});
+            let dev = devices.find(item => item.sn_number === device.sn_number && item.requestDataInterval);
+            if(dev){ 
+                // rpi asked for the data
+                devices[devices.map(device => device.id).indexOf(dev.id)].requestDataInterval = false;
+                socket.emit("deviceDataInterval", {device: dev.id, data: data});
+                if(!dev.focus){
+                    log(`STOP FOR DEVICE ${dev.name}`);
+                    radio.send('stopRealTimeData', 10, dev.sn_number).then(() => {
+                        log(`stop real time data for device "${sn}"`);
+                    }).catch(error => {
+                        log(error);
+                    })
+                }
+            } else { 
+                // user asked for the data
+                if(device.focus)
+                socket.emit('realTimeData', {sn_number: sn, data: data});
+            }
         }
     }
 });
@@ -125,6 +165,7 @@ function requestRealTimeDataFromAllDevices() {
 }
 function requestRealTimeData(device) {
     return new Promise((resolve, reject) => {
+        device.requestDataInterval = true;
         radio.send('realTimeData', 10, device.sn_number).then(() => {
             resolve();
         }).catch(error => {
@@ -175,7 +216,7 @@ function checkAllDevices() {
     recursivePromises(0, checkConnected);
 }
 
-//{
+// {
 //     name: 'dht',
 //     device_id: 4,
 //     {
