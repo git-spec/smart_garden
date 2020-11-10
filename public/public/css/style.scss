@@ -65,6 +65,7 @@
 // variables
 $font-main: Ubuntu;
 $font-head: Cuyabra;
+$font-size-1: 1.8rem;
 $font-size-2: 1.4rem;
 $font-size-3: 1.2rem;
 $font-size-4: 1rem;
@@ -76,7 +77,7 @@ $color-1: rgb(36, 27, 18);
 $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
 $color-2-opac: rgba(29, 44, 34, .8);
-$color-3: rgb(242, 194, 145);
+$color-3: rgb(253, 215, 157);
 $color-4: rgb(33, 84, 48);
 $color-5: rgb(154, 201, 146);
 $color-6: rgb(0, 168, 230);
@@ -92,6 +93,10 @@ $border: .1rem;
 @mixin killShadow {
   box-shadow: none;
   text-shadow: none;
+}
+@mixin killBorder {
+  border: none;
+  outline: none;
 }
 // round button size
 @mixin roundBtn {
@@ -206,27 +211,7 @@ body {
       color: $text-transp !important;
     }
   }
-  // color of links
-  & a.nav-link {
-    color: $color-3;
-    @include killShadow();
-    background-color: none;
-    // scales link after hover
-    &:hover,
-    &:active,
-    &.visited,
-    &:focus {
-      transform: scale(1.2);
-      @include killShadow();
-      outline: none;
-      color: $color-3 !important;
-    }
-    // change bg-color & color of link
-    &:active {
-      // background-color: $color-light !important;
-      color: $color-1 !important;
-    }
-  }
+  //
   & .row a {
     color: $color-6;
     &:hover,
@@ -598,12 +583,11 @@ body {
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
-  html { font-size: 13px; }
+  html { font-size: 14px; }
 }
 
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) {
-  html { font-size: 15px; }
 }
 
 // Large devices (desktops, 992px and up)
@@ -612,15 +596,6 @@ body {
   #root > .container .col-lg-8 {
     @include makeOutline();
     border-radius: $font-size-3;
-  }
-  // navigation bar
-  #root > .navbar {
-    background-color: $color-1;
-    box-shadow: 0 6px 24px 2px $color-1;                
-    // changes regular toggle color
-    &.navbar-toggler-icon {
-        color: $color-3;
-    }
   }
 }
 
