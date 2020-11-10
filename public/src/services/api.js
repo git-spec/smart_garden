@@ -30,23 +30,22 @@ export const registerPost = (firstName, lastName, userName, email, password, rep
     });
 };
 
-export const editPost = (id, firstName, lastName, userName, city, password, repassword) => {
-    const sendData = {
-        id,
-        firstName,
-        lastName,
-        userName,
-        city,
-        password,
-        repassword
-    };
+export const editPost = (id, firstName, lastName, userName, city, password, repassword, userImg) => {
     return new Promise((resolve, reject) => {
+        const fd = new FormData()
+        if (userImg) {
+            fd.append('userImg', userImg)
+        }
+        fd.append('id', id)
+        fd.append('firstName', firstName)
+        fd.append('lastName', lastName)
+        fd.append('userName', userName)
+        fd.append('city', city)
+        fd.append('password', password)
+        fd.append('repassword', repassword)
         fetch('/edit', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(sendData)
+            body: fd
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(receivedData => {
@@ -58,8 +57,9 @@ export const editPost = (id, firstName, lastName, userName, city, password, repa
             } else {
                 reject(new Error('can not send data to server. response number is: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
+            console.log(err);
         });
     });
 };

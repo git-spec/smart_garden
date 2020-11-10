@@ -1,12 +1,6 @@
 // export default Register;
 import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
-// import Image from "react-bootstrap/Image";
-import {
-    // Link,
-    // useLocation,
-    // useHistory
-} from "react-router-dom";
 import PopUpModal from "./PopUpModal";
 // import validator from "validator";
 import {
@@ -50,7 +44,9 @@ const Admin = (props) => {
             .catch((err) => {
                 console.log(err);
             });
-    // eslint-disable-next-line
+
+        // eslint-disable-next-line
+
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
