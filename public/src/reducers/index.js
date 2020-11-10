@@ -8,7 +8,15 @@ const userReducer = (user = null, action) => {
     return user;
 };
 
+const socketReducer = (socket = null, action) => {
+    if (action.type === 'CHANGE_SOCKET') {
+        return action.payload;
+    }
+    return socket;
+};
+
 // take in actions and update part of applications state
 export default combineReducers({
-    user: userReducer
+    user: userReducer,
+    socket: socketReducer
 });

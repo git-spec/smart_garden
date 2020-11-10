@@ -222,7 +222,6 @@ app.post('/checklogin', (req, res) => {
     //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
     //     verified: 1
     // };
-    // console.log(req.session.user);
     
     // 10 session does not exist
     if (req.session.user) {
@@ -331,17 +330,42 @@ io.on('connection', socket => {
     // log('Device Is Connected');
 
     socket.on('user_connect', userID => {
-        // console.log('userID: ', userID);
+
         socket.join(userID.toString());
-    });
+        log(`user ${userID} is connected`);
+        socket.broadcast.to(userID).emit('user_connect');
+
+        // request for realtime data
+        socket.on("getRealTimeData", request => {
+            // log(request);
+            socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
+        });
+
+        // request for stopping incoming data
+        socket.on("stopRealTimeData", request => {
+            // log(request);
+            socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
+        });
+
+        // user disconnected
+        socket.on('user_disconnect', userId => {
+            socket.broadcast.to(userId).emit("user_disconnect");
+        })
+
+        // user is not online anymore
+        socket.on('disconnect', () => {
+            log('user is disconnected');
+            socket.broadcast.to(userID).emit('user_disconnect');
+        });
+    }); 
 
     socket.on('hub_connect', data => {
         // check in the database if the hub exists
         SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(hubs => {
-            // console.log('hub: ', hubs[0]);
             if (hubs.length > 0) {
                 if (hubs[0].user_id) {
-                    // join user twice?
+
+                    // join user
                     socket.join(hubs[0].user_id);
 
                     // change the status from hub to connected in db
@@ -350,7 +374,7 @@ io.on('connection', socket => {
                         log(`Hub ${hubs[0].name} is connected now!`);
                         // get the devices that belong to this hub
                         SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
-                            // log(devices);
+                            // send all devices to raspberry
                             socket.emit('toDevice', devices);
                         }).catch(error => {
                             log(error);
@@ -381,33 +405,52 @@ io.on('connection', socket => {
                         });
                     });
                     
+                    // listener for the incoming data
+                    socket.on("realTimeData", info => {
+                        // send the data back to the client
+                        socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
+                    });
+
+                    socket.on("deviceDataInterval", info => {
+                        // log(info);
+                        // log(SQL.toMysqlFormat())
+                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, SQL.toMysqlFormat()]).then(result => {
+                            log(result);
+                        });
+                    });
+
                     // disconnect hub
                     socket.on('disconnect', () => {
                         // change the status from hub to disconnected in DB
                         SQL.updateRecord("iot_hubs", {connected: 0}, {sn_number: data.sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('hub_disconnect', data.sn_number);
-                            log(`Hub "${hubs[0].name}" is disconnected now`);                        
+                            log(`Hub "${hubs[0].name}" is disconnected now`);  
+                            socket.disconnect();                      
                         }).catch(error => {
                             log(error);
+                            socket.disconnect();
                         });
                     });
+                    
                 } else {
                     // hub is not registered
                     log(`Hub ${data.sn_number} is not registered!`);
-                    // kill socket
+                    socket.disconnect();
                 }
             } else {
-                // hub not found
+                // hub is not found
                 log(`Hub with ${data.sn_number} is not existing!`);
-                // kill socket
+                socket.disconnect();
             }
         }).catch(error => {
             log(error);
+            socket.disconnect();
         });
     });
 
     socket.on('disconnect', () => {
-        // log('Hub is disconnected');
+        log('Hub is disconnected');
+        socket.disconnect();
     });
 
 });

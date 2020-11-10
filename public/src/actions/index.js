@@ -4,3 +4,10 @@ export const setUserAction = user => {
         payload: user
     };
 };
+
+export const setSocketAction = socket => {
+    return {
+        type: 'CHANGE_SOCKET',
+        payload: socket
+    };
+};

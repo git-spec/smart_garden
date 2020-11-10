@@ -31,17 +31,15 @@ const SubAdmin = (props) => {
     const [myState, setMyState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers()
-            .then((data) => {
-                setMyState({
-                    ...myState,
-                    users: data,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
+        getAllUsers().then((data) => {
+            setMyState({
+                ...myState,
+                users: data,
             });
-        // eslint-disable-next-line
+        }).catch((err) => {
+            console.log(err);
+        });
+    // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */

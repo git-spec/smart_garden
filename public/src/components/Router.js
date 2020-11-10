@@ -25,7 +25,6 @@ import SubAdmin from './SubAdmin';
 const Router = props => {
 
     const {setUserAction} = props;
-    // run at initial render
     useEffect(() => {
         checkLoginPost().then(data => {
             // console.log('user:', data);
@@ -33,7 +32,8 @@ const Router = props => {
                 setUserAction(data);
             }
         });
-    }, [setUserAction]);
+    // eslint-disable-next-line
+    }, []);
 
     return (
         <BrowserRouter>

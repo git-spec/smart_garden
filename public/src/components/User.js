@@ -13,7 +13,6 @@ import {
 import Image from "react-bootstrap/Image";
 import PopUpModal from "./PopUpModal";
 import { editPost, getUser } from "../services/api";
-
 import { connect } from "react-redux";
 
 const User = (props) => {
@@ -157,7 +156,6 @@ const User = (props) => {
                             Here you can easily edit your Profile
                         </p>
                     </Col>
-
                     <Col className="float-right" xs={6} md={3}>
                         <Image
                             src={myState.userImg?myState.userImg:`/uploads/1.jpg`}
@@ -320,6 +318,4 @@ const User = (props) => {
 const mapStateToProps = (state) => {
     return { user: state.user };
 };
-
-// export default User;
 export default connect(mapStateToProps)(User);

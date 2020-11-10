@@ -1,9 +1,69 @@
+// font Cuyabra
 @font-face {
   font-family: Cuyabra;
-  src: url('../fonts/cuyabra.ttf');
+  src:  url('../fonts/cuyabra.ttf') format('truetype');
+}
+@font-face {
+  font-family: Cuyabra;
+  src:  url('../fonts/cuyabra-bold.ttf') format('truetype');
+  font-weight: bold;
+}
+@font-face {
+  font-family: Cuyabra;
+  src:  url('../fonts/cuyabra-oblique.ttf') format('truetype');
+  font-style: italic;
+}
+@font-face {
+  font-family: Cuyabra;
+  src:  url('../fonts/cuyabra-bold-oblique.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}
+// font Ubuntu       
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Regular.ttf') format('truetype');
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Italic.ttf') format('truetype');
+  font-style: italic;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Medium.ttf') format('truetype');
+  font-weight: bold;
+}            
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Medium.ttf') format('truetype');
+  font-weight: bold;
+  font-style: italic;
+}    
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Bold.ttf') format('truetype');
+  font-weight: bolder;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-BoldItalic.ttf') format('truetype');
+  font-weight: bolder;
+  font-style: italic;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-Light.ttf') format('truetype');
+  font-weight: small;
+}        
+@font-face {
+  font-family: Ubuntu;
+  src:  url('../fonts/Ubuntu-LightItalic.ttf') format('truetype');
+  font-weight: small;
+  font-style: italic;
 }
 // variables
-$font-main: 'Ubuntu';
+$font-main: Ubuntu;
 $font-head: Cuyabra;
 $font-size-2: 1.4rem;
 $font-size-3: 1.2rem;
@@ -16,14 +76,17 @@ $color-1: rgb(36, 27, 18);
 $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
 $color-2-opac: rgba(29, 44, 34, .8);
-$color-3: rgb(0, 168, 230);
+$color-3: rgb(242, 194, 145);
+$color-4: rgb(33, 84, 48);
+$color-5: rgb(154, 201, 146);
+$color-6: rgb(0, 168, 230);
 $color-light: white;
 $color-danger: red;
 $color-success: rgb(48, 162, 86);
 $border: .1rem;
 // outline
 @mixin makeOutline {
-  border: $border solid $color-light !important;
+  border: $border solid $color-3 !important;
 }
 // remove shadows
 @mixin killShadow {
@@ -41,18 +104,21 @@ $border: .1rem;
     padding: 0;
     box-sizing: border-box;
 }
+
+.chartjs-render-monitor {
+  margin-bottom: $font-size-3;
+}
     
 body {
-  font-family: 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: Ubuntu, 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
   sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: $color-light !important;
+  color: $color-3 !important;
   // app container
   #root {
-    font-family: 'Ubuntu';
-    font-weight: 300;
+    font-family: Ubuntu;
     height: 100vh;
     background-color: $color-1;
     background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
@@ -64,11 +130,14 @@ body {
         box-shadow: 0 12px 30px 6px $color-1;                
         // changes regular toggle color
         &.navbar-toggler-icon {
-            color: $color-light;
+            color: $color-3;
         }
         & #sidebar {
           top: 60px;
           padding-top: $font-size-5;
+        }
+        .menu-icon > span {
+          border: calc(#{$border} * 1.6) solid $color-3;
         }
     }
     // layer with gradient
@@ -118,9 +187,9 @@ body {
   }
   // logo svg
   & .logo {
-    width: 4rem;
-    height: 2rem;
-    fill: $color-light;
+    width: 7rem;
+    height: 2.4rem;
+    fill: $color-5;
   }
   // headlines
   & h1,
@@ -128,21 +197,41 @@ body {
   & h3 {
     font-family: $font-head;
     letter-spacing: .02rem;
-    color: $color-light;
+    color: $color-3;
     padding-left: .02rem;
   }
   & input.form-control {
-    color: $color-light !important;
+    color: $color-3 !important;
     &::placeholder {
       color: $text-transp !important;
     }
   }
   // color of links
-  & a {
+  & a.nav-link {
     color: $color-3;
+    @include killShadow();
+    background-color: none;
+    // scales link after hover
+    &:hover,
+    &:active,
+    &.visited,
+    &:focus {
+      transform: scale(1.2);
+      @include killShadow();
+      outline: none;
+      color: $color-3 !important;
+    }
+    // change bg-color & color of link
+    &:active {
+      // background-color: $color-light !important;
+      color: $color-1 !important;
+    }
+  }
+  & .row a {
+    color: $color-6;
     &:hover,
     &:active {
-      color: $color-3;
+      color: $color-6;
     }
   }
   // paragraph text
@@ -161,6 +250,9 @@ body {
   & .btn,
   & button {
     @include killShadow();
+    background-color: none;
+    color: $color-3;
+    font-weight: bold;
     // scales button after hover
     &:hover,
     &:active,
@@ -172,12 +264,12 @@ body {
     }
     // scale button on hover
     &.btn-outline-light:hover {
-      color: $color-light !important;
+      color: $color-3 !important;
       transform: scale(1.05);
     }
     // change bg-color & color of button
     &.btn-outline-light:active {
-      background-color: $color-light !important;
+      background-color: $color-3 !important;
       color: $color-1 !important;
       // change bg-color of button icons up & down
       &.down > span,
@@ -196,13 +288,23 @@ body {
         position: absolute;
         left: (($font-size-3 - $font-size-6) / 2 - $border);
         top: ($font-size-3 / 2 - $border - $border / 2);
-        background-color: $color-light;
+        background-color: $color-3;
         border-radius: $border;
       }
     }
     // change color of buttons lpus & minus
     &.plus {
       border-color: $color-success !important;
+      transition: opacity .2s ease-out .1s;
+      // show button plus
+      &.show {
+        opacity: 1;
+      }
+      // hide button plus
+      &.hidden {
+        transition: none;
+        opacity: 0;
+      }
       & > span {
         background-color: $color-success !important;
       }
@@ -232,7 +334,7 @@ body {
       position: absolute;
       top: (($font-size-3 - $font-size-6) / 2 - $border);
       left: ($font-size-3 / 2 - ($border / 2 + $border));
-      background-color: $color-light;
+      // background-color: $color-light;
       border-radius: $border;
 
     }
@@ -250,7 +352,7 @@ body {
         width: $border;
         height: $font-size-6 - .11rem;
         display: inline-block;
-        background-color: $color-light;
+        background-color: $color-3;
         border-radius: $border;
         &:first-child {
           transform: rotate(-45deg);
@@ -271,7 +373,7 @@ body {
         width: $border;
         height: $font-size-6 - .11rem;
         display: inline-block;
-        background-color: $color-light;
+        background-color: $color-3;
         border-radius: $border;
         &:first-child {
           transform: rotate(45deg);
@@ -318,9 +420,14 @@ body {
     // inputs
     & input {
       color: $color-light !important;
-    }
-    & input::placeholder {
-      color: $text-transp !important;
+      // &:focus {
+      //   outline: none;
+      //   border-color: $color-light !important;
+      //   color: $color-light;
+      // }
+      &::placeholder {
+        color: $text-transp !important;
+      }
     }
   }
   & .accordion {
@@ -452,12 +559,16 @@ body {
       z-index: 1;
     }
   }
+  // range
+  & #rangeIput {
+    color: $color-danger;
+  }
   // tables
   & .table {
-    font-weight: 300;
+    // font-weight: 300;
     & tr {
-      color: $color-light;
-      border-bottom: $border solid $text-transp;
+      color: $color-3;
+      border-bottom: $border solid $color-3;         //$text-transp;
     }
     & thead > tr > th {
       text-align: right;
@@ -472,7 +583,7 @@ body {
     }
   }
   & th {
-    font-weight: 500;
+    font-weight: bold;
   }
 
   code {
@@ -481,13 +592,19 @@ body {
 }
 
 // Extra small devices (portrait phones, less than 576px)
-@media (max-width: 576px) {}
+@media (max-width: 576px) {
+  html { font-size: 12px; }
+}
 
 // Small devices (landscape phones, 576px and up)
-@media (min-width: 576px) {}
+@media (min-width: 576px) {
+  html { font-size: 13px; }
+}
 
 // Medium devices (tablets, 768px and up)
-@media (min-width: 768px) {}
+@media (min-width: 768px) {
+  html { font-size: 15px; }
+}
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
@@ -502,7 +619,7 @@ body {
     box-shadow: 0 6px 24px 2px $color-1;                
     // changes regular toggle color
     &.navbar-toggler-icon {
-        color: $color-light;
+        color: $color-3;
     }
   }
 }
@@ -512,3 +629,4 @@ body {
 
 /* *********************************************************** IMPORT ********************************************************* */
 @import 'nav';
+@import 'range';
