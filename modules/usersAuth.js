@@ -38,8 +38,7 @@ function checkUser(user, password) {
                             if (result[0].verified) {
                                 resolve(result[0]);
                             }
-                        } 
-                        else {
+                        } else {
                             reject(3);
                         }
                     }
@@ -87,11 +86,10 @@ function registerUser(firstName, lastName, userName, email, password) {
 }
 
 // edit user
-function editUser(id, firstName, lastName, userName, city, password) {
-    console.log('pass  :  '+password);
+function editUser(id, firstName, lastName, userName, city, password, userImg) {
     if (password) {
-        console.log(1);
         return new Promise((resolve, reject) => {
+            console.log(userImg);
             runQuery(
                 `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
                 users.city='${city}', users.password='${passwordHash.generate(
@@ -99,18 +97,41 @@ function editUser(id, firstName, lastName, userName, city, password) {
                 )}' WHERE users.id=${id}`
             )
                 .then((result) => {
-                    resolve(result);
+                    if (userImg) {
+                        let saveImgsQuery = "";
+                            // get file extension
+                            let ext = userImg.name.substr(userImg.name.lastIndexOf("."));
+                            // set the new image name
+                            let newName =
+                            userName.trim().replace(/ /g, "_") + ext;
+                            userImg.mv("./public/uploads/" + newName);
+                            const imgUrl = "/uploads/" + newName;
+                            saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
+                        
+                        runQuery(saveImgsQuery)
+                            .then(() => {
+                                resolve(result);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                reject(error);
+                            });
+                    } else {
+                        resolve(result);
+                    }
                 })
                 .catch((err) => {
+                    console.log(err);
+
                     if (err.errno === 1062) {
                         reject("exist");
                     } else {
                         reject(err);
+
                     }
                 });
         });
     } else {
-        console.log(2);
 
         return new Promise((resolve, reject) => {
             runQuery(
@@ -118,7 +139,28 @@ function editUser(id, firstName, lastName, userName, city, password) {
                 users.city='${city}' WHERE users.id=${id}`
             )
                 .then((result) => {
-                    resolve(result);
+                    if (userImg) {
+                        let saveImgsQuery = "";
+                            // get file extension
+                            let ext = userImg.name.substr(userImg.name.lastIndexOf("."));
+                            // set the new image name
+                            let newName =
+                            userName.trim().replace(/ /g, "_") + ext;
+                            userImg.mv("./public/uploads/" + newName);
+                            const imgUrl = "/uploads/" + newName;
+                            saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
+                        
+                        runQuery(saveImgsQuery)
+                            .then(() => {
+                                resolve(result);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                                reject(error);
+                            });
+                    } else {
+                        resolve(result);
+                    }
                 })
                 .catch((err) => {
                     if (err.errno === 1062) {
