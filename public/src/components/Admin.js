@@ -1,4 +1,3 @@
-// export default Register;
 import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
 import PopUpModal from "./PopUpModal";
