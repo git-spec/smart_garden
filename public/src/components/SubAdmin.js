@@ -1,14 +1,6 @@
-// export default Register;
 import React, { Fragment, useState, useEffect } from "react";
 import { Container, Row, Col, Button, Table} from "reactstrap";
-// import Image from "react-bootstrap/Image";
-// import {
-//     Link,
-//     // useLocation,
-//     // useHistory
-// } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
-// import validator from "validator";
 import {
     getAllUsers,
     changeVerificationPost,
@@ -39,17 +31,15 @@ const SubAdmin = (props) => {
     const [myState, setMyState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers()
-            .then((data) => {
-                setMyState({
-                    ...myState,
-                    users: data,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
+        getAllUsers().then((data) => {
+            setMyState({
+                ...myState,
+                users: data,
             });
-        // eslint-disable-next-line
+        }).catch((err) => {
+            console.log(err);
+        });
+    // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
@@ -73,6 +63,9 @@ const SubAdmin = (props) => {
             .catch((err) => {
                 console.log(err);
             });
+        }).catch((err) => {
+            console.log(err);
+        });
     };
 
     /* ********************************************************* DELETE User ********************************************************* */

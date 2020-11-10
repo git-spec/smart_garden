@@ -16,7 +16,8 @@ const Verification = () => {
         }).catch(err => {
             history.push('/register');
         });
-    }, [history, params.email]);
+    // eslint-disable-next-line
+    }, []);
 
     return (
         <React.Fragment>

@@ -1,13 +1,13 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {useState, useEffect} from 'react';
+// router dom
+import {useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
-// import {setUserAction} from '../actions';
+import {setSocketAction} from '../actions';
 // socket
 import io from 'socket.io-client';
-// router dom
-// import {Link} from 'react-router-dom';
 // reactstrap
 import {
     Row,
@@ -15,22 +15,21 @@ import {
     Button,
     Input,
     Container,
-    Collapse, 
-    CardBody, 
+    Collapse,
+    CardBody,
     Card,
     CardHeader,
-    Label, 
-    FormGroup,
+    Label,
     CardTitle,
-    CardSubtitle,
-    CardText
+    CardSubtitle
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
-import ReactTable from './Table';
-import LineChart from './LineChart';
-import LineChartMultiple from './LineChartMultiple';
-import BarChartHorizontal from './BarChartHorizontal';
+import MonitorAll from './MonitorAll';
+import MonitorSoil from './MonitorSoil';
+import MonitorWater from './MonitorWater';
+import MonitorTempHum from './MonitorTempHum';
+import MonitorLight from './MonitorLight';
 // services
 import {
     checkHubNumPost,
@@ -42,129 +41,175 @@ import {
     getDevicesPost,
     deleteDevicePost
 } from '../services/productsApi';
-import {getData} from '../services/getData';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
-  
+
+    const history = useHistory();
+
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
     const openHubIconRefs = [];
-    const hubStatusRefs = [];
-    const deviceStatusRefs = [];
+    const rangeStatusRefs = [];
 
 /* ********************************************************* STATE ********************************************************* */
     const initialState = {
+        // hubs & devices
         hubs: [],
         devices: [],
         hubName: '',
         deviceName: '',
         hubNum: '',
         deviceNum: '',
+        // collapse
         collapseHubs: false,
         collapseHub: null,
         collapseAddHub: false,
         collapseAddDevice: null,
+        // modal
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-        feed: []
+        // monitor
+        realTimeData: {},
+        shownHub: '',
+        shownDevice: '',
+        shownDeviceType: '',
+        shownDeviceSn: '',
+        // range
+        feed: [],
+        inputRange: null,
+        inputRangeMax: "100",
+        graphHeightMax: 160,
+        graphHeightMin: 20
     };
     const [state, setState] = useState(initialState);
 
-    const data = getData();
-
-/* ********************************************************* SOCKET.IO ********************************************************* */
-
-    // useEffect(() => {
-
-        const socket = io('http://localhost:5000');
-
-        socket.on('connect', () => {
-            console.log('connected');
-            console.log(props.user);
-            socket.emit('user_connect', '3');
-        });
-
-        socket.on('hub_connect', sn => {
-            console.log(hubStatusRefs);
-            // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-            // if (idx !== -1) {
-            //     hubStatusRefs[idx].ref.current.classList.remove('d-none');
-            // }
-            console.log('hub connected', sn);
-            // if (hubStatusRefs[0]) {
-            //     if (hubStatusRefs[0].current) {
-            //     }
-            // }
-        });
-
-        socket.on('hub_disconnect', sn => {
-            console.log(hubStatusRefs);
-            // const idx = hubStatusRefs.map(foundHub => foundHub.sn).indexOf(sn);
-            // if (idx !== -1) {
-            //     hubStatusRefs[idx].ref.current.classList.add('d-none');
-            // }
-            console.log('hub disconnected', sn);
-        });
-
-        socket.on('device_connect', sn => {
-            console.log(deviceStatusRefs);
-            // if (deviceStatusRefs.length > 0) {
-            //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-            //     if (idx !== -1) {
-            //         deviceStatusRefs[idx].ref.current.classList.remove('d-none');
-            //     }
-            // }
-            console.log('device connected', sn);
-        });
-
-        socket.on('device_disconnect', sn => {
-            console.log(deviceStatusRefs);
-            // if (deviceStatusRefs.length > 0) {
-            //     const idx = deviceStatusRefs.map(foundDevice => foundDevice.sn).indexOf(sn);
-            //     if (idx !== -1) {
-            //         deviceStatusRefs[idx].ref.current.classList.add('d-none');
-            //     }
-            // }
-            console.log('device disconnected', sn);
-        });
-
-    // }, []);
-
-
 /* ********************************************************* USE EFFECT ********************************************************* */
+    // get hubs & devices data from db at initial render
     useEffect(() => {
-        // get hubs & devices data from db at initial render
         getHubsPost().then(hubs => {
-            switch (hubs) {
-                case 2:
-                    alert('Server error');
-                    break;
-                case 10:
-                    break;
-                default:
-                    getDevicesPost().then(devices => {
-                        switch (devices) {
-                            case 2:
-                                alert('Server error');
-                                break;
-                            case 10:
-                                break;
-                            default:
-                                setState(state => ({...state, hubs, devices}));
-                                break;
-                        }
-                    }).catch(err => {
-                        alert(err);
-                    });
-                    break;
+            if (hubs === 2) {
+                alert('Server error');
+            } else if (hubs === 10) {
+                history.push('/login');
+            } else {
+                getDevicesPost().then(devices => {
+                    if (devices === 2) {
+                        alert('Server error');
+                    } else if (devices === 10) {
+                        history.push('/login');
+                    } else {
+                        setState({...state, hubs, devices});
+                    }
+                }).catch(err => {
+                    alert(err);
+                });
             }
         }).catch(err => {
             alert(err);
         });
+    // eslint-disable-next-line
+    }, []);
+
+/* ********************************************************* SOCKET.IO ********************************************************* */
+    useEffect(() => {
+        const socket = io('http://localhost:5000');
+
+        socket.on('connect', () => {
+            console.log('connected');
+            props.setSocketAction(socket);
+            socket.emit('user_connect', props.user.id);
+        });
+
+        socket.on('hub_connect', sn => {
+            if (state.hubs) {
+                setState(state => {
+                    const hubs = [...state.hubs];
+                    const hub = hubs.find(hub => hub.sn_number === sn);
+                    const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
+                    if (hub) {
+                        hub.connected = 1;
+                        hubs[idx] = hub;
+                        console.log('hub connected', sn);
+                    }
+                    return ({...state, hubs});
+                });
+            }
+        });
+
+        socket.on('hub_disconnect', sn => {
+            if (state.hubs) {
+                setState(state => {
+                    const hubs = [...state.hubs];
+                    const hub = hubs.find(hub => hub.sn_number === sn);
+                    const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
+                    if (hub) {
+                        hub.connected = 0;
+                        hubs[idx] = hub;
+                        console.log('hub disconnected', sn);
+                    }
+                    return ({...state, hubs});
+                });
+            }
+        });
+
+        socket.on('device_connect', sn => {
+            if (state.devices) {
+                setState(state => {
+                    let devices = [...state.devices];
+                    const device = devices.find(device => device.sn_number === sn);
+                    const idx = devices.map(device => device.sn_number).indexOf(sn);
+                    if (device) {
+                        device.connected = 1;
+                        devices[idx] = device;
+                        console.log('device connected', sn);
+                    }
+                    return ({...state, devices});
+                });
+            }
+        });
+
+        socket.on('device_disconnect', sn => {
+            if (state.devices) {
+                setState(state => {
+                    let devices = [...state.devices];
+                    const device = devices.find(device => device.sn_number === sn);
+                    const idx = devices.map(device => device.sn_number).indexOf(sn);
+                    if (device) {
+                        device.connected = 0;
+                        devices[idx] = device;
+                        console.log('device disconnected', sn);
+                    }
+                    return ({...state, devices});
+                });
+            }
+        });
+
+        socket.on('realTimeIncomingData', data => {
+            console.log(data);
+            setState(state => ({...state, realTimeData: data.data}));
+        });
+
+        socket.on('disconnect', () => {
+            // the connection was lost, may have been caused by the server, the network...
+            console.log('disconnected');
+            socket.emit('user_disconnect', props.user.id);
+            props.setSocketAction(null);
+            socket.disconnect();
+        });
+
+        // cleanup
+        return () => {
+            // the user leaves the component
+            console.log('cleanup');
+            socket.emit('user_disconnect', props.user.id);
+            props.setSocketAction(null);
+            socket.disconnect();
+        };
+    // eslint-disable-next-line
     }, []);
 
 /* ********************************************************* TOGGLES ********************************************************* */
@@ -197,25 +242,61 @@ const Products = props => {
     };
 
     const toggleAddHub = e => {
-        // toggle plus & minus button
-        addHubIconRef.current.classList.toggle('plus');
-        addHubIconRef.current.classList.toggle('minus');
+        e.preventDefault();
+        // toggle plus hidden
+        addHubIconRef.current.classList.add('hidden');
         setState({
             ...state,
             collapseAddHub: !state.collapseAddHub
         });
     };
 
+    const toggleDeleteHub = e => {
+        e.preventDefault();
+        // toggle plus visible
+        addHubIconRef.current.classList.toggle('show');
+        addHubIconRef.current.classList.toggle('hidden');
+        setState({
+            ...state,
+            collapseAddHub: !state.collapseAddHub
+        });
+    }
+
     const toggleAddDevice = (e, idx) => {
         e.preventDefault();
-        // toggle plus & minus button
-        addDeviceIconRefs[idx].current.classList.toggle('plus');
-        addDeviceIconRefs[idx].current.classList.toggle('minus');
+        // toggle plus hidden
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,
             collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
-    };
+    }
+
+    const toggleDeleteDevice = (e, idx) => {
+        e.preventDefault();
+        // toggle plus visible
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
+        setState({
+            ...state,
+            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
+        });
+    }
+
+/* ******************************************************** FUNCTIONS ********************************************************* */
+    const onBtnInputRange = (e, output) => {
+        e.preventDefault();
+        // output of current value
+        output.current.innerText = e.target.value;
+        setState({
+            ...state,
+            inputRange: e.target.value
+        });
+        // send current propperties to css
+        output.current.style.setProperty('--thumb-input', e.target.value);
+        output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
+    }
 
 /* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
@@ -248,6 +329,7 @@ const Products = props => {
             confirmModalDelete: () => deleteHub(hubID)
         });
     };
+
 /* ********************************************************* DELETE DEVICE ********************************************************* */
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
@@ -273,6 +355,7 @@ const Products = props => {
             confirmModalDelete: () => deleteDevice(deviceID)
         });
     };
+
 /* ********************************************************* ADD HUB ********************************************************* */
     const onAddHubBtnClick = e => {
         e.preventDefault();
@@ -318,6 +401,7 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
+
 /* ********************************************************* ADD DEVICE ********************************************************* */
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -363,9 +447,30 @@ const Products = props => {
             alert('Please fill out all inputs!');
         }
     };
-      
+
+/* ********************************************************* SHOW DEVICE DATA ********************************************************* */
+const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
+        e.preventDefault();
+        // rerender the data section
+        // 1 from database: fetch request
+
+        // 2 send order to RPI to stop the previous device
+        if(state.shownDeviceSn){
+            props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.shownDeviceSn});
+        }
+        // 3 real time data: socket emit to send the order to raspberry
+        setState({
+            ...state,
+            shownHub: hubName,
+            shownDevice: deviceName,
+            shownDeviceType: deviceType,
+            shownDeviceSn: sn
+        });
+        props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+    };
+
 /* ********************************************************* RETURN ********************************************************* */
-if (state.hubs && state.devices) {
+    if (state.hubs && state.devices && props.user) {
         return (
             <Container>
 {/* ********************************************************* MODAL ********************************************************* */}
@@ -378,15 +483,17 @@ if (state.hubs && state.devices) {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                <h3 className="text-trans mb-4">Hello User, how are you?</h3>
+                <h3 className="text-trans mb-4">Hello {props.user.userName}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>hubs</Button>
-                                    <span className="active-light mx-2"></span>
+                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>
+                                        hubs
+                                    </Button>
+                                    {/* <span className="active-light mx-2"></span> */}
                                 </CardTitle>
                                 <CardSubtitle>
                                     <Button
@@ -407,7 +514,15 @@ if (state.hubs && state.devices) {
                             </CardHeader>
 {/* ********************************************************* ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
-                                <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                    <CardSubtitle>
+                                        <Button
+                                            className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
+                                            onClick={toggleDeleteHub}
+                                        >
+                                            <span></span><span></span>
+                                        </Button>
+                                    </CardSubtitle>
                                     <CardTitle className="flex-grow-1 m-0">
                                         <Input
                                             className="badge-pill bg-transparent py-0 mb-3"
@@ -416,7 +531,7 @@ if (state.hubs && state.devices) {
                                             value={state.hubNum}
                                         />
                                         <Input
-                                            className="badge-pill bg-transparent py-0 mb-3"
+                                            className="badge-pill bg-transparent py-0"
                                             placeholder="Enter a name for your hub"
                                             onChange={e => setState({...state, hubName: e.target.value})}
                                             value={state.hubName}
@@ -440,8 +555,6 @@ if (state.hubs && state.devices) {
                                         openHubIconRefs.push(openHubIconRef);
                                         const addDeviceIconRef = React.createRef();
                                         addDeviceIconRefs.push(addDeviceIconRef);
-                                        const hubStatusRef = React.createRef();
-                                        hubStatusRefs.push({ref: hubStatusRef, sn: hub.sn_number});
                                         return (
                                             <div key={idx}>
                                                 <CardHeader className="p-0 pl-2 mb-1 d-flex align-items-center">
@@ -452,10 +565,9 @@ if (state.hubs && state.devices) {
                                                         >
                                                             {hub.name}
                                                         </Button>
-                                                        <span 
-                                                            ref={hubStatusRef}
-                                                            className="active-light mx-2 d-none">
-                                                        </span>
+                                                        <span
+                                                            className={hub.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
+                                                        ></span>
                                                     </CardTitle>
                                                     <CardSubtitle>
                                                         <Button
@@ -483,26 +595,30 @@ if (state.hubs && state.devices) {
 {/* ********************************************************* ADD DEVICE ********************************************************* */}
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseAddDevice === idx}>
-                                                        <CardHeader className="px-0 d-flex align-items-center justify-align-space-between">
+                                                        <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                                            <CardSubtitle className="p-0">
+                                                                <Button
+                                                                    className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
+                                                                    onClick={e => toggleDeleteDevice(e, idx)}
+                                                                >
+                                                                    <span></span><span></span>
+                                                                </Button>
+                                                            </CardSubtitle>
                                                             <CardTitle className="flex-grow-1 m-0">
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0 mb-3"
                                                                     placeholder="Enter a serial number"
-                                                                    onChange={e =>
-                                                                        setState({...state, deviceNum: e.target.value})
-                                                                    }
+                                                                    onChange={e => setState({...state, deviceNum: e.target.value})}
                                                                     value={state.deviceNum}
                                                                 />
                                                                 <Input
-                                                                    className="badge-pill bg-transparent py-0 mb-3"
+                                                                    className="badge-pill bg-transparent py-0"
                                                                     placeholder="Enter a name for your device"
-                                                                    onChange={e =>
-                                                                        setState({...state, deviceName: e.target.value})
-                                                                    }
+                                                                    onChange={e => setState({...state, deviceName: e.target.value})}
                                                                     value={state.deviceName}
                                                                 />
                                                             </CardTitle>
-                                                            <CardSubtitle>
+                                                            <CardSubtitle className="p-0">
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
                                                                     onClick={e => onAddDeviceBtnClick(e, hub.id)}
@@ -517,17 +633,21 @@ if (state.hubs && state.devices) {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                                                            const deviceStatusRef = React.createRef();
-                                                            deviceStatusRefs.push({ref: deviceStatusRef, sn: device.sn_number});
+                                                            const rangeStatusMinRef = React.createRef();
+                                                            const rangeStatusMaxRef = React.createRef();
+                                                            rangeStatusRefs.push({ref: rangeStatusMinRef, sn: device.sn_number});
+                                                            rangeStatusRefs.push({ref: rangeStatusMaxRef, sn: device.sn_number});
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
-                                                                        <div className="d-flex align-items-center">
+                                                                        <div
+                                                                            className="d-flex align-items-center"
+                                                                            onClick={e => onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number)}
+                                                                        >
                                                                             {device.name}
-                                                                            <span 
-                                                                                ref={deviceStatusRef} 
-                                                                                className="active-light mx-2 d-none">
-                                                                            </span>
+                                                                            <span
+                                                                                className={device.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
+                                                                            ></span>
                                                                         </div>
                                                                         <Button
                                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
@@ -539,13 +659,53 @@ if (state.hubs && state.devices) {
                                                                     <CardSubtitle>
                                                                         {device.device_name}
                                                                     </CardSubtitle>
-                                                                    <CardText className="d-flex align-items-center">
-                                                                        <label className="switch">
-                                                                            <input type="checkbox" />
-                                                                            <span className="slider round"></span>
-                                                                        </label>
-                                                                        <span className="ml-3">ON / OFF</span>
-                                                                    </CardText>
+                                                                    <CardSubtitle className="mt-2">
+                                                                        <div className="d-flex align-items-center">
+                                                                            <label className="switch">
+                                                                                <input type="checkbox" />
+                                                                                <span className="slider round"></span>
+                                                                            </label>
+                                                                            <span className="ml-3">OFF / ON</span>
+                                                                        </div>
+                                                                        <div className="range mt-2 min">
+                                                                            <Label for="rangeInput">min.</Label>
+                                                                            <output ref={rangeStatusMinRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <div>
+                                                                                <Input
+                                                                                    type="range"
+                                                                                    id="rangeInput"
+                                                                                    name="rangeInput"
+                                                                                    min="0"
+                                                                                    max={state.inputRangeMax}
+                                                                                    defaultValue="0"
+                                                                                    // onInput= {function (e) {e.preventDefault()
+                                                                                    //     this.output.amount.value=this.value}}
+                                                                                    // onInput={amount.value = parseInt(this.value)}
+                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMinRef)}
+                                                                                />
+                                                                            </div>
+                                                                            <output>{state.inputRangeMax}</output>
+                                                                        </div>
+                                                                        <div className="range mt-2 max">
+                                                                            <Label for="rangeInput">max.</Label>
+                                                                            <output ref={rangeStatusMaxRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <div>
+                                                                                <Input
+                                                                                    type="range"
+                                                                                    id="rangeInput"
+                                                                                    name="rangeInput"
+                                                                                    min="0"
+                                                                                    max={state.inputRangeMax}
+                                                                                    defaultValue="0"
+                                                                                    // onInput= {function (e) {e.preventDefault()
+                                                                                    //     this.output.amount.value=this.value}}
+                                                                                    // onInput={amount.value = parseInt(this.value)}
+                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMaxRef)}
+                                                                                />
+                                                                            </div>
+                                                                            <output>{state.inputRangeMax}</output>
+                                                                        </div>
+                                                                    </CardSubtitle>
                                                                 </CardHeader>
                                                             );
                                                         })}
@@ -558,32 +718,28 @@ if (state.hubs && state.devices) {
                             </CardBody>
                         </Card>
                     </Col>
-{/* ********************************************************* MONITOR ********************************************************* */}
-                    <Col className="px-3" lg="7">
+{/* ******************************************************** MONITOR ********************************************************* */}
+                    <Col className="px-3 mt-md-0 mt-3" lg="7">
                         <Col className="p-3">
-                            {/* <h3 className="text-center">kitchen</h3> */}
-                            <ReactTable />
-                            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" />
-                            {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" /> */}
-                            <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
-                            <FormGroup>
-                                <Label for="rangeInput">Range</Label>
-                                <Input
-                                    type="range"
-                                    id="rangeInput"
-                                    name="rangeInput"
-                                    min="0"
-                                    max="100"
-                                    // onInput="this.output.amount.value=this.value"
-                                />
-                                <output name="amount" id="amount" htmlFor="rangeInput">
-                                    0
-                                </output>
-                            </FormGroup>
+                            {state.shownDeviceType === '' && (
+                                <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                            )}
+                            {state.shownDeviceType === 1 && (
+                                <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                            )}
+                            {state.shownDeviceType === 2 && (
+                                <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                            )}
+                            {state.shownDeviceType === 3 && (
+                                <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                            )}
+                            {state.shownDeviceType === 4 && (
+                                <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                            )}
                         </Col>
                     </Col>
                 </Row>
-            </Container>
+           </Container>
         );
     } else {
         return <div>Loading...</div>;
@@ -591,6 +747,6 @@ if (state.hubs && state.devices) {
 };
 
 const mapStateToProps = state => {
-    return ({user: state.user});
+    return {user: state.user, socket: state.socket};
 };
-export default connect(mapStateToProps)(Products);
+export default connect(mapStateToProps, {setSocketAction})(Products);

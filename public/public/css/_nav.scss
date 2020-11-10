@@ -2,7 +2,7 @@
 .navbar-toggler {
     padding-right: 0 !important;
     & .menu-icon {
-        width: 30px;
+        width: 2rem;
         position: relative;
         display: flex;
         justify-content: space-between;
@@ -12,7 +12,7 @@
             height: ($font-size-5 / 2);
             width: ($font-size-5 / 2);
             border-radius: 50%;
-            border: $border solid white;
+            border: $border solid $color-3;
             // second dot
             &:nth-child(2) {
                 position: relative;
@@ -21,17 +21,19 @@
                 &::after {
                     content: '';
                     position: absolute;
-                    background: white;
+                    background: $color-3;
                     height: $border;
                     width: 0;
                     transition: width 0.3s;
                 }
                 &::before {
-                    top: ($border / 2);
+                    top: 50%;
+                    transform: translateY(-50%);
                     right: ($font-size-5 / 4);
                 }
                 &::after {
-                    top: ($border / 2);
+                    top: 50%;
+                    transform: translateY(-50%);
                     left: ($font-size-5 / 4);
                 }
             }
@@ -48,8 +50,12 @@
 
 }
 
+.nav-item {
+    font-size: $font-size-3;
+}
+
 /* mobile sidebar */
-#sidebar {
+.sidebar {
     width: 100vw;
     position: fixed;
     top: 74px;
@@ -63,6 +69,32 @@
     /* overflow-y: hidden; */
 }
 
-#sidebar.active {
-    left: 0;
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 576px) {
+    .nav-item {
+        font-size: $font-size-2;
+    }
+    // show sidebar
+    .sidebar.active {
+        left: 0;
+    }
+    // hide topbar
+    .topbar {
+        display: none;
+    }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    .nav-item {
+        font-size: $font-size-2;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
 }
