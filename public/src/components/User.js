@@ -129,6 +129,14 @@ const User = (props) => {
             showErrorModal: false,
         });
     };
+    
+     let imgLink
+    if (myState.userImg) {
+        imgLink = myState.userImg
+    } else {
+        imgLink = '/uploads/1.jpg'
+    }
+    
     return (
         <Fragment>
             <PopUpModal
@@ -158,7 +166,7 @@ const User = (props) => {
                     </Col>
                     <Col className="float-right" xs={6} md={3}>
                         <Image
-                            src={myState.userImg?myState.userImg:`/uploads/1.jpg`}
+                            src={imgLink}
                             height={"150px"}
                             width={"150px"}
                             roundedCircle
