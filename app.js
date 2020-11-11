@@ -347,6 +347,11 @@ io.on('connection', socket => {
             socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
         });
 
+        // turn water on off
+        socket.on('waterOnOff', data => {
+            socket.broadcast.to(userID).emit("waterOnOff", data);
+        })
+
         // user disconnected
         socket.on('user_disconnect', userId => {
             socket.broadcast.to(userId).emit("user_disconnect");
@@ -412,9 +417,7 @@ io.on('connection', socket => {
                     });
 
                     socket.on("deviceDataInterval", info => {
-                        // log(info);
-                        // log(SQL.toMysqlFormat())
-                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, SQL.toMysqlFormat()]).then(result => {
+                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, 'now()']).then(result => {
                             log(result);
                         });
                     });
