@@ -5,6 +5,17 @@
     color: $color-3;
     // transform: scale(1.2);
 }
+// navbar
+.navbar {
+    background-color: $color-1;
+    box-shadow: 0 0 1em 1em $color-1;   
+}
+// logo svg
+.logo {
+  width: 7rem;
+  height: 2.4rem;
+  fill: $color-5;
+}
 // set link bol
 .nav-item {
     font-size: $font-size-3;
@@ -101,14 +112,14 @@ background-color: none;
 .sidebar {
     width: 100vw;
     position: fixed;
-    top: 74px;
+    top:  2.4rem + $font-size-3;
     left: -101vw;
     height: 100vh;
     z-index: 999;
     background: rgb(36, 27, 18);
     /* background: pink; */
     transition: all 0.5s;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    // box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     /* overflow-y: hidden; */
 }
 
@@ -131,6 +142,8 @@ background-color: none;
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
     a.nav-link {
+        padding-top: 0;
+        padding-bottom: 0;
         font-size: $font-size-2;
     }
 }
@@ -144,7 +157,7 @@ background-color: none;
     // navigation bar
     .navbar {
       background-color: $color-1;
-      box-shadow: 0 6px 24px 2px $color-1;                
+      box-shadow: 0 0 1em 1em $color-1;                
       // changes regular toggle color
       &.navbar-toggler-icon {
           color: $color-3;
