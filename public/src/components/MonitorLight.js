@@ -35,8 +35,7 @@ class MonitorSoil extends Component {
                     <tbody>
                         <tr>
                             <th scope="row">{this.props.device}</th>
-                            <td>50%</td>
-                            {/* <td>{this.props.data[0]}%</td> */}
+                            <td>{this.props.data[0]}%</td>
                         </tr>
                     </tbody>
                 </Table>
