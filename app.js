@@ -44,7 +44,7 @@ socket.on('toDevice', receivedDevices => {
 let userConnected = false;
 socket.on('user_connect', () => {
     userConnected = true;
-    log('The user is online now & asking for realtime data');
+    log('The user is online now');
     // send order to all devices to get realtime data
     // requestRealTimeDataFromAllDevices();
 });
@@ -54,15 +54,18 @@ socket.on('user_disconnect', () => {
 });
 
 
-// incoming order for realtime date
+// incoming order for realtime data
 socket.on('realTimeRequest', sn => {
     // change focus to true
     devices[devices.map(device => device.sn_number).indexOf(sn)].focus = true;
-    radio.send('realTimeData', 10, sn).then(() => {
-        log(`realtime data request sent to "${sn}"`);
-    }).catch(error => {
-        log(error);
-    });
+    // realtime data request for all devices except waterpump
+    if (devices[devices.map(device => device.sn_number).indexOf(sn)].type_id != 2) {
+        radio.send('realTimeData', 10, sn).then(() => {
+            log(`realtime data request sent to "${sn}"`);
+        }).catch(error => {
+            log(error);
+        });    
+    }
 });
 // stop real time data for some device
 socket.on('stopRealTimeData', sn => {
@@ -75,6 +78,19 @@ socket.on('stopRealTimeData', sn => {
     })
 })
 
+// get status from water switcher
+socket.on('waterOnOff', data => {
+    // switch status from device inside devices
+    devices[devices.map(device => device.sn_number).indexOf(data.sn)].status = data.status;
+    const message = data.status ? 'on' : 'off';
+    // send message on or off to arduino
+    radio.send(message, 10, data.sn).then(() => {
+        log(`status for water device ${data.sn}: "${data.status}"`);
+    }).catch(error => {
+        log(error);
+    });
+});
+
 
 // read the data getting from device
 radio.read(data => {
@@ -82,7 +98,7 @@ radio.read(data => {
     const message = data.substr(data.indexOf('-') + 1, data.length);
     const device = devices.find(device => device.sn_number === sn);
     if (device && message) {
-        if (message.toString().replace(/\x00/gi, '') === 'yup') { 
+        if (message.toString().replace(/\x00/gi, '') === 'yup' || message.toString().replace(/\x00/gi, '') === 'hi') { 
             // device is connected 
             let dev = devices.find(item => item.sn_number === device.sn_number && !item.connected);
             if (dev) {
@@ -162,7 +178,6 @@ const checkConnected = device => {
 };
 
 
-// ???
 // interval request data from devices
 function requestDataInterval(){
     requestRealTimeDataFromAllDevices();
@@ -170,11 +185,13 @@ function requestDataInterval(){
 function requestRealTimeDataFromAllDevices() {
     // recursivePromises(0, requestRealTimeData);
     devices.forEach(device => {
-        requestRealTimeData(device).then(() => {
+        if (device.type_id !== 2) {
+            requestRealTimeData(device).then(() => {
 
-        }).catch(error => {
-
-        })
+            }).catch(error => {
+    
+            })
+        }
     })
 }
 function requestRealTimeData(device) {
@@ -194,11 +211,13 @@ function requestRealTimeData(device) {
 function stopRequestRealTimeDataFromAllDevices() {
     // recursivePromises(0, stopRequestRealTimeData);
     devices.forEach(device => {
-        stopRequestRealTimeData(device).then(() => {
+        if (device.type_id !== 2) {
+            stopRequestRealTimeData(device).then(() => {
 
-        }).catch(error => {
-
-        })
+            }).catch(error => {
+    
+            })    
+        }
     })
 }
 function stopRequestRealTimeData(device) {
