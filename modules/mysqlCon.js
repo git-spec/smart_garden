@@ -146,11 +146,15 @@ function insertMulti(tableName, columns, values) {
         query = query.substring(0, query.length - 2);
         query += `) VALUES (`;
         values.forEach(val => {
-            query += `'${val}', `;
+            if(val === 'now()'){
+                query += `${val}, `;
+            } else {
+                query += `'${val}', `;
+            }
         });
         query = query.substring(0, query.length - 2);
         query += `);`;
-        console.log(query);
+        // console.log(query);
         runQuery(query).then(result => {
             resolve(result);
         }).catch(error => {
@@ -164,7 +168,6 @@ function twoDigits(d) {
     if (-10 < d && d < 0) return '-0' + (-1 * d).toString();
     return d.toString();
 }
-
 const toMysqlFormat = function () {
     let date = new Date();
     return (
