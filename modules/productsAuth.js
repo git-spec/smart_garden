@@ -141,6 +141,17 @@ function deleteDevice(deviceID, userID) {
     });
 }
 
+function deviceOnOff(deviceID, deviceStatus) {
+    return new Promise((resolve, reject) => {
+        runQuery(`UPDATE iot_device SET status=${deviceStatus} WHERE id=${deviceID}`).then(() => {
+            resolve();
+        }).catch(err => {
+            console.log(err);
+            reject(err);
+        });
+    });
+}
+
 /* ******************************************************* EXPORT ******************************************************* */
 module.exports = {
     checkHubNum,
@@ -150,5 +161,6 @@ module.exports = {
     getHubs,
     getDevices,
     deleteHub,
-    deleteDevice
+    deleteDevice,
+    deviceOnOff
 };
