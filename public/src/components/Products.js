@@ -39,7 +39,8 @@ import {
     checkDeviceNumPost,
     addDevicePost,
     getDevicesPost,
-    deleteDevicePost
+    deleteDevicePost,
+    deviceOnOffPost
 } from '../services/productsApi';
 // delete after integrating!!!
 import '../css/Products.css';
@@ -451,16 +452,16 @@ const Products = props => {
     };
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
+    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
         e.preventDefault();
         // rerender the data section
         // 1 from database: fetch request
 
-        // 2 send order to RPI to stop the previous device
-        if(state.shownDeviceSn){
+        // 2 send order to RPI to stop the request from previous device
+        if (state.shownDeviceSn) {
             props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.shownDeviceSn});
         }
-        // 3 real time data: socket emit to send the order to raspberry
+        // 3 get real time data: socket emit to send the order to raspberry
         setState({
             ...state,
             realTimeData: {},
@@ -469,7 +470,9 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
             shownDeviceType: deviceType,
             shownDeviceSn: sn
         });
-        props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+        if (deviceType !== 2) {
+            props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+        }
     };
 
 /* ********************************************************* RETURN ********************************************************* */
@@ -640,6 +643,26 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                             const rangeStatusMaxRef = React.createRef();
                                                             rangeStatusRefs.push({ref: rangeStatusMinRef, sn: device.sn_number});
                                                             rangeStatusRefs.push({ref: rangeStatusMaxRef, sn: device.sn_number});
+                                                            let switchElement = null;
+                                                            if (device.type_id === 2){
+                                                                const statusChange = () => {
+                                                                    deviceOnOffPost(device.id, !device.status).then(() => {
+                                                                        props.socket.emit('waterOnOff', {sn: device.sn_number, status: !device.status});
+                                                                        const newDevices = [...state.devices];
+                                                                        newDevices[newDevices.map(device => device.id).indexOf(device.id)].status = !device.status;
+                                                                        setState({...state, devices: newDevices});
+                                                                    });
+                                                                };
+                                                                switchElement = (
+                                                                <div className="d-flex align-items-center">
+                                                                    <label className="switch">
+                                                                        <input type="checkbox" checked={device.status} onChange={statusChange} />
+                                                                        <span className="slider round"></span>
+                                                                    </label>
+                                                                    <span className="ml-3">OFF / ON</span>
+                                                                </div>
+                                                                )
+                                                            }
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
@@ -663,16 +686,10 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                                         {device.device_name}
                                                                     </CardSubtitle>
                                                                     <CardSubtitle className="mt-2">
-                                                                        <div className="d-flex align-items-center">
-                                                                            <label className="switch">
-                                                                                <input type="checkbox" />
-                                                                                <span className="slider round"></span>
-                                                                            </label>
-                                                                            <span className="ml-3">OFF / ON</span>
-                                                                        </div>
+                                                                        {switchElement}
                                                                         <div className="range mt-2 min">
                                                                             <Label for="rangeInput">min.</Label>
-                                                                            <output ref={rangeStatusMinRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <output ref={rangeStatusMinRef} name="amount" id="amount" htmlFor="rangeInput">0</output>
                                                                             <div>
                                                                                 <Input
                                                                                     type="range"
@@ -691,7 +708,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                                         </div>
                                                                         <div className="range mt-2 max">
                                                                             <Label for="rangeInput">max.</Label>
-                                                                            <output ref={rangeStatusMaxRef}  name="amount" id="amount" htmlFor="rangeInput">0</output>
+                                                                            <output ref={rangeStatusMaxRef} name="amount" id="amount" htmlFor="rangeInput">0</output>
                                                                             <div>
                                                                                 <Input
                                                                                     type="range"
@@ -742,7 +759,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                         </Col>
                     </Col>
                 </Row>
-           </Container>
+            </Container>
         );
     } else {
         return <div>Loading...</div>;
