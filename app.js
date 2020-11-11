@@ -337,13 +337,11 @@ io.on('connection', socket => {
 
         // request for realtime data
         socket.on("getRealTimeData", request => {
-            // log(request);
             socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
         });
 
         // request for stopping incoming data
         socket.on("stopRealTimeData", request => {
-            // log(request);
             socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
         });
 
