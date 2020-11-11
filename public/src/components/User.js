@@ -16,27 +16,46 @@ import { editPost, getUser } from "../services/api";
 import { connect } from "react-redux";
 
 const User = (props) => {
-    
     useEffect(() => {
-        getUser(props.user.id).then(user => {
-            setMyState({...myState,firstName: user.firstname, lastName: user.lastname, userName: user.username, city: user.city, userImg: user.img})
-        }).catch(err=>{
-            console.log(err);
-        })
+        getUser(props.user.id)
+            .then((user) => {
+                if (user.img) {
+                    setMyState({
+                        ...myState,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        userName: user.username,
+                        city: user.city,
+                        userImg: user.img,
+                    });
+                } else {
+                    setMyState({
+                        ...myState,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        userName: user.username,
+                        city: user.city,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
         // eslint-disable-next-line
-    },[]);
+    }, []);
     const imageInpRef = useRef();
-
 
     const user = { ...props.user };
     const initialState = {
-        firstName: '',
-        lastName: '',
-        userName: '',
+        firstName: "",
+        lastName: "",
+        userName: "",
         city: "",
         password: "",
         repassword: "",
-        userImg:"",
+        userImg: "/uploads/1.jpg",
+        imageHash: null,
+
         errorComponent: null,
         showErrorModal: false,
         resultElement: null,
@@ -44,13 +63,10 @@ const User = (props) => {
     const [myState, setMyState] = useState(initialState);
     const onEditBtnClick = (e) => {
         e.preventDefault();
-        if (
-            myState.password !== myState.repassword
-        ) {
+        if (myState.password !== myState.repassword) {
             const errorsElement = (
-
                 <ul>
-                    <br/>
+                    <br />
                     {myState.password !== myState.repassword ? (
                         <li>password is not matching the repassword</li>
                     ) : null}
@@ -62,7 +78,7 @@ const User = (props) => {
                 errorComponent: errorsElement,
                 showErrorModal: true,
             });
-            } else {
+        } else {
             editPost(
                 user.id,
                 myState.firstName,
@@ -74,7 +90,6 @@ const User = (props) => {
                 imageInpRef.current.files[0]
             )
                 .then((data) => {
-
                     let badgeClass = "";
                     let badgeMessage = "";
 
@@ -82,7 +97,24 @@ const User = (props) => {
                         case 1:
                             badgeClass = "alert alert-success";
                             badgeMessage =
-                                "You changed your Profile successfully";
+                                "Your Profile has been changed successfully";
+                            getUser(props.user.id)
+                                .then((user) => {
+                                    setMyState({
+                                        ...myState,
+                                        userImg: user.img,
+                                        imageHash: Date.now(),
+                                        resultElement: badge,
+                                    });
+                                    // setTimeout(() => {
+                                    //     setMyState({
+                                    //         ...myState,
+                                    //         userImg: user.img,
+                                    //         imageHash: Date.now(),
+                                    //         resultElement: null,
+                                    //     });
+                                    // }, 2000);
+                                })
                             break;
                         case 2:
                         case 4:
@@ -109,7 +141,6 @@ const User = (props) => {
                     });
                 })
                 .catch((err) => {
-                   
                     const badge = (
                         <div className="alert alert-danger" role="alert">
                             can not send the data to server
@@ -129,14 +160,7 @@ const User = (props) => {
             showErrorModal: false,
         });
     };
-    
-     let imgLink
-    if (myState.userImg) {
-        imgLink = myState.userImg
-    } else {
-        imgLink = '/uploads/1.jpg'
-    }
-    
+
     return (
         <Fragment>
             <PopUpModal
@@ -166,7 +190,8 @@ const User = (props) => {
                     </Col>
                     <Col className="float-right" xs={6} md={3}>
                         <Image
-                            src={imgLink}
+                            key={myState.imageHash}
+                            src={`${myState.userImg}?${myState.imageHash}`}
                             height={"150px"}
                             width={"150px"}
                             roundedCircle
@@ -236,7 +261,11 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="city"
-                                    placeholder={myState.city?myState.city:"Enter Your city"}
+                                    placeholder={
+                                        myState.city
+                                            ? myState.city
+                                            : "Enter Your city"
+                                    }
                                     required
                                     onChange={(e) => {
                                         setMyState({
