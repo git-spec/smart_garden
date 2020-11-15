@@ -12,6 +12,7 @@ function Main(props) {
         props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
         props.setBackgroundColor100Action(null);
         props.setBackgroundColor70Action(null);
+    // eslint-disable-next-line
     }, []);
 
     return(
