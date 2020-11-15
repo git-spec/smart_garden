@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 // router dom
 import {useHistory} from 'react-router-dom';
 // redux
@@ -19,7 +19,6 @@ import {
     CardBody,
     Card,
     CardHeader,
-    Label,
     CardTitle,
     CardSubtitle
 } from 'reactstrap';
@@ -30,6 +29,8 @@ import MonitorSoil from './MonitorSoil';
 import MonitorWater from './MonitorWater';
 import MonitorTempHum from './MonitorTempHum';
 import MonitorLight from './MonitorLight';
+// window dimension hook
+import {useWindowDimension} from './UseWindowDimension';
 // services
 import {
     checkHubNumPost,
@@ -49,13 +50,13 @@ import '../css/Products.css';
 const Products = props => {
 
     const history = useHistory();
+    const [width, height] = useWindowDimension();
 
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
     const openHubsIconRef = React.createRef();
     const openHubIconRefs = [];
-    const rangeStatusRefs = [];
 
 /* ********************************************************* STATE ********************************************************* */
     const initialState = {
@@ -81,6 +82,7 @@ const Products = props => {
         shownDevice: '',
         shownDeviceType: '',
         shownDeviceSn: '',
+        shownDeviceStatus: '',
         // range
         feed: [],
         inputRange: null,
@@ -287,20 +289,6 @@ const Products = props => {
         });
     }
 
-/* ******************************************************** FUNCTIONS ********************************************************* */
-    const onBtnInputRange = (e, output) => {
-        e.preventDefault();
-        // output of current value
-        output.current.innerText = e.target.value;
-        setState({
-            ...state,
-            inputRange: e.target.value
-        });
-        // send current propperties to css
-        output.current.style.setProperty('--thumb-input', e.target.value);
-        output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
-    }
-
 /* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -452,7 +440,7 @@ const Products = props => {
     };
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
+    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn, deviceStatus) => {
         e.preventDefault();
         // rerender the data section
         // 1 from database: fetch request
@@ -468,11 +456,22 @@ const Products = props => {
             shownHub: hubName,
             shownDevice: deviceName,
             shownDeviceType: deviceType,
-            shownDeviceSn: sn
+            shownDeviceSn: sn,
+            shownDeviceStatus: deviceStatus
         });
         if (deviceType !== 2) {
             props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
         }
+    };
+
+    const statusChange = () => {
+        console.log(!state.shownDeviceStatus)
+        deviceOnOffPost(state.shownDeviceSn, !state.shownDeviceStatus).then(() => {
+            props.socket.emit('waterOnOff', {sn: state.shownDeviceSn, status: !state.shownDeviceStatus});
+            const newDevices = [...state.devices];
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.shownDeviceSn)].status = !state.shownDeviceStatus;
+            setState({...state, devices: newDevices, shownDeviceStatus: !state.shownDeviceStatus});
+        });
     };
 
 /* ********************************************************* RETURN ********************************************************* */
@@ -489,6 +488,7 @@ const Products = props => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
+                <div>{width} x {height}</div>
                 <h3 className="text-trans mb-4">Hello {props.user.userName}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
@@ -639,36 +639,12 @@ const Products = props => {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                                                            const rangeStatusMinRef = React.createRef();
-                                                            const rangeStatusMaxRef = React.createRef();
-                                                            rangeStatusRefs.push({ref: rangeStatusMinRef, sn: device.sn_number});
-                                                            rangeStatusRefs.push({ref: rangeStatusMaxRef, sn: device.sn_number});
-                                                            let switchElement = null;
-                                                            if (device.type_id === 2){
-                                                                const statusChange = () => {
-                                                                    deviceOnOffPost(device.id, !device.status).then(() => {
-                                                                        props.socket.emit('waterOnOff', {sn: device.sn_number, status: !device.status});
-                                                                        const newDevices = [...state.devices];
-                                                                        newDevices[newDevices.map(device => device.id).indexOf(device.id)].status = !device.status;
-                                                                        setState({...state, devices: newDevices});
-                                                                    });
-                                                                };
-                                                                switchElement = (
-                                                                <div className="d-flex align-items-center">
-                                                                    <label className="switch">
-                                                                        <input type="checkbox" checked={device.status} onChange={statusChange} />
-                                                                        <span className="slider round"></span>
-                                                                    </label>
-                                                                    <span className="ml-3">OFF / ON</span>
-                                                                </div>
-                                                                )
-                                                            }
                                                             return (
                                                                 <CardHeader key={idx} className="p-0 pl-3 mb-2">
                                                                     <CardTitle className="m-0 d-flex justify-content-between align-items-center">
                                                                         <div
                                                                             className="d-flex align-items-center"
-                                                                            onClick={e => onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number)}
+                                                                            onClick={e => onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number, device.status)}
                                                                         >
                                                                             {device.name}
                                                                             <span
@@ -685,47 +661,39 @@ const Products = props => {
                                                                     <CardSubtitle>
                                                                         {device.device_name}
                                                                     </CardSubtitle>
-                                                                    <CardSubtitle className="mt-2">
-                                                                        {switchElement}
-                                                                        <div className="range mt-2 min">
-                                                                            <Label for="rangeInput">min.</Label>
-                                                                            <output ref={rangeStatusMinRef} name="amount" id="amount" htmlFor="rangeInput">0</output>
-                                                                            <div>
-                                                                                <Input
-                                                                                    type="range"
-                                                                                    id="rangeInput"
-                                                                                    name="rangeInput"
-                                                                                    min="0"
-                                                                                    max={state.inputRangeMax}
-                                                                                    defaultValue="0"
-                                                                                    // onInput= {function (e) {e.preventDefault()
-                                                                                    //     this.output.amount.value=this.value}}
-                                                                                    // onInput={amount.value = parseInt(this.value)}
-                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMinRef)}
-                                                                                />
-                                                                            </div>
-                                                                            <output>{state.inputRangeMax}</output>
-                                                                        </div>
-                                                                        <div className="range mt-2 max">
-                                                                            <Label for="rangeInput">max.</Label>
-                                                                            <output ref={rangeStatusMaxRef} name="amount" id="amount" htmlFor="rangeInput">0</output>
-                                                                            <div>
-                                                                                <Input
-                                                                                    type="range"
-                                                                                    id="rangeInput"
-                                                                                    name="rangeInput"
-                                                                                    min="0"
-                                                                                    max={state.inputRangeMax}
-                                                                                    defaultValue="0"
-                                                                                    // onInput= {function (e) {e.preventDefault()
-                                                                                    //     this.output.amount.value=this.value}}
-                                                                                    // onInput={amount.value = parseInt(this.value)}
-                                                                                    onInput={e => onBtnInputRange(e, rangeStatusMaxRef)}
-                                                                                />
-                                                                            </div>
-                                                                            <output>{state.inputRangeMax}</output>
-                                                                        </div>
-                                                                    </CardSubtitle>
+{/* ******************************************************** MONITOR MOBILE ********************************************************* */}
+                                                                    {width <= 991 && (
+                                                                        <Fragment>
+                                                                            {device.type_id === 1 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {device.type_id === 2 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {device.type_id === 3 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {device.type_id === 4 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                    </Col>
+                                                                                </Col> 
+                                                                            )}
+                                                                        </Fragment>
+                                                                    )}                                                            
                                                                 </CardHeader>
                                                             );
                                                         })}
@@ -738,26 +706,28 @@ const Products = props => {
                             </CardBody>
                         </Card>
                     </Col>
-{/* ******************************************************** MONITOR ********************************************************* */}
-                    <Col className="px-3 mt-md-0 mt-3" lg="7">
-                        <Col className="p-3">
-                            {state.shownDeviceType === '' && (
-                                <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 1 && (
-                                <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 2 && (
-                                <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 3 && (
-                                <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 4 && (
-                                <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
+{/* ******************************************************** MONITOR DESKTOP ********************************************************* */}
+                    {width > 991 && (
+                        <Col className="px-3 mt-md-0 mt-3" lg="7">
+                            <Col className="p-3">
+                                {state.shownDeviceType === '' && (
+                                    <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                )}
+                                {state.shownDeviceType === 1 && (
+                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                )}
+                                {state.shownDeviceType === 2 && (
+                                    <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                )}
+                                {state.shownDeviceType === 3 && (
+                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                )}
+                                {state.shownDeviceType === 4 && (
+                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                )}
+                            </Col>
                         </Col>
-                    </Col>
+                    )}
                 </Row>
             </Container>
         );
@@ -767,6 +737,10 @@ const Products = props => {
 };
 
 const mapStateToProps = state => {
-    return {user: state.user, socket: state.socket};
+    return {
+        user: state.user, 
+        socket: state.socket,
+        windowDimensions: state.windowDimensions
+    };
 };
 export default connect(mapStateToProps, {setSocketAction})(Products);
