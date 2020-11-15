@@ -12,7 +12,8 @@ const {
     getHubs,
     getDevices,
     deleteHub,
-    deleteDevice
+    deleteDevice,
+    deviceOnOff
 } = require('../modules/productsAuth');
 
 /* ---------------------------------------- ROUTES ---------------------------------------- */
@@ -176,6 +177,20 @@ userRouter.post('/deletedevice', (req, res) => {
         });
     } else {
         res.json(2);
+    }
+});
+
+userRouter.post('/deviceonoff', (req, res) => {
+    const deviceSN = req.body.deviceSN;
+    const deviceStatus = req.body.deviceStatus;
+    if (deviceSN && deviceStatus !== null) {
+        deviceOnOff(deviceSN, deviceStatus).then(() => {
+            res.json(1);
+        }).catch(err => {
+            console.log(err);
+        });
+    } else {
+        console.log(err);
     }
 });
 

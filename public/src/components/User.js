@@ -5,78 +5,68 @@ import {
     Row,
     Col,
     Button,
-    // Collapse,
-    // Card,
-    // CardBody,
     Input,
     Form,
     Label,
     FormGroup,
 } from "reactstrap";
 import Image from "react-bootstrap/Image";
-// import { getData } from "../services/getData";
-// import { Link, useLocation, useHistory } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
-// import validator from "validator";
 import { editPost, getUser } from "../services/api";
-
 import { connect } from "react-redux";
 
 const User = (props) => {
-    
     useEffect(() => {
-        getUser(props.user.id).then(user => {
-            setMyState({...myState,firstName: user.firstname, lastName: user.lastname, userName: user.username, city: user.city})
-        }).catch(err=>{
-            console.log(err);
-        })
-    // eslint-disable-next-line
-    },[]);
-    const imagesFileInpRef = useRef();
-
+        getUser(props.user.id)
+            .then((user) => {
+                if (user.img) {
+                    setMyState({
+                        ...myState,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        userName: user.username,
+                        city: user.city,
+                        userImg: user.img,
+                    });
+                } else {
+                    setMyState({
+                        ...myState,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        userName: user.username,
+                        city: user.city,
+                    });
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        // eslint-disable-next-line
+    }, []);
+    const imageInpRef = useRef();
 
     const user = { ...props.user };
-    // const firstName = user.firstName
-    // const lastName = user.lastName
-    // const userName = user.userName
-    // console.log(user.firstName);
-    // console.log('location.state '+location.state);
-    // if(!location.state){
-    //     history.push('/login')
-    // }
     const initialState = {
-        firstName: '',
-        lastName: '',
-        userName: '',
+        firstName: "",
+        lastName: "",
+        userName: "",
         city: "",
         password: "",
         repassword: "",
+        userImg: "/uploads/1.jpg",
+        imageHash: null,
+
         errorComponent: null,
         showErrorModal: false,
         resultElement: null,
     };
     const [myState, setMyState] = useState(initialState);
-    // setMyState({...myState,firstName: user.firstName, lastName: user.lastName, userName: user.userName})
-    // if (myState.firstName.trim() === "") {
-    //     setMyState({...myState,firstName: user.firstName })
-    // }
-    // if (myState.lastName.trim() === "") {
-    //     setMyState({...myState,lastName: user.lastName })
-    // }
-    // if (myState.userName.trim() === "") {
-    //     setMyState({...myState,userName: user.userName })
-    // }
-
     const onEditBtnClick = (e) => {
-        console.log(initialState);
         e.preventDefault();
-        if (
-            myState.password !== myState.repassword
-        ) {
+        if (myState.password !== myState.repassword) {
             const errorsElement = (
-
                 <ul>
-                    <br/>
+                    <br />
                     {myState.password !== myState.repassword ? (
                         <li>password is not matching the repassword</li>
                     ) : null}
@@ -88,17 +78,16 @@ const User = (props) => {
                 errorComponent: errorsElement,
                 showErrorModal: true,
             });
-            } else {
+        } else {
             editPost(
                 user.id,
                 myState.firstName,
                 myState.lastName,
                 myState.userName,
-                myState.City,
+                myState.city,
                 myState.password,
-                myState.repassword
-                // imagesFileInpRef.current.files.length ?
-                // imagesFileInpRef.current.files : null
+                myState.repassword,
+                imageInpRef.current.files[0]
             )
                 .then((data) => {
                     let badgeClass = "";
@@ -108,7 +97,24 @@ const User = (props) => {
                         case 1:
                             badgeClass = "alert alert-success";
                             badgeMessage =
-                                "You changed your Profile successfully";
+                                "Your Profile has been changed successfully";
+                            getUser(props.user.id)
+                                .then((user) => {
+                                    setMyState({
+                                        ...myState,
+                                        userImg: user.img,
+                                        imageHash: Date.now(),
+                                        resultElement: badge,
+                                    });
+                                    // setTimeout(() => {
+                                    //     setMyState({
+                                    //         ...myState,
+                                    //         userImg: user.img,
+                                    //         imageHash: Date.now(),
+                                    //         resultElement: null,
+                                    //     });
+                                    // }, 2000);
+                                })
                             break;
                         case 2:
                         case 4:
@@ -135,16 +141,6 @@ const User = (props) => {
                     });
                 })
                 .catch((err) => {
-                    console.log(err);
-                    console.log({
-                        a: user.id,
-                        b: myState.firstName,
-                        c: myState.lastName,
-                        d: myState.userName,
-                        e: myState.City,
-                        f: myState.password,
-                        g: myState.repassword,
-                    });
                     const badge = (
                         <div className="alert alert-danger" role="alert">
                             can not send the data to server
@@ -164,6 +160,7 @@ const User = (props) => {
             showErrorModal: false,
         });
     };
+
     return (
         <Fragment>
             <PopUpModal
@@ -193,19 +190,19 @@ const User = (props) => {
                     </Col>
                     <Col className="float-right" xs={6} md={3}>
                         <Image
-                            src={require("../imgs/1.jpg")}
+                            key={myState.imageHash}
+                            src={`${myState.userImg}?${myState.imageHash}`}
                             height={"150px"}
                             width={"150px"}
                             roundedCircle
                         />
                         <br />
                         <br />
-                        <Input
-                            ref={imagesFileInpRef}
+                        <input
+                            ref={imageInpRef}
                             id="exampleFormControlFile1"
                             type="file"
                             className="form-control-file"
-                            multiple
                             accept="image/x-png,image/gif,image/jpeg"
                         />
                     </Col>
@@ -264,15 +261,19 @@ const User = (props) => {
                                 <Input
                                     className="badge-pill bg-transparent"
                                     type="city"
-                                    placeholder={myState.city?myState.city:"Enter Your City"}
+                                    placeholder={
+                                        myState.city
+                                            ? myState.city
+                                            : "Enter Your city"
+                                    }
                                     required
                                     onChange={(e) => {
                                         setMyState({
                                             ...myState,
-                                            City: e.target.value,
+                                            city: e.target.value,
                                         });
                                     }}
-                                    value={myState.City}
+                                    value={myState.city}
                                 />
                             </FormGroup>
                         </Col>
