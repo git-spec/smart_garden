@@ -15,7 +15,12 @@ import {
 import {Link, useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
-import {setUserAction, setSocketAction} from '../actions';
+import {setUserAction,
+        setSocketAction,
+        setBackgroundImageAction,
+        setBackgroundColorAction,
+        setBackgroundColor70Action
+} from '../actions';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -23,10 +28,11 @@ import {loginPost} from '../services/api';
 
 const Login = props => {
 
-    const {setUserAction} = props;
     useEffect(() => {
-        setUserAction(null);
-        // setSocketAction(null);
+        props.setUserAction(null);
+        props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
+        props.setBackgroundColorAction("color-5");
+        props.setBackgroundColor70Action("color70");
     // eslint-disable-next-line
     }, []);
 
@@ -84,7 +90,7 @@ const Login = props => {
                         });
                         break;
                     default:
-                        setUserAction(data);
+                        props.setUserAction(data);
                         if (data.role === 'admin') {
                             history.push('/admin/dashboard');
                         } else if(data.role === 'subadmin'){
@@ -189,4 +195,4 @@ const Login = props => {
     );
 };
 
-export default connect(null, {setUserAction, setSocketAction})(Login);
+export default connect(null, {setUserAction, setSocketAction, setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor70Action})(Login);

@@ -1,6 +1,73 @@
+@mixin boldLink {
+    font-weight: bold;
+    @include killShadow();
+    outline: none;
+    color: $color-3;
+    // transform: scale(1.2);
+}
+// navbar
+.navbar {
+    background-color: $color-1-transp;
+    box-shadow: 0 0 1em 1em $color-1-transp;
+    transition: background-color 1s ease;
+}
+// show color of navbar
+.color100 + .navbar,
+.color70 + .navbar {
+    background-color: $color-1;
+    box-shadow: 0 0 1em 1em $color-1;
+    transition: all 1s ease;
+}
+// logo svg
+.logo {
+  width: 7rem;
+  height: 2.4rem;
+  fill: $color-5;
+}
+// set link bol
+.nav-item {
+    font-size: $font-size-3;
+    &:focus {
+        @include killShadow();
+        @include killBorder();
+    }
+    &.active {
+        @include boldLink();
+    }
+}
+// color of links
+a.nav-link {
+    display:inline-block;
+font-size: $font-size-3;
+color: $color-3;
+@include killShadow();
+background-color: none;
+&::before {
+    content: attr(title);
+    content: attr(title) / "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+    font-weight: bold;
+    // transform: scale(1.2);
+}
+// set link bold after hover
+&:hover {
+    @include boldLink();
+}
+// change bg-color & color of link
+// &:active {
+//     // background-color: $color-light !important;
+//     color: $color-1 !important;
+// }
+}
 // menu-icon
 .navbar-toggler {
     padding-right: 0 !important;
+    @include killBorder();
     & .menu-icon {
         width: 2rem;
         position: relative;
@@ -50,30 +117,26 @@
 
 }
 
-.nav-item {
-    font-size: $font-size-3;
-}
-
 /* mobile sidebar */
 .sidebar {
     width: 100vw;
     position: fixed;
-    top: 74px;
+    top:  0;
     left: -101vw;
     height: 100vh;
-    z-index: 999;
     background: rgb(36, 27, 18);
     /* background: pink; */
     transition: all 0.5s;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    z-index: -1;
+    padding-top: 8rem;
+    // box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     /* overflow-y: hidden; */
 }
 
+
+
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
-    .nav-item {
-        font-size: $font-size-2;
-    }
     // show sidebar
     .sidebar.active {
         left: 0;
@@ -82,11 +145,17 @@
     .topbar {
         display: none;
     }
+    // rise font size
+    a.nav-link {
+        font-size: $font-size-2;
+    }
 }
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
-    .nav-item {
+    a.nav-link {
+        padding-top: 0;
+        padding-bottom: 0;
         font-size: $font-size-2;
     }
 }
@@ -97,4 +166,13 @@
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
+    // navigation bar
+    .navbar {
+    //   background-color: $color-1;
+    //   box-shadow: 0 0 1em 1em $color-1;                
+      // changes regular toggle color
+      &.navbar-toggler-icon {
+          color: $color-3;
+      }
+    }
 }

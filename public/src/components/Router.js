@@ -20,9 +20,10 @@ import User from './User';
 import Admin from './Admin';
 import SubAdmin from './SubAdmin';
 
-
-
+/* ******************************************************** COMPONENT ********************************************************* */
 const Router = props => {
+
+console.log(props.backgroundColor);
 
     const {setUserAction} = props;
     useEffect(() => {
@@ -34,9 +35,12 @@ const Router = props => {
         });
     // eslint-disable-next-line
     }, []);
-
-    return (
+/* ******************************************************** RETURN ********************************************************* */
+return (
         <BrowserRouter>
+            {/* <div style={{backgroundImage: props.backgroundUrl === "" ? setTimeout(function() {return(`url(${props.backgroundUrl})`)}, 1000) : `url(${props.backgroundUrl})`}}></div> */}
+            <div style={{backgroundImage: `url(${props.backgroundUrl})`}}></div>
+            <div className={`${props.backgroundColor} ${props.backgroundColor100} ${props.backgroundColor70}`}></div>
             <Navigation />
             <Switch>
                 <Route path="/" exact component={Main} />
@@ -55,4 +59,12 @@ const Router = props => {
     );
 }
 
-export default connect(null, {setUserAction})(Router);
+const mapStateToProps = state => {
+    return {
+        backgroundUrl: state.backgroundUrl,
+        backgroundColor: state.backgroundColor,
+        backgroundColor100: state.backgroundColor100,
+        backgroundColor70: state.backgroundColor70
+    };
+};
+export default connect(mapStateToProps, {setUserAction})(Router);

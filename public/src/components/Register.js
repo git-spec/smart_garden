@@ -1,4 +1,10 @@
 import React, {Fragment} from 'react';
+// redux
+import {connect} from 'react-redux';
+import {setBackgroundImageAction} from '../actions';
+import {setBackgroundColorAction} from '../actions';
+import {setBackgroundColor70Action} from '../actions';
+// reactstrap
 import {
     Container,
     Row,
@@ -16,17 +22,26 @@ import {registerPost} from '../services/api';
 
 class Register extends React.Component {
 
-    state = {
-        firstName: '',
-        lastName: '',
-        userName: '',
-        email: '',
-        password: '',
-        repassword: '',
-        errorComponent: null,
-        showErrorModal: false,
-        resultElement: null
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: '',
+            lastName: '',
+            userName: '',
+            email: '',
+            password: '',
+            repassword: '',
+            errorComponent: null,
+            showErrorModal: false,
+            resultElement: null
+        };
+    }
+
+    componentDidMount() {
+        this.props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
+        this.props.setBackgroundColorAction("color-5");
+        this.props.setBackgroundColor70Action("color70");
+    }
 
     onRegisterBtnClick = e => {
         e.preventDefault();
@@ -230,4 +245,4 @@ class Register extends React.Component {
     }
 }
 
-export default Register;
+export default connect(null, {setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor70Action})(Register);

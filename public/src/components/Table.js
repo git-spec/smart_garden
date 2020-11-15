@@ -2,11 +2,18 @@ import React from 'react';
 import {Table} from 'reactstrap';
 
 const ReactTable = (props) => {
+
+  // const initialState = {
+  //   theadInput = '',
+  //   thInputs = []
+  // };
+  // const [state, setState] = React.useState(initialState);
+
   return (
     <Table borderless size="sm" className="mb-4">
       <thead>
         <tr>
-          <th className="align-bottom"></th>
+          <th className="align-bottom text-uppercase">Devices</th>
           <th><i className="fas fa-thermometer-half mr-2 mb-2"></i></th>
           <th><i className="fas fa-cloud mr-2 mb-2"></i></th>
           <th><i className="fas fa-tint mr-2 mb-2"></i></th>
