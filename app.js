@@ -416,7 +416,7 @@ io.on('connection', socket => {
 
                     socket.on("deviceDataInterval", info => {
                         SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, 'now()']).then(result => {
-                            log(result);
+                            // log(result);
                         });
                     });
 
