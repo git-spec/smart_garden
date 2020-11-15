@@ -82,13 +82,7 @@ const Products = props => {
         shownDevice: '',
         shownDeviceType: '',
         shownDeviceSn: '',
-        shownDeviceStatus: '',
-        // range
-        feed: [],
-        inputRange: null,
-        inputRangeMax: "100",
-        graphHeightMax: 160,
-        graphHeightMin: 20
+        shownDeviceStatus: ''
     };
     const [state, setState] = useState(initialState);
 
@@ -667,28 +661,28 @@ const Products = props => {
                                                                             {device.type_id === 1 && device.sn_number === state.shownDeviceSn && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                        <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 2 && device.sn_number === state.shownDeviceSn && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                        <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 3 && device.sn_number === state.shownDeviceSn && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                        <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 4 && device.sn_number === state.shownDeviceSn && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                                                                        <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                                                                     </Col>
                                                                                 </Col> 
                                                                             )}
@@ -711,19 +705,19 @@ const Products = props => {
                         <Col className="px-3 mt-md-0 mt-3" lg="7">
                             <Col className="p-3">
                                 {state.shownDeviceType === '' && (
-                                    <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                    <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                 )}
                                 {state.shownDeviceType === 1 && (
-                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                 )}
                                 {state.shownDeviceType === 2 && (
-                                    <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                    <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
                                 )}
                                 {state.shownDeviceType === 3 && (
-                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                 )}
                                 {state.shownDeviceType === 4 && (
-                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
+                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                 )}
                             </Col>
                         </Col>
