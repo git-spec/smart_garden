@@ -141,12 +141,12 @@ function deleteDevice(deviceID, userID) {
     });
 }
 
-function deviceOnOff(deviceID, deviceStatus) {
+function deviceOnOff(deviceSN, deviceStatus) {
     return new Promise((resolve, reject) => {
-        runQuery(`UPDATE iot_device SET status=${deviceStatus} WHERE id=${deviceID}`).then(() => {
+        runQuery(`UPDATE iot_device SET status=${deviceStatus} WHERE sn_number='${deviceSN}'`).then(() => {
             resolve();
         }).catch(err => {
-            console.log(err);
+            console.log(err); 
             reject(err);
         });
     });
