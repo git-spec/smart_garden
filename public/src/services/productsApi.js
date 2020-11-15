@@ -189,14 +189,14 @@ export const deleteDevicePost = deviceID => {
     });
 };
 
-export const deviceOnOffPost = (deviceID, deviceStatus) => {
+export const deviceOnOffPost = (deviceSN, deviceStatus) => {
     return new Promise((resolve, reject) => {
         fetch('/user/deviceonoff', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({deviceID, deviceStatus})
+            body: JSON.stringify({deviceSN, deviceStatus})
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {
