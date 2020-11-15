@@ -112,9 +112,9 @@
                     margin-right: ($font-size-3 + $font-size-4) * 2;
                 }
             }
-            & > .card-subtitle {
-            color: $text-transp;
-            }
+            // & > .card-subtitle {
+            // color: $text-transp;
+            // }
         }
         & .card-text {
             font-size: $font-size-5;
@@ -126,17 +126,17 @@
         opacity: 1;
     }
     // inputs
-    & input {
-      color: $color-light !important;
-      // &:focus {
-      //   outline: none;
-      //   border-color: $color-light !important;
-      //   color: $color-light;
-      // }
-      &::placeholder {
-        color: $text-transp !important;
-      }
-    }
+    // & input {
+    //   color: $color-light !important;
+    //   // &:focus {
+    //   //   outline: none;
+    //   //   border-color: $color-light !important;
+    //   //   color: $color-light;
+    //   // }
+    //   &::placeholder {
+    //     color: $text-transp !important;
+    //   }
+    // }
 }
 // inactive light {
 .inactive-lcd {

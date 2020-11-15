@@ -7,8 +7,16 @@
 }
 // navbar
 .navbar {
+    background-color: $color-1-transp;
+    box-shadow: 0 0 1em 1em $color-1-transp;
+    transition: background-color 1s ease;
+}
+// show color of navbar
+.color100 + .navbar,
+.color70 + .navbar {
     background-color: $color-1;
-    box-shadow: 0 0 1em 1em $color-1;   
+    box-shadow: 0 0 1em 1em $color-1;
+    transition: all 1s ease;
 }
 // logo svg
 .logo {
@@ -59,6 +67,7 @@ background-color: none;
 // menu-icon
 .navbar-toggler {
     padding-right: 0 !important;
+    @include killBorder();
     & .menu-icon {
         width: 2rem;
         position: relative;
@@ -112,16 +121,19 @@ background-color: none;
 .sidebar {
     width: 100vw;
     position: fixed;
-    top:  2.4rem + $font-size-3;
+    top:  0;
     left: -101vw;
     height: 100vh;
-    z-index: 999;
     background: rgb(36, 27, 18);
     /* background: pink; */
     transition: all 0.5s;
+    z-index: -1;
+    padding-top: 8rem;
     // box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     /* overflow-y: hidden; */
 }
+
+
 
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
@@ -156,8 +168,8 @@ background-color: none;
 @media (min-width: 992px) {
     // navigation bar
     .navbar {
-      background-color: $color-1;
-      box-shadow: 0 0 1em 1em $color-1;                
+    //   background-color: $color-1;
+    //   box-shadow: 0 0 1em 1em $color-1;                
       // changes regular toggle color
       &.navbar-toggler-icon {
           color: $color-3;
