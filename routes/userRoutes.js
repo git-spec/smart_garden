@@ -181,10 +181,10 @@ userRouter.post('/deletedevice', (req, res) => {
 });
 
 userRouter.post('/deviceonoff', (req, res) => {
-    const deviceID = req.body.deviceID;
+    const deviceSN = req.body.deviceSN;
     const deviceStatus = req.body.deviceStatus;
-    if (deviceID !== null && deviceStatus !== null) {
-        deviceOnOff(deviceID, deviceStatus).then(() => {
+    if (deviceSN && deviceStatus !== null) {
+        deviceOnOff(deviceSN, deviceStatus).then(() => {
             res.json(1);
         }).catch(err => {
             console.log(err);
