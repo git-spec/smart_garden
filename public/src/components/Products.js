@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 // router dom
 import {useHistory} from 'react-router-dom';
 // redux
@@ -24,7 +24,6 @@ import {
     CardBody,
     Card,
     CardHeader,
-    Label,
     CardTitle,
     CardSubtitle,
     CardText
@@ -36,6 +35,8 @@ import MonitorSoil from './MonitorSoil';
 import MonitorWater from './MonitorWater';
 import MonitorTempHum from './MonitorTempHum';
 import MonitorLight from './MonitorLight';
+// window dimension hook
+import {useWindowDimension} from './UseWindowDimension';
 // services
 import {
     checkHubNumPost,
@@ -45,13 +46,17 @@ import {
     checkDeviceNumPost,
     addDevicePost,
     getDevicesPost,
-    deleteDevicePost
+    deleteDevicePost,
+    deviceOnOffPost
 } from '../services/productsApi';
+// delete after integrating!!!
+import '../css/Products.css';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
 
     const history = useHistory();
+    const [width, height] = useWindowDimension();
 
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
@@ -86,12 +91,7 @@ const Products = props => {
         shownDevice: '',
         shownDeviceType: '',
         shownDeviceSn: '',
-        // range
-        feed: [],
-        inputRange: null,
-        inputRangeMax: "100",
-        graphHeightMax: 160,
-        graphHeightMin: 20
+        shownDeviceStatus: ''
     };
     const [state, setState] = useState(initialState);
 
@@ -325,20 +325,6 @@ const Products = props => {
         });
     }
 
-/* ******************************************************** FUNCTIONS ********************************************************* */
-    const onBtnInputRange = (e, output) => {
-        e.preventDefault();
-        // output of current value
-        output.current.innerText = e.target.value;
-        setState({
-            ...state,
-            inputRange: e.target.value
-        });
-        // send current propperties to css
-        output.current.style.setProperty('--thumb-input', e.target.value);
-        output.current.style.setProperty('--output-width', output.current.offsetWidth + "px");
-    }
-
 /* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -490,24 +476,38 @@ const Products = props => {
     };
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
+    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn, deviceStatus) => {
         e.preventDefault();
         // rerender the data section
         // 1 from database: fetch request
 
-        // 2 send order to RPI to stop the previous device
-        if(state.shownDeviceSn){
+        // 2 send order to RPI to stop the request from previous device
+        if (state.shownDeviceSn) {
             props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.shownDeviceSn});
         }
-        // 3 real time data: socket emit to send the order to raspberry
+        // 3 get real time data: socket emit to send the order to raspberry
         setState({
             ...state,
+            realTimeData: {},
             shownHub: hubName,
             shownDevice: deviceName,
             shownDeviceType: deviceType,
-            shownDeviceSn: sn
+            shownDeviceSn: sn,
+            shownDeviceStatus: deviceStatus
         });
-        props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+        if (deviceType !== 2) {
+            props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+        }
+    };
+
+    const statusChange = () => {
+        console.log(!state.shownDeviceStatus)
+        deviceOnOffPost(state.shownDeviceSn, !state.shownDeviceStatus).then(() => {
+            props.socket.emit('waterOnOff', {sn: state.shownDeviceSn, status: !state.shownDeviceStatus});
+            const newDevices = [...state.devices];
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.shownDeviceSn)].status = !state.shownDeviceStatus;
+            setState({...state, devices: newDevices, shownDeviceStatus: !state.shownDeviceStatus});
+        });
     };
 
 /* ********************************************************* RETURN ********************************************************* */
@@ -524,6 +524,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
+                <div>{width} x {height}</div>
                 <h3 className="text-trans mb-4">Hello {props.user.userName}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
@@ -672,6 +673,64 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+//felix
+                                                            return (
+                                                                <CardHeader key={idx} className="p-0 pl-3 mb-2">
+                                                                    <CardTitle className="m-0 d-flex justify-content-between align-items-center">
+                                                                        <div
+                                                                            className="d-flex align-items-center"
+                                                                            onClick={e => onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number, device.status)}
+                                                                        >
+                                                                            {device.name}
+                                                                            <span
+                                                                                className={device.connected ? 'active-light mx-2' : 'inactive-light mx-2'}
+                                                                            ></span>
+                                                                        </div>
+                                                                        <Button
+                                                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                                                            onClick={e => onDeleteDeviceBtnClick(e, device.id)}
+                                                                        >
+                                                                            <span></span><span></span>
+                                                                        </Button>
+                                                                    </CardTitle>
+                                                                    <CardSubtitle>
+                                                                        {device.device_name}
+                                                                    </CardSubtitle>
+{/* ******************************************************** MONITOR MOBILE ********************************************************* */}
+                                                                    {width <= 991 && (
+                                                                        <Fragment>
+                                                                            {device.type_id === 1 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {device.type_id === 2 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {device.type_id === 3 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {device.type_id === 4 && device.sn_number === state.shownDeviceSn && (
+                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                                    <Col className="p-3">
+                                                                                        <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                                                                    </Col>
+                                                                                </Col> 
+                                                                            )}
+                                                                        </Fragment>
+                                                                    )}                                                            
+                                                                </CardHeader>
+//break
                                                             const rangeStatusMinRef = React.createRef();
                                                             const rangeStatusMaxRef = React.createRef();
                                                             rangeStatusRefs.push({ref: rangeStatusMinRef, sn: device.sn_number});
@@ -769,6 +828,7 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                                                                         </CardText>
                                                                     </CardBody>
                                                                 </div>
+//master
                                                             );
                                                         })}
                                                     </Collapse>
@@ -780,28 +840,30 @@ const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
                             </CardBody>
                         </Card>
                     </Col>
-{/* ******************************************************** MONITOR ********************************************************* */}
-                    <Col className="px-3 mt-md-0 mt-3" lg="7">
-                        <Col className="p-3">
-                            {state.shownDeviceType === '' && (
-                                <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 1 && (
-                                <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 2 && (
-                                <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 3 && (
-                                <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
-                            {state.shownDeviceType === 4 && (
-                                <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} min={state.graphHeightMin} max={state.graphHeightMax} />
-                            )}
+{/* ******************************************************** MONITOR DESKTOP ********************************************************* */}
+                    {width > 991 && (
+                        <Col className="px-3 mt-md-0 mt-3" lg="7">
+                            <Col className="p-3">
+                                {state.shownDeviceType === '' && (
+                                    <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                )}
+                                {state.shownDeviceType === 1 && (
+                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                )}
+                                {state.shownDeviceType === 2 && (
+                                    <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
+                                )}
+                                {state.shownDeviceType === 3 && (
+                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                )}
+                                {state.shownDeviceType === 4 && (
+                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                )}
+                            </Col>
                         </Col>
-                    </Col>
+                    )}
                 </Row>
-           </Container>
+            </Container>
         );
     } else {
         return <div>Loading...</div>;

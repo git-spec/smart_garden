@@ -35,12 +35,11 @@ class MonitorSoil extends Component {
                     <tbody>
                         <tr>
                             <th scope="row">{this.props.device}</th>
-                            <td>50%</td>
-                            {/* <td>{this.props.data[0]}%</td> */}
+                            <td>{this.props.data[0]}%</td>
                         </tr>
                     </tbody>
                 </Table>
-                <LineChart data={this.data[0].data} title={this.data[0].title} color="rgb(0, 168, 230)" min={this.props.min} max={this.props.max} />
+                <LineChart data={this.data[0].data} title={this.data[0].title} color="rgb(0, 168, 230)" min="20" max="160" />
                 {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" /> */}
                 {/* <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" /> */}
                 {/* <FormGroup>

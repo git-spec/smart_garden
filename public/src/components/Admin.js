@@ -44,8 +44,7 @@ const Admin = (props) => {
             .catch((err) => {
                 console.log(err);
             });
-
-        // eslint-disable-next-line
+    // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
