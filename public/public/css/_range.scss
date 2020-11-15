@@ -29,6 +29,10 @@ $input-h: 2rem;
   // background: linear-gradient(90deg, $color-6, $color-danger);
   background-color: transparent;
 }
+// range
+#rangeIput {
+  color: $color-danger;
+}
 
 .range {
   width: max-content;
