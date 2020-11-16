@@ -18,8 +18,6 @@ class MonitorTempHum extends Component {
 
     data = getData();
 
-    // console.log('data: ', this.props.data);
-
     render() {
         return (
             <Fragment>
@@ -37,9 +35,22 @@ class MonitorTempHum extends Component {
                     <tbody>
                         <tr>
                             <th scope="row">{this.props.device}</th>
-                            <td>{this.props.data[1]}°</td>
-                            <td>{this.props.data[0]}%</td>
-                            {/* <td>34%</td> */}
+                            {/* <td>{this.props.data[1]}°</td>
+                            <td>{this.props.data[0]}%</td> */}
+                            <td>
+                                {this.props.connected
+                                    ? this.props.data[1]
+                                        ? this.props.data[1] + '°'
+                                        : 'loading'
+                                    : 'not connected'}
+                            </td>
+                            <td>
+                                {this.props.connected
+                                    ? this.props.data[0]
+                                        ? this.props.data[0] + '%'
+                                        : 'loading'
+                                    : 'not connected'}
+                            </td>
                         </tr>
                         {/* <tr>
                             <th scope="row">chives</th>

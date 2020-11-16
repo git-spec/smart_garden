@@ -15,10 +15,10 @@ import LineChart from './LineChart';
 import {getData} from '../services/getData';
 
 class MonitorSoil extends Component {
-
     data = getData();
 
     // console.log('data: ', this.props.data);
+    // {let realTimeData = `${this.props.data[0]}%`}
 
     render() {
         return (
@@ -27,7 +27,9 @@ class MonitorSoil extends Component {
                 <Table borderless size="sm" className="mb-5">
                     <thead>
                         <tr>
-                            <th className="align-bottom"><h3 className="mb-0">{this.props.hub}</h3></th>
+                            <th className="align-bottom">
+                                <h3 className="mb-0">{this.props.hub}</h3>
+                            </th>
                             {/* <th><i className="fas fa-tint mr-2 mb-2"></i></th> */}
                             <th>light</th>
                         </tr>
@@ -35,11 +37,23 @@ class MonitorSoil extends Component {
                     <tbody>
                         <tr>
                             <th scope="row">{this.props.device}</th>
-                            <td>{this.props.data[0]}%</td>
+                            <td>
+                                {this.props.connected
+                                    ? this.props.data[0]
+                                        ? this.props.data[0] + '%'
+                                        : 'loading'
+                                    : 'not connected'}
+                            </td>
                         </tr>
                     </tbody>
                 </Table>
-                <LineChart data={this.data[0].data} title={this.data[0].title} color="rgb(0, 168, 230)" min="20" max="160" />
+                <LineChart
+                    data={this.data[0].data}
+                    title={this.data[0].title}
+                    color="rgb(0, 168, 230)"
+                    min="20"
+                    max="160"
+                />
                 {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" /> */}
                 {/* <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" /> */}
                 {/* <FormGroup>
@@ -57,8 +71,8 @@ class MonitorSoil extends Component {
                     </output>
                 </FormGroup> */}
             </Fragment>
-        )
+        );
     }
-};
+}
 
 export default MonitorSoil;
