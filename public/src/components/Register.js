@@ -2,8 +2,7 @@ import React, {Fragment} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setBackgroundImageAction} from '../actions';
-import {setBackgroundColorAction} from '../actions';
-import {setBackgroundColor70Action} from '../actions';
+import {setBackgroundColor100Action} from '../actions';
 // reactstrap
 import {
     Container,
@@ -39,8 +38,7 @@ class Register extends React.Component {
 
     componentDidMount() {
         this.props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
-        this.props.setBackgroundColorAction("color-5");
-        this.props.setBackgroundColor70Action("color70");
+        this.props.setBackgroundColor100Action("color100");
     }
 
     onRegisterBtnClick = e => {
@@ -245,4 +243,4 @@ class Register extends React.Component {
     }
 }
 
-export default connect(null, {setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor70Action})(Register);
+export default connect(null, {setBackgroundImageAction, setBackgroundColor100Action})(Register);

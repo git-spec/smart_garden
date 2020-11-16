@@ -19,7 +19,7 @@ import {setUserAction,
         setSocketAction,
         setBackgroundImageAction,
         setBackgroundColorAction,
-        setBackgroundColor70Action
+        setBackgroundColor100Action
 } from '../actions';
 // components
 import PopUpModal from './PopUpModal';
@@ -31,8 +31,7 @@ const Login = props => {
     useEffect(() => {
         props.setUserAction(null);
         props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
-        props.setBackgroundColorAction("color-5");
-        props.setBackgroundColor70Action("color70");
+        props.setBackgroundColor100Action("color100");
     // eslint-disable-next-line
     }, []);
 
@@ -195,4 +194,4 @@ const Login = props => {
     );
 };
 
-export default connect(null, {setUserAction, setSocketAction, setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor70Action})(Login);
+export default connect(null, {setUserAction, setSocketAction, setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor100Action})(Login);

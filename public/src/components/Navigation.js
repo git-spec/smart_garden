@@ -110,7 +110,7 @@ function Navigation(props) {
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
                     <NavbarBrand title="home" tag={Link} to="/">
-                        <svg version="1.1" className="logo"
+                        {/* <svg version="1.1" className="logo"
                             xmlns="http://www.w3.org/2000/svg"
                             x="0px" y="0px" width="653px" height="181px" viewBox="0 0 653 181" enableBackground="new 0 0 653 181">
                             <defs>
@@ -166,7 +166,7 @@ function Navigation(props) {
                                 c0-4.619-6.3-8.729-11.266-8.729C38.268,56.763,22.041,61.928,22.041,65.492z"/>
                             <path fill="#9AC992" d="M159.17,48.264c0-3.564-16.227-8.729-23.107-8.729c-4.966,0-11.266,4.11-11.266,8.729
                                 c0,4.62,6.3,8.73,11.266,8.73C142.943,56.994,159.17,51.829,159.17,48.264z"/>
-                        </svg>
+                        </svg> */}
                     </NavbarBrand>
                 </div>
 

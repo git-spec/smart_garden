@@ -8,9 +8,9 @@
 // hubs and devices
 .accordion {
     & button.accordion {
-    background-color: transparent;
-    border-color: transparent;
-    font-size: $font-size-2;
+        background-color: transparent;
+        border-color: transparent;
+        font-size: $font-size-2;
         &:hover,
         &:active,
         &:focus,
@@ -18,6 +18,7 @@
             background-color: transparent;
             border-color: transparent;
             box-shadow: none;
+            color: inherit;
         }
     }
     // name lables
@@ -86,11 +87,13 @@
     }
     // delete card-header formatting
     & .card {
+        color: inherit;
         & .card-header {
             @include killShadow;
             @include killBorder;
             background-color: rgba(0, 0, 0, 0);
             border-bottom: 0 solid rgba(0, 0, 0, 0);
+            color: inherit;
         }
         // placeholder for button up
         & > .card-header .up {
@@ -141,10 +144,10 @@
 // inactive light {
 .inactive-lcd {
     @include lcd();
-    background-color: $color-success-transp;
+    background-color: $color-8-transp;
 }
 // active light {
 .active-lcd {
     @include lcd();
-    background-color: $color-success;
+    background-color: $color-8;
 }

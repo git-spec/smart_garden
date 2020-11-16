@@ -24,10 +24,10 @@ class LineChart extends React.Component {
       // const {height: graphHeight} = myChartRef.canvas;
       // set gradient line
       let gradientLine = myChartRef.createLinearGradient(0, this.props.min, 0, this.props.max);
-      gradientLine.addColorStop(0, "rgb(255, 0, 0)");
+      gradientLine.addColorStop(0, "rgb(255, 96, 96)");
       gradientLine.addColorStop(.2, "rgb(0, 168, 230)");
       gradientLine.addColorStop(.8, "rgb(0, 168, 230)");
-      gradientLine.addColorStop(1, "rgb(255, 0, 0)");
+      gradientLine.addColorStop(1, "rgb(255, 96, 96)");
       // create chart
       this.myChart = new Chart(myChartRef, {
         type: 'line',
@@ -38,14 +38,15 @@ class LineChart extends React.Component {
                 ticks: {
                   min: 0,
                   padding: 10,
-                  fontSize: 12
+                  fontSize: 12,
+                  fontColor: 'rgb(154, 201, 146)'
                 },
                 type: 'time',
                 time: {
                   unit: 'week'
                 },
                 gridLines: {
-                  color: 'rgba(255, 255, 255, .3)'
+                  color: 'rgba(154, 201, 146, .3)'
                 },
                 drawBorder: true,
                 borderWidth: .5
@@ -56,10 +57,11 @@ class LineChart extends React.Component {
                 ticks: {
                   min: 0,
                   padding: 10,
-                  fontSize: 12
+                  fontSize: 12,
+                  fontColor: 'rgb(154, 201, 146)'
                 },
                 gridLines: {
-                  color: 'rgba(255, 255, 255, .3)'
+                  color: 'rgba(154, 201, 146, .3)'
                 },
                 borderWidth: .5
               }
@@ -95,8 +97,10 @@ class LineChart extends React.Component {
   
     render() {
       return(
-        <div className="lineGraph">
-          <canvas ref={this.chartRef} />
+        <div className="line-graph">
+          <div>
+            <canvas ref={this.chartRef} />
+          </div>
         </div>
       );
     }
