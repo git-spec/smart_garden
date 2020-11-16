@@ -5,11 +5,12 @@ import React, {useState, useEffect, Fragment} from 'react';
 import {useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
-import {setSocketAction,
-        setBackgroundImageAction,
-        setBackgroundColorAction,
-        setBackgroundColor100Action,
-        setBackgroundColor70Action
+import {
+    setSocketAction,
+    setBackgroundImageAction,
+    setBackgroundColorAction,
+    setBackgroundColor100Action,
+    setBackgroundColor70Action
 } from '../actions';
 // socket
 import io from 'socket.io-client';
@@ -88,7 +89,8 @@ const Products = props => {
         shownDevice: '',
         shownDeviceType: '',
         shownDeviceSn: '',
-        shownDeviceStatus: ''
+        shownDeviceStatus: null,
+        shownDeviceConnected: null
     };
     const [state, setState] = useState(initialState);
 
@@ -249,12 +251,14 @@ const Products = props => {
     }
     // remove shiny hub
     const toggleHubs = e => {
+        e.preventDefault();
         shineHubRefs.forEach((item) => {
             item.current.classList.remove('shine');
         });
     }
     // remove shiny device
     const toggleDevices = e => {
+        e.preventDefault();
         shineDeviceRefs.forEach((item) => {
             item.current.classList.remove('shine');
         });
@@ -473,13 +477,13 @@ const Products = props => {
     };
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn, deviceStatus) => {
+    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn, deviceStatus, deviceConnected) => {
         e.preventDefault();
         // rerender the data section
         // 1 from database: fetch request
 
         // 2 send order to RPI to stop the request from previous device
-        if (state.shownDeviceSn) {
+        if (state.shownDeviceSn && state.shownDeviceConnected) {
             props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.shownDeviceSn});
         }
         // 3 get real time data: socket emit to send the order to raspberry
@@ -490,9 +494,10 @@ const Products = props => {
             shownDevice: deviceName,
             shownDeviceType: deviceType,
             shownDeviceSn: sn,
-            shownDeviceStatus: deviceStatus
+            shownDeviceStatus: deviceStatus,
+            shownDeviceConnected: deviceConnected
         });
-        if (deviceType !== 2) {
+        if (deviceType !== 2 && deviceConnected) {
             props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
         }
     };
@@ -529,7 +534,7 @@ const Products = props => {
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>
+                                    <Button className="accordion text-uppercase p-0" onClick={e => toggleHubs(e)}>
                                         <h5>hubs</h5>
                                     </Button>
                                     {/* <span className="active-lcd mx-2"></span> */}
@@ -600,7 +605,7 @@ const Products = props => {
                                         return (
                                             <div key={idx} ref={shineHubRef}>
                                                 <CardHeader className="p-0 mb-2 d-flex align-items-center">
-                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices()}}>
+                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e)}}>
                                                         <CardTitle className="m-0 text-left d-flex align-items-center">
                                                                 {hub.name}
                                                             <span className={hub.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -677,11 +682,11 @@ const Products = props => {
                                                                     <CardHeader className="p-0 d-flex align-items-center">
                                                                         <Button className="accordion p-0 flex-grow-1">
                                                                             <CardTitle className="m-0 text-left d-flex align-items-center"
-                                                                                        onClick={e => {
-                                                                                            onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number, device.status);
-                                                                                            shineDevice(e, idx);
-                                                                                            toggleHubs()
-                                                                                        }}
+                                                                                onClick={e => {
+                                                                                    onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number, device.status, device.connected);
+                                                                                    shineDevice(e, idx);
+                                                                                    toggleHubs(e);
+                                                                                }}
                                                                             >
                                                                                 {device.name}
                                                                                 <span className={device.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -694,7 +699,7 @@ const Products = props => {
                                                                             >
                                                                                 <span></span><span></span>
                                                                             </Button>
-                                                                            <Button
+                                                                            {/* <Button
                                                                                 className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
                                                                                 innerRef={addDeviceIconRef}
                                                                                 onClick={e => toggleAddDevice(e, idx)}
@@ -707,7 +712,7 @@ const Products = props => {
                                                                                 onClick={e => toggleHub(e, idx)}
                                                                             >
                                                                                 <span></span><span></span>
-                                                                            </Button>
+                                                                            </Button> */}
                                                                         </CardSubtitle>
                                                                     </CardHeader>
                                                                     <CardBody className="p-0">
@@ -768,16 +773,16 @@ const Products = props => {
                                     <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                 )}
                                 {state.shownDeviceType === 1 && (
-                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} connected={state.shownDeviceConnected} />
                                 )}
                                 {state.shownDeviceType === 2 && (
                                     <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
                                 )}
                                 {state.shownDeviceType === 3 && (
-                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} connected={state.shownDeviceConnected} />
                                 )}
                                 {state.shownDeviceType === 4 && (
-                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} connected={state.shownDeviceConnected} />
                                 )}
                             </Col>
                         </Col>
@@ -791,13 +796,15 @@ const Products = props => {
 };
 
 const mapStateToProps = state => {
-    return {user: state.user,
-            socket: state.socket
+    return {
+        user: state.user,
+        socket: state.socket
     };
 };
-export default connect(mapStateToProps, {   setSocketAction,
-                                            setBackgroundImageAction,
-                                            setBackgroundColorAction,
-                                            setBackgroundColor100Action,
-                                            setBackgroundColor70Action
-                                        })(Products);
+export default connect(mapStateToProps, {
+    setSocketAction,
+    setBackgroundImageAction,
+    setBackgroundColorAction,
+    setBackgroundColor100Action,
+    setBackgroundColor70Action
+})(Products);
