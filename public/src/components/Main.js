@@ -14,6 +14,7 @@ function Main(props) {
         props.setBackgroundColorAction(null);
         props.setBackgroundColor100Action(null);
         props.setBackgroundColor70Action(null);
+    // eslint-disable-next-line
     }, []);
 
     return(

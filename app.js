@@ -5,6 +5,10 @@ const app = express();
 
 // packages
 const fs = require('fs');
+const fileUpload = require('express-fileupload');
+app.use(fileUpload({
+    limits: {fileSize: 6 * 1024 * 1024},
+}))
 const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const cors = require('cors');
@@ -12,6 +16,7 @@ const session = require('express-session');
 
 // app use
 app.use(express.static(__dirname + '/public/build'));
+app.use(express.static(__dirname + '/public'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use(cors());
@@ -88,27 +93,45 @@ app.post('/edit', (req, res) => {
     // 2 data error
     // 3 user exists
     // 4 server error
-    console.log(req.body);
+ 
     const id = req.body.id;
     const firstName = req.body.firstName.trim();
     const lastName = req.body.lastName.trim();
     const userName = req.body.userName.trim();
-    const city = req.body.city.trim();
+    const city = req.body.city;
     const password = req.body.password;
-    const repassword = req.body.repassword;
-    if (id && firstName && lastName && userName ) {
-        editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
-            res.json(1);
-        }).catch(error => {
-            if (error == "exist") {
-                res.json(3);
-            } else{
-                res.json(4);
-            }
-        })
-    } else {
-        res.json(2);
-    };
+    if ( req.files) {
+        const userImg = req.files.userImg;
+        if (id && firstName && lastName && userName ) {
+            editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password, userImg).then(() => {
+                res.json(1);
+            }).catch(error => {
+                if (error == "exist") {
+                    res.json(3);
+                } else{
+                    res.json(4);
+                }
+            })
+        } else {
+            res.json(2);
+        };
+    }else{
+
+        if (id && firstName && lastName && userName ) {
+            editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
+                res.json(1);
+            }).catch(error => {
+                if (error == "exist") {
+                    res.json(3);
+                } else{
+                    res.json(4);
+                }
+            })
+        } else {
+            res.json(2);
+        };
+    }
+
 });
 
 // login
@@ -314,15 +337,18 @@ io.on('connection', socket => {
 
         // request for realtime data
         socket.on("getRealTimeData", request => {
-            // log(request);
             socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
         });
 
         // request for stopping incoming data
         socket.on("stopRealTimeData", request => {
-            // log(request);
             socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
         });
+
+        // turn water on off
+        socket.on('waterOnOff', data => {
+            socket.broadcast.to(userID).emit("waterOnOff", data);
+        })
 
         // user disconnected
         socket.on('user_disconnect', userId => {
@@ -389,10 +415,8 @@ io.on('connection', socket => {
                     });
 
                     socket.on("deviceDataInterval", info => {
-                        // log(info);
-                        // log(SQL.toMysqlFormat())
-                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, SQL.toMysqlFormat()]).then(result => {
-                            log(result);
+                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, 'now()']).then(result => {
+                            // log(result);
                         });
                     });
 

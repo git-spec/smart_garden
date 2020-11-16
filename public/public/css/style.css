@@ -1139,7 +1139,7 @@ input[type='range']::after {
   height: 1rem;
   width: 1rem;
   top: -0.25rem;
-  background-color: red;
+  background-color: #30a256;
   border: 0.25rem solid white;
   border-radius: 50%;
   -webkit-transition: .4s;
@@ -1155,7 +1155,7 @@ input[type='range']::after {
   width: 1rem;
   top: -0.25rem;
   right: 0;
-  background-color: #30a256;
+  background-color: red;
   border: 0.25rem solid white;
   border-radius: 50%;
   -webkit-transition: .4s;

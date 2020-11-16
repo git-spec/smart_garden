@@ -16,7 +16,7 @@ const MonitorAll = props => {
         <Fragment>
             <h3 className="text-center">title</h3>
             <Table />
-            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" min={props.min} max={props.max} />
+            <LineChart data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" min="20" max="160" />
             {/* <LineChartMultiple data={data[0].data} title={data[0].title} color="rgb(0, 168, 230)" /> */}
             <BarChartHorizontal data={data[3].data} title={data[3].title} color="rgb(0, 168, 230)" />
         </Fragment>

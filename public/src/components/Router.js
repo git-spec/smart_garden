@@ -23,8 +23,6 @@ import SubAdmin from './SubAdmin';
 /* ******************************************************** COMPONENT ********************************************************* */
 const Router = props => {
 
-console.log(props.backgroundColor);
-
     const {setUserAction} = props;
     useEffect(() => {
         checkLoginPost().then(data => {
