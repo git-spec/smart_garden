@@ -212,16 +212,16 @@ app.post('/resetPass', (req, res) => {
 
 // checklogin
 app.post('/checklogin', (req, res) => {
-    // just for development, delete for production!!!
-    req.session.user = {
-        id: 3,
-        firstname: 'Felix',
-        lastname: 'Wurst',
-        username: 'felix',
-        email: 'felix.wurst@gmail.com',
-        password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
-        verified: 1
-    };
+    // // just for development, delete for production!!!
+    // req.session.user = {
+    //     id: 3,
+    //     firstname: 'Felix',
+    //     lastname: 'Wurst',
+    //     username: 'felix',
+    //     email: 'felix.wurst@gmail.com',
+    //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
+    //     verified: 1
+    // };
     
     // 10 session does not exist
     if (req.session.user) {
@@ -327,7 +327,7 @@ const server = app.listen(port, () => {
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
-    // log('Device Is Connected');
+    log('Hub is connected');
 
     socket.on('user_connect', userID => {
 
@@ -350,6 +350,10 @@ io.on('connection', socket => {
             socket.broadcast.to(userID).emit("waterOnOff", data);
         })
 
+        socket.on('waterConf', data => {
+            socket.broadcast.to(userID).emit("waterConf", data);
+        })
+        
         // user disconnected
         socket.on('user_disconnect', userId => {
             socket.broadcast.to(userId).emit("user_disconnect");
