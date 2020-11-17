@@ -54,7 +54,7 @@
             font-family: Cuyabra;
             font-size: $font-size-2;
             // font-weight: bold;
-            color: $color-5;
+            color: $color-8;
             margin-bottom: 0;
             line-height: $font-size-3;
         }
@@ -62,6 +62,9 @@
     // buttons plus, minus, up, down
     & .plus, .minus, .up, .down {
         opacity: .7;
+    }
+    & .up, .down {
+        margin-right: .12rem;
     }
     & .card-subtitle {
         // change color of buttons plus & minus
@@ -73,6 +76,7 @@
             }
             &:first-of-type {
                 opacity: 1;
+                margin-top: .12rem !important;
             }
         }
     }
@@ -83,6 +87,12 @@
         // set minus of collapse shiny
         & > .card-subtitle > .minus {
             opacity: 1;
+            margin-left: .12rem;
+        }
+        // set left margin of collapse shiny
+        & > .card-subtitle > .plus {
+            opacity: 1;
+            margin-right: .12rem;
         }
     }
     // delete card-header formatting
@@ -98,29 +108,36 @@
         // placeholder for button up
         & > .card-header .up {
             visibility: hidden;
+            margin-right: $border;
         }
-    }
-    // second unit (hubs)
-    & > .card-body {
-        @include killShadow;
-        border: none !important;
-        // third unit (devices
-        & .card-body .card-header {
-            & .card-title {
-                font-size: $font-size-3 !important;
-                & > button.plus {
-                    margin-right: $font-size-3 + $font-size-4;
+        // placeholder for button up and plus
+        & > .card-body > .collapse > div > .card-body .card-header .up,
+            & > .card-body > .collapse > div > div:last-child.card-body .card-header .plus {
+            visibility: hidden;
+            margin-right: $border;
+        }
+        // second unit (hubs)
+        & > .card-body {
+            @include killShadow;
+            border: none !important;
+            // third unit (devices
+            & .card-body .card-header {
+                & .card-title {
+                    font-size: $font-size-3 !important;
+                    & > button.plus {
+                        margin-right: $font-size-3 + $font-size-4;
+                    }
+                    & > button.minus {
+                        margin-right: ($font-size-3 + $font-size-4) * 2;
+                    }
                 }
-                & > button.minus {
-                    margin-right: ($font-size-3 + $font-size-4) * 2;
-                }
+                // & > .card-subtitle {
+                // color: $text-transp;
+                // }
             }
-            // & > .card-subtitle {
-            // color: $text-transp;
-            // }
-        }
-        & .card-text {
-            font-size: $font-size-5;
+            & .card-text {
+                font-size: $font-size-5;
+            }
         }
     }
     & .shine > .card-header .card-title,

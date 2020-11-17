@@ -6,11 +6,21 @@
     // @include changeColor();
     // transform: scale(1.2);
 }
+@keyframes blur {
+    form {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 // navbar
 .navbar {
     // @include changeBGColor();
-    background-color: $color-1-transp;
+    // background-color: $color-1-transp;
+    background-color: none;
     transition: none;
+    height: 4rem;
     // logo
     & .navbar-brand {
         width: 7rem;
@@ -30,14 +40,23 @@
     }
 }
 // show color of navbar
-.color100 + .navbar,
-.color70 + .navbar {
-    @include changeBGColor();
-    transition: all .5s ease 1s;
-}
+// .color100 + .navbar,
+// .color70 + .navbar {
+//     @include changeBGColor();
+//     @include changeBGShadow();
+//     animation: blur .8s ease .8s;
+//     // transition: all .5s ease 1s;
+// }
+// .color100.color-5 + .navbar {
+//     @include changeBGColor($color-5);
+//     @include changeBGShadow($color-5);
+//     transition: all .5s ease 1s;
+// }
 // change color
 .color-5 + .navbar {
+    @include changeBGColor($color-5);
     @include changeBGShadow($color-5);
+    animation: blur .8s ease 1s;
     & .navbar-brand {
         background-image: url('../imgs/inuta_logo_dark.svg');
     }
@@ -50,7 +69,7 @@
     }
     & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
     & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
-        @include changeButton($color-5);
+        @include changeBGColor($color-2);
     }
     & a.nav-link {
         @include changeColor($color-5);
@@ -64,7 +83,7 @@
   width: 7rem;
   height: 2.4rem;
 }
-// set link bol
+// set link bold
 .nav-item {
     font-size: $font-size-3;
     &:focus {
@@ -79,8 +98,8 @@
 a.nav-link {
     display:inline-block;
     font-size: $font-size-3;
-    @include changeColor();
-    @include killShadow();
+    @include changeColor;
+    @include killShadow;
     background-color: none;
 &::before {
     content: attr(title);
@@ -96,7 +115,7 @@ a.nav-link {
 }
 // set link bold after hover
 &:hover {
-    @include boldLink();
+    @include boldLink;
 }
 // change bg-color & color of link
 // &:active {
@@ -107,7 +126,7 @@ a.nav-link {
 // menu-icon
 .navbar-toggler {
     padding-right: 0 !important;
-    @include killBorder();
+    @include killBorder;
     & .menu-icon {
         width: 2rem;
         position: relative;
@@ -127,8 +146,8 @@ a.nav-link {
                 &::after {
                     content: '';
                     position: absolute;
-                    @include changeButton();
-                    height: $border;
+                    @include changeBGColor($color-3);
+                    height: $border * 1.2;
                     width: 0;
                     transition: width 0.3s;
                 }

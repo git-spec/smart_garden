@@ -13,6 +13,7 @@ button {
     &.btn-secondary,
     &.btn-secondary:not(:disabled):not(.disabled):active {
       color: inherit;
+      @include changeBorder;
     }
     // scales button after hover
     &:hover,
@@ -47,16 +48,22 @@ button {
     &.btn-outline-light:hover {
       color: inherit !important;
       transform: scale(1.2);
-    }
-    // change bg-color & color of button
-    &.btn-outline-light:active {
       @include changeBorder;
-      color: none !important;
+    }
+    // change bg-color & color of buttons up & down
+    &.btn-outline-light:active {
+      // border-color: $color-5 !important;
+      // color: none !important;
+      @include changeButton;
       // change bg-color of button icons up & down
       &.down > span,
       &.up > span {
         background-color: none !important;
       }
+    }
+    &.btn-outline-light:focus {
+      @include changeBorder;
+      @include changeColor;
     }
     // buttons plus & minus
     &.plus,
@@ -172,11 +179,11 @@ button {
   background-color: $color-5 !important;
 }
 
-.color-5 ~ div .btn,
-.color-5 ~ div button,
+// .color-5 ~ div .btn,
+// .color-5 ~ div button,
 .color-5 ~ div .up,
 .color-5 ~ div .down  {
-  @include changeBorder($color-5);
+  border-color: $color-2 !important;
 }
 .color-5 ~ div .plus:active > span,
 .color-5 ~ div .minus:active > span  {
@@ -185,4 +192,14 @@ button {
 .color-5 ~ div .up > span,
 .color-5 ~ div .down > span  {
 @include changeButton($color-5);
+}
+.color-5 ~ div .up:active > span,
+.color-5 ~ div .down:active > span  {
+ background-color: $color-5 !important;
+}
+.color-5 ~ div .btn.btn-outline-light.up:active,
+.color-5 ~ div button.btn-outline-light.up:active,
+.color-5 ~ div .btn.btn-outline-light.down:active,
+.color-5 ~ div button.btn-outline-light.down:active {
+  background-color: $color-2 !important;
 }
