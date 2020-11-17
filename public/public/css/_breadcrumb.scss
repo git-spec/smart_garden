@@ -1,0 +1,9 @@
+.breadcrumb {
+    padding: 0 !important;
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+// color of links
+body .breadcrumb a,
+body .breadcrumb-item.active {
+  color: $color-4-opac !important;
+}
