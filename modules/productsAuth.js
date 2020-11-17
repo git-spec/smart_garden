@@ -152,6 +152,50 @@ function deviceOnOff(deviceSN, deviceStatus) {
     });
 }
 
+function saveRanges(inputRangeTime, inputRangeDuration, deviceSN, soilMoistureDevice) {
+    return new Promise((resolve, reject) => {
+        runQuery(`UPDATE iot_device SET moisture_device_id=${soilMoistureDevice}, water_time=${inputRangeTime}, water_duration=${inputRangeDuration} WHERE sn_number='${deviceSN}'`).then(() => {
+            resolve();
+        }).catch(err => {
+            console.log(err); 
+            reject(err);
+        });
+    });
+}
+
+function deviceMoistureData(deviceID) {
+    return new Promise((resolve, reject) => {
+        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 6 DAY GROUP BY DATE(timestamp)`).then(data => {
+            resolve(data);
+        }).catch(err => {
+            console.log(err); 
+            reject(err);
+        });
+    });
+}
+
+function deviceTempHumData(deviceID) {
+    return new Promise((resolve, reject) => {
+        runQuery(`SELECT AVG(CONVERT(SUBSTRING_INDEX(REPLACE(REPLACE( REPLACE(data, '"]', ''), '["', ''),'"',''),',',1), signed)) as humidity,AVG(CONVERT(SUBSTRING_INDEX(REPLACE( REPLACE(data, '"]', ''), '["', ''),',"',-1), signed)) as temp, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 6 DAY GROUP BY DATE(timestamp)`).then(data => {
+            resolve(data);
+        }).catch(err => {
+            console.log(err); 
+            reject(err);
+        });
+    });
+}
+
+function deviceLightData(deviceID) {
+    return new Promise((resolve, reject) => {
+        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 6 DAY GROUP BY DATE(timestamp)`).then(data => {
+            resolve(data);
+        }).catch(err => {
+            console.log(err); 
+            reject(err);
+        });
+    });
+}
+
 /* ******************************************************* EXPORT ******************************************************* */
 module.exports = {
     checkHubNum,
@@ -162,5 +206,9 @@ module.exports = {
     getDevices,
     deleteHub,
     deleteDevice,
-    deviceOnOff
+    deviceOnOff,
+    saveRanges,
+    deviceMoistureData,
+    deviceTempHumData,
+    deviceLightData
 };
