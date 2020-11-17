@@ -1,93 +1,108 @@
 import React from 'react';
 import Chart from 'chart.js';
 
-// chart stlye options
+// chart style options
 Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
 
 class LineChartMultiple extends React.Component {
+
     constructor(props) {
-      super(props);
-      this.chartRef = React.createRef();
+        super(props);
+        this.chartRef = React.createRef();
     }
-  
-    componentDidUpdate() {
-      this.myChart.data.labels = this.props.data.map(d => d.time);
-      this.myChart.data.datasets[0].data = this.props.data.map(d => d.value);
-      this.myChart.update();
-    }
-  
+
     componentDidMount() {
-      this.myChart = new Chart(this.chartRef.current, {
-      type: 'line',
-      data: {
-          datasets: [{
-              data: [20, 50, 100, 75, 25, 0],
-              label: 'Left dataset',
-  
-              // This binds the dataset to the left y axis
-              yAxisID: 'left-y-axis',
-              fill: 'none',
-              backgroundColor: 0,
-              pointRadius: 2,
-              borderColor: this.props.color,
-              borderWidth: 1,
-              lineTension: 0
-          }, {
-              data: [0.1, 0.5, 1.0, 2.0, 1.5, 0],
-              label: 'Right dataset',
-  
-              // This binds the dataset to the right y axis
-              yAxisID: 'right-y-axis',
-              fill: 'none',
-              backgroundColor: 0,
-              pointRadius: 2,
-              borderColor: 'red',
-              borderWidth: 1,
-              lineTension: 0
-          }],
-          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
-      },
-      options: {
-          scales: {
-              yAxes: [{
-                  id: 'left-y-axis',
-                  type: 'linear',
-                  position: 'left',
-                  gridLines: {
-                    color: 'rgba(255, 255, 255, .5)'
-                  },
-                  drawBorder: true,
-                  borderWidth: .5
-              }, {
-                  id: 'right-y-axis',
-                  type: 'linear',
-                  position: 'right'
-              }],
-              xAxes: [{
-                ticks: {
-                  min: 0,
-                  padding: 10
+        // get canvas
+        const myChartRef = this.chartRef.current.getContext("2d");
+        // set gradient line
+        let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 100);
+        gradientLine.addColorStop(0, "rgb(255, 0, 0)");
+        gradientLine.addColorStop(.2, "rgb(0, 168, 230)");
+        gradientLine.addColorStop(.8, "rgb(0, 168, 230)");
+        gradientLine.addColorStop(1, "rgb(255, 0, 0)");
+        const hData = this.props.data[0].map(d => d.value);
+        const tData = this.props.data[1].map(d => d.value);
+        this.myChart = new Chart(myChartRef, {
+            type: 'line',
+            options: {
+                scales: {
+                    xAxes: [
+                        {
+                            ticks: {
+                                min: 0,
+                                padding: 10,
+                                fontSize: 12
+                            },
+                            type: 'time',
+                            time: {
+                                unit: 'day'
+                            },
+                            gridLines: {
+                                color: 'rgba(255, 255, 255, .3)'
+                            },
+                            drawBorder: true,
+                            borderWidth: .5
+                        }
+                    ],
+                    yAxes: [
+                        {
+                            ticks: {
+                                min: 0,
+                                padding: 10,
+                                fontSize: 12
+                            },
+                            gridLines: {
+                                color: 'rgba(255, 255, 255, .3)'
+                            },
+                            borderWidth: .5
+                        }
+                    ]
+                }
+            },
+            data: {
+                labels: this.props.data.map(d => d.time),
+                datasets: [{
+                    label: 'humidity',
+                    data: hData,
+                    fill: 'none',
+                    backgroundColor: 0,
+                    pointRadius: 2,
+                    borderColor: gradientLine,
+                    borderWidth: 1,
+                    lineTension: 0
                 },
-                type: 'time',
-                time: {
-                  unit: 'week'
-                },
-                gridLines: {
-                  color: 'rgba(255, 255, 255, .5)'
-                },
-                drawBorder: true,
-                borderWidth: .5
-              }]
-          }
-        }
-    });
-  };
-  
-  render() {
-    return <canvas ref={this.chartRef} />;
-  }
+                {
+                    label: 'temperature',
+                    data: tData,
+                    fill: 'none',
+                    backgroundColor: 0,
+                    pointRadius: 2,
+                    borderColor: gradientLine,
+                    borderWidth: 1,
+                    lineTension: 0
+                }]
+            },
+            plugins: {
+                indexlabels: {
+                    fontSize: function (context) {
+                        var width = context.chart.width;
+                        var size = Math.round(width / 32);
+                        return {
+                            size: size
+                        };
+                    }
+                }
+            }
+        });
+        this.myChart.data.labels = this.props.data[0].map(d => d.time);
+        this.myChart.update();
+    }
+
+    render() {
+        return <canvas ref={this.chartRef} />;
+    }
 }
 
 export default LineChartMultiple;
