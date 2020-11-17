@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { Container, Row, Col, Button, Table} from "reactstrap";
+import { Container, Row, Col, Button, Table, Breadcrumb, BreadcrumbItem} from "reactstrap";
+import { Link } from "react-router-dom";
 import PopUpModal from "./PopUpModal";
 import {
     getAllUsers,
@@ -139,6 +140,28 @@ const SubAdmin = (props) => {
             </PopUpModal>
 
             <Container>
+                {/* ********************************************************* Breadcrumb ********************************************************* */}
+                <Row>
+                    <Col lg="5"></Col>
+                    <Col>
+                        <Row>
+                            <Breadcrumb>
+                                <BreadcrumbItem>
+                                    <Link to="/">Home</Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem>
+                                    <Link to="/user">UserProfile</Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem active>
+                                    S-AdminPanel
+                                </BreadcrumbItem>
+                            </Breadcrumb>
+                        </Row>
+                    </Col>
+                    <br />
+                </Row>{" "}
+                <br />
+                {/* ********************************************************* End ********************************************************* */}
                 <Row>
                     <Col xs={6} md={9}>
                         <br />
@@ -172,7 +195,7 @@ const SubAdmin = (props) => {
                         </thead>
                         <tbody>
                             {myState.users.map((user, idx) => {
-                                if (user.role === 'admin') {
+                                if (user.role === 'admin' || user.role === 'subadmin') {
                                     return (null)
                                 } else {
                                     

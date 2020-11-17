@@ -32,6 +32,7 @@ const Login = props => {
         props.setUserAction(null);
         props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
         props.setBackgroundColor100Action("color100");
+        props.setBackgroundColorAction(null);
     // eslint-disable-next-line
     }, []);
 

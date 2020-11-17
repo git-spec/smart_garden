@@ -61,13 +61,12 @@ function Navigation(props) {
         toggleMenuIconRef.current.classList.toggle('open');
     };
 
-    const toggleNavbarBlur = (e) => {
+    const toggleNavbarBlur = e => {
         // console.log(e.relatedTarget);
         if(e.relatedTarget === null){
             setState({...state, collapsed: true});
             toggleMenuIconRef.current.classList.remove('open');
         }
-        
     }
 
 /* *********************************************************** RETURN ********************************************************* */      
@@ -78,7 +77,7 @@ function Navigation(props) {
             <NavItem active={location.pathname === '/' ? true : false}>
                 <NavLink title="home" onClick={toggleNavbar} tag={Link} to="/">home</NavLink>
             </NavItem>
-            {props.user ?
+            {props.user ? (
                 <Fragment>
                     <NavItem active={location.pathname === '/user/dashboard' ? true : false}>
                         <NavLink title="dashboard" onClick={toggleNavbar} tag={Link} to="/user/dashboard">dashboard</NavLink>
@@ -86,11 +85,35 @@ function Navigation(props) {
                     <NavItem active={location.pathname === '/user/profile' ? true : false}>
                         <NavLink title="profile" onClick={toggleNavbar}  tag={Link} to="/user/profile">profile</NavLink>
                     </NavItem>
+            {props.user.role === "admin" ? (
+                    <NavItem>
+                        <NavLink
+                            tag={Link}
+                            to="/user/adminPanel"
+                        >
+                            Panel
+                        </NavLink>
+                    </NavItem>
+            ) : (
+                ""
+            )}
+            {props.user.role === "subadmin" ? (
+                    <NavItem>
+                        <NavLink
+                            tag={Link}
+                            to="/user/subadminPanel"
+                        >
+                            Panel
+                        </NavLink>
+                    </NavItem>
+            ) : (
+                ""
+            )}
                     <NavItem>
                         <NavLink title="logout" href="#" onClick={logoutBtnClick}>logout</NavLink>
                     </NavItem>
                 </Fragment>
-            :
+            ) : (
                 <Fragment>
                     <NavItem active={location.pathname === '/login' ? true : false}>
                         <NavLink title="login" onClick={toggleNavbar} tag={Link} to="/login">login</NavLink>
@@ -99,17 +122,16 @@ function Navigation(props) {
                         <NavLink title="register" onClick={toggleNavbar} tag={Link} to="/register">register</NavLink>
                     </NavItem>
                 </Fragment>
-            }
+            )}
         </Fragment>
     )
-
     return (
         <Navbar onBlur={toggleNavbarBlur} fixed="top" >
             <Container  className="px-sm-3 px-0">
 
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
-                    <NavbarBrand title="home" tag={Link} to="/">
+                    <NavbarBrand className="m-0" title="home" tag={Link} to="/">
                         {/* <svg version="1.1" className="logo"
                             xmlns="http://www.w3.org/2000/svg"
                             x="0px" y="0px" width="653px" height="181px" viewBox="0 0 653 181" enableBackground="new 0 0 653 181">
@@ -171,7 +193,7 @@ function Navigation(props) {
                 </div>
 
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <NavLink  title="login" tag={Link} to="/login"><h4 className="m-0"><i className="far fa-user-circle"></i></h4></NavLink>
+                <NavLink  title="login" tag={Link} to="/login" className=" p-0"><h4 className="d-flex text-align-center m-0"><i className="far fa-user-circle"></i></h4></NavLink>
                 {/* navbar toggle for devices smaller than 576px */}
                 <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggleNavbar}>
                     <div ref={toggleMenuIconRef} className="menu-icon"><span></span><span></span><span></span></div>
