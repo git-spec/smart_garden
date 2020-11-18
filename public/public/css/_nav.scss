@@ -1,6 +1,145 @@
+@mixin boldLink {
+    font-weight: bold;
+    @include killShadow();
+    outline: none;
+    color: inherit;
+    // @include changeColor();
+    // transform: scale(1.2);
+}
+// @keyframes navBGColor-1 {
+//     form {
+//         background-color: none;
+//         box-shadow: none;
+//     }
+//     to {
+//         @include changeBGColor($color-1);
+//         @include changeBGShadow($color-1);
+//     }
+// }
+// @keyframes navBGColor-5 {
+//     form {
+//         background-color: none;
+//         box-shadow: none;
+//     }
+//     to {
+//         @include changeBGColor($color-5);
+//         @include changeBGShadow($color-5);
+//     }
+// }
+
+// navbar
+.navbar {
+    // @include changeBGColor();
+    // background-color: $color-1-transp;
+    background-color: rgba(255, 255, 255, 0) !important;
+    transition: none;
+    height: $nav-height;
+    // logo
+    & .navbar-brand {
+        width: 7.2rem;
+        height: 3rem;
+        background-image: url('../imgs/inuta_logo_light.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+    // menu points
+    & li {
+        @include changeColor();
+    }
+    // menu icon color
+    & span {
+        @include changeBorder();
+    }
+}
+// show color of navbar
+// .color100 + .navbar,
+// .color70 + .navbar {
+//     @include changeBGColor();
+//     @include changeBGShadow();
+//     animation: blur .8s ease .8s;
+//     // transition: all .5s ease 1s;
+// }
+// .color100.color-5 + .navbar {
+//     @include changeBGColor($color-5);
+//     @include changeBGShadow($color-5);
+//     transition: all .5s ease 1s;
+// }
+// change color
+// .color-1 + .navbar {
+//     animation: navBGColor-1 .5s ease 1s forwards;
+// }
+.color-5 + .navbar {
+    & .navbar-brand {
+        background-image: url('../imgs/inuta_logo_dark.svg');
+    }
+    & li {
+        @include changeColor($color-5);
+    }
+    & span,
+    & .btn {
+        @include changeBorder($color-5);
+    }
+    & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+    & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+        @include changeBGColor($color-2);
+    }
+    & a.nav-link {
+        @include changeColor($color-5);
+    }
+    & .sidebar {
+        @include changeBGColor($color-5);
+    }
+}
+// logo svg
+.logo {
+  width: 7rem;
+  height: 2.4rem;
+}
+// set link bold
+.nav-item {
+    font-size: $font-size-3;
+    &:focus {
+        @include killShadow();
+        @include killBorder();
+    }
+    &.active {
+        @include boldLink();
+    }
+}
+// color of links
+a.nav-link {
+    display:inline-block;
+    font-size: $font-size-3;
+    @include changeColor;
+    @include killShadow;
+    background-color: none;
+&::before {
+    content: attr(title);
+    content: attr(title) / "";
+    display: block;
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+    font-weight: bold;
+    // transform: scale(1.2);
+}
+// set link bold after hover
+&:hover {
+    @include boldLink;
+}
+// change bg-color & color of link
+// &:active {
+//     // background-color: $color-light !important;
+//     color: $color-1 !important;
+// }
+}
 // menu-icon
 .navbar-toggler {
     padding-right: 0 !important;
+    @include killBorder;
     & .menu-icon {
         width: 2rem;
         position: relative;
@@ -12,7 +151,6 @@
             height: ($font-size-5 / 2);
             width: ($font-size-5 / 2);
             border-radius: 50%;
-            border: $border solid $color-3;
             // second dot
             &:nth-child(2) {
                 position: relative;
@@ -21,8 +159,8 @@
                 &::after {
                     content: '';
                     position: absolute;
-                    background: $color-3;
-                    height: $border;
+                    @include changeBGColor($color-3);
+                    height: $border * 1.2;
                     width: 0;
                     transition: width 0.3s;
                 }
@@ -50,30 +188,26 @@
 
 }
 
-.nav-item {
-    font-size: $font-size-3;
-}
-
 /* mobile sidebar */
 .sidebar {
     width: 100vw;
     position: fixed;
-    top: 74px;
+    top:  0;
     left: -101vw;
     height: 100vh;
-    z-index: 999;
-    background: rgb(36, 27, 18);
+    @include changeBGColor();
     /* background: pink; */
     transition: all 0.5s;
-    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+    z-index: -1;
+    padding-top: 8rem;
+    // box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
     /* overflow-y: hidden; */
 }
 
+
+
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
-    .nav-item {
-        font-size: $font-size-2;
-    }
     // show sidebar
     .sidebar.active {
         left: 0;
@@ -82,11 +216,17 @@
     .topbar {
         display: none;
     }
+    // rise font size
+    a.nav-link {
+        font-size: $font-size-2;
+    }
 }
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
-    .nav-item {
+    a.nav-link {
+        padding-top: 0;
+        padding-bottom: 0;
         font-size: $font-size-2;
     }
 }
@@ -97,4 +237,13 @@
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
+    // navigation bar
+    // .navbar {
+    // //   background-color: $color-1;
+    // //   box-shadow: 0 0 1em 1em $color-1;
+    //   // changes regular toggle color
+    //   &.navbar-toggler-icon {
+    //       color: $color-3;
+    //   }
+    // }
 }

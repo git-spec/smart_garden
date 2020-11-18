@@ -1,0 +1,205 @@
+// round button size
+@mixin roundBtn {
+    width: $font-size-3;
+    height: $font-size-3;
+}
+
+.btn,
+button {
+    @include killShadow;
+    background-color: none;
+    color: inherit;
+    font-weight: bold;
+    &.btn-secondary,
+    &.btn-secondary:not(:disabled):not(.disabled):active {
+      color: inherit;
+      @include changeBorder;
+    }
+    // scales button after hover
+    &:hover,
+    &:active,
+    &.visited,
+    &:focus {
+      @include killShadow;
+      color: inherit;
+    }
+    // shine button after hover
+    &:hover.minus,
+    &:active.minus,
+    &.visited.minus,
+    &:focus.minus,
+    &:hover.plus,
+    &:active.plus,
+    &.visited.plus,
+    &:focus.plus,
+    &:hover.up,
+    &:active.up,
+    &.visited.up,
+    &:focus.up,
+    &:hover.down,
+    &:active.down,
+    &.visited.down,
+    &:focus.down {
+        @include killShadow;
+        outline: none;
+        opacity: 1;
+    }
+    // scale button on hover
+    &.btn-outline-light:hover {
+      color: inherit !important;
+      transform: scale(1.2);
+      @include changeBorder;
+    }
+    // change bg-color & color of buttons up & down
+    &.btn-outline-light:active {
+      // border-color: $color-5 !important;
+      // color: none !important;
+      @include changeButton;
+      // change bg-color of button icons up & down
+      &.down > span,
+      &.up > span {
+        background-color: none !important;
+      }
+    }
+    &.btn-outline-light:focus {
+      @include changeBorder;
+      @include changeColor;
+    }
+    // buttons plus & minus
+    &.plus,
+    &.minus {
+      @include roundBtn;
+      position: relative;
+      & > span {
+        width: $font-size-6;
+        height: $border;
+        position: absolute;
+        left: (($font-size-3 - $font-size-6) / 2 - $border);
+        top: ($font-size-3 / 2 - $border - $border / 2);
+        background-color: $color-3;
+        border-radius: $border;
+      }
+    }
+    // change color of buttons lpus & minus
+    // &.plus {
+    //   border-color: $color-success !important;
+    //   & > span {
+    //     background-color: $color-success !important;
+    //   }
+    //   &:active {
+    //     background-color: $color-success !important;
+    //     opacity: 1;
+    //   }
+    //   &:active > span {
+    //     background-color: $color-1;
+    //   }
+    // }
+    &.minus {
+      border-color: $color-danger !important;
+      & > span {
+        background-color: $color-danger;
+      }
+      &:active {
+        background-color: $color-danger !important;
+        opacity: 1;
+      }
+      &:active > span {
+        background-color: $color-1;
+      }
+    }
+    // plus bar
+    &.plus > span:last-child {
+      width: $border;
+      height: $font-size-6;
+      position: absolute;
+      top: (($font-size-3 - $font-size-6) / 2 - $border);
+      left: ($font-size-3 / 2 - ($border / 2 + $border));
+      // background-color: $color-light;
+      border-radius: $border;
+
+    }
+    // inverts button after click
+    &.plus:active > span,
+    &.minus:active > span {
+      @include changeBGColor;
+    }
+    // button down
+    &.down {
+      @include roundBtn();
+      padding: .3rem;
+      // bars
+      & > span {
+        width: $border;
+        height: $font-size-6 - .11rem;
+        display: inline-block;
+        @include changeBGColor();
+        border-radius: $border;
+        &:first-child {
+          transform: rotate(-45deg);
+          float: left;
+        }
+        &:last-child {
+          transform: rotate(45deg);
+          float: right;
+        }
+      }
+    }
+    // button up
+    &.up {
+      @include roundBtn();
+      padding: 0 .3rem .12rem .3rem;
+      // bars
+      & > span {
+        width: $border;
+        height: $font-size-6 - .11rem;
+        display: inline-block;
+        @include changeBGColor();
+        border-radius: $border;
+        &:first-child {
+          transform: rotate(45deg);
+          float: left;
+        }
+        &:last-child {
+          transform: rotate(-45deg);
+          float: right;
+        }
+      }
+    }
+}
+
+.color-5 ~ div .plus,
+.color-5 ~ div .plus:active {
+  border-color: $color-8 !important;
+}
+.color-5 ~ div .plus > span,
+.color-5 ~ div .plus:active {
+  background-color: $color-8 !important;
+}
+.color-5 ~ div .plus:active > span {
+  background-color: $color-5 !important;
+}
+
+// .color-5 ~ div .btn,
+// .color-5 ~ div button,
+.color-5 ~ div .up,
+.color-5 ~ div .down  {
+  border-color: $color-2 !important;
+}
+.color-5 ~ div .plus:active > span,
+.color-5 ~ div .minus:active > span  {
+@include changeBGColor($color-5);
+}
+.color-5 ~ div .up > span,
+.color-5 ~ div .down > span  {
+@include changeButton($color-5);
+}
+.color-5 ~ div .up:active > span,
+.color-5 ~ div .down:active > span  {
+ background-color: $color-5 !important;
+}
+.color-5 ~ div .btn.btn-outline-light.up:active,
+.color-5 ~ div button.btn-outline-light.up:active,
+.color-5 ~ div .btn.btn-outline-light.down:active,
+.color-5 ~ div button.btn-outline-light.down:active {
+  background-color: $color-2 !important;
+}

@@ -343,7 +343,7 @@ const server = app.listen(port, () => {
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
-    // log('Device Is Connected');
+    log('Hub is connected');
 
     socket.on('user_connect', userID => {
 
@@ -353,16 +353,23 @@ io.on('connection', socket => {
 
         // request for realtime data
         socket.on("getRealTimeData", request => {
-            // log(request);
             socket.broadcast.to(request.userId).emit("realTimeRequest", request.sn);
         });
 
         // request for stopping incoming data
         socket.on("stopRealTimeData", request => {
-            // log(request);
             socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
         });
 
+        // turn water on off
+        socket.on('waterOnOff', data => {
+            socket.broadcast.to(userID).emit("waterOnOff", data);
+        })
+
+        socket.on('waterConf', data => {
+            socket.broadcast.to(userID).emit("waterConf", data);
+        })
+        
         // user disconnected
         socket.on('user_disconnect', userId => {
             socket.broadcast.to(userId).emit("user_disconnect");
@@ -428,10 +435,8 @@ io.on('connection', socket => {
                     });
 
                     socket.on("deviceDataInterval", info => {
-                        // log(info);
-                        // log(SQL.toMysqlFormat())
-                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, SQL.toMysqlFormat()]).then(result => {
-                            log(result);
+                        SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, 'now()']).then(result => {
+                            // log(result);
                         });
                     });
 
@@ -465,7 +470,7 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        log('Hub is disconnected');
+        // log('Hub is disconnected');
         socket.disconnect();
     });
 

@@ -1,0 +1,28 @@
+
+.table {
+    & th {
+        font-weight: bold;
+    }
+    & tr {
+        @include changeColor();
+        border-bottom: $border solid $color-3;         //$text-transp;
+    }
+    & thead > tr > th {
+        text-align: right;
+      &:first-child {
+        text-align: left;
+        font-size: $font-size-3;
+        font-weight: normal;
+      }
+    }
+    & tbody {
+        & td {
+            text-align: right;
+        }
+    }
+}
+
+.color-5 ~ div tr {
+    @include changeColor($color-5);
+    border-bottom: $border solid $color-2;
+}

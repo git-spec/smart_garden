@@ -1,0 +1,11 @@
+#root > div:last-child > div:nth-child(2) a,
+#root > div:last-child > div:nth-child(3) a {
+    color: $color-3 !important;
+    font-size: $font-size-4;
+}
+
+#root > .color-5 ~ div > div:nth-child(2) a,
+#root > .color-5 ~ div > div:nth-child(3) a {
+    color: $color-4 !important;
+    font-size: $font-size-4;
+}

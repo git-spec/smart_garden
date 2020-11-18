@@ -1,11 +1,16 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, Fragment} from 'react';
+// bootstrap
+import Image from "react-bootstrap/Image";
 // router dom
-import { useHistory, Link } from "react-router-dom";
+import {useHistory, Link} from 'react-router-dom';
 // redux
-import { connect } from "react-redux";
-import { setSocketAction } from "../actions";
+import {connect} from 'react-redux';
+import {setSocketAction,
+        setBackgroundColor5Action,
+        setBackgroundColor1Action
+} from '../actions';
 // socket
 import io from "socket.io-client";
 // reactstrap
@@ -19,21 +24,25 @@ import {
     CardBody,
     Card,
     CardHeader,
-    Label,
     CardTitle,
     CardSubtitle,
-    Table, 
-    Breadcrumb, 
+    CardText,
+    Breadcrumb,
     BreadcrumbItem
-} from "reactstrap";
+} from 'reactstrap';
 // components
-import Image from "react-bootstrap/Image";
-import ConfirmModal from "./ConfirmModal";
-import MonitorAll from "./MonitorAll";
-import MonitorSoil from "./MonitorSoil";
-import MonitorWater from "./MonitorWater";
-import MonitorTempHum from "./MonitorTempHum";
-import MonitorLight from "./MonitorLight";
+import ConfirmModal from './ConfirmModal';
+import MonitorAll from './MonitorAll';
+import MonitorSoil from './MonitorSoil';
+import MonitorWater from './MonitorWater';
+import MonitorTempHum from './MonitorTempHum';
+import MonitorLight from './MonitorLight';
+import MonitorKitchen from './MonitorKitchen';
+import MonitorHomeOffice from './MonitorHomeOffice';
+import MonitorGarden from './MonitorGarden';
+import MonitorBalcony from './MonitorBalcony';
+// window dimension hook
+import {useWindowDimension} from './UseWindowDimension';
 // services
 import {
     checkHubNumPost,
@@ -44,11 +53,23 @@ import {
     addDevicePost,
     getDevicesPost,
     deleteDevicePost,
-} from "../services/productsApi";
-
+    deviceOnOffPost,
+    saveRangesPost
+} from '../services/productsApi';
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = (props) => {
     const history = useHistory();
+    const [width] = useWindowDimension();
+
+    // profile
+    let img = "/uploads/1.jpg";
+    if (props.user.img) {
+        img = props.user.img;
+    }
+    const o_date = new Intl.DateTimeFormat();
+    const f_date = (m_ca, m_it) => Object({ ...m_ca, [m_it.type]: m_it.value });
+    const m_date = o_date.formatToParts().reduce(f_date, {});
+    const data = m_date.day + "/" + m_date.month + "/" + m_date.year;
 
     let img = "/uploads/1.jpg";
     if (props.user.img) {
@@ -61,9 +82,10 @@ const Products = (props) => {
     /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
-    const openHubsIconRef = React.createRef();
+    // const openHubsIconRef = React.createRef();
     const openHubIconRefs = [];
-    const rangeStatusRefs = [];
+    const shineHubRefs = [];
+    const shineDeviceRefs = [];
 
     /* ********************************************************* STATE ********************************************************* */
     const initialState = {
@@ -85,48 +107,44 @@ const Products = (props) => {
         confirmModalDelete: null,
         // monitor
         realTimeData: {},
-        shownHub: "",
-        shownDevice: "",
-        shownDeviceType: "",
-        shownDeviceSn: "",
-        // range
-        feed: [],
-        inputRange: null,
-        inputRangeMax: "100",
-        graphHeightMax: 160,
-        graphHeightMin: 20,
+        currentHub: {},
+        currentDevice: {},
+        currentMonitor: 0
     };
     const [state, setState] = useState(initialState);
 
-    /* ********************************************************* USE EFFECT ********************************************************* */
-    // get hubs & devices data from db at initial render
+/* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
-        getHubsPost()
-            .then((hubs) => {
-                if (hubs === 2) {
-                    alert("Server error");
-                } else if (hubs === 10) {
-                    history.push("/login");
-                } else {
-                    getDevicesPost()
-                        .then((devices) => {
-                            if (devices === 2) {
-                                alert("Server error");
-                            } else if (devices === 10) {
-                                history.push("/login");
-                            } else {
-                                setState({ ...state, hubs, devices });
-                            }
-                        })
-                        .catch((err) => {
-                            alert(err);
-                        });
-                }
-            })
-            .catch((err) => {
-                alert(err);
-            });
-        // eslint-disable-next-line
+        // delete image-url
+        // props.setBackgroundImageAction("");
+
+        // set background color of nav
+        props.setBackgroundColor5Action('color-5');
+        props.setBackgroundColor1Action(null);
+
+        // get hubs & devices data from db at initial render
+        getHubsPost().then(hubs => {
+            if (hubs === 2) {
+                alert('Server error');
+            } else if (hubs === 10) {
+                history.push('/login');
+            } else {
+                getDevicesPost().then(devices => {
+                    if (devices === 2) {
+                        alert('Server error');
+                    } else if (devices === 10) {
+                        history.push('/login');
+                    } else {
+                        setState({...state, hubs, devices});
+                    }
+                }).catch(err => {
+                    alert(err);
+                });
+            }
+        }).catch(err => {
+            alert(err);
+        });
+    // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* SOCKET.IO ********************************************************* */
@@ -211,9 +229,9 @@ const Products = (props) => {
             }
         });
 
-        socket.on("realTimeIncomingData", (data) => {
-            console.log(data);
-            setState((state) => ({ ...state, realTimeData: data.data }));
+        socket.on('realTimeIncomingData', data => {
+            // console.log(data);
+            setState(state => ({...state, realTimeData: data.data}));
         });
 
         socket.on("disconnect", () => {
@@ -227,24 +245,59 @@ const Products = (props) => {
         // cleanup
         return () => {
             // the user leaves the component
-            console.log("cleanup");
-            socket.emit("user_disconnect", props.user.id);
+            // console.log('cleanup');
+            socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
         };
         // eslint-disable-next-line
     }, []);
 
-    /* ********************************************************* TOGGLES ********************************************************* */
-    const toggleHubs = (e) => {
-        // toggle up & down button
-        openHubsIconRef.current.classList.toggle("up");
-        openHubsIconRef.current.classList.toggle("down");
+/* ********************************************************* TOGGLES ********************************************************* */
+    // set card-header shiny
+    const shineHub = (e, idx) => {
+        e.preventDefault();
+        shineHubRefs.forEach((item, index) => {
+            if (idx !== index) {
+                item.current.classList.remove('shine');
+            } else {
+                item.current.classList.add('shine');
+            };
+        });
+    }
+    const shineDevice = (e, deviceSN) => {
+        e.preventDefault();
+        shineDeviceRefs.forEach((item) => {
+            if (deviceSN !== item.current.id) {
+                item.current.classList.remove('shine');
+            } else {
+                item.current.classList.add('shine');
+            };
+        });
+    }
+    // remove shiny hub
+    const toggleHubs = e => {
+        e.preventDefault();
+        shineHubRefs.forEach((item) => {
+            item.current.classList.remove('shine');
+        });
+    }
+    // remove shiny device
+    const toggleDevices = e => {
+        e.preventDefault();
+        shineDeviceRefs.forEach((item) => {
+            item.current.classList.remove('shine');
+        });
+    }
+
+    // show first monitor
+    const resetMonitor = e => {
+        e.preventDefault();
         setState({
             ...state,
-            collapseHubs: !state.collapseHubs,
+            currentMonitor: 0
         });
-    };
+    }
 
     const toggleHub = (e, idx) => {
         e.preventDefault();
@@ -254,15 +307,17 @@ const Products = (props) => {
                 item.current.classList.remove("down");
                 item.current.classList.add("up");
             } else {
-                item.current.classList.toggle("up");
-                item.current.classList.toggle("down");
-            }
+                item.current.classList.toggle('up');
+                item.current.classList.toggle('down');
+            };
         });
+        // collapse hub and change monitor
         setState({
             ...state,
             collapseHub: state.collapseHub === Number(idx) ? null : Number(idx),
+            currentMonitor: idx + 5
         });
-    };
+    }
 
     const toggleAddHub = (e) => {
         e.preventDefault();
@@ -272,7 +327,7 @@ const Products = (props) => {
             ...state,
             collapseAddHub: !state.collapseAddHub,
         });
-    };
+    }
 
     const toggleDeleteHub = (e) => {
         e.preventDefault();
@@ -308,25 +363,7 @@ const Products = (props) => {
                 state.collapseAddDevice === Number(idx) ? null : Number(idx),
         });
     };
-
-    /* ******************************************************** FUNCTIONS ********************************************************* */
-    const onBtnInputRange = (e, output) => {
-        e.preventDefault();
-        // output of current value
-        output.current.innerText = e.target.value;
-        setState({
-            ...state,
-            inputRange: e.target.value,
-        });
-        // send current propperties to css
-        output.current.style.setProperty("--thumb-input", e.target.value);
-        output.current.style.setProperty(
-            "--output-width",
-            output.current.offsetWidth + "px"
-        );
-    };
-
-    /* ********************************************************* DELETE HUB ********************************************************* */
+/* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
         const deleteHub = (hubID) => {
@@ -496,32 +533,52 @@ const Products = (props) => {
             alert("Please fill out all inputs!");
         }
     };
-
-    /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn) => {
+/* ********************************************************* SHOW DEVICE DATA ********************************************************* */
+    // rerender the data section
+    const onShowDeviceDataClick = (e, hub, device) => {
         e.preventDefault();
-        // rerender the data section
-        // 1 from database: fetch request
-
-        // 2 send order to RPI to stop the previous device
-        if (state.shownDeviceSn) {
-            props.socket.emit("stopRealTimeData", {
-                userId: props.user.id,
-                sn: state.shownDeviceSn,
-            });
+        // send order to RPI to stop the request from previous device
+        if (state.currentDevice.sn_number && state.currentDevice.connected) {
+            props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.currentDevice.sn_number});
         }
-        // 3 real time data: socket emit to send the order to raspberry
+        // get real time data: socket emit to send the order to raspberry
         setState({
             ...state,
-            shownHub: hubName,
-            shownDevice: deviceName,
-            shownDeviceType: deviceType,
-            shownDeviceSn: sn,
+            realTimeData: {},
+            currentHub: hub,
+            currentDevice: device,
+            currentMonitor: device.type_id
         });
-        props.socket.emit("getRealTimeData", { userId: props.user.id, sn: sn });
+        if (device.type_id !== 2 && device.connected) {
+            props.socket.emit('getRealTimeData', {userId: props.user.id, sn: device.sn_number});
+        }
     };
 
-    /* ********************************************************* RETURN ********************************************************* */
+    // water on off switcher
+    const statusChange = () => {
+        // console.log(!state.currentDevice.status);
+        deviceOnOffPost(state.currentDevice.sn_number, !state.currentDevice.status).then(() => {
+            props.socket.emit('waterOnOff', {sn: state.currentDevice.sn_number, status: !state.currentDevice.status});
+            const newDevices = [...state.devices];
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].status = !state.currentDevice.status;
+            setState({...state, devices: newDevices});
+        });
+    };
+
+    // save parameters for watering
+    const onSaveBtnClick = (e, inputRangeTime, inputRangeDuration, soilMoistureDevice) => {
+        e.preventDefault();
+        saveRangesPost(inputRangeTime, inputRangeDuration, state.currentDevice.sn_number, soilMoistureDevice).then(data => {
+            const newDevices = [...state.devices];
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].water_time = inputRangeTime;
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].water_duration = inputRangeDuration;
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].moisture_device_id = soilMoistureDevice;
+            props.socket.emit('waterConf', {sn: state.currentDevice.sn_number, time: inputRangeTime, duration: inputRangeDuration, soilMoistureDevice: soilMoistureDevice});
+            setState({...state, devices: newDevices});
+        });
+    }
+
+/* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
         return (
             <Container>
@@ -537,67 +594,58 @@ const Products = (props) => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                {/* ********************************************************* Profile Photo ********************************************************* */}
-                <Row>
-                    <Col lg="2">
-                        <Table borderless size="sm">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <Image
-                                            src={img}
-                                            height={"50px"}
-                                            width={"50px"}
-                                            roundedCircle
-                                        />
-                                    </td>
-                                    <td className="text-left">
-                                        {props.user.firstName}{" "}
-                                        {props.user.lastName}
-                                        <br />
-                                        {data}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </Table>
+{/* ********************************************************* BREADCRUMB ********************************************************* */}               
+                <Col className="p-0 mb-3">
+                    <Breadcrumb className="bg-transparent">
+                        <BreadcrumbItem className="bg-transparent">
+                            <Link to="/">Home</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent">
+                            <Link to="/user">UserProfile</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent" active>DashBoard</BreadcrumbItem>
+                    </Breadcrumb>
+                </Col>
+{/* ********************************************************* PROFILE ********************************************************* */}               
+                <Row className="mb-4 d-flex align-items-center">
+                    <Col className="d-flex align-items-center">
+                        <div className="mr-2">
+                            <span>
+                                <Image
+                                    src={img}
+                                    height={"32px"}
+                                    width={"32px"}
+                                    roundedCircle
+                                />
+                            </span>
+                        </div>
+                        <div className="flex-grow-1 p-0 m-0">
+                            <div>
+                                {props.user.firstName}{" "}
+                                {props.user.lastName}
+                            </div>
+                            <div>
+                                {data}
+                            </div>
+                        </div>
                     </Col>
-                    <Col lg="3">
-                    </Col>
-                    <Col >
-                        <Row>
-                            <Breadcrumb className="bg-transparent">
-                                <BreadcrumbItem className="bg-transparent">
-                                    <Link to="/">Home</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbItem className="bg-transparent">
-                                    <Link to="/user">UserProfile</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbItem className="bg-transparent" active>DashBoard</BreadcrumbItem>
-                            </Breadcrumb>
-                        </Row>
-                    </Col>
-                    <br />
-                </Row>{" "}
-                <br />
-                    {/* ********************************************************* End ********************************************************* */}
+                </Row>
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
-                            {/* ********************************************************* HUBS ********************************************************* */}
-                            <CardHeader className="p-0 d-flex align-items-center">
+{/* ********************************************************* HUBS ********************************************************* */}
+                            <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button
-                                        className="accordion text-uppercase p-0"
-                                        onClick={toggleHubs}
-                                    >
-                                        hubs
+                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e)}}>
+                                        <h5>hubs</h5>
                                     </Button>
-                                    {/* <span className="active-light mx-2"></span> */}
+                                    {/* <span className="active-lcd mx-2"></span> */}
                                 </CardTitle>
                                 <CardSubtitle>
                                     <Button
                                         innerRef={addHubIconRef}
                                         className="badge-pill btn-outline-light bg-transparent ml-3 my-auto p-0 plus"
+                                        // show={state.collapseAddHub}
                                         onClick={toggleAddHub}
                                     >
                                         <span></span>
@@ -605,8 +653,8 @@ const Products = (props) => {
                                     </Button>
                                     <Button
                                         className="badge-pill btn-outline-light bg-transparent ml-3 my-auto up"
-                                        innerRef={openHubsIconRef}
-                                        onClick={toggleHubs}
+                                        // innerRef={openHubsIconRef}
+                                        // onClick={toggleHubs}
                                     >
                                         <span></span>
                                         <span></span>
@@ -615,7 +663,7 @@ const Products = (props) => {
                             </CardHeader>
                             {/* ********************************************************* ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
-                                <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                <CardHeader className="p-0 mb-3 d-flex align-items-center justify-align-space-between">
                                     <CardSubtitle>
                                         <Button
                                             className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
@@ -661,38 +709,24 @@ const Products = (props) => {
                                 </CardHeader>
                             </Collapse>
                             <CardBody className="p-0">
-                                <Collapse isOpen={state.collapseHubs}>
-                                    {/* ********************************************************* LOOP HUBS ********************************************************* */}
+                                <Collapse isOpen={true}>
+{/* ********************************************************* LOOP HUBS ********************************************************* */}
                                     {state.hubs.map((hub, idx) => {
                                         const openHubIconRef = React.createRef();
                                         openHubIconRefs.push(openHubIconRef);
                                         const addDeviceIconRef = React.createRef();
-                                        addDeviceIconRefs.push(
-                                            addDeviceIconRef
-                                        );
+                                        addDeviceIconRefs.push(addDeviceIconRef);
+                                        const shineHubRef = React.createRef();
+                                        shineHubRefs.push(shineHubRef);
                                         return (
-                                            <div key={idx}>
-                                                <CardHeader className="p-0 pl-2 mb-1 d-flex align-items-center">
-                                                    <CardTitle className="m-0 flex-grow-1">
-                                                        <Button
-                                                            className="accordion p-0"
-                                                            onClick={(e) =>
-                                                                toggleHub(
-                                                                    e,
-                                                                    idx
-                                                                )
-                                                            }
-                                                        >
-                                                            {hub.name}
-                                                        </Button>
-                                                        <span
-                                                            className={
-                                                                hub.connected
-                                                                    ? "active-light mx-2"
-                                                                    : "inactive-light mx-2"
-                                                            }
-                                                        ></span>
-                                                    </CardTitle>
+                                            <div key={idx} ref={shineHubRef}>
+                                                <CardHeader className="p-0 mb-2 d-flex align-items-center">
+                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e);}}>
+                                                        <CardTitle className="m-0 text-left d-flex align-items-center">
+                                                                {hub.name}
+                                                            <span className={hub.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
+                                                        </CardTitle>
+                                                    </Button>
                                                     <CardSubtitle>
                                                         <Button
                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
@@ -723,15 +757,8 @@ const Products = (props) => {
                                                         </Button>
                                                         <Button
                                                             className="badge-pill btn-outline-light bg-transparent ml-3 up"
-                                                            innerRef={
-                                                                openHubIconRef
-                                                            }
-                                                            onClick={(e) =>
-                                                                toggleHub(
-                                                                    e,
-                                                                    idx
-                                                                )
-                                                            }
+                                                            innerRef={openHubIconRef}
+                                                            onClick={e => {toggleHub(e, idx); shineHub(e, idx)}}
                                                         >
                                                             <span></span>
                                                             <span></span>
@@ -740,13 +767,8 @@ const Products = (props) => {
                                                 </CardHeader>
                                                 {/* ********************************************************* ADD DEVICE ********************************************************* */}
                                                 <CardBody className="p-0 pl-2">
-                                                    <Collapse
-                                                        isOpen={
-                                                            state.collapseAddDevice ===
-                                                            idx
-                                                        }
-                                                    >
-                                                        <CardHeader className="px-0 mb-2 d-flex align-items-center justify-align-space-between">
+                                                    <Collapse isOpen={state.collapseAddDevice === idx}>
+                                                        <CardHeader className="p-0 mb-3 d-flex align-items-center justify-align-space-between">
                                                             <CardSubtitle className="p-0">
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
@@ -824,199 +846,117 @@ const Products = (props) => {
                                                         </CardHeader>
                                                     </Collapse>
                                                 </CardBody>
-                                                <CardBody className="p-0 pl-2">
-                                                    <Collapse
-                                                        isOpen={
-                                                            state.collapseHub ===
-                                                            idx
-                                                        }
-                                                    >
-                                                        {/* ********************************************************* LOOP DEVICE ********************************************************* */}
-                                                        {state.devices
-                                                            .filter(
-                                                                (device) =>
-                                                                    device.hub_id ===
-                                                                    hub.id
-                                                            )
-                                                            .map(
-                                                                (
-                                                                    device,
-                                                                    idx
-                                                                ) => {
-                                                                    const rangeStatusMinRef = React.createRef();
-                                                                    const rangeStatusMaxRef = React.createRef();
-                                                                    rangeStatusRefs.push(
-                                                                        {
-                                                                            ref: rangeStatusMinRef,
-                                                                            sn:
-                                                                                device.sn_number,
-                                                                        }
-                                                                    );
-                                                                    rangeStatusRefs.push(
-                                                                        {
-                                                                            ref: rangeStatusMaxRef,
-                                                                            sn:
-                                                                                device.sn_number,
-                                                                        }
-                                                                    );
-                                                                    return (
-                                                                        <CardHeader
-                                                                            key={
-                                                                                idx
-                                                                            }
-                                                                            className="p-0 pl-3 mb-2"
-                                                                        >
-                                                                            <CardTitle className="m-0 d-flex justify-content-between align-items-center">
-                                                                                <div
-                                                                                    className="d-flex align-items-center"
-                                                                                    onClick={(
-                                                                                        e
-                                                                                    ) =>
-                                                                                        onShowDeviceDataClick(
-                                                                                            e,
-                                                                                            hub.name,
-                                                                                            device.name,
-                                                                                            device.type_id,
-                                                                                            device.sn_number
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    {
-                                                                                        device.name
-                                                                                    }
-                                                                                    <span
-                                                                                        className={
-                                                                                            device.connected
-                                                                                                ? "active-light mx-2"
-                                                                                                : "inactive-light mx-2"
-                                                                                        }
-                                                                                    ></span>
-                                                                                </div>
-                                                                                <Button
-                                                                                    className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                                                                    onClick={(
-                                                                                        e
-                                                                                    ) =>
-                                                                                        onDeleteDeviceBtnClick(
-                                                                                            e,
-                                                                                            device.id
-                                                                                        )
-                                                                                    }
-                                                                                >
-                                                                                    <span></span>
-                                                                                    <span></span>
-                                                                                </Button>
+                                                <CardBody className="p-0 pl-3">
+                                                    <Collapse isOpen={state.collapseHub === idx}>
+{/* ********************************************************* LOOP DEVICE ********************************************************* */}
+                                                        {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
+                                                            const shineDeviceRef = React.createRef();
+                                                            shineDeviceRefs.push(shineDeviceRef);
+                                                            return (
+                                                                <div key={device.sn_number} id={device.sn_number} ref={shineDeviceRef}>
+                                                                    <CardHeader className="p-0 d-flex align-items-center">
+                                                                        <Button className="accordion p-0 flex-grow-1">
+                                                                            <CardTitle className="m-0 text-left d-flex align-items-center"
+                                                                                onClick={e => {
+                                                                                    onShowDeviceDataClick(e, hub, device);
+                                                                                    shineDevice(e, device.sn_number);
+                                                                                    toggleHubs(e);
+                                                                                }}
+                                                                            >
+                                                                                {device.name}
+                                                                                <span className={device.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
                                                                             </CardTitle>
-                                                                            <CardSubtitle>
-                                                                                {
-                                                                                    device.device_name
-                                                                                }
-                                                                            </CardSubtitle>
-                                                                            <CardSubtitle className="mt-2">
-                                                                                <div className="d-flex align-items-center">
-                                                                                    <label className="switch">
-                                                                                        <input type="checkbox" />
-                                                                                        <span className="slider round"></span>
-                                                                                    </label>
-                                                                                    <span className="ml-3">
-                                                                                        OFF
-                                                                                        /
-                                                                                        ON
-                                                                                    </span>
-                                                                                </div>
-                                                                                <div className="range mt-2 min">
-                                                                                    <Label for="rangeInput">
-                                                                                        min.
-                                                                                    </Label>
-                                                                                    <output
-                                                                                        ref={
-                                                                                            rangeStatusMinRef
-                                                                                        }
-                                                                                        name="amount"
-                                                                                        id="amount"
-                                                                                        htmlFor="rangeInput"
-                                                                                    >
-                                                                                        0
-                                                                                    </output>
-                                                                                    <div>
-                                                                                        <Input
-                                                                                            type="range"
-                                                                                            id="rangeInput"
-                                                                                            name="rangeInput"
-                                                                                            min="0"
-                                                                                            max={
-                                                                                                state.inputRangeMax
-                                                                                            }
-                                                                                            defaultValue="0"
-                                                                                            // onInput= {function (e) {e.preventDefault()
-                                                                                            //     this.output.amount.value=this.value}}
-                                                                                            // onInput={amount.value = parseInt(this.value)}
-                                                                                            onInput={(
-                                                                                                e
-                                                                                            ) =>
-                                                                                                onBtnInputRange(
-                                                                                                    e,
-                                                                                                    rangeStatusMinRef
-                                                                                                )
-                                                                                            }
-                                                                                        />
-                                                                                    </div>
-                                                                                    <output>
-                                                                                        {
-                                                                                            state.inputRangeMax
-                                                                                        }
-                                                                                    </output>
-                                                                                </div>
-                                                                                <div className="range mt-2 max">
-                                                                                    <Label for="rangeInput">
-                                                                                        max.
-                                                                                    </Label>
-                                                                                    <output
-                                                                                        ref={
-                                                                                            rangeStatusMaxRef
-                                                                                        }
-                                                                                        name="amount"
-                                                                                        id="amount"
-                                                                                        htmlFor="rangeInput"
-                                                                                    >
-                                                                                        0
-                                                                                    </output>
-                                                                                    <div>
-                                                                                        <Input
-                                                                                            type="range"
-                                                                                            id="rangeInput"
-                                                                                            name="rangeInput"
-                                                                                            min="0"
-                                                                                            max={
-                                                                                                state.inputRangeMax
-                                                                                            }
-                                                                                            defaultValue="0"
-                                                                                            // onInput= {function (e) {e.preventDefault()
-                                                                                            //     this.output.amount.value=this.value}}
-                                                                                            // onInput={amount.value = parseInt(this.value)}
-                                                                                            onInput={(
-                                                                                                e
-                                                                                            ) =>
-                                                                                                onBtnInputRange(
-                                                                                                    e,
-                                                                                                    rangeStatusMaxRef
-                                                                                                )
-                                                                                            }
-                                                                                        />
-                                                                                    </div>
-                                                                                    <output>
-                                                                                        {
-                                                                                            state.inputRangeMax
-                                                                                        }
-                                                                                    </output>
-                                                                                </div>
-                                                                            </CardSubtitle>
-                                                                        </CardHeader>
-                                                                    );
-                                                                }
-                                                            )}
+                                                                        </Button>
+                                                                        <CardSubtitle>
+                                                                            <Button
+                                                                                className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                                                                onClick={e => onDeleteDeviceBtnClick(e, device.id)}
+                                                                            >
+                                                                                <span></span><span></span>
+                                                                            </Button>
+                                                                            <Button className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus">
+                                                                                <span></span><span></span>
+                                                                            </Button>
+                                                                            <Button className="badge-pill btn-outline-light bg-transparent ml-3 up">
+                                                                                <span></span><span></span>
+                                                                            </Button> 
+                                                                        </CardSubtitle>
+                                                                    </CardHeader>
+                                                                    <CardBody className="p-0">
+                                                                        <CardText className="m-0 mb-3">
+                                                                            {device.device_name}
+                                                                        </CardText>
+                                                                    </CardBody>
+{/* ******************************************************** MONITOR MOBILE ********************************************************* */}
+                                                                    {width <= 991 && (
+                                                                        <Fragment>
+                                                                            {state.currentMonitor === 1 && device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
+                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
+                                                                                        <MonitorSoil chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {state.currentMonitor === 2 && device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
+                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
+                                                                                        <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {state.currentMonitor === 3 && device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
+                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
+                                                                                        <MonitorTempHum chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
+                                                                                    </Col>
+                                                                                </Col>  
+                                                                            )}
+                                                                            {state.currentMonitor === 4 && device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
+                                                                                <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
+                                                                                        <MonitorLight chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                    </Col>
+                                                                                </Col> 
+                                                                            )}
+                                                                        </Fragment>
+                                                                    )}                                                            
+                                                                </div>
+                                                            );
+                                                        })}
                                                     </Collapse>
                                                 </CardBody>
+                                                {width <= 991 && (
+                                                    <Fragment>
+                                                        {state.currentMonitor === 5 && hub.id === 1 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorKitchen />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 6 && hub.id === 2 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorHomeOffice />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 7 && hub.id === 5 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorGarden />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 8 && hub.id === 7 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorBalcony />
+                                                                </Col>
+                                                            </Col> 
+                                                        )}
+                                                    </Fragment>
+                                                )}                                                            
                                             </div>
                                         );
                                     })}
@@ -1024,56 +964,51 @@ const Products = (props) => {
                             </CardBody>
                         </Card>
                     </Col>
-                    {/* ******************************************************** MONITOR ********************************************************* */}
-                    <Col className="px-3 mt-md-0 mt-3" lg="7">
-                        <Col className="p-3">
-                            {state.shownDeviceType === "" && (
-                                <MonitorAll
-                                    hub={state.shownHub}
-                                    device={state.shownDevice}
-                                    data={state.realTimeData}
-                                    min={state.graphHeightMin}
-                                    max={state.graphHeightMax}
-                                />
+                    {width <= 991 && (
+                        <Fragment>
+                            {state.currentMonitor === 0 && (
+                                <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                    <Col className="p-0 px-sm-3">
+                                        <MonitorAll />
+                                    </Col>
+                                </Col>  
                             )}
-                            {state.shownDeviceType === 1 && (
-                                <MonitorSoil
-                                    hub={state.shownHub}
-                                    device={state.shownDevice}
-                                    data={state.realTimeData}
-                                    min={state.graphHeightMin}
-                                    max={state.graphHeightMax}
-                                />
-                            )}
-                            {state.shownDeviceType === 2 && (
-                                <MonitorWater
-                                    hub={state.shownHub}
-                                    device={state.shownDevice}
-                                    data={state.realTimeData}
-                                    min={state.graphHeightMin}
-                                    max={state.graphHeightMax}
-                                />
-                            )}
-                            {state.shownDeviceType === 3 && (
-                                <MonitorTempHum
-                                    hub={state.shownHub}
-                                    device={state.shownDevice}
-                                    data={state.realTimeData}
-                                    min={state.graphHeightMin}
-                                    max={state.graphHeightMax}
-                                />
-                            )}
-                            {state.shownDeviceType === 4 && (
-                                <MonitorLight
-                                    hub={state.shownHub}
-                                    device={state.shownDevice}
-                                    data={state.realTimeData}
-                                    min={state.graphHeightMin}
-                                    max={state.graphHeightMax}
-                                />
-                            )}
+                        </Fragment>
+                    )}                                                            
+{/* ******************************************************** MONITOR DESKTOP ********************************************************* */}
+                    {width > 991 && (
+                        <Col className="px-3 mt-md-0 mt-3" lg="7">
+                            <Col className="p-3">
+                                {state.currentMonitor === 0 && (
+                                    <MonitorAll />
+                                )}
+                                {state.currentMonitor === 1 && (
+                                    <MonitorSoil chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                )}
+                                {state.currentMonitor === 2 && (
+                                    <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
+                                )}
+                                {state.currentMonitor === 3 && (
+                                    <MonitorTempHum chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
+                                )}
+                                {state.currentMonitor === 4 && (
+                                    <MonitorLight chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                )}
+                                {state.currentMonitor === 5 && (
+                                    <MonitorKitchen />
+                                )}
+                                {state.currentMonitor === 6 && (
+                                    <MonitorHomeOffice />
+                                )}
+                                {state.currentMonitor === 7 && (
+                                    <MonitorGarden />
+                                )}
+                                {state.currentMonitor === 8 && (
+                                    <MonitorBalcony />
+                                )}
+                            </Col>
                         </Col>
-                    </Col>
+                    )}
                 </Row>
             </Container>
         );
@@ -1081,8 +1016,10 @@ const Products = (props) => {
         return <div>Loading...</div>;
     }
 };
-
-const mapStateToProps = (state) => {
-    return { user: state.user, socket: state.socket };
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        socket: state.socket
+    };
 };
-export default connect(mapStateToProps, { setSocketAction })(Products);
+export default connect(mapStateToProps, {setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Products);

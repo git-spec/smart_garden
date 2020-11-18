@@ -65,38 +65,102 @@
 // variables
 $font-main: Ubuntu;
 $font-head: Cuyabra;
+$font-size-1: 1.8rem;
 $font-size-2: 1.4rem;
 $font-size-3: 1.2rem;
 $font-size-4: 1rem;
 $font-size-5: .8rem;
 $font-size-6: .6rem;
 $font-size-7: .4rem;
-$text-transp: rgba(255, 255, 255, .7);
 $color-1: rgb(36, 27, 18);
+$color-1-transp: rgba(36, 27, 18, 0);
 $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
 $color-2-opac: rgba(29, 44, 34, .8);
-$color-3: rgb(242, 194, 145);
-$color-4: rgb(33, 84, 48);
+$color-3: rgb(253, 215, 157);
+$color-3-opac: rgba(253, 215, 157, .6);
+$color-4: rgb(0, 80, 24);
+$color-4-opac: rgba(0, 67, 20, .6);
 $color-5: rgb(154, 201, 146);
+$color-5-opac: rgba(154, 201, 146, .6);
 $color-6: rgb(0, 168, 230);
+$color-8: rgb(0, 122, 167);
+$color-8-opac: rgba(0, 122, 167, .6);
+$color-8-transp: rgba(0, 122, 167, .3);
+$color-7: rgb(152, 210, 232);
+$color-7-opac: rgba(152, 210, 232, .6);
 $color-light: white;
 $color-danger: red;
+$color-danger-opac: rgba(255, 0, 0, .6);
+$color-danger-light: rgb(255, 96, 96);
 $color-success: rgb(48, 162, 86);
+$color-success-opac: rgba(48, 162, 86, .6);
+$color-success-transp: rgba(48, 162, 86, .3);
 $border: .1rem;
-// outline
-@mixin makeOutline {
-  border: $border solid $color-3 !important;
+$nav-height: 4rem;
+
+// color
+@mixin changeColor($color: $color-1) {
+  @if $color == $color-1 {
+    color: $color-3 !important;
+  }
+  @if $color == $color-5 {
+    color: $color-2 !important;
+  }
+}
+// bg-color
+@mixin changeBGColor($color: $color-1) {
+  background-color: $color;
+}
+// border
+@mixin changeBorder($color: $color-1, $width: $border, $style: solid) {
+  border-width: $width;
+  border-style: $style;
+  @if $color == $color-1 {
+    border-color: $color-3;
+  }
+  @if $color == $color-5 {
+    border-color: $color-2;
+  }
+}
+// bg-shadow
+@mixin changeBGShadow($color: $color-1) {
+  box-shadow: 0 0 1em 1em $color;
+}
+// button background
+@mixin changeButton($color: $color-1) {
+  @if $color == $color-1 {
+    background-color: $color-3 !important;
+    color: $color-1 !important;
+  }
+  @if $color == $color-5 {
+    background-color: $color-2 !important;
+    color: $color-5 !important;
+  }
+}
+// change color of input
+@mixin changeInput($color: $color-1) {
+  @if $color == $color-1 {
+    border-color: $color-3 !important;
+    color: $color-5 !important;
+  }
+  @if $color == $color-5 {
+    border-color: $color-2 !important;
+    color: $color-8 !important;
+  }
 }
 // remove shadows
 @mixin killShadow {
-  box-shadow: none;
-  text-shadow: none;
+  box-shadow: none !important;
+  text-shadow: none !important;
 }
-// round button size
-@mixin roundBtn {
-  width: $font-size-3;
-  height: $font-size-3;
+// remove borders
+@mixin killBorder {
+  border: none !important;
+  outline: none !important;
+}
+@mixin transitionOpacity {
+  transition: opacity .4s ease;
 }
 // default
 *, *:before, *:after {
@@ -104,11 +168,7 @@ $border: .1rem;
     padding: 0;
     box-sizing: border-box;
 }
-
-.chartjs-render-monitor {
-  margin-bottom: $font-size-3;
-}
-    
+// app    
 body {
   font-family: Ubuntu, 'Ubuntu', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
   'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -120,46 +180,120 @@ body {
   #root {
     font-family: Ubuntu;
     height: 100vh;
-    background-color: $color-1;
-    background: url(../imgs/800px_COLOURBOX10774649.jpg) no-repeat fixed top right;
-    background-size: cover;
-    background-position: 20% 40%;
-    // navigation bar
-    & > .navbar {
-        background-color: $color-1;
-        box-shadow: 0 12px 30px 6px $color-1;                
-        // changes regular toggle color
-        &.navbar-toggler-icon {
-            color: $color-3;
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    // background-size: cover;
+    // background-position: top right;
+    // background-position: 20% 40%;
+    // background image
+    // & > div:first-child {
+      // width: 100%;
+      // height: 100%;
+      // position: fixed;
+      // background-color: $color-1;
+      // background-image: url(../imgs/800px_COLOURBOX10774649.jpg);
+      // background-repeat: no-repeat;
+      // background-attachment: fixed;
+      // background-size: cover;
+      // background-position: top right;
+      // background-position: 20% 40%;
+      // background layer
+      // & + div {
+      //   width: 100%;
+      //   height: 100%;
+      //   background-color: $color-1;
+      //   position: fixed;
+      //   opacity: 0;
+      //   @include transitionOpacity();
+
+      
+      // layer with full color
+      // & .color100 {
+      // opacity: 1;
+      // @include transitionOpacity();
+      // }
+      // layer with 70% color
+      // & .color70 {
+      // opacity: .9;
+      // @include transitionOpacity();
+      // }
+      // fade in container
+      // & .color100 ~ .container,
+      // & .color70 ~ .container {
+      // opacity: 1;
+      // @include transitionOpacity();
+      // }
+    & .color-5 {
+      // @include changeBGColor($color-5);
+      & ~ div {
+        @include changeColor($color-5);
+        @include changeBGColor($color-5);
+        // inputs
+        & input {
+          @include changeInput($color-5);
+          &.form-control {
+            font-weight: bold;
+            &::placeholder {
+              color: $color-8-opac !important;
+            }
+            &:focus {
+              @include killShadow();
+              border-color: $color-8 !important;
+            }
+          }
         }
-        & #sidebar {
-          top: 60px;
-          padding-top: $font-size-5;
+        // color of frameborder
+        & .container .col-lg-7 > .col {
+          @include changeBorder($color-5);
         }
-        .menu-icon > span {
-          border: calc(#{$border} * 1.6) solid $color-3;
-        }
+      }
+      & ~ nav {
+        @include changeBGColor($color-5);
+        @include changeColor($color-5);
+      }
     }
+    // profile
+    & > div:last-child > .container > div:nth-child(2) {
+      font-size: $font-size-5;
+    }
+    // }
     // layer with gradient
-    & .gradient {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
-    position: fixed;
-    }
+    // & .gradient {
+    // width: 100%;
+    // height: 100%;
+    // background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
+    // position: fixed;
+    // }
     // layer with opac
-    & .opac {
-    width: 100%;
-    height: 100%;
-    background-color: $color-1-opac;
-    position: fixed;
+    // & .opac {
+    // width: 100%;
+    // height: 100%;
+    // background-color: $color-1-opac;
+    // position: fixed;
+    // }
+    
+    // fader
+    & > div:first-child {
+      height: $nav-height;
+      width: 100vw;
+      position: fixed;
+      z-index: 1000;
+      &.color-1 {
+        @include changeBGColor($color-1);
+        @include changeBGShadow($color-1);
+      }
+      &.color-5 {
+        @include changeBGColor($color-5);
+        @include changeBGShadow($color-5);
+      }
     }
-    //layer with full color
-    & .cover {
-    width: 100%;
-    height: 100%;
-    background-color: $color-1;
-    position: fixed;
+    // container-wrap
+    & > div:last-child {
+      min-height: 100vh;
+      @include changeBGColor($color-1);
+      // & > .container {
+      //   min-height: 100vh;
+      // }
     }
     // container
     & .container {
@@ -173,454 +307,117 @@ body {
       }
       // frame border
       & .col-lg-7 > .col {
-        @include makeOutline();
+        @include changeBorder;
         border-radius: $font-size-4;
       }
+    }
+    // frame border of container outside container
+    & > div > .container {
+      padding-top: 5.2rem;
       // frame border of container inside container
       & > .container {
-        padding-top: 6rem;
+        padding-top: 8rem;
       }
     }
-    & > .container {
-      padding-top: 6rem;
-    }
-  }
-  // logo svg
-  & .logo {
-    width: 7rem;
-    height: 2.4rem;
-    fill: $color-5;
   }
   // headlines
   & h1,
   & h2,
-  & h3 {
+  & h3,
+  & h4,
+  & h5 {
     font-family: $font-head;
     letter-spacing: .02rem;
-    color: $color-3;
+    color: inherit;
     padding-left: .02rem;
   }
-  & input.form-control {
-    color: $color-3 !important;
-    &::placeholder {
-      color: $text-transp !important;
-    }
-  }
-  // color of links
-  & a.nav-link {
-    color: $color-3;
-    @include killShadow();
-    background-color: none;
-    // scales link after hover
-    &:hover,
-    &:active,
-    &.visited,
-    &:focus {
-      transform: scale(1.2);
-      @include killShadow();
-      outline: none;
-      color: $color-3 !important;
-    }
-    // change bg-color & color of link
-    &:active {
-      // background-color: $color-light !important;
-      color: $color-1 !important;
-    }
-  }
-  & .row a {
-    color: $color-6;
-    &:hover,
-    &:active {
-      color: $color-6;
+  // inputs
+  & input {
+    @include changeInput;
+    &.form-control {
+      font-weight: bold;
+      &::placeholder {
+        color: $color-5-opac !important;
+      }
+      &:focus {
+        @include killShadow();
+        border-color: $color-5 !important;
+      }
     }
   }
   // paragraph text
   & p {
+    color: inherit;
     font-size: $font-size-3;
   }
-  // round border
-  & .badge-pill {
-    @include makeOutline();
-  }
-  // opac text
-  & .text-transp {
-    color: $text-transp !important;
-  }
-  // buttons
-  & .btn,
-  & button {
-    @include killShadow();
-    background-color: none;
-    color: $color-3;
-    font-weight: bold;
-    // scales button after hover
-    &:hover,
-    &:active,
-    &.visited,
-    &:focus {
-      transform: scale(130%);
-      @include killShadow();
-      outline: none;
-    }
-    // scale button on hover
-    &.btn-outline-light:hover {
-      color: $color-3 !important;
-      transform: scale(1.05);
-    }
-    // change bg-color & color of button
-    &.btn-outline-light:active {
-      background-color: $color-3 !important;
-      color: $color-1 !important;
-      // change bg-color of button icons up & down
-      &.down > span,
-      &.up > span {
-        background-color: $color-1 !important;
-      }
-    }
-    // buttons plus & minus
-    &.plus,
-    &.minus {
-      @include roundBtn();
-      position: relative;
-      & > span {
-        width: $font-size-6;
-        height: $border;
-        position: absolute;
-        left: (($font-size-3 - $font-size-6) / 2 - $border);
-        top: ($font-size-3 / 2 - $border - $border / 2);
-        background-color: $color-3;
-        border-radius: $border;
-      }
-    }
-    // change color of buttons lpus & minus
-    &.plus {
-      border-color: $color-success !important;
-      transition: opacity .2s ease-out .1s;
-      // show button plus
-      &.show {
-        opacity: 1;
-      }
-      // hide button plus
-      &.hidden {
-        transition: none;
-        opacity: 0;
-      }
-      & > span {
-        background-color: $color-success !important;
-      }
-      &:active {
-        background-color: $color-success !important;
-      }
-      &:active > span {
-        background-color: $color-1 !important;
-      }
-    }
-    &.minus {
-      border-color: $color-danger !important;
-      & > span {
-        background-color: $color-danger !important;
-      }
-      &:active {
-        background-color: $color-danger !important;
-      }
-      &:active > span {
-        background-color: $color-1 !important;
-      }
-    }
-    // plus bar
-    &.plus > span:last-child {
-      width: $border;
-      height: $font-size-6;
-      position: absolute;
-      top: (($font-size-3 - $font-size-6) / 2 - $border);
-      left: ($font-size-3 / 2 - ($border / 2 + $border));
-      // background-color: $color-light;
-      border-radius: $border;
-
-    }
-    // inverts button after click
-    &.plus:active > span,
-    &.minus:active > span {
-      background-color: $color-1;
-    }
-    // button down
-    &.down {
-      @include roundBtn();
-      padding: .3rem;
-      // bars
-      & > span {
-        width: $border;
-        height: $font-size-6 - .11rem;
-        display: inline-block;
-        background-color: $color-3;
-        border-radius: $border;
-        &:first-child {
-          transform: rotate(-45deg);
-          float: left;
-        }
-        &:last-child {
-          transform: rotate(45deg);
-          float: right;
-        }
-      }
-    }
-    // button up
-    &.up {
-      @include roundBtn();
-      padding: 0 .3rem .12rem .3rem;
-      // bars
-      & > span {
-        width: $border;
-        height: $font-size-6 - .11rem;
-        display: inline-block;
-        background-color: $color-3;
-        border-radius: $border;
-        &:first-child {
-          transform: rotate(45deg);
-          float: left;
-        }
-        &:last-child {
-          transform: rotate(-45deg);
-          float: right;
-        }
-      }
-    }
-    // // accordion
-    // &.accordion {
-    //   &.btn {
-    //     background-color: transparent;
-    //     border-color: transparent;
-    //     font-size: $font-size-2;
-    //   }
-      
-    // &.btn:hover,
-    // &.btn:active,
-    // &.btn:focus,
-    // &.btn.btn-secondary:not(:disabled):not(.disabled):active {
-    //   background-color: transparent;
-    //   border-color: transparent;
-    //   box-shadow: none;
-    // }
-      
-    //   & .collapse {
-    //     & .card {
-    //       background-color: transparent !important;
-    //       border-color: transparent;
-    //       & .card-body {
-    //         font-size: $font-size-3;
-    //         color: $text-transp;
-    //         & .btn {
-    //           background-color: transparent !important;
-    //           border-color: transparent;
-    //         }
-    //       }
-    //     }
-    //   } 
-    // }
-    // inputs
-    & input {
-      color: $color-light !important;
-      // &:focus {
-      //   outline: none;
-      //   border-color: $color-light !important;
-      //   color: $color-light;
-      // }
-      &::placeholder {
-        color: $text-transp !important;
-      }
-    }
-  }
-  & .accordion {
-    @include killShadow;
-    border: none !important;
-    & button.accordion {
-      background-color: transparent;
-      border-color: transparent;
-      font-size: $font-size-2;
-      &:hover,
-      &:active,
-      &:focus,
-      &.btn-secondary:not(:disabled):not(.disabled):active {
-        background-color: transparent;
-        border-color: transparent;
-        box-shadow: none;
-      }
-    }
-    & > .card > .card-body {
-      @include killShadow;
-      border: none !important;
-      & button.accordion {
-        font-size: $font-size-3;
-      }
-      & .card-body .card-header {
-        & > .card-title {
-          font-size: $font-size-3 !important;
-          & > button.plus {
-            margin-right: $font-size-3 + $font-size-4;
-          }
-          & > button.minus {
-            margin-right: ($font-size-3 + $font-size-4) * 2;
-          }
-        }
-        & > .card-subtitle {
-          color: $text-transp;
-        }
-      }
-      & .card-text {
-        font-size: $font-size-5;
-      }
-    }
-  }
-  // active light {
-  & .active-light {
-    display: inline-block;
-    height: $font-size-7;
-    width: $font-size-7;
-    border-radius: $font-size-7;
-    background-color: $color-success;
-  }
-  // wrap of switch on & off
-  & .switch {
-    position: relative;
-    display: inline-block;
-    width: $font-size-4 * 2.5;
-    height: ($font-size-4 / 2);
-    margin: .5rem 0;        
-    // hides checkbox of switch
-    & > input[type=checkbox] {
-      display: none;
-    }
-    // moves switch
-    & > input[type=checkbox]:checked + .slider::before {
-      -webkit-transform: translateX($font-size-4 * 1.5);
-      -ms-transform: translateX($font-size-4 * 1.5);
-      transform: translateX($font-size-4 * 1.5);
-    }
-    // makes slider round
-    & .slider.round {
-      border-radius: $font-size-4;
-      // makes switch round
-      &::before {
-        border-radius: 50%;
-      }
-    }
-    // switch label off
-    &::before {
-      position: absolute;
-      cursor: pointer;
-      content: "";
-      height: $font-size-4;
-      width: $font-size-4;
-      top: ($font-size-4 / -4);
-      background-color: $color-danger;
-      border: .25rem solid $color-light;
-      border-radius: 50%;
-      -webkit-transition: .4s;
-      transition: .4s;
-      z-index: 1;
-    }
-    // switch label on
-    &::after {
-      position: absolute;
-      cursor: pointer;
-      content: "";
-      height: $font-size-4;
-      width: $font-size-4;
-      top: ($font-size-4 / -4);
-      right: 0;
-      background-color: $color-success;
-      border: .25rem solid $color-light;
-      border-radius: 50%;
-      -webkit-transition: .4s;
-      transition: .4s;
-    }
-    // slider of switch
-    & .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: $color-light;
-      -webkit-transition: .4s;
-      transition: .4s;
-    }
-    // switch
-    & .slider:before {
-      position: absolute;
-      content: "";
-      height: $font-size-4;
-      width: $font-size-4;
-      top: ($font-size-4 / -4);
-      background-color: $color-light;
-      -webkit-transition: .4s;
-      transition: .4s;
-      z-index: 1;
-    }
-  }
-  // range
-  & #rangeIput {
-    color: $color-danger;
-  }
-  // tables
-  & .table {
-    // font-weight: 300;
-    & tr {
-      color: $color-3;
-      border-bottom: $border solid $color-3;         //$text-transp;
-    }
-    & thead > tr > th {
-      text-align: right;
-      &:first-child {
-        text-align: left;
-      }
-    }
-    & tbody {
-      & td {
-        text-align: right;
-      }
-    }
-  }
-  & th {
-    font-weight: bold;
-  }
+  // // opac text
+  // & .text-transp {
+  //   color: $text-transp !important;
+  // }
 
   code {
       font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
 }
+// color of links
+a {
+  color: $color-6 !important;
+  &:hover,
+  &:active {
+    color: $color-6 !important;
+  }
+}
+// color-5
+.color-5 ~ div {
+  background-color: $color-5 !important;
+  & a {
+    &:hover,
+    &:active {
+      color: $color-8 !important;
+    }
+  }
+}
 
+/* *********************************************************** MEDIA QUERY ********************************************************* */
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
   html { font-size: 12px; }
+  // frame border of container outside container
+  body #root > div:last-child > .container {
+    padding-top: 6rem;
+    // frame border of container inside container
+    & > .container {
+      padding-top: 6rem;
+    }
+    // expand monitor
+    & .card-body + div > div:first-child {
+      left: -1rem;
+      & > div {
+        width: calc(100% + 1rem);
+      }
+    }
+  }
+  // hide frame of dashboard
+  .color-5 ~ div > .container .col-lg-7 > .col {
+    border-color: rgba(255, 255, 255, 0) !important;
+  }
 }
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
-  html { font-size: 13px; }
+  html { font-size: 14px; }
 }
 
 // Medium devices (tablets, 768px and up)
 @media (min-width: 768px) {
-  html { font-size: 15px; }
 }
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
-  // hidden frame of dashboard
+  // show frame of dashboard
   #root > .container .col-lg-8 {
-    @include makeOutline();
+    // @include makeOutline();
     border-radius: $font-size-3;
-  }
-  // navigation bar
-  #root > .navbar {
-    background-color: $color-1;
-    box-shadow: 0 6px 24px 2px $color-1;                
-    // changes regular toggle color
-    &.navbar-toggler-icon {
-        color: $color-3;
-    }
   }
 }
 
@@ -628,5 +425,13 @@ body {
 @media (min-width: 1200px) {}
 
 /* *********************************************************** IMPORT ********************************************************* */
+@import 'breadcrumb';
 @import 'nav';
+@import 'buttons';
 @import 'range';
+@import 'accordion';
+@import 'table';
+@import 'switch';
+@import 'chartjs';
+@import 'slider';
+@import 'footer';

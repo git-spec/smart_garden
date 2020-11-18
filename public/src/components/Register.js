@@ -1,4 +1,10 @@
 import React, {Fragment} from 'react';
+// redux
+import {connect} from 'react-redux';
+import {setBackgroundImageAction} from '../actions';
+import {setBackgroundColor1Action} from '../actions';
+import {setBackgroundColor5Action} from '../actions';
+// reactstrap
 import {
     Container,
     Row,
@@ -16,17 +22,25 @@ import {registerPost} from '../services/api';
 
 class Register extends React.Component {
 
-    state = {
-        firstName: '',
-        lastName: '',
-        userName: '',
-        email: '',
-        password: '',
-        repassword: '',
-        errorComponent: null,
-        showErrorModal: false,
-        resultElement: null
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            firstName: '',
+            lastName: '',
+            userName: '',
+            email: '',
+            password: '',
+            repassword: '',
+            errorComponent: null,
+            showErrorModal: false,
+            resultElement: null
+        };
+    }
+
+    componentDidMount() {
+        this.props.setBackgroundColor1Action("color-1");
+        this.props.setBackgroundColor5Action(null);
+    }
 
     onRegisterBtnClick = e => {
         e.preventDefault();
@@ -115,6 +129,7 @@ class Register extends React.Component {
                     {this.state.errorComponent}
                 </PopUpModal>
                 <Container>
+                    <Row className="my-4"><Col></Col></Row>
                     <h1 className="text-trans mb-4">Registration</h1>
                     {/* <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p> */}
                     <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
@@ -230,4 +245,4 @@ class Register extends React.Component {
     }
 }
 
-export default Register;
+export default connect(null, {setBackgroundImageAction, setBackgroundColor1Action, setBackgroundColor5Action})(Register);
