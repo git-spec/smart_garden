@@ -37,6 +37,10 @@ import MonitorSoil from './MonitorSoil';
 import MonitorWater from './MonitorWater';
 import MonitorTempHum from './MonitorTempHum';
 import MonitorLight from './MonitorLight';
+import MonitorKitchen from './MonitorKitchen';
+import MonitorHomeOffice from './MonitorHomeOffice';
+import MonitorGarden from './MonitorGarden';
+import MonitorBalcony from './MonitorBalcony';
 // window dimension hook
 import {useWindowDimension} from './UseWindowDimension';
 // services
@@ -49,14 +53,14 @@ import {
     addDevicePost,
     getDevicesPost,
     deleteDevicePost,
-    deviceOnOffPost
+    deviceOnOffPost,
+    saveRangesPost
 } from '../services/productsApi';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Products = props => {
 
     const history = useHistory();
-    // const [width, height] = useWindowDimension();
     const [width] = useWindowDimension();
 
     // profile
@@ -97,11 +101,9 @@ const Products = props => {
         confirmModalDelete: null,
         // monitor
         realTimeData: {},
-        shownHub: '',
-        shownDevice: '',
-        shownDeviceType: '',
-        shownDeviceSn: '',
-        shownDeviceStatus: ''
+        currentHub: {},
+        currentDevice: {},
+        currentMonitor: 0
     };
     const [state, setState] = useState(initialState);
 
@@ -214,7 +216,7 @@ const Products = props => {
         });
 
         socket.on('realTimeIncomingData', data => {
-            console.log(data);
+            // console.log(data);
             setState(state => ({...state, realTimeData: data.data}));
         });
 
@@ -229,7 +231,7 @@ const Products = props => {
         // cleanup
         return () => {
             // the user leaves the component
-            console.log('cleanup');
+            // console.log('cleanup');
             socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
@@ -249,10 +251,10 @@ const Products = props => {
             };
         });
     }
-    const shineDevice = (e, idx) => {
+    const shineDevice = (e, deviceSN) => {
         e.preventDefault();
-        shineDeviceRefs.forEach((item, index) => {
-            if (idx !== index) {
+        shineDeviceRefs.forEach((item) => {
+            if (deviceSN !== item.current.id) {
                 item.current.classList.remove('shine');
             } else {
                 item.current.classList.add('shine');
@@ -261,14 +263,25 @@ const Products = props => {
     }
     // remove shiny hub
     const toggleHubs = e => {
+        e.preventDefault();
         shineHubRefs.forEach((item) => {
             item.current.classList.remove('shine');
         });
     }
     // remove shiny device
     const toggleDevices = e => {
+        e.preventDefault();
         shineDeviceRefs.forEach((item) => {
             item.current.classList.remove('shine');
+        });
+    }
+
+    // show first monitor
+    const resetMonitor = e => {
+        e.preventDefault();
+        setState({
+            ...state,
+            currentMonitor: 0
         });
     }
 
@@ -284,10 +297,11 @@ const Products = props => {
                 item.current.classList.toggle('down');
             };
         });
-        // collapse hub
+        // collapse hub and change monitor
         setState({
             ...state,
-            collapseHub: state.collapseHub === Number(idx) ? null : Number(idx)
+            collapseHub: state.collapseHub === Number(idx) ? null : Number(idx),
+            currentMonitor: idx + 5
         });
     }
 
@@ -485,39 +499,49 @@ const Products = props => {
     };
 
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-    const onShowDeviceDataClick = (e, hubName, deviceName, deviceType, sn, deviceStatus) => {
+    // rerender the data section
+    const onShowDeviceDataClick = (e, hub, device) => {
         e.preventDefault();
-        // rerender the data section
-        // 1 from database: fetch request
-
-        // 2 send order to RPI to stop the request from previous device
-        if (state.shownDeviceSn) {
-            props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.shownDeviceSn});
+        // send order to RPI to stop the request from previous device
+        if (state.currentDevice.sn_number && state.currentDevice.connected) {
+            props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.currentDevice.sn_number});
         }
-        // 3 get real time data: socket emit to send the order to raspberry
+        // get real time data: socket emit to send the order to raspberry
         setState({
             ...state,
             realTimeData: {},
-            shownHub: hubName,
-            shownDevice: deviceName,
-            shownDeviceType: deviceType,
-            shownDeviceSn: sn,
-            shownDeviceStatus: deviceStatus
+            currentHub: hub,
+            currentDevice: device,
+            currentMonitor: device.type_id
         });
-        if (deviceType !== 2) {
-            props.socket.emit('getRealTimeData', {userId: props.user.id, sn: sn});
+        if (device.type_id !== 2 && device.connected) {
+            props.socket.emit('getRealTimeData', {userId: props.user.id, sn: device.sn_number});
         }
     };
 
+    // water on off switcher
     const statusChange = () => {
-        console.log(!state.shownDeviceStatus)
-        deviceOnOffPost(state.shownDeviceSn, !state.shownDeviceStatus).then(() => {
-            props.socket.emit('waterOnOff', {sn: state.shownDeviceSn, status: !state.shownDeviceStatus});
+        // console.log(!state.currentDevice.status);
+        deviceOnOffPost(state.currentDevice.sn_number, !state.currentDevice.status).then(() => {
+            props.socket.emit('waterOnOff', {sn: state.currentDevice.sn_number, status: !state.currentDevice.status});
             const newDevices = [...state.devices];
-            newDevices[newDevices.map(device => device.sn_number).indexOf(state.shownDeviceSn)].status = !state.shownDeviceStatus;
-            setState({...state, devices: newDevices, shownDeviceStatus: !state.shownDeviceStatus});
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].status = !state.currentDevice.status;
+            setState({...state, devices: newDevices});
         });
     };
+
+    // save parameters for watering
+    const onSaveBtnClick = (e, inputRangeTime, inputRangeDuration, soilMoistureDevice) => {
+        e.preventDefault();
+        saveRangesPost(inputRangeTime, inputRangeDuration, state.currentDevice.sn_number, soilMoistureDevice).then(data => {
+            const newDevices = [...state.devices];
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].water_time = inputRangeTime;
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].water_duration = inputRangeDuration;
+            newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].moisture_device_id = soilMoistureDevice;
+            props.socket.emit('waterConf', {sn: state.currentDevice.sn_number, time: inputRangeTime, duration: inputRangeDuration, soilMoistureDevice: soilMoistureDevice});
+            setState({...state, devices: newDevices});
+        });
+    }
 
 /* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
@@ -575,7 +599,7 @@ const Products = props => {
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={toggleHubs}>
+                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e)}}>
                                         <h5>hubs</h5>
                                     </Button>
                                     {/* <span className="active-lcd mx-2"></span> */}
@@ -646,7 +670,7 @@ const Products = props => {
                                         return (
                                             <div key={idx} ref={shineHubRef}>
                                                 <CardHeader className="p-0 mb-2 d-flex align-items-center">
-                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices()}}>
+                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e);}}>
                                                         <CardTitle className="m-0 text-left d-flex align-items-center">
                                                                 {hub.name}
                                                             <span className={hub.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -719,15 +743,15 @@ const Products = props => {
                                                             const shineDeviceRef = React.createRef();
                                                             shineDeviceRefs.push(shineDeviceRef);
                                                             return (
-                                                                <div key={idx} ref={shineDeviceRef}>
+                                                                <div key={device.sn_number} id={device.sn_number} ref={shineDeviceRef}>
                                                                     <CardHeader className="p-0 d-flex align-items-center">
                                                                         <Button className="accordion p-0 flex-grow-1">
                                                                             <CardTitle className="m-0 text-left d-flex align-items-center"
-                                                                                        onClick={e => {
-                                                                                            onShowDeviceDataClick(e, hub.name, device.name, device.type_id, device.sn_number, device.status);
-                                                                                            shineDevice(e, idx);
-                                                                                            toggleHubs()
-                                                                                        }}
+                                                                                onClick={e => {
+                                                                                    onShowDeviceDataClick(e, hub, device);
+                                                                                    shineDevice(e, device.sn_number);
+                                                                                    toggleHubs(e);
+                                                                                }}
                                                                             >
                                                                                 {device.name}
                                                                                 <span className={device.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -745,7 +769,7 @@ const Products = props => {
                                                                             </Button>
                                                                             <Button className="badge-pill btn-outline-light bg-transparent ml-3 up">
                                                                                 <span></span><span></span>
-                                                                            </Button>
+                                                                            </Button> 
                                                                         </CardSubtitle>
                                                                     </CardHeader>
                                                                     <CardBody className="p-0">
@@ -756,31 +780,31 @@ const Products = props => {
 {/* ******************************************************** MONITOR MOBILE ********************************************************* */}
                                                                     {width <= 991 && (
                                                                         <Fragment>
-                                                                            {device.type_id === 1 && device.sn_number === state.shownDeviceSn && (
+                                                                            {state.currentMonitor === 1 && device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
-                                                                                        <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                                                                        <MonitorSoil chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
-                                                                            {device.type_id === 2 && device.sn_number === state.shownDeviceSn && (
+                                                                            {state.currentMonitor === 2 && device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
-                                                                                        <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
+                                                                                        <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
-                                                                            {device.type_id === 3 && device.sn_number === state.shownDeviceSn && (
+                                                                            {state.currentMonitor === 3 && device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
-                                                                                        <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                                                                        <MonitorTempHum chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
-                                                                            {device.type_id === 4 && device.sn_number === state.shownDeviceSn && (
+                                                                            {state.currentMonitor === 4 && device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
-                                                                                        <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                                                                        <MonitorLight chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col> 
                                                                             )}
@@ -791,6 +815,38 @@ const Products = props => {
                                                         })}
                                                     </Collapse>
                                                 </CardBody>
+                                                {width <= 991 && (
+                                                    <Fragment>
+                                                        {state.currentMonitor === 5 && hub.id === 1 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorKitchen />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 6 && hub.id === 2 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorHomeOffice />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 7 && hub.id === 5 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorGarden />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 8 && hub.id === 7 && (
+                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                <Col className="p-0 px-sm-3">
+                                                                    <MonitorBalcony />
+                                                                </Col>
+                                                            </Col> 
+                                                        )}
+                                                    </Fragment>
+                                                )}                                                            
                                             </div>
                                         );
                                     })}
@@ -798,24 +854,47 @@ const Products = props => {
                             </CardBody>
                         </Card>
                     </Col>
+                    {width <= 991 && (
+                        <Fragment>
+                            {state.currentMonitor === 0 && (
+                                <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                    <Col className="p-0 px-sm-3">
+                                        <MonitorAll />
+                                    </Col>
+                                </Col>  
+                            )}
+                        </Fragment>
+                    )}                                                            
 {/* ******************************************************** MONITOR DESKTOP ********************************************************* */}
                     {width > 991 && (
                         <Col className="px-3 mt-md-0 mt-3" lg="7">
                             <Col className="p-3">
-                                {state.shownDeviceType === '' && (
-                                    <MonitorAll hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                {state.currentMonitor === 0 && (
+                                    <MonitorAll />
                                 )}
-                                {state.shownDeviceType === 1 && (
-                                    <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                {state.currentMonitor === 1 && (
+                                    <MonitorSoil chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                 )}
-                                {state.shownDeviceType === 2 && (
-                                    <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
+                                {state.currentMonitor === 2 && (
+                                    <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                 )}
-                                {state.shownDeviceType === 3 && (
-                                    <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                {state.currentMonitor === 3 && (
+                                    <MonitorTempHum chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
                                 )}
-                                {state.shownDeviceType === 4 && (
-                                    <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
+                                {state.currentMonitor === 4 && (
+                                    <MonitorLight chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                )}
+                                {state.currentMonitor === 5 && (
+                                    <MonitorKitchen />
+                                )}
+                                {state.currentMonitor === 6 && (
+                                    <MonitorHomeOffice />
+                                )}
+                                {state.currentMonitor === 7 && (
+                                    <MonitorGarden />
+                                )}
+                                {state.currentMonitor === 8 && (
+                                    <MonitorBalcony />
                                 )}
                             </Col>
                         </Col>
@@ -829,11 +908,10 @@ const Products = props => {
 };
 
 const mapStateToProps = state => {
-    return {user: state.user,
-            socket: state.socket
+    return {
+        user: state.user,
+        socket: state.socket
     };
 };
-export default connect(mapStateToProps, {   setSocketAction,
-                                            setBackgroundColor5Action,
-                                            setBackgroundColor1Action
-                                        })(Products);
+export default connect(mapStateToProps, {setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Products);
+

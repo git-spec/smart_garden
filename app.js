@@ -327,7 +327,7 @@ const server = app.listen(port, () => {
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
-    // log('Device Is Connected');
+    log('Hub is connected');
 
     socket.on('user_connect', userID => {
 
@@ -350,6 +350,10 @@ io.on('connection', socket => {
             socket.broadcast.to(userID).emit("waterOnOff", data);
         })
 
+        socket.on('waterConf', data => {
+            socket.broadcast.to(userID).emit("waterConf", data);
+        })
+        
         // user disconnected
         socket.on('user_disconnect', userId => {
             socket.broadcast.to(userId).emit("user_disconnect");
@@ -450,7 +454,7 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        log('Hub is disconnected');
+        // log('Hub is disconnected');
         socket.disconnect();
     });
 

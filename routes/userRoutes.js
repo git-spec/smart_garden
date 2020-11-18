@@ -13,7 +13,11 @@ const {
     getDevices,
     deleteHub,
     deleteDevice,
-    deviceOnOff
+    deviceOnOff,
+    saveRanges,
+    deviceMoistureData,
+    deviceTempHumData,
+    deviceLightData
 } = require('../modules/productsAuth');
 
 /* ---------------------------------------- ROUTES ---------------------------------------- */
@@ -186,6 +190,61 @@ userRouter.post('/deviceonoff', (req, res) => {
     if (deviceSN && deviceStatus !== null) {
         deviceOnOff(deviceSN, deviceStatus).then(() => {
             res.json(1);
+        }).catch(err => {
+            console.log(err);
+        });
+    } else {
+        console.log(err);
+    }
+});
+
+userRouter.post('/saveranges', (req, res) => {
+    const inputRangeTime = req.body.inputRangeTime;
+    const inputRangeDuration = req.body.inputRangeDuration;
+    const deviceSn = req.body.deviceSn;
+    const soilMoistureDevice = req.body.soilMoistureDevice;
+    if (inputRangeTime && inputRangeDuration && deviceSn && soilMoistureDevice) {
+        saveRanges(inputRangeTime, inputRangeDuration, deviceSn, soilMoistureDevice).then(() => {
+            res.json(1);
+        }).catch(err => {
+            console.log(err);
+        });
+    } else {
+        console.log(err);
+    }
+});
+
+userRouter.post('/devicemoisturedata', (req, res) => {
+    const deviceID = req.body.deviceID;
+    if (deviceID) {
+        deviceMoistureData(deviceID).then(data => {
+            res.json(data);
+        }).catch(err => {
+            console.log(err);
+        });
+    } else {
+        console.log(err);
+    }
+});
+
+userRouter.post('/devicetemphumdata', (req, res) => {
+    const deviceID = req.body.deviceID;
+    if (deviceID) {
+        deviceTempHumData(deviceID).then(data => {
+            res.json(data);
+        }).catch(err => {
+            console.log(err);
+        });
+    } else {
+        console.log(err);
+    }
+});
+
+userRouter.post('/devicelightdata', (req, res) => {
+    const deviceID = req.body.deviceID;
+    if (deviceID) {
+        deviceLightData(deviceID).then(data => {
+            res.json(data);
         }).catch(err => {
             console.log(err);
         });
