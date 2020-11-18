@@ -141,7 +141,7 @@ function Kontakt() {
                                         ></Col>
                                     </Row>
                                     <textarea
-                                        className="badge-pill rounded bg-transparent"
+                                        className="badge-pill rounded bg-transparent "
                                         type="text"
                                         placeholder="Enter your Message..."
                                         required
