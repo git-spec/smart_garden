@@ -7,6 +7,7 @@ import {setUserAction} from '../actions';
 import {checkLoginPost} from '../services/api';
 // components
 import Navigation from './Navigation';
+import Footer from './Footer';
 import Main from './Main';
 import CheckLogin from './CheckLogin';
 import Register from './Register';
@@ -21,6 +22,7 @@ import Admin from './Admin';
 import SubAdmin from './SubAdmin';
 import Impressum from './Impressum';
 import AGB from './AGB';
+import Kontakt from './Kontakt';
 import Footer from './Footer';
 import Fader from './Fader'
 
@@ -61,6 +63,7 @@ return (
                     <Route path="/" exact component={Main} />
                     <Route path="/AGB" exact component={AGB} />
                     <Route path="/impressum" exact component={Impressum} />
+                    <Route path="/kontakt" exact component={Kontakt} />
                     <Route path="/register" exact component={Register} />
                     <Route path="/login" exact component={Login} />
                     <Route path="/verify/:email" exact component={Verification} />

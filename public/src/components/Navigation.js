@@ -1,8 +1,8 @@
 // react
-import React, {useState, Fragment} from 'react';
+import React, { useState, Fragment } from "react";
 // redux
-import {connect} from "react-redux";
-import {setSocketAction, setUserAction} from '../actions';
+import { connect } from "react-redux";
+import { setSocketAction, setUserAction } from "../actions";
 // router dom
 import {
     Link, 
@@ -18,28 +18,27 @@ import {
     NavbarBrand,
     Nav,
     NavItem,
-    NavLink
-} from 'reactstrap';
+    NavLink,
+} from "reactstrap";
 // services
-import {logoutPost} from '../services/api';
+import { logoutPost } from "../services/api";
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
-
-/* *********************************************************** REFERENCES ********************************************************* */
+    /* *********************************************************** REFERENCES ********************************************************* */
     const toggleNavbarRef = React.createRef();
     const toggleMenuIconRef = React.createRef();
 
-/* *********************************************************** STATES ********************************************************* */
+    /* *********************************************************** STATES ********************************************************* */
     const initialState = {
-        collapsed: true
+        collapsed: true,
     };
     const [state, setState] = useState(initialState);
 
-/* *********************************************************** LOGOUT ********************************************************* */
+    /* *********************************************************** LOGOUT ********************************************************* */
     const history = useHistory();
 
-    const logoutBtnClick = e => {
+    const logoutBtnClick = (e) => {
         e.preventDefault();
         logoutPost().then(data => {
             if (data === 10) {
@@ -205,21 +204,24 @@ function Navigation(props) {
                         {navItemsElement}
                     </Nav>
                 </div>
-{/* *********************************************************** TOPBAR ********************************************************* */}
+                {/* *********************************************************** TOPBAR ********************************************************* */}
                 <Collapse className="topbar" isOpen={!state.collapsed} navbar>
+
                     <Nav horizontal="center" vertical="align-items-end">
                         {navItemsElement}
                     </Nav>
                 </Collapse>
             </Container>
         </Navbar>
-    )
+    );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         user: state.user,
-        socket: state.socket
+        socket: state.socket,
     };
 };
-export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);
+export default connect(mapStateToProps, { setUserAction, setSocketAction })(
+    Navigation
+);
