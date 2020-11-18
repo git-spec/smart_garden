@@ -731,14 +731,14 @@ const Products = props => {
                                                                             {device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorSoil data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                        <MonitorSoil width={width} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorWater data={state.realTimeData} devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
+                                                                                        <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
@@ -774,14 +774,14 @@ const Products = props => {
                     {width > 991 && (
                         <Col className="px-3 mt-md-0 mt-3" lg="7">
                             <Col className="p-3">
-                                {!state.currentDevice && (
-                                    <MonitorAll data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />    
+                                {!state.currentDevice.type_id && state.hubs && (
+                                    <MonitorAll hubs={state.hubs} devices={state.devices} />
                                 )}
                                 {state.currentDevice.type_id === 1 && (
-                                    <MonitorSoil data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                    <MonitorSoil width={width} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                 )}
                                 {state.currentDevice.type_id === 2 && (
-                                    <MonitorWater data={state.realTimeData} devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
+                                    <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                 )}
                                 {state.currentDevice.type_id === 3 && (
                                     <MonitorTempHum data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
@@ -806,10 +806,4 @@ const mapStateToProps = state => {
         socket: state.socket
     };
 };
-export default connect(mapStateToProps, {
-    setSocketAction,
-    setBackgroundImageAction,
-    setBackgroundColorAction,
-    setBackgroundColor100Action,
-    setBackgroundColor70Action
-})(Products);
+export default connect(mapStateToProps, {setSocketAction, setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor100Action, setBackgroundColor70Action})(Products);
