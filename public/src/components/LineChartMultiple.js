@@ -33,7 +33,7 @@ class LineChartMultiple extends React.Component {
                             ticks: {
                                 min: 0,
                                 padding: 10,
-                                fontSize: 12
+                                fontSize: this.props.chartData.fontSize
                             },
                             type: 'time',
                             time: {
@@ -51,7 +51,7 @@ class LineChartMultiple extends React.Component {
                             ticks: {
                                 min: 0,
                                 padding: 10,
-                                fontSize: 12
+                                fontSize: this.props.chartData.fontSize
                             },
                             gridLines: {
                                 color: 'rgba(255, 255, 255, .3)'
@@ -68,7 +68,7 @@ class LineChartMultiple extends React.Component {
                     data: hData,
                     fill: 'none',
                     backgroundColor: 0,
-                    pointRadius: 2,
+                    pointRadius: this.props.chartData.pointRadius,
                     borderColor: gradientLine,
                     borderWidth: 1,
                     lineTension: 0
@@ -78,7 +78,7 @@ class LineChartMultiple extends React.Component {
                     data: tData,
                     fill: 'none',
                     backgroundColor: 0,
-                    pointRadius: 2,
+                    pointRadius: this.props.chartData.pointRadius,
                     borderColor: gradientLine,
                     borderWidth: 1,
                     lineTension: 0

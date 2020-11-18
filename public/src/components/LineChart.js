@@ -1,7 +1,7 @@
 import React from 'react';
 import Chart from 'chart.js';
 
-// chart stlye options
+// chart style options
 Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
@@ -10,6 +10,9 @@ class LineChart extends React.Component {
     
     constructor(props) {
         super(props);
+        this.state = {
+            fontsize: null
+        }
         this.chartRef = React.createRef();
     }
 
@@ -18,9 +21,20 @@ class LineChart extends React.Component {
         this.myChart.data.labels = this.props.data.map(d => d.time);
         this.myChart.data.datasets[0].data = this.props.data.map(d => d.value);
         this.myChart.update();
+        // console.log(this.props.width);
+        // if(this.props.width > 576) {
+        //     this.setState({fontsize: 12});
+        // } else {
+        //     this.setState({fontsize: 6});
+        // }
     }
 
     componentDidMount() {
+        // if(this.props.width > 576) {
+        //     this.setState({fontsize: 12});
+        // } else {
+        //     this.setState({fontsize: 6});
+        // }
         // get canvas
         const myChartRef = this.chartRef.current.getContext("2d");
         // const {height: graphHeight} = myChartRef.canvas;
@@ -40,7 +54,8 @@ class LineChart extends React.Component {
                             ticks: {
                                 min: 0,
                                 padding: 10,
-                                fontSize: 12
+                                fontSize: this.props.chartData.fontSize
+
                             },
                             type: 'time',
                             time: {
@@ -58,7 +73,7 @@ class LineChart extends React.Component {
                             ticks: {
                                 min: 0,
                                 padding: 10,
-                                fontSize: 12
+                                fontSize: this.props.chartData.fontSize
                             },
                             gridLines: {
                                 color: 'rgba(255, 255, 255, .3)'
@@ -75,7 +90,7 @@ class LineChart extends React.Component {
                     data: this.props.data.map(d => d.value),
                     fill: 'none',
                     backgroundColor: 0,
-                    pointRadius: 2,
+                    pointRadius: this.props.chartData.pointRadius,
                     borderColor: gradientLine,
                     borderWidth: 1,
                     lineTension: 0
