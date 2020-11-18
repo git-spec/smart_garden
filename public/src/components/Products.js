@@ -36,6 +36,10 @@ import MonitorSoil from './MonitorSoil';
 import MonitorWater from './MonitorWater';
 import MonitorTempHum from './MonitorTempHum';
 import MonitorLight from './MonitorLight';
+import MonitorKitchen from './MonitorKitchen';
+import MonitorHomeOffice from './MonitorHomeOffice';
+import MonitorGarden from './MonitorGarden';
+import MonitorBalcony from './MonitorBalcony';
 // window dimension hook
 import {useWindowDimension} from './UseWindowDimension';
 // services
@@ -56,7 +60,7 @@ import {
 const Products = props => {
 
     const history = useHistory();
-    const [width, height] = useWindowDimension();
+    const [width] = useWindowDimension();
 
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
@@ -87,7 +91,8 @@ const Products = props => {
         // monitor
         realTimeData: {},
         currentHub: {},
-        currentDevice: {}
+        currentDevice: {},
+        currentMonitor: 0
     };
     const [state, setState] = useState(initialState);
 
@@ -201,7 +206,7 @@ const Products = props => {
         });
 
         socket.on('realTimeIncomingData', data => {
-            console.log(data);
+            // console.log(data);
             setState(state => ({...state, realTimeData: data.data}));
         });
 
@@ -236,10 +241,10 @@ const Products = props => {
             };
         });
     }
-    const shineDevice = (e, idx) => {
+    const shineDevice = (e, deviceSN) => {
         e.preventDefault();
-        shineDeviceRefs.forEach((item, index) => {
-            if (idx !== index) {
+        shineDeviceRefs.forEach((item) => {
+            if (deviceSN !== item.current.id) {
                 item.current.classList.remove('shine');
             } else {
                 item.current.classList.add('shine');
@@ -261,6 +266,15 @@ const Products = props => {
         });
     }
 
+    // show first monitor
+    const resetMonitor = e => {
+        e.preventDefault();
+        setState({
+            ...state,
+            currentMonitor: 0
+        });
+    }
+
     const toggleHub = (e, idx) => {
         e.preventDefault();
         // toggle up & down buttons
@@ -273,10 +287,11 @@ const Products = props => {
                 item.current.classList.toggle('down');
             };
         });
-        // collapse hub
+        // collapse hub and change monitor
         setState({
             ...state,
-            collapseHub: state.collapseHub === Number(idx) ? null : Number(idx)
+            collapseHub: state.collapseHub === Number(idx) ? null : Number(idx),
+            currentMonitor: idx + 5
         });
     }
 
@@ -486,7 +501,8 @@ const Products = props => {
             ...state,
             realTimeData: {},
             currentHub: hub,
-            currentDevice: device
+            currentDevice: device,
+            currentMonitor: device.type_id
         });
         if (device.type_id !== 2 && device.connected) {
             props.socket.emit('getRealTimeData', {userId: props.user.id, sn: device.sn_number});
@@ -531,7 +547,6 @@ const Products = props => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                <div>{width} x {height}</div>
                 <h3 className="text-trans mb-4">Hello {props.user.userName}, how are you?</h3>
                 <Row>
                     <Col lg="5" className="accordion">
@@ -539,7 +554,7 @@ const Products = props => {
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={e => toggleHubs(e)}>
+                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e)}}>
                                         <h5>hubs</h5>
                                     </Button>
                                     {/* <span className="active-lcd mx-2"></span> */}
@@ -610,7 +625,7 @@ const Products = props => {
                                         return (
                                             <div key={idx} ref={shineHubRef}>
                                                 <CardHeader className="p-0 mb-2 d-flex align-items-center">
-                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e)}}>
+                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e);}}>
                                                         <CardTitle className="m-0 text-left d-flex align-items-center">
                                                                 {hub.name}
                                                             <span className={hub.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -683,13 +698,13 @@ const Products = props => {
                                                             const shineDeviceRef = React.createRef();
                                                             shineDeviceRefs.push(shineDeviceRef);
                                                             return (
-                                                                <div key={idx} ref={shineDeviceRef}>
+                                                                <div key={device.sn_number} id={device.sn_number} ref={shineDeviceRef}>
                                                                     <CardHeader className="p-0 d-flex align-items-center">
                                                                         <Button className="accordion p-0 flex-grow-1">
                                                                             <CardTitle className="m-0 text-left d-flex align-items-center"
                                                                                 onClick={e => {
                                                                                     onShowDeviceDataClick(e, hub, device);
-                                                                                    shineDevice(e, idx);
+                                                                                    shineDevice(e, device.sn_number);
                                                                                     toggleHubs(e);
                                                                                 }}
                                                                             >
@@ -728,31 +743,31 @@ const Products = props => {
 {/* ******************************************************** MONITOR MOBILE ********************************************************* */}
                                                                     {width <= 991 && (
                                                                         <Fragment>
-                                                                            {device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
+                                                                            {state.currentMonitor === 1 && device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorSoil width={width} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                        <MonitorSoil chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
-                                                                            {device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
+                                                                            {state.currentMonitor === 2 && device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
                                                                                         <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
-                                                                            {device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
+                                                                            {state.currentMonitor === 3 && device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorTempHum data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
+                                                                                        <MonitorTempHum chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
-                                                                            {device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
+                                                                            {state.currentMonitor === 4 && device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="px-3 mt-md-0 mt-3" lg="7">
                                                                                     <Col className="p-3">
-                                                                                        <MonitorLight data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                        <MonitorLight chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col> 
                                                                             )}
@@ -763,6 +778,38 @@ const Products = props => {
                                                         })}
                                                     </Collapse>
                                                 </CardBody>
+                                                {width <= 991 && (
+                                                    <Fragment>
+                                                        {state.currentMonitor === 5 && hub.id === 1 && (
+                                                            <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                <Col className="p-3">
+                                                                    <MonitorKitchen />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 6 && hub.id === 2 && (
+                                                            <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                <Col className="p-3">
+                                                                    <MonitorHomeOffice />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 7 && hub.id === 5 && (
+                                                            <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                <Col className="p-3">
+                                                                    <MonitorGarden />
+                                                                </Col>
+                                                            </Col>  
+                                                        )}
+                                                        {state.currentMonitor === 8 && hub.id === 7 && (
+                                                            <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                                                <Col className="p-3">
+                                                                    <MonitorBalcony />
+                                                                </Col>
+                                                            </Col> 
+                                                        )}
+                                                    </Fragment>
+                                                )}                                                            
                                             </div>
                                         );
                                     })}
@@ -770,24 +817,47 @@ const Products = props => {
                             </CardBody>
                         </Card>
                     </Col>
+                    {width <= 991 && (
+                        <Fragment>
+                            {state.currentMonitor === 0 && (
+                                <Col className="px-3 mt-md-0 mt-3" lg="7">
+                                    <Col className="p-3">
+                                        <MonitorAll />
+                                    </Col>
+                                </Col>  
+                            )}
+                        </Fragment>
+                    )}                                                            
 {/* ******************************************************** MONITOR DESKTOP ********************************************************* */}
                     {width > 991 && (
                         <Col className="px-3 mt-md-0 mt-3" lg="7">
                             <Col className="p-3">
-                                {!state.currentDevice.type_id && state.hubs && (
-                                    <MonitorAll hubs={state.hubs} devices={state.devices} />
+                                {state.currentMonitor === 0 && (
+                                    <MonitorAll />
                                 )}
-                                {state.currentDevice.type_id === 1 && (
-                                    <MonitorSoil width={width} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                {state.currentMonitor === 1 && (
+                                    <MonitorSoil chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                 )}
-                                {state.currentDevice.type_id === 2 && (
+                                {state.currentMonitor === 2 && (
                                     <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                 )}
-                                {state.currentDevice.type_id === 3 && (
-                                    <MonitorTempHum data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
+                                {state.currentMonitor === 3 && (
+                                    <MonitorTempHum chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
                                 )}
-                                {state.currentDevice.type_id === 4 && (
-                                    <MonitorLight data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                {state.currentMonitor === 4 && (
+                                    <MonitorLight chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                )}
+                                {state.currentMonitor === 5 && (
+                                    <MonitorKitchen />
+                                )}
+                                {state.currentMonitor === 6 && (
+                                    <MonitorHomeOffice />
+                                )}
+                                {state.currentMonitor === 7 && (
+                                    <MonitorGarden />
+                                )}
+                                {state.currentMonitor === 8 && (
+                                    <MonitorBalcony />
                                 )}
                             </Col>
                         </Col>
