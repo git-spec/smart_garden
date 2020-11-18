@@ -13,7 +13,7 @@ export const getData = () => {
   return data;
 }
     
-    function getRandomDateArray(numItems) {
+function getRandomDateArray(numItems) {
         // Create random array of objects (with date)
         let data = [];
         let baseTime = new Date('2018-05-01T00:00:00').getTime();

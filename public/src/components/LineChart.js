@@ -25,8 +25,8 @@ class LineChart extends React.Component {
       // set gradient line
       let gradientLine = myChartRef.createLinearGradient(0, this.props.min, 0, this.props.max);
       gradientLine.addColorStop(0, "rgb(255, 0, 0)");
-      gradientLine.addColorStop(.2, "rgb(0, 168, 230)");
-      gradientLine.addColorStop(.8, "rgb(0, 168, 230)");
+      gradientLine.addColorStop(.2, "rgb(0, 122, 167)");
+      gradientLine.addColorStop(.8, "rgb(0, 122, 167)");
       gradientLine.addColorStop(1, "rgb(255, 0, 0)");
       // create chart
       this.myChart = new Chart(myChartRef, {
@@ -38,14 +38,15 @@ class LineChart extends React.Component {
                 ticks: {
                   min: 0,
                   padding: 10,
-                  fontSize: 12
+                  fontSize: 12,
+                  fontColor: 'rgb(29, 44, 34)'
                 },
                 type: 'time',
                 time: {
                   unit: 'week'
                 },
                 gridLines: {
-                  color: 'rgba(255, 255, 255, .3)'
+                  color: 'rgba(29, 44, 34, .3)'
                 },
                 drawBorder: true,
                 borderWidth: .5
@@ -56,10 +57,11 @@ class LineChart extends React.Component {
                 ticks: {
                   min: 0,
                   padding: 10,
-                  fontSize: 12
+                  fontSize: 12,
+                  fontColor: 'rgb(29, 44, 34)'
                 },
                 gridLines: {
-                  color: 'rgba(255, 255, 255, .3)'
+                  color: 'rgba(29, 44, 34, .3)'
                 },
                 borderWidth: .5
               }
@@ -95,7 +97,7 @@ class LineChart extends React.Component {
   
     render() {
       return(
-        <div className="lineGraph">
+        <div className="line-graph">
           <canvas ref={this.chartRef} />
         </div>
       );

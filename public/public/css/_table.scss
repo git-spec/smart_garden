@@ -4,7 +4,7 @@
         font-weight: bold;
     }
     & tr {
-        color: $color-3;
+        @include changeColor();
         border-bottom: $border solid $color-3;         //$text-transp;
     }
     & thead > tr > th {
@@ -20,4 +20,9 @@
             text-align: right;
         }
     }
+}
+
+.color-5 ~ div tr {
+    @include changeColor($color-5);
+    border-bottom: $border solid $color-2;
 }

@@ -17,9 +17,8 @@ import {Link, useHistory} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {setUserAction,
         setSocketAction,
-        setBackgroundImageAction,
-        setBackgroundColorAction,
-        setBackgroundColor70Action
+        setBackgroundColor5Action,
+        setBackgroundColor1Action
 } from '../actions';
 // components
 import PopUpModal from './PopUpModal';
@@ -30,9 +29,8 @@ const Login = props => {
 
     useEffect(() => {
         props.setUserAction(null);
-        props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
-        props.setBackgroundColorAction("color-5");
-        props.setBackgroundColor70Action("color70");
+        props.setBackgroundColor1Action("color-1");
+        props.setBackgroundColor5Action(null);
     // eslint-disable-next-line
     }, []);
 
@@ -130,6 +128,7 @@ const Login = props => {
                     <span className="breadcrumb-item active">Login</span>
                 </div>
                 </div> */}
+                <Row className="my-4"><Col></Col></Row>
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Login</h1>
                 <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Log in to access your device management.</p>
                 <Form className="pb-md-0 pb-5">
@@ -195,4 +194,4 @@ const Login = props => {
     );
 };
 
-export default connect(null, {setUserAction, setSocketAction, setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor70Action})(Login);
+export default connect(null, {setUserAction, setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Login);

@@ -1,15 +1,15 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {useState, useEffect, Fragment} from 'react';
+// bootstrap
+import Image from "react-bootstrap/Image";
 // router dom
-import {useHistory} from 'react-router-dom';
+import {useHistory, Link} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
 import {setSocketAction,
-        setBackgroundImageAction,
-        setBackgroundColorAction,
-        setBackgroundColor100Action,
-        setBackgroundColor70Action
+        setBackgroundColor5Action,
+        setBackgroundColor1Action
 } from '../actions';
 // socket
 import io from 'socket.io-client';
@@ -26,7 +26,9 @@ import {
     CardHeader,
     CardTitle,
     CardSubtitle,
-    CardText
+    CardText,
+    Breadcrumb,
+    BreadcrumbItem
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
@@ -54,7 +56,18 @@ import {
 const Products = props => {
 
     const history = useHistory();
-    const [width, height] = useWindowDimension();
+    // const [width, height] = useWindowDimension();
+    const [width] = useWindowDimension();
+
+    // profile
+    let img = "/uploads/1.jpg";
+    if (props.user.img) {
+        img = props.user.img;
+    }
+    const o_date = new Intl.DateTimeFormat();
+    const f_date = (m_ca, m_it) => Object({ ...m_ca, [m_it.type]: m_it.value });
+    const m_date = o_date.formatToParts().reduce(f_date, {});
+    const data = m_date.day + "/" + m_date.month + "/" + m_date.year;
 
 /* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
@@ -96,11 +109,10 @@ const Products = props => {
     useEffect(() => {
         // delete image-url
         // props.setBackgroundImageAction("");
-        // store class color-5
-        props.setBackgroundColorAction('color-5');
-        // store class color100
-        props.setBackgroundColor100Action("color100");
-        props.setBackgroundColor70Action(null);
+
+        // set background color of nav
+        props.setBackgroundColor5Action('color-5');
+        props.setBackgroundColor1Action(null);
 
         // get hubs & devices data from db at initial render
         getHubsPost().then(hubs => {
@@ -521,8 +533,42 @@ const Products = props => {
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-                <div>{width} x {height}</div>
-                <h3 className="text-trans mb-4">Hello {props.user.userName}, how are you?</h3>
+{/* ********************************************************* BREADCRUMB ********************************************************* */}               
+                <Col className="p-0 mb-3">
+                    <Breadcrumb className="bg-transparent">
+                        <BreadcrumbItem className="bg-transparent">
+                            <Link to="/">Home</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent">
+                            <Link to="/user">UserProfile</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent" active>DashBoard</BreadcrumbItem>
+                    </Breadcrumb>
+                </Col>
+{/* ********************************************************* PROFILE ********************************************************* */}               
+                <Row className="mb-4 d-flex align-items-center">
+                    <Col className="d-flex align-items-center">
+                        <div className="mr-2">
+                            <span>
+                                <Image
+                                    src={img}
+                                    height={"32px"}
+                                    width={"32px"}
+                                    roundedCircle
+                                />
+                            </span>
+                        </div>
+                        <div className="flex-grow-1 p-0 m-0">
+                            <div>
+                                {props.user.firstName}{" "}
+                                {props.user.lastName}
+                            </div>
+                            <div>
+                                {data}
+                            </div>
+                        </div>
+                    </Col>
+                </Row>
                 <Row>
                     <Col lg="5" className="accordion">
                         <Card color="transparent" className="border-0">
@@ -623,7 +669,7 @@ const Products = props => {
                                                         <Button
                                                             className="badge-pill btn-outline-light bg-transparent ml-3 up"
                                                             innerRef={openHubIconRef}
-                                                            onClick={e => toggleHub(e, idx)}
+                                                            onClick={e => {toggleHub(e, idx); shineHub(e, idx)}}
                                                         >
                                                             <span></span><span></span>
                                                         </Button>
@@ -694,18 +740,10 @@ const Products = props => {
                                                                             >
                                                                                 <span></span><span></span>
                                                                             </Button>
-                                                                            <Button
-                                                                                className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                                                innerRef={addDeviceIconRef}
-                                                                                onClick={e => toggleAddDevice(e, idx)}
-                                                                            >
+                                                                            <Button className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus">
                                                                                 <span></span><span></span>
                                                                             </Button>
-                                                                            <Button
-                                                                                className="badge-pill btn-outline-light bg-transparent ml-3 up"
-                                                                                innerRef={openHubIconRef}
-                                                                                onClick={e => toggleHub(e, idx)}
-                                                                            >
+                                                                            <Button className="badge-pill btn-outline-light bg-transparent ml-3 up">
                                                                                 <span></span><span></span>
                                                                             </Button>
                                                                         </CardSubtitle>
@@ -719,29 +757,29 @@ const Products = props => {
                                                                     {width <= 991 && (
                                                                         <Fragment>
                                                                             {device.type_id === 1 && device.sn_number === state.shownDeviceSn && (
-                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
-                                                                                    <Col className="p-3">
+                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
                                                                                         <MonitorSoil hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 2 && device.sn_number === state.shownDeviceSn && (
-                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
-                                                                                    <Col className="p-3">
+                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
                                                                                         <MonitorWater hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} status={state.shownDeviceStatus} statusChange={statusChange} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 3 && device.sn_number === state.shownDeviceSn && (
-                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
-                                                                                    <Col className="p-3">
+                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
                                                                                         <MonitorTempHum hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {device.type_id === 4 && device.sn_number === state.shownDeviceSn && (
-                                                                                <Col className="px-3 mt-md-0 mt-3" lg="7">
-                                                                                    <Col className="p-3">
+                                                                                <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                    <Col className="p-0 px-sm-3">
                                                                                         <MonitorLight hub={state.shownHub} device={state.shownDevice} data={state.realTimeData} />
                                                                                     </Col>
                                                                                 </Col> 
@@ -796,8 +834,6 @@ const mapStateToProps = state => {
     };
 };
 export default connect(mapStateToProps, {   setSocketAction,
-                                            setBackgroundImageAction,
-                                            setBackgroundColorAction,
-                                            setBackgroundColor100Action,
-                                            setBackgroundColor70Action
+                                            setBackgroundColor5Action,
+                                            setBackgroundColor1Action
                                         })(Products);

@@ -1,3 +1,9 @@
 .chartjs-render-monitor {
     margin-bottom: $font-size-3;
   }
+
+  .line-graph > div {
+    padding: 1.2rem;
+    // @include changeBGColor($color-2);
+    border-radius: 1rem;
+}

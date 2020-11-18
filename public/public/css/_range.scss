@@ -19,7 +19,7 @@ $input-h: 2rem;
   //   0 1px $track-shadow-base 2 * $color-light,
   //   0 1px $track-shadow-base 4 * $color-light,
   //   0 $track-shadow-base $track-shadow-base $color-light;
-  background: $color-light;
+  background: $color-2;
 }
 
 @mixin track() {
@@ -71,8 +71,8 @@ $input-h: 2rem;
     padding: 0 $input-pad;
     width: calc(#{$input-w} - #{$thumb-size} / 2);
     height: $border * 4;
-    background: linear-gradient(90deg, $color-6, $color-danger);
-    border: $border * 2.5 solid $color-light;
+    background: linear-gradient(90deg, $color-6, $color-danger-light);
+    border: $border * 2.5 solid $color-2;
     &::before {
       content: "";
       position: absolute;
@@ -81,8 +81,8 @@ $input-h: 2rem;
       padding: 0 $input-pad;
       width: calc(#{$input-w} - #{$thumb-size});
       height: $border * 4;
-      background: linear-gradient(90deg, $color-6, $color-danger);
-      border: $border * 2.5 solid $color-light;
+      background: linear-gradient(90deg, $color-6, $color-danger-light);
+      border: $border * 2.5 solid $color-2;
     }
     // left point
     &::after {
@@ -93,7 +93,7 @@ $input-h: 2rem;
       top: 50%;
       left: 0;
       background-color: $color-6;
-      border: $border * 2.5 solid $color-light;
+      border: $border * 2.5 solid $color-2;
       // padding: 0 $input-pad;
       border-radius: $thumb-size;
       transform: translate(-50%, -50%);
@@ -214,16 +214,16 @@ input[type='range'] {
     padding: 0 $input-pad;
     width: calc(#{$input-w} - #{$thumb-size});
     height: $border * 2;
-    background: linear-gradient(90deg, $color-6, $color-danger);
+    background: linear-gradient(90deg, $color-6, $color-danger-light);
   }
   &::after {
     content: '';
     display: inline-block;
     width: $thumb-size;
     height: $thumb-size;
-    background-color: $color-danger;
+    background-color: $color-danger-light;
     border-radius: $thumb-size;
-    border: $border * 2.5 solid $color-light;
+    border: $border * 2.5 solid $color-2;
     position: absolute;
     top: $input-h / 2 - $thumb-size / 2;
     right: 0;
