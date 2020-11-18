@@ -454,7 +454,7 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        log('Hub is disconnected');
+        // log('Hub is disconnected');
         socket.disconnect();
     });
 
