@@ -89,104 +89,82 @@ body {
 body #root {
   font-family: Ubuntu;
   height: 100vh;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: top right;
-  background-position: 20% 40%;
 }
 
-body #root > div:first-child {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  background-position: top right;
-  background-position: 20% 40%;
-}
-
-body #root > div:first-child + div {
-  width: 100%;
-  height: 100%;
-  background-color: #241b12;
-  position: fixed;
-  opacity: 0;
-  -webkit-transition: opacity .4s ease;
-  transition: opacity .4s ease;
-}
-
-body #root > div:first-child + div.color100 {
-  opacity: 1;
-  -webkit-transition: opacity .4s ease;
-  transition: opacity .4s ease;
-}
-
-body #root > div:first-child + div.color70 {
-  opacity: .9;
-  -webkit-transition: opacity .4s ease;
-  transition: opacity .4s ease;
-}
-
-body #root > div:first-child + div.color100 ~ .container,
-body #root > div:first-child + div.color70 ~ .container {
-  opacity: 1;
-  -webkit-transition: opacity .4s ease;
-  transition: opacity .4s ease;
-}
-
-body #root > div:first-child + div.color-5 {
+body #root .color-5 ~ div {
+  color: #1d2c22 !important;
   background-color: #9ac992;
 }
 
-body #root > div:first-child + div.color-5 ~ div {
-  color: #1d2c22 !important;
-}
-
-body #root > div:first-child + div.color-5 ~ div input {
+body #root .color-5 ~ div input {
   border-color: #1d2c22 !important;
   color: #007aa7 !important;
 }
 
-body #root > div:first-child + div.color-5 ~ div input.form-control {
+body #root .color-5 ~ div input.form-control {
   font-weight: bold;
 }
 
-body #root > div:first-child + div.color-5 ~ div input.form-control::-webkit-input-placeholder {
+body #root .color-5 ~ div input.form-control::-webkit-input-placeholder {
   color: rgba(0, 122, 167, 0.6) !important;
 }
 
-body #root > div:first-child + div.color-5 ~ div input.form-control:-ms-input-placeholder {
+body #root .color-5 ~ div input.form-control:-ms-input-placeholder {
   color: rgba(0, 122, 167, 0.6) !important;
 }
 
-body #root > div:first-child + div.color-5 ~ div input.form-control::-ms-input-placeholder {
+body #root .color-5 ~ div input.form-control::-ms-input-placeholder {
   color: rgba(0, 122, 167, 0.6) !important;
 }
 
-body #root > div:first-child + div.color-5 ~ div input.form-control::placeholder {
+body #root .color-5 ~ div input.form-control::placeholder {
   color: rgba(0, 122, 167, 0.6) !important;
 }
 
-body #root > div:first-child + div.color-5 ~ div input.form-control:focus {
+body #root .color-5 ~ div input.form-control:focus {
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
   text-shadow: none !important;
   border-color: #007aa7 !important;
 }
 
-body #root > div:first-child + div.color-5 ~ nav {
+body #root .color-5 ~ div .container .col-lg-7 > .col {
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #1d2c22;
+}
+
+body #root .color-5 ~ nav {
   background-color: #9ac992;
   color: #1d2c22 !important;
 }
 
-body #root .gradient {
-  width: 100%;
-  height: 100%;
-  background: -webkit-gradient(linear, left top, left bottom, from(#241b12), to(rgba(255, 0, 0, 0)));
-  background: linear-gradient(to bottom, #241b12, rgba(255, 0, 0, 0));
+body #root > div:last-child > .container > div:nth-child(2) {
+  font-size: 0.8rem;
+}
+
+body #root > div:first-child {
+  height: 4rem;
+  width: 100vw;
   position: fixed;
+  z-index: 1000;
+}
+
+body #root > div:first-child.color-1 {
+  background-color: #241b12;
+  -webkit-box-shadow: 0 0 1em 1em #241b12;
+          box-shadow: 0 0 1em 1em #241b12;
+}
+
+body #root > div:first-child.color-5 {
+  background-color: #9ac992;
+  -webkit-box-shadow: 0 0 1em 1em #9ac992;
+          box-shadow: 0 0 1em 1em #9ac992;
+}
+
+body #root > div:last-child {
+  min-height: 100vh;
+  background-color: #241b12;
 }
 
 body #root .container {
@@ -208,20 +186,11 @@ body #root .container .col-lg-7 > .col {
   border-radius: 1rem;
 }
 
-body #root .color-5 ~ .container .col-lg-7 > .col {
-  border-width: 0.1rem;
-  border-style: solid;
-  border-color: #1d2c22;
-}
-
-body #root > .container {
-  opacity: 0;
-  -webkit-transition: opacity .4s ease;
-  transition: opacity .4s ease;
+body #root > div > .container {
   padding-top: 5.2rem;
 }
 
-body #root > .container > .container {
+body #root > div > .container > .container {
   padding-top: 8rem;
 }
 
@@ -285,7 +254,11 @@ a:hover, a:active {
   color: #00a8e6 !important;
 }
 
-.color-5 ~ .container a:hover, .color-5 ~ .container a:active {
+.color-5 ~ div {
+  background-color: #9ac992 !important;
+}
+
+.color-5 ~ div a:hover, .color-5 ~ div a:active {
   color: #007aa7 !important;
 }
 
@@ -294,13 +267,19 @@ a:hover, a:active {
   html {
     font-size: 12px;
   }
-  body #root > .container {
+  body #root > div:last-child > .container {
     padding-top: 6rem;
   }
-  body #root > .container > .container {
+  body #root > div:last-child > .container > .container {
     padding-top: 6rem;
   }
-  .color-5 ~ .container .col-lg-7 > .col {
+  body #root > div:last-child > .container .card-body + div > div:first-child {
+    left: -1rem;
+  }
+  body #root > div:last-child > .container .card-body + div > div:first-child > div {
+    width: calc(100% + 1rem);
+  }
+  .color-5 ~ div > .container .col-lg-7 > .col {
     border-color: rgba(255, 255, 255, 0) !important;
   }
 }
@@ -324,37 +303,28 @@ a:hover, a:active {
 }
 
 body .breadcrumb a,
+body .breadcrumb li::before,
+body .breadcrumb li::after,
 body .breadcrumb-item.active {
+  color: rgba(253, 215, 157, 0.6) !important;
+}
+
+.color-5 ~ div .breadcrumb a,
+.color-5 ~ div li::before,
+.color-5 ~ div li::after,
+.color-5 ~ div .breadcrumb-item.active {
   color: rgba(0, 67, 20, 0.6) !important;
 }
 
-@-webkit-keyframes blur {
-  form {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes blur {
-  form {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .navbar {
-  background-color: none;
+  background-color: rgba(255, 255, 255, 0) !important;
   -webkit-transition: none;
   transition: none;
   height: 4rem;
 }
 
 .navbar .navbar-brand {
-  width: 7rem;
+  width: 7.2rem;
   height: 3rem;
   background-image: url("../imgs/inuta_logo_light.svg");
   background-repeat: no-repeat;
@@ -370,14 +340,6 @@ body .breadcrumb-item.active {
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
-}
-
-.color-5 + .navbar {
-  background-color: #9ac992;
-  -webkit-box-shadow: 0 0 1em 1em #9ac992;
-          box-shadow: 0 0 1em 1em #9ac992;
-  -webkit-animation: blur .8s ease 1s;
-          animation: blur .8s ease 1s;
 }
 
 .color-5 + .navbar .navbar-brand {
@@ -1389,5 +1351,17 @@ input[type='range']::after {
 .fadeIn {
   -webkit-animation: fadeIn 0.5s;
           animation: fadeIn 0.5s;
+}
+
+#root > div:last-child > div:nth-child(2) a,
+#root > div:last-child > div:nth-child(3) a {
+  color: #fdd79d !important;
+  font-size: 1rem;
+}
+
+#root > .color-5 ~ div > div:nth-child(2) a,
+#root > .color-5 ~ div > div:nth-child(3) a {
+  color: #005018 !important;
+  font-size: 1rem;
 }
 /*# sourceMappingURL=style.css.map */

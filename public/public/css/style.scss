@@ -78,6 +78,7 @@ $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
 $color-2-opac: rgba(29, 44, 34, .8);
 $color-3: rgb(253, 215, 157);
+$color-3-opac: rgba(253, 215, 157, .6);
 $color-4: rgb(0, 80, 24);
 $color-4-opac: rgba(0, 67, 20, .6);
 $color-5: rgb(154, 201, 146);
@@ -96,6 +97,8 @@ $color-success: rgb(48, 162, 86);
 $color-success-opac: rgba(48, 162, 86, .6);
 $color-success-transp: rgba(48, 162, 86, .3);
 $border: .1rem;
+$nav-height: 4rem;
+
 // color
 @mixin changeColor($color: $color-1) {
   @if $color == $color-1 {
@@ -177,80 +180,90 @@ body {
   #root {
     font-family: Ubuntu;
     height: 100vh;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: top right;
-    background-position: 20% 40%;
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    // background-size: cover;
+    // background-position: top right;
+    // background-position: 20% 40%;
     // background image
-    & > div:first-child {
-      width: 100%;
-      height: 100%;
-      position: fixed;
+    // & > div:first-child {
+      // width: 100%;
+      // height: 100%;
+      // position: fixed;
       // background-color: $color-1;
       // background-image: url(../imgs/800px_COLOURBOX10774649.jpg);
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: top right;
-      background-position: 20% 40%;
+      // background-repeat: no-repeat;
+      // background-attachment: fixed;
+      // background-size: cover;
+      // background-position: top right;
+      // background-position: 20% 40%;
       // background layer
-      & + div {
-        width: 100%;
-        height: 100%;
-        background-color: $color-1;
-        position: fixed;
-        opacity: 0;
-        @include transitionOpacity();
-        // layer with full color
-        &.color100 {
-        opacity: 1;
-        @include transitionOpacity();
-        }
-        // layer with 70% color
-        &.color70 {
-        opacity: .9;
-        @include transitionOpacity();
-        }
-        // fade in container
-        &.color100 ~ .container,
-        &.color70 ~ .container {
-        opacity: 1;
-        @include transitionOpacity();
-        }
-        &.color-5 {
-          @include changeBGColor($color-5);
-          & ~ div {
-            @include changeColor($color-5);
-            // inputs
-            & input {
-              @include changeInput($color-5);
-              &.form-control {
-                font-weight: bold;
-                &::placeholder {
-                  color: $color-8-opac !important;
-                }
-                &:focus {
-                  @include killShadow();
-                  border-color: $color-8 !important;
-                }
-              }
+      // & + div {
+      //   width: 100%;
+      //   height: 100%;
+      //   background-color: $color-1;
+      //   position: fixed;
+      //   opacity: 0;
+      //   @include transitionOpacity();
+
+      
+      // layer with full color
+      // & .color100 {
+      // opacity: 1;
+      // @include transitionOpacity();
+      // }
+      // layer with 70% color
+      // & .color70 {
+      // opacity: .9;
+      // @include transitionOpacity();
+      // }
+      // fade in container
+      // & .color100 ~ .container,
+      // & .color70 ~ .container {
+      // opacity: 1;
+      // @include transitionOpacity();
+      // }
+    & .color-5 {
+      // @include changeBGColor($color-5);
+      & ~ div {
+        @include changeColor($color-5);
+        @include changeBGColor($color-5);
+        // inputs
+        & input {
+          @include changeInput($color-5);
+          &.form-control {
+            font-weight: bold;
+            &::placeholder {
+              color: $color-8-opac !important;
+            }
+            &:focus {
+              @include killShadow();
+              border-color: $color-8 !important;
             }
           }
-          & ~ nav {
-            @include changeBGColor($color-5);
-            @include changeColor($color-5);
-          }
+        }
+        // color of frameborder
+        & .container .col-lg-7 > .col {
+          @include changeBorder($color-5);
         }
       }
+      & ~ nav {
+        @include changeBGColor($color-5);
+        @include changeColor($color-5);
+      }
     }
+    // profile
+    & > div:last-child > .container > div:nth-child(2) {
+      font-size: $font-size-5;
+    }
+    // }
     // layer with gradient
-    & .gradient {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
-    position: fixed;
-    }
+    // & .gradient {
+    // width: 100%;
+    // height: 100%;
+    // background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
+    // position: fixed;
+    // }
     // layer with opac
     // & .opac {
     // width: 100%;
@@ -258,6 +271,30 @@ body {
     // background-color: $color-1-opac;
     // position: fixed;
     // }
+    
+    // fader
+    & > div:first-child {
+      height: $nav-height;
+      width: 100vw;
+      position: fixed;
+      z-index: 1000;
+      &.color-1 {
+        @include changeBGColor($color-1);
+        @include changeBGShadow($color-1);
+      }
+      &.color-5 {
+        @include changeBGColor($color-5);
+        @include changeBGShadow($color-5);
+      }
+    }
+    // container-wrap
+    & > div:last-child {
+      min-height: 100vh;
+      @include changeBGColor($color-1);
+      // & > .container {
+      //   min-height: 100vh;
+      // }
+    }
     // container
     & .container {
       position: relative;
@@ -274,13 +311,8 @@ body {
         border-radius: $font-size-4;
       }
     }
-    & .color-5 ~ .container .col-lg-7 > .col {
-      @include changeBorder($color-5);
-    }
     // frame border of container outside container
-    & > .container {
-      opacity: 0;
-      @include transitionOpacity;
+    & > div > .container {
       padding-top: 5.2rem;
       // frame border of container inside container
       & > .container {
@@ -336,10 +368,13 @@ a {
   }
 }
 // color-5
-.color-5 ~ .container a {
-  &:hover,
-  &:active {
-    color: $color-8 !important;
+.color-5 ~ div {
+  background-color: $color-5 !important;
+  & a {
+    &:hover,
+    &:active {
+      color: $color-8 !important;
+    }
   }
 }
 
@@ -348,14 +383,22 @@ a {
 @media (max-width: 576px) {
   html { font-size: 12px; }
   // frame border of container outside container
-  body #root > .container {
+  body #root > div:last-child > .container {
     padding-top: 6rem;
     // frame border of container inside container
     & > .container {
       padding-top: 6rem;
     }
+    // expand monitor
+    & .card-body + div > div:first-child {
+      left: -1rem;
+      & > div {
+        width: calc(100% + 1rem);
+      }
+    }
   }
-  .color-5 ~ .container .col-lg-7 > .col {
+  // hide frame of dashboard
+  .color-5 ~ div > .container .col-lg-7 > .col {
     border-color: rgba(255, 255, 255, 0) !important;
   }
 }
@@ -371,7 +414,7 @@ a {
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
-  // hidden frame of dashboard
+  // show frame of dashboard
   #root > .container .col-lg-8 {
     // @include makeOutline();
     border-radius: $font-size-3;
@@ -391,3 +434,4 @@ a {
 @import 'switch';
 @import 'chartjs';
 @import 'slider';
+@import 'footer';

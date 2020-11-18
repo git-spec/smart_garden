@@ -6,24 +6,37 @@
     // @include changeColor();
     // transform: scale(1.2);
 }
-@keyframes blur {
-    form {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
-}
+// @keyframes navBGColor-1 {
+//     form {
+//         background-color: none;
+//         box-shadow: none;
+//     }
+//     to {
+//         @include changeBGColor($color-1);
+//         @include changeBGShadow($color-1);
+//     }
+// }
+// @keyframes navBGColor-5 {
+//     form {
+//         background-color: none;
+//         box-shadow: none;
+//     }
+//     to {
+//         @include changeBGColor($color-5);
+//         @include changeBGShadow($color-5);
+//     }
+// }
+
 // navbar
 .navbar {
     // @include changeBGColor();
     // background-color: $color-1-transp;
-    background-color: none;
+    background-color: rgba(255, 255, 255, 0) !important;
     transition: none;
-    height: 4rem;
+    height: $nav-height;
     // logo
     & .navbar-brand {
-        width: 7rem;
+        width: 7.2rem;
         height: 3rem;
         background-image: url('../imgs/inuta_logo_light.svg');
         background-repeat: no-repeat;
@@ -53,10 +66,10 @@
 //     transition: all .5s ease 1s;
 // }
 // change color
+// .color-1 + .navbar {
+//     animation: navBGColor-1 .5s ease 1s forwards;
+// }
 .color-5 + .navbar {
-    @include changeBGColor($color-5);
-    @include changeBGShadow($color-5);
-    animation: blur .8s ease 1s;
     & .navbar-brand {
         background-image: url('../imgs/inuta_logo_dark.svg');
     }
