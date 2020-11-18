@@ -17,6 +17,7 @@
     // makes slider round
     & .slider.round {
       border-radius: $font-size-4;
+      height: $font-size-6;
       // makes switch round
       &::before {
         border-radius: 50%;
@@ -30,8 +31,8 @@
       height: $font-size-4;
       width: $font-size-4;
       top: ($font-size-4 / -4);
-      background-color: $color-success;
-      border: .25rem solid $color-light;
+      background-color: $color-6;
+      border: .25rem solid $color-2;
       border-radius: 50%;
       -webkit-transition: .4s;
       transition: .4s;
@@ -46,8 +47,8 @@
       width: $font-size-4;
       top: ($font-size-4 / -4);
       right: 0;
-      background-color: $color-danger;
-      border: .25rem solid $color-light;
+      background-color: $color-danger-light;
+      border: .25rem solid $color-2;
       border-radius: 50%;
       -webkit-transition: .4s;
       transition: .4s;
@@ -60,7 +61,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: $color-light;
+      background-color: $color-2;
       -webkit-transition: .4s;
       transition: .4s;
     }
@@ -71,7 +72,7 @@
       height: $font-size-4;
       width: $font-size-4;
       top: ($font-size-4 / -4);
-      background-color: $color-light;
+      background-color: $color-2;
       -webkit-transition: .4s;
       transition: .4s;
       z-index: 1;

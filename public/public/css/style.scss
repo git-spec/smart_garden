@@ -78,36 +78,89 @@ $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
 $color-2-opac: rgba(29, 44, 34, .8);
 $color-3: rgb(253, 215, 157);
-$color-4: rgb(33, 84, 48);
-$color-4: rgba(33, 84, 48, .6);
+$color-3-opac: rgba(253, 215, 157, .6);
+$color-4: rgb(0, 80, 24);
+$color-4-opac: rgba(0, 67, 20, .6);
 $color-5: rgb(154, 201, 146);
 $color-5-opac: rgba(154, 201, 146, .6);
 $color-6: rgb(0, 168, 230);
+$color-8: rgb(0, 122, 167);
+$color-8-opac: rgba(0, 122, 167, .6);
+$color-8-transp: rgba(0, 122, 167, .3);
 $color-7: rgb(152, 210, 232);
 $color-7-opac: rgba(152, 210, 232, .6);
 $color-light: white;
 $color-danger: red;
 $color-danger-opac: rgba(255, 0, 0, .6);
+$color-danger-light: rgb(255, 96, 96);
 $color-success: rgb(48, 162, 86);
 $color-success-opac: rgba(48, 162, 86, .6);
 $color-success-transp: rgba(48, 162, 86, .3);
 $border: .1rem;
-// color
-// @mixin changeColor() {
+$nav-height: 4rem;
 
-// }
-// outline
-@mixin makeOutline {
-  border: $border solid $color-3 !important;
+// color
+@mixin changeColor($color: $color-1) {
+  @if $color == $color-1 {
+    color: $color-3 !important;
+  }
+  @if $color == $color-5 {
+    color: $color-2 !important;
+  }
+}
+// bg-color
+@mixin changeBGColor($color: $color-1) {
+  background-color: $color;
+}
+// border
+@mixin changeBorder($color: $color-1, $width: $border, $style: solid) {
+  border-width: $width;
+  border-style: $style;
+  @if $color == $color-1 {
+    border-color: $color-3;
+  }
+  @if $color == $color-5 {
+    border-color: $color-2;
+  }
+}
+// bg-shadow
+@mixin changeBGShadow($color: $color-1) {
+  box-shadow: 0 0 1em 1em $color;
+}
+// button background
+@mixin changeButton($color: $color-1) {
+  @if $color == $color-1 {
+    background-color: $color-3 !important;
+    color: $color-1 !important;
+  }
+  @if $color == $color-5 {
+    background-color: $color-2 !important;
+    color: $color-5 !important;
+  }
+}
+// change color of input
+@mixin changeInput($color: $color-1) {
+  @if $color == $color-1 {
+    border-color: $color-3 !important;
+    color: $color-5 !important;
+  }
+  @if $color == $color-5 {
+    border-color: $color-2 !important;
+    color: $color-8 !important;
+  }
 }
 // remove shadows
 @mixin killShadow {
   box-shadow: none !important;
   text-shadow: none !important;
 }
+// remove borders
 @mixin killBorder {
   border: none !important;
   outline: none !important;
+}
+@mixin transitionOpacity {
+  transition: opacity .4s ease;
 }
 // default
 *, *:before, *:after {
@@ -127,66 +180,120 @@ body {
   #root {
     font-family: Ubuntu;
     height: 100vh;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    background-position: top right;
-    background-position: 20% 40%;
-    // background color
-    // & .color-5 {
-    //   @include changeColor($color-5);
-    // }
+    // background-repeat: no-repeat;
+    // background-attachment: fixed;
+    // background-size: cover;
+    // background-position: top right;
+    // background-position: 20% 40%;
     // background image
-    & > div:first-child {
-      width: 100%;
-      height: 100%;
-      position: fixed;
+    // & > div:first-child {
+      // width: 100%;
+      // height: 100%;
+      // position: fixed;
       // background-color: $color-1;
       // background-image: url(../imgs/800px_COLOURBOX10774649.jpg);
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: top right;
-      background-position: 20% 40%;
+      // background-repeat: no-repeat;
+      // background-attachment: fixed;
+      // background-size: cover;
+      // background-position: top right;
+      // background-position: 20% 40%;
       // background layer
-      & + div {
-        width: 100%;
-        height: 100%;
-        background-color: $color-1;
-        position: fixed;
-        opacity: 0;
-        transition: opacity  1s ease;
-        // layer with full color
-        &.color100 {
-        opacity: 1;
-        transition: opacity 1s ease;
+      // & + div {
+      //   width: 100%;
+      //   height: 100%;
+      //   background-color: $color-1;
+      //   position: fixed;
+      //   opacity: 0;
+      //   @include transitionOpacity();
+
+      
+      // layer with full color
+      // & .color100 {
+      // opacity: 1;
+      // @include transitionOpacity();
+      // }
+      // layer with 70% color
+      // & .color70 {
+      // opacity: .9;
+      // @include transitionOpacity();
+      // }
+      // fade in container
+      // & .color100 ~ .container,
+      // & .color70 ~ .container {
+      // opacity: 1;
+      // @include transitionOpacity();
+      // }
+    & .color-5 {
+      // @include changeBGColor($color-5);
+      & ~ div {
+        @include changeColor($color-5);
+        @include changeBGColor($color-5);
+        // inputs
+        & input {
+          @include changeInput($color-5);
+          &.form-control {
+            font-weight: bold;
+            &::placeholder {
+              color: $color-8-opac !important;
+            }
+            &:focus {
+              @include killShadow();
+              border-color: $color-8 !important;
+            }
+          }
         }
-        // layer with 70% color
-        &.color70 {
-        opacity: .9;
-        transition: opacity 1s ease;
-        }
-        // fade in container
-        &.color100 ~ .container,
-        &.color70 ~ .container {
-        opacity: 1;
-        transition: opacity 1s ease;
+        // color of frameborder
+        & .container .col-lg-7 > .col {
+          @include changeBorder($color-5);
         }
       }
+      & ~ nav {
+        @include changeBGColor($color-5);
+        @include changeColor($color-5);
+      }
     }
+    // profile
+    & > div:last-child > .container > div:nth-child(2) {
+      font-size: $font-size-5;
+    }
+    // }
     // layer with gradient
-    & .gradient {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
-    position: fixed;
-    }
+    // & .gradient {
+    // width: 100%;
+    // height: 100%;
+    // background: linear-gradient(to bottom, $color-1, rgba(255,0,0,0));
+    // position: fixed;
+    // }
     // layer with opac
-    & .opac {
-    width: 100%;
-    height: 100%;
-    background-color: $color-1-opac;
-    position: fixed;
+    // & .opac {
+    // width: 100%;
+    // height: 100%;
+    // background-color: $color-1-opac;
+    // position: fixed;
+    // }
+    
+    // fader
+    & > div:first-child {
+      height: $nav-height;
+      width: 100vw;
+      position: fixed;
+      z-index: 1000;
+      &.color-1 {
+        @include changeBGColor($color-1);
+        @include changeBGShadow($color-1);
+      }
+      &.color-5 {
+        @include changeBGColor($color-5);
+        @include changeBGShadow($color-5);
+      }
+    }
+    // container-wrap
+    & > div:last-child {
+      min-height: 100vh;
+      @include changeBGColor($color-1);
+      // & > .container {
+      //   min-height: 100vh;
+      // }
     }
     // container
     & .container {
@@ -200,15 +307,13 @@ body {
       }
       // frame border
       & .col-lg-7 > .col {
-        @include makeOutline();
+        @include changeBorder;
         border-radius: $font-size-4;
       }
     }
     // frame border of container outside container
-    & > .container {
-      opacity: 0;
-      transition: opacity 1s ease;
-      padding-top: 8rem;
+    & > div > .container {
+      padding-top: 5.2rem;
       // frame border of container inside container
       & > .container {
         padding-top: 8rem;
@@ -223,53 +328,27 @@ body {
   & h5 {
     font-family: $font-head;
     letter-spacing: .02rem;
-    color: $color-3;
+    color: inherit;
     padding-left: .02rem;
   }
   // inputs
   & input {
-    color: $color-5 !important;
+    @include changeInput;
     &.form-control {
       font-weight: bold;
-    }
-    // &:focus {
-    //   outline: none;
-    //   border-color: $color-light !important;
-    //   color: $color-light;
-    // }
-    &::placeholder {
-      color: $color-5-opac !important;
-    }
-    &:focus {
-      @include killShadow();
-      border-color: $color-5 !important;
-    }
-  }
-  // & input.form-control {
-  //   // color: $color-3 !important;
-  //   &::placeholder {
-  //     color: $text-transp !important;
-  //   }
-  //   &:focus {
-  //     @include killShadow();
-  //     border-color: $color-7 !important;
-  //   }
-  // }
-  // color of links
-  & .row a {
-    color: $color-6;
-    &:hover,
-    &:active {
-      color: $color-6;
+      &::placeholder {
+        color: $color-5-opac !important;
+      }
+      &:focus {
+        @include killShadow();
+        border-color: $color-5 !important;
+      }
     }
   }
   // paragraph text
   & p {
+    color: inherit;
     font-size: $font-size-3;
-  }
-  // round border
-  & .badge-pill {
-    @include makeOutline();
   }
   // // opac text
   // & .text-transp {
@@ -280,18 +359,47 @@ body {
       font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }
 }
+// color of links
+a {
+  color: $color-6 !important;
+  &:hover,
+  &:active {
+    color: $color-6 !important;
+  }
+}
+// color-5
+.color-5 ~ div {
+  background-color: $color-5 !important;
+  & a {
+    &:hover,
+    &:active {
+      color: $color-8 !important;
+    }
+  }
+}
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
   html { font-size: 12px; }
   // frame border of container outside container
-  body #root > .container {
+  body #root > div:last-child > .container {
     padding-top: 6rem;
     // frame border of container inside container
     & > .container {
       padding-top: 6rem;
     }
+    // expand monitor
+    & .card-body + div > div:first-child {
+      left: -1rem;
+      & > div {
+        width: calc(100% + 1rem);
+      }
+    }
+  }
+  // hide frame of dashboard
+  .color-5 ~ div > .container .col-lg-7 > .col {
+    border-color: rgba(255, 255, 255, 0) !important;
   }
 }
 
@@ -306,9 +414,9 @@ body {
 
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
-  // hidden frame of dashboard
+  // show frame of dashboard
   #root > .container .col-lg-8 {
-    @include makeOutline();
+    // @include makeOutline();
     border-radius: $font-size-3;
   }
 }
@@ -317,6 +425,7 @@ body {
 @media (min-width: 1200px) {}
 
 /* *********************************************************** IMPORT ********************************************************* */
+@import 'breadcrumb';
 @import 'nav';
 @import 'buttons';
 @import 'range';
@@ -324,3 +433,5 @@ body {
 @import 'table';
 @import 'switch';
 @import 'chartjs';
+@import 'slider';
+@import 'footer';

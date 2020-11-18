@@ -22,25 +22,18 @@ const backgroundImageReducer = (backgroundUrl = null, action) => {
     return backgroundUrl;
 };
 
-const backgroundColorReducer = (backgroundColor = null, action) => {
-    if (action.type === 'CHANGE_BGCOLOR') {
+const backgroundColor5Reducer = (backgroundColor5 = null, action) => {
+    if (action.type === 'CHANGE_BGCOLOR_5') {
         return action.payload;
     }
-    return backgroundColor;
+    return backgroundColor5;
 };
 
-const backgroundColor100Reducer = (backgroundColor100 = null, action) => {
-    if (action.type === 'CHANGE_BGCOLOR100') {
+const backgroundColor1Reducer = (backgroundColor1 = null, action) => {
+    if (action.type === 'CHANGE_BGCOLOR_1') {
         return action.payload;
     }
-    return backgroundColor100;
-};
-
-const backgroundColor70Reducer = (backgroundColor70 = null, action) => {
-    if (action.type === 'CHANGE_BGCOLOR70') {
-        return action.payload;
-    }
-    return backgroundColor70;
+    return backgroundColor1;
 };
 
 // take in actions and update part of applications state
@@ -48,7 +41,6 @@ export default combineReducers({
     user: userReducer,
     socket: socketReducer,
     backgroundUrl: backgroundImageReducer,
-    backgroundColor: backgroundColorReducer,
-    backgroundColor100: backgroundColor100Reducer,
-    backgroundColor70: backgroundColor70Reducer
+    backgroundColor5: backgroundColor5Reducer,
+    backgroundColor1: backgroundColor1Reducer
 });

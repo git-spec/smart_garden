@@ -21,20 +21,9 @@ class LineChart extends React.Component {
         this.myChart.data.labels = this.props.data.map(d => d.time);
         this.myChart.data.datasets[0].data = this.props.data.map(d => d.value);
         this.myChart.update();
-        // console.log(this.props.width);
-        // if(this.props.width > 576) {
-        //     this.setState({fontsize: 12});
-        // } else {
-        //     this.setState({fontsize: 6});
-        // }
     }
 
     componentDidMount() {
-        // if(this.props.width > 576) {
-        //     this.setState({fontsize: 12});
-        // } else {
-        //     this.setState({fontsize: 6});
-        // }
         // get canvas
         const myChartRef = this.chartRef.current.getContext("2d");
         // const {height: graphHeight} = myChartRef.canvas;

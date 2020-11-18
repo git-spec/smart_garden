@@ -1,8 +1,16 @@
-// export default Register;
 import React, { Fragment, useState, useEffect } from "react";
-import { Container, Row, Col, Button, Table, ButtonGroup } from "reactstrap";
+import {
+    Container,
+    Row,
+    Col,
+    Button,
+    Table,
+    ButtonGroup,
+    Breadcrumb,
+    BreadcrumbItem,
+} from "reactstrap";
 import PopUpModal from "./PopUpModal";
-// import validator from "validator";
+import { Link } from "react-router-dom";
 import {
     getAllUsers,
     changeVerificationPost,
@@ -44,7 +52,8 @@ const Admin = (props) => {
             .catch((err) => {
                 console.log(err);
             });
-    // eslint-disable-next-line
+
+        // eslint-disable-next-line
     }, []);
 
     /* ********************************************************* Change User Verification ********************************************************* */
@@ -165,8 +174,29 @@ const Admin = (props) => {
             >
                 {myState.errorComponent}
             </PopUpModal>
-
             <Container>
+                {/* ********************************************************* Breadcrumb ********************************************************* */}
+                <Row>
+                    <Col lg="5"></Col>
+                    <Col>
+                        <Row>
+                            <Breadcrumb>
+                                <BreadcrumbItem>
+                                    <Link to="/">Home</Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem>
+                                    <Link to="/user">UserProfile</Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem active>
+                                    AdminPanel
+                                </BreadcrumbItem>
+                            </Breadcrumb>
+                        </Row>
+                    </Col>
+                    <br />
+                </Row>{" "}
+                <br />
+                {/* ********************************************************* End ********************************************************* */}
                 <Row>
                     <Col xs={6} md={9}>
                         <br />
