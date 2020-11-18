@@ -19,16 +19,16 @@ import PopUpModal from "./PopUpModal";
 import { editPost, getUser } from "../services/api";
 // redux
 import {connect} from 'react-redux';
-import {setBackgroundColorAction,
-        setBackgroundColor100Action
+import {setBackgroundColor5Action,
+        setBackgroundColor1Action
 } from '../actions';
 
 
 const User = (props) => {
     useEffect(() => {
 
-        props.setBackgroundColor100Action("color100");
-        props.setBackgroundColorAction(null);
+        props.setBackgroundColor1Action("color-1");
+        props.setBackgroundColor5Action(null);
 
         getUser(props.user.id)
             .then((user) => {
@@ -185,27 +185,20 @@ return (
                 {myState.errorComponent}
             </PopUpModal>
 {/* ********************************************************* Breadcrumb ********************************************************* */}
-            <Row>
-                <Col lg="5"></Col>
-                <Col>
-                    <Row>
-                        <Breadcrumb>
-                            <BreadcrumbItem>
-                                <Link to="/">Home</Link>
-                            </BreadcrumbItem>
-                            <BreadcrumbItem active>
-                                UserProfile
-                            </BreadcrumbItem>
-                        </Breadcrumb>
-                    </Row>
-                </Col>
-                <br />
-            </Row>{" "}
-            <br />
+            <Col className="p-0 mb-3">
+                <Breadcrumb className="bg-transparent">
+                    <BreadcrumbItem className="bg-transparent">
+                        <Link to="/">Home</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem className="bg-transparent">
+                        <Link to="/user">UserProfile</Link>
+                    </BreadcrumbItem>
+                    <BreadcrumbItem className="bg-transparent" active>DashBoard</BreadcrumbItem>
+                </Breadcrumb>
+            </Col>
 {/* ********************************************************* End ********************************************************* */}
             <Row>
                 <Col xs={6} md={9}>
-                    <br />
                     <h1 className="text-trans mb-4">
                         Hello {user.firstName + " " + user.lastName}
                     </h1>
@@ -237,7 +230,6 @@ return (
                     />
                 </Col>
             </Row>
-            <Row></Row>
             <Form className="pb-md-0 pb-5">
                 <div className="col-lg-12 col-md-12">
                     {myState.resultElement}
@@ -384,4 +376,4 @@ return (
 const mapStateToProps = (state) => {
     return { user: state.user };
 };
-export default connect(mapStateToProps, {setBackgroundColorAction, setBackgroundColor100Action})(User);
+export default connect(mapStateToProps, {setBackgroundColor5Action, setBackgroundColor1Action})(User);

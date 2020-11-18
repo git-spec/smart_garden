@@ -2,7 +2,8 @@ import React, {Fragment} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setBackgroundImageAction} from '../actions';
-import {setBackgroundColor100Action} from '../actions';
+import {setBackgroundColor1Action} from '../actions';
+import {setBackgroundColor5Action} from '../actions';
 // reactstrap
 import {
     Container,
@@ -37,8 +38,8 @@ class Register extends React.Component {
     }
 
     componentDidMount() {
-        this.props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
-        this.props.setBackgroundColor100Action("color100");
+        this.props.setBackgroundColor1Action("color-1");
+        this.props.setBackgroundColor5Action(null);
     }
 
     onRegisterBtnClick = e => {
@@ -128,6 +129,7 @@ class Register extends React.Component {
                     {this.state.errorComponent}
                 </PopUpModal>
                 <Container>
+                    <Row className="my-4"><Col></Col></Row>
                     <h1 className="text-trans mb-4">Registration</h1>
                     {/* <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p> */}
                     <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
@@ -243,4 +245,4 @@ class Register extends React.Component {
     }
 }
 
-export default connect(null, {setBackgroundImageAction, setBackgroundColor100Action})(Register);
+export default connect(null, {setBackgroundImageAction, setBackgroundColor1Action, setBackgroundColor5Action})(Register);

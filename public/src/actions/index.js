@@ -19,23 +19,16 @@ export const setBackgroundImageAction = backgroundUrl => {
     };
 };
 
-export const setBackgroundColorAction = backgroundColor => {
+export const setBackgroundColor5Action = backgroundColor5 => {
     return {
-        type: 'CHANGE_BGCOLOR',
-        payload: backgroundColor
+        type: 'CHANGE_BGCOLOR_5',
+        payload: backgroundColor5
     };
 };
 
-export const setBackgroundColor100Action = backgroundColor100 => {
+export const setBackgroundColor1Action = backgroundColor1 => {
     return {
-        type: 'CHANGE_BGCOLOR100',
-        payload: backgroundColor100
-    };
-};
-
-export const setBackgroundColor70Action = backgroundColor70 => {
-    return {
-        type: 'CHANGE_BGCOLOR70',
-        payload: backgroundColor70
+        type: 'CHANGE_BGCOLOR_1',
+        payload: backgroundColor1
     };
 };

@@ -2,25 +2,31 @@ import React, {Fragment, useEffect} from 'react';
 // redux
 import {connect} from "react-redux";
 import {setBackgroundImageAction} from '../actions';
-import {setBackgroundColorAction} from '../actions';
-import {setBackgroundColor100Action} from '../actions';
-import {setBackgroundColor70Action} from '../actions';
-
+import {setBackgroundColor5Action} from '../actions';
+import {setBackgroundColor1Action} from '../actions';
+import Slider from "./Slider"
+import Images from "./images"
 
 function Main(props) {
 
     useEffect(() => {
         props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
-        props.setBackgroundColorAction(null);
-        props.setBackgroundColor100Action(null);
-        props.setBackgroundColor70Action(null);
+        props.setBackgroundColor5Action(null);
+        props.setBackgroundColor1Action(null);
     // eslint-disable-next-line
     }, []);
 
     return(
         <Fragment>
+            <Slider images={Images} className={`${props.backgroundColor} ${props.backgroundColor100} ${props.backgroundColor70}`} />
         </Fragment>
     );
 }
-
-export default connect(null, {setBackgroundImageAction, setBackgroundColorAction, setBackgroundColor100Action, setBackgroundColor70Action})(Main);
+const mapStateToProps = state => {
+    return {
+        backgroundUrl: state.backgroundUrl,
+        backgroundColor: state.backgroundColor5,
+        backgroundColor100: state.backgroundColor1
+    };
+};
+export default connect(mapStateToProps, {setBackgroundImageAction, setBackgroundColor5Action, setBackgroundColor1Action})(Main);
