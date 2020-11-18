@@ -40,14 +40,11 @@ const Router = props => {
         divRef.current.style.visibility = 'hidden';
 
         window.addEventListener('scroll', e => {
-            console.log(window.scrollY);
-            
             if(window.scrollY > 40) {
                 divRef.current.style.visibility = 'visible';
             } else {
                 divRef.current.style.visibility = 'hidden';
             };
-            
         });
 
     // eslint-disable-next-line
