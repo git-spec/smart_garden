@@ -300,6 +300,9 @@ a:hover, a:active {
   body #root > .container > .container {
     padding-top: 6rem;
   }
+  .color-5 ~ .container .col-lg-7 > .col {
+    border-color: rgba(255, 255, 255, 0) !important;
+  }
 }
 
 @media (min-width: 576px) {

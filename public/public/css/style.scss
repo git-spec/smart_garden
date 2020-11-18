@@ -355,6 +355,9 @@ a {
       padding-top: 6rem;
     }
   }
+  .color-5 ~ .container .col-lg-7 > .col {
+    border-color: rgba(255, 255, 255, 0) !important;
+  }
 }
 
 // Small devices (landscape phones, 576px and up)
