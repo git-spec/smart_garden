@@ -86,9 +86,9 @@ const Login = props => {
                     default:
                         setUserAction(data);
                         if (data.role === 'admin') {
-                            history.push('/admin/dashboard');
+                            history.push('/user/adminpanel');
                         } else if(data.role === 'subadmin'){
-                            history.push('/subadmin/dashboard');
+                            history.push('/user/subadminpanel');
                         }else {
                             history.push('/user/dashboard');
                         }

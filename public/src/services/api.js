@@ -59,7 +59,6 @@ export const editPost = (id, firstName, lastName, userName, city, password, repa
             }
         }).catch(err => {
             reject(err);
-            console.log(err);
         });
     });
 };
@@ -346,6 +345,34 @@ export const changeUserRolePost = (id, role)  => {
                     resolve(data);
                 }).catch(error => {
                     reject(error);
+                });
+            } else {
+                reject(new Error('can not get the data, response number is: ' + response.status));
+            }
+        }).catch(error => {
+            reject(error);
+        });
+    });
+};
+
+export const sendMessagePost = (email, message)  => {
+    return new Promise((resolve, reject) => {
+        const data = {
+            email,
+            message
+        };
+        fetch('/sendMessagePost', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('can not get the data, response number is: ' + response.status));

@@ -7,6 +7,7 @@ import {setUserAction} from '../actions';
 import {checkLoginPost} from '../services/api';
 // components
 import Navigation from './Navigation';
+import Footer from './Footer';
 import Main from './Main';
 import CheckLogin from './CheckLogin';
 import Register from './Register';
@@ -19,6 +20,10 @@ import Products from './Products';
 import User from './User';
 import Admin from './Admin';
 import SubAdmin from './SubAdmin';
+import Impressum from './Impressum';
+import AGB from './AGB';
+import Kontakt from './Kontakt';
+
 
 
 
@@ -45,12 +50,17 @@ const Router = props => {
                 <Route path="/verify/:email" exact component={Verification} />
                 <Route path='/password' exact component={Password} />
                 <Route path='/reset/:id/:email' exact component={Reset} />
-                <Route path="/admin/dashboard" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
-                <Route path="/subadmin/dashboard" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
-                <Route path="/user/profile" exact component={() => <CheckLogin><User /></CheckLogin>} />
+                <Route path="/AGB" exact component={AGB} />
+                <Route path="/impressum" exact component={Impressum} />
+                <Route path="/kontakt" exact component={Kontakt} />
+                <Route path="/user/adminPanel" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
+                <Route path="/user/subadminPanel" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
+                <Route path="/user" exact component={() => <CheckLogin><User /></CheckLogin>} />
                 <Route path="/user/dashboard" exact component={() => <CheckLogin><Products /></CheckLogin>} />
+
                 <Route path="/" component={ErrorPage} />
             </Switch>
+            <Footer/>
         </BrowserRouter>
     );
 }

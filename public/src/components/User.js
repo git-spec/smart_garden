@@ -9,7 +9,10 @@ import {
     Form,
     Label,
     FormGroup,
+    Breadcrumb,
+    BreadcrumbItem
 } from "reactstrap";
+import { Link } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import PopUpModal from "./PopUpModal";
 import { editPost, getUser } from "../services/api";
@@ -173,6 +176,25 @@ const User = (props) => {
             </PopUpModal>
 
             <Container>
+                {/* ********************************************************* Breadcrumb ********************************************************* */}
+                <Row>
+                    <Col lg="5"></Col>
+                    <Col>
+                        <Row>
+                            <Breadcrumb>
+                                <BreadcrumbItem>
+                                    <Link to="/">Home</Link>
+                                </BreadcrumbItem>
+                                <BreadcrumbItem active>
+                                    UserProfile
+                                </BreadcrumbItem>
+                            </Breadcrumb>
+                        </Row>
+                    </Col>
+                    <br />
+                </Row>{" "}
+                <br />
+                {/* ********************************************************* End ********************************************************* */}
                 <Row>
                     <Col xs={6} md={9}>
                         <br />
