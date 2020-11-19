@@ -5,7 +5,7 @@ import {
     Input,
     Label,
     Table,
-    Button,
+    // Button,
     FormGroup,
     CustomInput
 } from 'reactstrap';
@@ -91,7 +91,7 @@ class MonitorWater extends Component {
         return (
             <Fragment>
                 <h3 className="text-center">{this.props.hub.name}</h3>
-                <Table borderless size="sm" className="mb-5">
+                <Table borderless size="sm" className="mb-4">
                     <thead>
                         <tr>                            
                             <th className="align-bottom text-uppercase">{this.props.device.name}</th>
@@ -138,7 +138,7 @@ class MonitorWater extends Component {
                 </div>
                 {/* range duration */}
                 <div className="range mt-2 max">
-                    <Label for="rangeInput">duration of watering: {this.state.inputRangeDuration}s</Label>
+                    {/* <Label for="rangeInput">duration of watering: {this.state.inputRangeDuration}s</Label> */}
                     <output ref={this.rangeStatusMaxRef} name="amount" id="amount" htmlFor="rangeInput">{this.state.inputRangeDuration}</output>
                     <div>
                         <Input
@@ -154,12 +154,12 @@ class MonitorWater extends Component {
                     <output>100</output>
                 </div>
                 {/* save button */}
-                <Button
+                {/* <Button
                     outline color="secondary"
                     onClick={e => this.props.save(e, this.state.inputRangeTime, this.state.inputRangeDuration, this.state.soilMoistureDevice)}
                 >
                     save
-                </Button>
+                </Button> */}
             </Fragment>
         )
     }

@@ -77,6 +77,7 @@ $color-1-transp: rgba(36, 27, 18, 0);
 $color-1-opac: rgba(26, 17, 8, .8);
 $color-2: rgb(29, 44, 34);
 $color-2-opac: rgba(29, 44, 34, .8);
+$color-2-transp: rgba(29, 44, 34, .3);
 $color-3: rgb(253, 215, 157);
 $color-3-opac: rgba(253, 215, 157, .6);
 $color-4: rgb(0, 80, 24);
@@ -391,9 +392,10 @@ a {
     }
     // expand monitor
     & .card-body + div > div:first-child {
-      left: -1rem;
-      & > div {
-        width: calc(100% + 1rem);
+      left: -.6rem;
+      & > div > div > div {
+        // width: calc(100% + 1rem);
+        transform: scaleX(1.05);
       }
     }
   }
