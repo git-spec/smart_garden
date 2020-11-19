@@ -32,4 +32,5 @@ function Footer({location}) {
 const mapStateToProps = (state) => {
     return { user: state.user };
 };
+
 export default connect(mapStateToProps)(withRouter(Footer));

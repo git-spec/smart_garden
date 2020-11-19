@@ -72,7 +72,9 @@ function AGB() {
                 Die Bestellung erfolgt in folgenden Schritten:
                 <br />
                 <br />
-                <div class="ml20">
+                  
+                <div className="ml20">
+
                     1 Auswahl der gewünschten Ware
                     <br />
                     2 Bestätigen durch Anklicken der Buttons „Bestellen“ <br />
