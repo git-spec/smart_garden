@@ -48,6 +48,7 @@ const {
     tellUserAboutAccountState,
     deleteUser,
     changeUserRole,
+    sendMessage
 } = require('./modules/usersAuth');
 
 // user router
@@ -144,7 +145,7 @@ app.post('/login', (req, res) => {
         checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
             req.session.user = user;
             // res.json({result: 1, id: user.id})
-            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role});
+            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role, img: user.img});
         }).catch(error => {
             if (error == 3) {
                 // res.json({result: 3})
@@ -226,7 +227,7 @@ app.post('/checklogin', (req, res) => {
     // 10 session does not exist
     if (req.session.user) {
         const user = req.session.user;
-        res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname});
+        res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, img: user.img, role: user.role});
     } else {
         res.json(10);
     }
@@ -308,6 +309,21 @@ app.post('/changeUserRolePost', (req, res) => {
     }).catch(err => {
         res.json(2)
     });
+});
+
+// send Message Post for Kontakt
+app.post('/sendMessagePost', (req, res) => {
+    // 1 sending successful
+    // 2 error in the message
+    if (req.body.email.trim() && req.body.message.trim()) {
+        sendMessage(req.body.email.trim(), req.body.message).then(data => {
+            res.json(1);
+        }).catch(err => {
+            res.json(2)
+        })
+    } else {
+        res.json(2);
+    };
 });
 /* ********************************************************* USE ROUTES ********************************************************* */
 app.use('/user', userRoutes);

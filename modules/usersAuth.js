@@ -65,7 +65,7 @@ function registerUser(firstName, lastName, userName, email, password) {
                 message += "Welcome to our website!\n";
                 message +=
                     "To verify your email address please click on the following link:\n";
-                message += `http://localhost:3000/verify/${email}`;
+                message += `http://localhost:3000/verify/${email}/`;
                 emailSender
                     .sendEmail(email, "Verify your email", message)
                     .then(() => {
@@ -367,6 +367,22 @@ function changeUserRole(id, role) {
             });
     });
 }
+// sending Message in kontakt page
+function sendMessage(email, message) {
+    return new Promise((resolve, reject) => {
+        // email message
+        let messages = "Message Form Kontakt Page From The Email: " + email + " \n";
+        messages += "Message content: \n "+ message + "\n";
+        emailSender
+            .sendEmail("hshwairi@gmail.com", " Email From Kontakt Page ", messages)
+            .then(() => {
+                resolve();
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+}
 /* ***************************************************** EXPORT ******************************************************* */
 module.exports = {
     editUser,
@@ -382,4 +398,5 @@ module.exports = {
     tellUserAboutAccountState,
     deleteUser,
     changeUserRole,
+    sendMessage
 };
