@@ -21,7 +21,7 @@ const Slider = ({ images }) => {
           <p ref={slideText} className="feature--text"></p>
           <button className="feature__btn">Get started</button>
           {images.map((element,idx)=>{
-            return <button onClick={()=>{goToSlide(idx)}}>asfsdfs</button>
+            return <button key={idx} onClick={()=>{goToSlide(idx)}}>asfsdfs</button>
           })}
         </div>
         <button onClick={goToNextSlide} className="slider__btn-right">

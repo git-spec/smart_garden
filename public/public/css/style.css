@@ -84,11 +84,42 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #fdd79d !important;
+  background-color: black !important;
 }
 
 body #root {
   font-family: Ubuntu;
   height: 100vh;
+}
+
+body #root .bg-image {
+  position: fixed;
+  background-color: #241b12;
+  background-image: url(../imgs/800px_COLOURBOX10774649.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: top right;
+  background-position: 20% 40%;
+}
+
+body #root > div:last-child > article {
+  width: 42rem;
+  position: fixed;
+  top: 12rem;
+  right: 8rem;
+  background-color: #fdd79d;
+  color: #241b12;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+body #root > div:last-child > article p {
+  font-size: 1.2rem;
+}
+
+body #root > div:last-child > article a {
+  text-align: right;
 }
 
 body #root .color-5 ~ div {
@@ -282,6 +313,19 @@ a:hover, a:active {
   }
   .color-5 ~ div > .container .col-lg-7 > .col {
     border-color: rgba(255, 255, 255, 0) !important;
+  }
+  body #root > div:last-child > article {
+    width: 28rem;
+    position: fixed;
+    top: 7rem;
+    right: 2rem;
+    background-color: #fdd79d;
+    color: #241b12;
+    padding: 2rem;
+    border-radius: 1rem;
+  }
+  body #root > div:last-child > article p {
+    font-size: 1.4rem;
   }
 }
 
