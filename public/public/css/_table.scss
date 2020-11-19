@@ -5,7 +5,7 @@
     }
     & tr {
         @include changeColor();
-        border-bottom: $border solid $color-3;         //$text-transp;
+        border-bottom: $border solid $color-3-opac;         //$text-transp;
     }
     & thead > tr > th {
         text-align: right;
@@ -24,5 +24,5 @@
 
 .color-5 ~ div tr {
     @include changeColor($color-5);
-    border-bottom: $border solid $color-2;
+    border-bottom: $border solid $color-2-transp;
 }

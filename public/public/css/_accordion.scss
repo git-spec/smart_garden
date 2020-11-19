@@ -158,6 +158,10 @@
     //   }
     // }
 }
+//
+.custom-select {
+    display: none !important;
+}
 // inactive light {
 .inactive-lcd {
     @include lcd();

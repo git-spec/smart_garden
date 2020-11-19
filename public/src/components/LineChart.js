@@ -43,7 +43,8 @@ class LineChart extends React.Component {
                             ticks: {
                                 min: 0,
                                 padding: 10,
-                                fontSize: this.props.chartData.fontSize
+                                fontSize: this.props.chartData.fontSize,
+                                fontColor: 'rgb(29, 44, 34)'
 
                             },
                             type: 'time',
@@ -51,7 +52,7 @@ class LineChart extends React.Component {
                                 unit: 'day'
                             },
                             gridLines: {
-                                color: 'rgba(255, 255, 255, .3)'
+                                color: 'rgba(29, 44, 34, .3)'
                             },
                             drawBorder: true,
                             borderWidth: .5
@@ -62,10 +63,11 @@ class LineChart extends React.Component {
                             ticks: {
                                 min: 0,
                                 padding: 10,
-                                fontSize: this.props.chartData.fontSize
+                                fontSize: this.props.chartData.fontSize,
+                                fontColor: 'rgb(29, 44, 34)'
                             },
                             gridLines: {
-                                color: 'rgba(255, 255, 255, .3)'
+                                color: 'rgba(29, 44, 34, .3)'
                             },
                             borderWidth: .5
                         }

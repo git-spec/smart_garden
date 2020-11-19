@@ -21,7 +21,7 @@ const Fader = (props) => {
     });
 
     return (
-        <div ref={fadeDiv} >
+        <div ref={fadeDiv} className="d-flex align-content-between flex-wrap justify-content-center" >
             {props.children}
         </div>
     );
