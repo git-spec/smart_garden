@@ -177,6 +177,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $color-3 !important;
+  background-color: black !important;
   // app container
   #root {
     font-family: Ubuntu;
@@ -206,8 +207,6 @@ body {
       //   position: fixed;
       //   opacity: 0;
       //   @include transitionOpacity();
-
-      
       // layer with full color
       // & .color100 {
       // opacity: 1;
@@ -224,6 +223,35 @@ body {
       // opacity: 1;
       // @include transitionOpacity();
       // }
+    
+    // background image
+    & .bg-image {
+      position: fixed;
+      background-color: $color-1;
+      background-image: url(../imgs/800px_COLOURBOX10774649.jpg);
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: top right;
+      background-position: 20% 40%;
+    }
+    // article
+    & > div:last-child > article {
+      width: 42rem;
+      position: fixed;
+      top: 12rem;
+      right: 8rem;
+      background-color: $color-3;
+      color: $color-1;
+      padding: 2rem;
+      border-radius: $font-size-4;
+      & p {
+        font-size: $font-size-3;
+      }
+      & a {
+        text-align: right;
+      } 
+    }
     & .color-5 {
       // @include changeBGColor($color-5);
       & ~ div {
@@ -402,6 +430,20 @@ a {
   // hide frame of dashboard
   .color-5 ~ div > .container .col-lg-7 > .col {
     border-color: rgba(255, 255, 255, 0) !important;
+  }
+  // article
+  body #root > div:last-child > article {
+    width: 28rem;
+    position: fixed;
+    top: 7rem;
+    right: 2rem;
+    background-color: $color-3;
+    color: $color-1;
+    padding: 2rem;
+    border-radius: $font-size-4;
+    & p {
+      font-size: $font-size-2;
+    }  
   }
 }
 

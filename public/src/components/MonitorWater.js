@@ -113,7 +113,7 @@ class MonitorWater extends Component {
                 </div>
                 {/* soil moisture selector */}
                 <FormGroup>
-                    <Label for="soilMoistureSelect">soil moisture modules:</Label>
+                    {/* <Label for="soilMoistureSelect">soil moisture modules:</Label> */}
                     <CustomInput type="select" id="soilMoistureSelect" name="soilMoistureSelect" onChange={this.onSoilMoistureSelect} value={this.state.soilMoistureDevice ? this.state.soilMoistureDevice : ''}>
                         <option value="">select your module</option>
                         {options}
@@ -138,7 +138,7 @@ class MonitorWater extends Component {
                 </div>
                 {/* range duration */}
                 <div className="range mt-2 max">
-                    {/* <Label for="rangeInput">duration of watering: {this.state.inputRangeDuration}s</Label> */}
+                    <Label for="rangeInput">duration of watering: {this.state.inputRangeDuration}s</Label>
                     <output ref={this.rangeStatusMaxRef} name="amount" id="amount" htmlFor="rangeInput">{this.state.inputRangeDuration}</output>
                     <div>
                         <Input
