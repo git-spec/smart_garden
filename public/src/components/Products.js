@@ -652,7 +652,7 @@ const Products = (props) => {
                                     </Button>
                                 </CardSubtitle>
                             </CardHeader>
-                            {/* ********************************************************* ADD HUB ********************************************************* */}
+{/* ********************************************************* ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
                                 <CardHeader className="p-0 mb-3 d-flex align-items-center justify-align-space-between">
                                     <CardSubtitle>
@@ -756,7 +756,7 @@ const Products = (props) => {
                                                         </Button>
                                                     </CardSubtitle>
                                                 </CardHeader>
-                                                {/* ********************************************************* ADD DEVICE ********************************************************* */}
+{/* ********************************************************* ADD DEVICE ********************************************************* */}
                                                 <CardBody className="p-0 pl-2">
                                                     <Collapse isOpen={state.collapseAddDevice === idx}>
                                                         <CardHeader className="p-0 mb-3 d-flex align-items-center justify-align-space-between">
@@ -837,7 +837,7 @@ const Products = (props) => {
                                                         </CardHeader>
                                                     </Collapse>
                                                 </CardBody>
-                                                <CardBody className="p-0 pl-3">
+                                                <CardBody className="p-0">
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
@@ -845,7 +845,7 @@ const Products = (props) => {
                                                             shineDeviceRefs.push(shineDeviceRef);
                                                             return (
                                                                 <div key={device.sn_number} id={device.sn_number} ref={shineDeviceRef}>
-                                                                    <CardHeader className="p-0 d-flex align-items-center">
+                                                                    <CardHeader className="p-0 pl-3 d-flex align-items-center">
                                                                         <Button className="accordion p-0 flex-grow-1">
                                                                             <CardTitle className="m-0 text-left d-flex align-items-center"
                                                                                 onClick={e => {
@@ -873,7 +873,7 @@ const Products = (props) => {
                                                                             </Button> 
                                                                         </CardSubtitle>
                                                                     </CardHeader>
-                                                                    <CardBody className="p-0">
+                                                                    <CardBody className="p-0 pl-3">
                                                                         <CardText className="m-0 mb-3">
                                                                             {device.device_name}
                                                                         </CardText>
@@ -882,28 +882,28 @@ const Products = (props) => {
                                                                     {width <= 991 && (
                                                                         <Fragment>
                                                                             {state.currentMonitor === 1 && device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
-                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
                                                                                         <MonitorSoil chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {state.currentMonitor === 2 && device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
-                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
                                                                                         <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {state.currentMonitor === 3 && device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
-                                                                                <Col className="p-0 px-sm-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
                                                                                         <MonitorTempHum chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {state.currentMonitor === 4 && device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
-                                                                                <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                                                <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3">
                                                                                         <MonitorLight chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
@@ -919,28 +919,28 @@ const Products = (props) => {
                                                 {width <= 991 && (
                                                     <Fragment>
                                                         {state.currentMonitor === 5 && hub.id === 1 && (
-                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                            <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                 <Col className="p-0 px-sm-3">
                                                                     <MonitorKitchen />
                                                                 </Col>
                                                             </Col>  
                                                         )}
                                                         {state.currentMonitor === 6 && hub.id === 2 && (
-                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                            <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                 <Col className="p-0 px-sm-3">
                                                                     <MonitorHomeOffice />
                                                                 </Col>
                                                             </Col>  
                                                         )}
                                                         {state.currentMonitor === 7 && hub.id === 5 && (
-                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                            <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                 <Col className="p-0 px-sm-3">
                                                                     <MonitorGarden />
                                                                 </Col>
                                                             </Col>  
                                                         )}
                                                         {state.currentMonitor === 8 && hub.id === 7 && (
-                                                            <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                                            <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                                                 <Col className="p-0 px-sm-3">
                                                                     <MonitorBalcony />
                                                                 </Col>
@@ -958,7 +958,7 @@ const Products = (props) => {
                     {width <= 991 && (
                         <Fragment>
                             {state.currentMonitor === 0 && (
-                                <Col className="p-0 px-3 mt-md-0 mt-3 mb-4" lg="7">
+                                <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
                                     <Col className="p-0 px-sm-3">
                                         <MonitorAll />
                                     </Col>

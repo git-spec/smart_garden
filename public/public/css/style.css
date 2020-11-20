@@ -304,13 +304,6 @@ a:hover, a:active {
   body #root > div:last-child > .container > .container {
     padding-top: 6rem;
   }
-  body #root > div:last-child > .container .card-body + div > div:first-child {
-    left: -.6rem;
-  }
-  body #root > div:last-child > .container .card-body + div > div:first-child > div > div > div {
-    -webkit-transform: scaleX(1.05);
-            transform: scaleX(1.05);
-  }
   .color-5 ~ div > .container .col-lg-7 > .col {
     border-color: rgba(255, 255, 255, 0) !important;
   }
