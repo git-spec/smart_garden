@@ -6,13 +6,14 @@ import { connect } from "react-redux";
 import { Link, withRouter} from "react-router-dom";
 // reactstrap
 import {
-    Col
+    Col,
+    Container
 } from "reactstrap";
 
 function Footer({location}) {
     if(location.pathname !== '/'){
         return (
-            <div>
+            <Container>
                 <Col className="d-flex justify-content-center mt-5 mb-2">
                     <a href="https://www.youtube.com" className="mx-2"><i className="fab fa-youtube"></i></a>
                     <a href="https://www.instagram.com" className="mx-2"><i className="fab fa-instagram"></i></a>
@@ -23,7 +24,7 @@ function Footer({location}) {
                     <Link to="/impressum" className="mx-3">Terms and Conditions</Link>
                     <Link to="/AGB" className="mx-3">About</Link>
                 </Col>
-            </div>
+            </Container>
         );
     } else {
         return(null)

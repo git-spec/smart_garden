@@ -419,13 +419,13 @@ a {
       padding-top: 6rem;
     }
     // expand monitor
-    & .card-body + div > div:first-child {
-      left: -.6rem;
-      & > div > div > div {
-        // width: calc(100% + 1rem);
-        transform: scaleX(1.05);
-      }
-    }
+    // & .card-body + div > div:first-child {
+    //   left: -.6rem;
+    //   & > div > div > div {
+    //     // width: calc(100% + 1rem);
+    //     transform: scaleX(1.05);
+    //   }
+    // }
   }
   // hide frame of dashboard
   .color-5 ~ div > .container .col-lg-7 > .col {
