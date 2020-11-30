@@ -6,6 +6,32 @@ This project is a web-based platform about plants and their cultivation. It shou
 ### Details:
 For the frontend application we have used react. The functionality of the surface relies on reactstrap and bootstrap, but the design was completely changed. A color theme based on the world of plants and there lifecycle divides the platform into different parts. The optical appearance of the interface is less technical, more like a printed guidance and fact sheet written in scss. On backend side we have installed node.js and using a mysql database. For informations in realtime the devices are communicating with the application over websocket by socket.io.
 
+Coding and Modules:
+- HTML
+- SCSS
+- Vanilla-JS
+
+- React
+- React-Dom
+- React-Router-Dom
+- Reactstrap
+- Bootstrap
+- Chart.js
+- Nodemailer
+- Validator
+- Socket.io
+- Redux
+
+- Node.js
+- Express
+- Express-Session
+- Express-Fileupload
+- password-hash
+- html-entities
+- MySQL
+- Nodemon
+
+
 
 ### Authors:
 Ingo Fischer & Hamoud Shwiri & Felix Wurst
