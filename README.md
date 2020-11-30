@@ -34,4 +34,4 @@ Coding and Modules:
 
 
 ### Authors:
-Ingo Fischer & Hamoud Shwiri & Felix Wurst
+Ingo Fischer & Hamoud Shwiri & Felix Wurst & Ahmad Osman & Mostafa Osman
