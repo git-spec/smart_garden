@@ -6,7 +6,7 @@ import {setBackgroundColor5Action} from '../actions';
 import {setBackgroundColor1Action} from '../actions';
 // import Slider from "./Slider"
 // import Images from "./images"
-import {Link, useHistory} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 function Main(props) {
 

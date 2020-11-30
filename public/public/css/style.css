@@ -165,6 +165,10 @@ body #root .color-5 ~ div .container .col-lg-7 > .col {
   border-color: #1d2c22;
 }
 
+body #root .color-5 ~ div .container h3 {
+  color: #007aa7;
+}
+
 body #root .color-5 ~ nav {
   background-color: #9ac992;
   color: #1d2c22 !important;
@@ -215,10 +219,6 @@ body #root .container .col-lg-7 > .col {
   border-style: solid;
   border-color: #fdd79d;
   border-radius: 1rem;
-}
-
-body #root > div > .container {
-  padding-top: 5.2rem;
 }
 
 body #root > div > .container > .container {
@@ -362,7 +362,7 @@ body .breadcrumb-item.active {
 }
 
 .navbar .navbar-brand {
-  width: 7.2rem;
+  width: 7.5rem;
   height: 3rem;
   background-image: url("../imgs/inuta_logo_light.svg");
   background-repeat: no-repeat;
@@ -406,11 +406,6 @@ body .breadcrumb-item.active {
 
 .color-5 + .navbar .sidebar {
   background-color: #9ac992;
-}
-
-.logo {
-  width: 7rem;
-  height: 2.4rem;
 }
 
 .nav-item {
