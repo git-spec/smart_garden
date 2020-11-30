@@ -36,7 +36,7 @@
     height: $nav-height;
     // logo
     & .navbar-brand {
-        width: 7.2rem;
+        width: 7.5rem;
         height: 3rem;
         background-image: url('../imgs/inuta_logo_light.svg');
         background-repeat: no-repeat;
@@ -92,10 +92,10 @@
     }
 }
 // logo svg
-.logo {
-  width: 7rem;
-  height: 2.4rem;
-}
+// .logo {
+//   width: 7rem;
+//   height: 2.4rem;
+// }
 // set link bold
 .nav-item {
     font-size: $font-size-3;

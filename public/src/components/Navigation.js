@@ -192,7 +192,7 @@ function Navigation(props) {
                 </div>
 
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <NavLink  title="login" tag={Link} to="/login" className=" p-0"><h4 className="d-flex text-align-center m-0"><i className="far fa-user-circle"></i></h4></NavLink>
+                <NavLink  title="login" tag={Link} to="/login" className=" p-0"><h4 className="d-flex text-align-center justify-content-center m-0"><i className="far fa-user-circle"></i></h4></NavLink>
                 {/* navbar toggle for devices smaller than 576px */}
                 <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggleNavbar}>
                     <div ref={toggleMenuIconRef} className="menu-icon"><span></span><span></span><span></span></div>
