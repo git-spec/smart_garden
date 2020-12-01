@@ -572,7 +572,7 @@ const Products = (props) => {
 /* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
         return (
-            <Container>
+            <Container className="pt-5 mt-5">
                 {/* ********************************************************* MODAL ********************************************************* */}
                 <ConfirmModal
                     className="bg-danger"
@@ -883,28 +883,28 @@ const Products = (props) => {
                                                                         <Fragment>
                                                                             {state.currentMonitor === 1 && device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                                    <Col className="p-0 px-sm-3">
+                                                                                    <Col className="p-0 px-sm-3 pt-sm-3">
                                                                                         <MonitorSoil chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {state.currentMonitor === 2 && device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                                    <Col className="p-0 px-sm-3">
+                                                                                    <Col className="p-0 px-sm-3 pt-sm-3">
                                                                                         <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {state.currentMonitor === 3 && device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                                    <Col className="p-0 px-sm-3">
+                                                                                    <Col className="p-0 px-sm-3 pt-sm-3">
                                                                                         <MonitorTempHum chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
                                                                                     </Col>
                                                                                 </Col>  
                                                                             )}
                                                                             {state.currentMonitor === 4 && device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                                    <Col className="p-0 px-sm-3">
+                                                                                    <Col className="p-0 px-sm-3 pt-sm-3">
                                                                                         <MonitorLight chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
                                                                                     </Col>
                                                                                 </Col> 
@@ -920,28 +920,28 @@ const Products = (props) => {
                                                     <Fragment>
                                                         {state.currentMonitor === 5 && hub.id === 1 && (
                                                             <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                <Col className="p-0 px-sm-3">
+                                                                <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorKitchen />
                                                                 </Col>
                                                             </Col>  
                                                         )}
                                                         {state.currentMonitor === 6 && hub.id === 2 && (
                                                             <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                <Col className="p-0 px-sm-3">
+                                                                <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorHomeOffice />
                                                                 </Col>
                                                             </Col>  
                                                         )}
                                                         {state.currentMonitor === 7 && hub.id === 5 && (
                                                             <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                <Col className="p-0 px-sm-3">
+                                                                <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorGarden />
                                                                 </Col>
                                                             </Col>  
                                                         )}
                                                         {state.currentMonitor === 8 && hub.id === 7 && (
                                                             <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                                                <Col className="p-0 px-sm-3">
+                                                                <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorBalcony />
                                                                 </Col>
                                                             </Col> 
@@ -958,8 +958,8 @@ const Products = (props) => {
                     {width <= 991 && (
                         <Fragment>
                             {state.currentMonitor === 0 && (
-                                <Col className="p-0 mt-md-0 mt-3 mb-4" lg="7">
-                                    <Col className="p-0 px-sm-3">
+                                <Col className="mt-md-0 mt-3 mb-4" lg="7">
+                                    <Col className="p-0 px-sm-3 pt-sm-3">
                                         <MonitorAll />
                                     </Col>
                                 </Col>  
