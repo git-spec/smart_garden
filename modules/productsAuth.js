@@ -165,7 +165,7 @@ function saveRanges(inputRangeTime, inputRangeDuration, deviceSN, soilMoistureDe
 
 function deviceMoistureData(deviceID) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 6 DAY GROUP BY DATE(timestamp)`).then(data => {
+        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 30 DAY GROUP BY DATE(timestamp)`).then(data => {
             resolve(data);
         }).catch(err => {
             console.log(err); 
@@ -176,7 +176,7 @@ function deviceMoistureData(deviceID) {
 
 function deviceTempHumData(deviceID) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT AVG(CONVERT(SUBSTRING_INDEX(REPLACE(REPLACE( REPLACE(data, '"]', ''), '["', ''),'"',''),',',1), signed)) as humidity,AVG(CONVERT(SUBSTRING_INDEX(REPLACE( REPLACE(data, '"]', ''), '["', ''),',"',-1), signed)) as temp, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 6 DAY GROUP BY DATE(timestamp)`).then(data => {
+        runQuery(`SELECT AVG(CONVERT(SUBSTRING_INDEX(REPLACE(REPLACE( REPLACE(data, '"]', ''), '["', ''),'"',''),',',1), signed)) as humidity,AVG(CONVERT(SUBSTRING_INDEX(REPLACE( REPLACE(data, '"]', ''), '["', ''),',"',-1), signed)) as temp, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 30 DAY GROUP BY DATE(timestamp)`).then(data => {
             resolve(data);
         }).catch(err => {
             console.log(err); 
@@ -187,7 +187,7 @@ function deviceTempHumData(deviceID) {
 
 function deviceLightData(deviceID) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 6 DAY GROUP BY DATE(timestamp)`).then(data => {
+        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 30 DAY GROUP BY DATE(timestamp)`).then(data => {
             resolve(data);
         }).catch(err => {
             console.log(err); 

@@ -1,4 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
+// react
+import React, {Fragment, useState, useEffect} from "react";
 import {
     Container,
     Row,
@@ -10,7 +11,7 @@ import {
     BreadcrumbItem,
 } from "reactstrap";
 import PopUpModal from "./PopUpModal";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import {
     getAllUsers,
     changeVerificationPost,
@@ -19,7 +20,7 @@ import {
 } from "../services/api";
 import ConfirmModal from "./ConfirmModal";
 
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 
 const Admin = (props) => {
     const initialState = {

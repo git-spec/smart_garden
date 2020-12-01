@@ -15,25 +15,25 @@ class MonitorSoil extends Component {
     state = {
         data: [],
         deviceID: null
-    }
+    };
     
     componentDidMount() {
         deviceMoistureDataPost(this.props.device.id).then(results => {
-            const data = results.map(result => {return {value : Number(result.value), time: new Date(result.time)}})
-            this.setState({data: data, deviceID: this.props.device.id})
-        })
-    }
+            const data = results.map(result => {return {value : Number(result.value), time: new Date(result.time)}});
+            this.setState({data: data, deviceID: this.props.device.id});
+        });
+    };
     componentDidUpdate() {
         if(this.props.device.id !== this.state.deviceID) {
             deviceMoistureDataPost(this.props.device.id).then(results => {
-                const data = results.map(result => {return {value : Number(result.value), time: new Date(result.time)}})
-                this.setState({data: data, deviceID: this.props.device.id})
-            })    
-        }
-    }
+                const data = results.map(result => {return {value : Number(result.value), time: new Date(result.time)}});
+                this.setState({data: data, deviceID: this.props.device.id});
+            });  
+        };
+    };
 
     render() {
-        let chart = null
+        let chart = null;
         if (this.state.data.length) {
             chart = (
                 <LineChart
@@ -44,8 +44,8 @@ class MonitorSoil extends Component {
                     max="200"
                     chartData={this.props.chartData}
                 />
-            )
-        }
+            );
+        };
         return (
             <Fragment>
                 <h3 className="text-center">{this.props.hub.name}</h3>
@@ -72,7 +72,7 @@ class MonitorSoil extends Component {
                 {chart}
             </Fragment>
         );
-    }
-}
+    };
+};
 
 export default MonitorSoil;

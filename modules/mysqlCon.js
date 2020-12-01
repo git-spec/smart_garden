@@ -154,7 +154,6 @@ function insertMulti(tableName, columns, values) {
         });
         query = query.substring(0, query.length - 2);
         query += `);`;
-        // console.log(query);
         runQuery(query).then(result => {
             resolve(result);
         }).catch(error => {
