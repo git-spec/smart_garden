@@ -1071,6 +1071,10 @@ input[type='range']::after {
   line-height: 1.2rem;
 }
 
+.accordion.btn.accordion > h5:hover, .accordion.btn.accordion > h5:active {
+  font-weight: bold;
+}
+
 .accordion .plus, .accordion .minus, .accordion .up, .accordion .down {
   opacity: .7;
 }

@@ -216,11 +216,9 @@ userRouter.post('/saveranges', (req, res) => {
 
 userRouter.post('/devicemoisturedata', (req, res) => {
     const deviceID = req.body.deviceID;
-console.log('Route_Device_ID:', deviceID);
     if (deviceID) {
         deviceMoistureData(deviceID).then(data => {
             res.json(data);
-console.log('Route Data:', data);
         }).catch(err => {
             console.log(err);
         });

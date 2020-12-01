@@ -633,7 +633,12 @@ const Products = (props) => {
                             <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
                                     <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e)}}>
-                                        <h5>hubs</h5>
+                                        <h5 
+                                            style={state.currentMonitor === 0
+                                                ? {fontWeight: 'bold'}
+                                                : {fontWeight: 'normal'}
+                                            }
+                                        >hubs</h5>
                                     </Button>
                                     {/* <span className="active-lcd mx-2"></span> */}
                                 </CardTitle>

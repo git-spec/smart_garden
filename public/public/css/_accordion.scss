@@ -57,6 +57,10 @@
             color: $color-8;
             margin-bottom: 0;
             line-height: $font-size-3;
+            &:hover,
+            &:active {
+                font-weight: bold;
+            }
         }
     }
     // buttons plus, minus, up, down
