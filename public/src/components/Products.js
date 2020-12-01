@@ -284,11 +284,16 @@ const Products = (props) => {
     // show first monitor
     const resetMonitor = e => {
         e.preventDefault();
+        openHubIconRefs.forEach((item) => {
+            item.current.classList.remove("down");
+            item.current.classList.add("up");
+        });
         setState({
             ...state,
-            currentMonitor: 0
+            currentMonitor: 0,
+            collapseHub: null
         });
-    }
+    } 
 
     const toggleHub = (e, idx) => {
         e.preventDefault();
