@@ -16,11 +16,9 @@ import reducers from './reducers';
 // );
 
 ReactDOM.render(
-  // <React.StrictMode>
     <Provider store={createStore(reducers)}>
         <App />
     </Provider>,
-  // </React.StrictMode>,
   document.querySelector('#root')
 );
 

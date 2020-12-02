@@ -2,17 +2,14 @@
 // react
 import React, {useState, useEffect, Fragment} from 'react';
 // bootstrap
-import Image from "react-bootstrap/Image";
+import Image from 'react-bootstrap/Image';
 // router dom
 import {useHistory, Link} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
-import {setSocketAction,
-        setBackgroundColor5Action,
-        setBackgroundColor1Action
-} from '../actions';
+import {setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action} from '../actions';
 // socket
-import io from "socket.io-client";
+import io from 'socket.io-client';
 // reactstrap
 import {
     Row,
@@ -56,39 +53,29 @@ import {
     deviceOnOffPost,
     saveRangesPost
 } from '../services/productsApi';
+
 /* ********************************************************* COMPONENT ********************************************************* */
-const Products = (props) => {
+const Products = props => {
     const history = useHistory();
     const [width] = useWindowDimension();
 
-    // profile
-    let img = "/uploads/1.jpg";
-    if (props.user.img) {
-        img = props.user.img;
-    }
-    const o_date = new Intl.DateTimeFormat();
-    const f_date = (m_ca, m_it) => Object({ ...m_ca, [m_it.type]: m_it.value });
-    const m_date = o_date.formatToParts().reduce(f_date, {});
-    const data = m_date.day + "/" + m_date.month + "/" + m_date.year;
-    /* ********************************************************* REFERENCES ********************************************************* */
+/* ********************************************************* REFERENCES ********************************************************* */
     const addHubIconRef = React.createRef();
     const addDeviceIconRefs = [];
-    // const openHubsIconRef = React.createRef();
     const openHubIconRefs = [];
     const shineHubRefs = [];
     const shineDeviceRefs = [];
 
-    /* ********************************************************* STATE ********************************************************* */
+/* ********************************************************* STATE ********************************************************* */
     const initialState = {
         // hubs & devices
         hubs: [],
         devices: [],
-        hubName: "",
-        deviceName: "",
-        hubNum: "",
-        deviceNum: "",
+        hubName: '',
+        deviceName: '',
+        hubNum: '',
+        deviceNum: '',
         // collapse
-        collapseHubs: false,
         collapseHub: null,
         collapseAddHub: false,
         collapseAddDevice: null,
@@ -106,9 +93,6 @@ const Products = (props) => {
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
-        // delete image-url
-        // props.setBackgroundImageAction("");
-
         // set background color of nav
         props.setBackgroundColor5Action('color-5');
         props.setBackgroundColor1Action(null);
@@ -138,110 +122,98 @@ const Products = (props) => {
     // eslint-disable-next-line
     }, []);
 
-    /* ********************************************************* SOCKET.IO ********************************************************* */
+/* ********************************************************* SOCKET.IO ********************************************************* */
     useEffect(() => {
-        const socket = io("http://localhost:5000");
+        const socket = io('http://localhost:5000');
 
-        socket.on("connect", () => {
-            console.log("connected");
+        socket.on('connect', () => {
+            console.log('connected');
             props.setSocketAction(socket);
-            socket.emit("user_connect", props.user.id);
+            socket.emit('user_connect', props.user.id);
         });
 
-        socket.on("hub_connect", (sn) => {
+        socket.on('hub_connect', sn => {
             if (state.hubs) {
-                setState((state) => {
+                setState(state => {
                     const hubs = [...state.hubs];
-                    const hub = hubs.find((hub) => hub.sn_number === sn);
-                    const idx = hubs.map((hub) => hub.sn_number).indexOf(sn);
+                    const hub = hubs.find(hub => hub.sn_number === sn);
+                    const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
                     if (hub) {
                         hub.connected = 1;
                         hubs[idx] = hub;
-                        console.log("hub connected", sn);
+                        console.log('hub connected', sn);
                     }
-                    return { ...state, hubs };
+                    return {...state, hubs};
                 });
             }
         });
 
-        socket.on("hub_disconnect", (sn) => {
+        socket.on('hub_disconnect', sn => {
             if (state.hubs) {
-                setState((state) => {
+                setState(state => {
                     const hubs = [...state.hubs];
-                    const hub = hubs.find((hub) => hub.sn_number === sn);
-                    const idx = hubs.map((hub) => hub.sn_number).indexOf(sn);
+                    const hub = hubs.find(hub => hub.sn_number === sn);
+                    const idx = hubs.map(hub => hub.sn_number).indexOf(sn);
                     if (hub) {
                         hub.connected = 0;
                         hubs[idx] = hub;
-                        console.log("hub disconnected", sn);
+                        console.log('hub disconnected', sn);
                     }
-                    return { ...state, hubs };
+                    return {...state, hubs};
                 });
             }
         });
 
-        socket.on("device_connect", (sn) => {
+        socket.on('device_connect', sn => {
             if (state.devices) {
-                setState((state) => {
+                setState(state => {
                     let devices = [...state.devices];
-                    const device = devices.find(
-                        (device) => device.sn_number === sn
-                    );
-                    const idx = devices
-                        .map((device) => device.sn_number)
-                        .indexOf(sn);
+                    const device = devices.find(device => device.sn_number === sn);
+                    const idx = devices.map(device => device.sn_number).indexOf(sn);
                     if (device) {
                         device.connected = 1;
                         devices[idx] = device;
-                        console.log("device connected", sn);
+                        console.log('device connected', sn);
                     }
-                    return { ...state, devices };
+                    return {...state, devices};
                 });
             }
         });
 
-        socket.on("device_disconnect", (sn) => {
+        socket.on('device_disconnect', sn => {
             if (state.devices) {
-                setState((state) => {
+                setState(state => {
                     let devices = [...state.devices];
-                    const device = devices.find(
-                        (device) => device.sn_number === sn
-                    );
-                    const idx = devices
-                        .map((device) => device.sn_number)
-                        .indexOf(sn);
+                    const device = devices.find(device => device.sn_number === sn);
+                    const idx = devices.map(device => device.sn_number).indexOf(sn);
                     if (device) {
                         device.connected = 0;
                         devices[idx] = device;
-                        console.log("device disconnected", sn);
+                        console.log('device disconnected', sn);
                     }
-                    return { ...state, devices };
+                    return {...state, devices};
                 });
             }
         });
 
         socket.on('realTimeIncomingData', data => {
-            // console.log(data);
             setState(state => ({...state, realTimeData: data.data}));
         });
 
-        socket.on("disconnect", () => {
-            // the connection was lost, may have been caused by the server, the network...
-            console.log("disconnected");
-            socket.emit("user_disconnect", props.user.id);
+        socket.on('disconnect', () => {
+            console.log('disconnected');
+            socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
         });
 
-        // cleanup
+        // cleanup if the user leaves the component
         return () => {
-            // the user leaves the component
-            // console.log('cleanup');
             socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
         };
-        // eslint-disable-next-line
+    // eslint-disable-next-line
     }, []);
 
 /* ********************************************************* TOGGLES ********************************************************* */
@@ -253,59 +225,59 @@ const Products = (props) => {
                 item.current.classList.remove('shine');
             } else {
                 item.current.classList.add('shine');
-            };
+            }
         });
-    }
+    };
     const shineDevice = (e, deviceSN) => {
         e.preventDefault();
-        shineDeviceRefs.forEach((item) => {
+        shineDeviceRefs.forEach(item => {
             if (deviceSN !== item.current.id) {
                 item.current.classList.remove('shine');
             } else {
                 item.current.classList.add('shine');
-            };
+            }
         });
-    }
+    };
     // remove shiny hub
     const toggleHubs = e => {
         e.preventDefault();
-        shineHubRefs.forEach((item) => {
+        shineHubRefs.forEach(item => {
             item.current.classList.remove('shine');
         });
-    }
+    };
     // remove shiny device
     const toggleDevices = e => {
         e.preventDefault();
-        shineDeviceRefs.forEach((item) => {
+        shineDeviceRefs.forEach(item => {
             item.current.classList.remove('shine');
         });
-    }
+    };
 
     // show first monitor
     const resetMonitor = e => {
         e.preventDefault();
-        openHubIconRefs.forEach((item) => {
-            item.current.classList.remove("down");
-            item.current.classList.add("up");
+        openHubIconRefs.forEach(item => {
+            item.current.classList.remove('down');
+            item.current.classList.add('up');
         });
         setState({
             ...state,
             currentMonitor: 0,
             collapseHub: null
         });
-    } 
+    };
 
     const toggleHub = (e, idx) => {
         e.preventDefault();
         // toggle up & down buttons
         openHubIconRefs.forEach((item, index) => {
             if (idx !== index) {
-                item.current.classList.remove("down");
-                item.current.classList.add("up");
+                item.current.classList.remove('down');
+                item.current.classList.add('up');
             } else {
                 item.current.classList.toggle('up');
                 item.current.classList.toggle('down');
-            };
+            }
         });
         // collapse hub and change monitor
         setState({
@@ -313,71 +285,68 @@ const Products = (props) => {
             collapseHub: state.collapseHub === Number(idx) ? null : Number(idx),
             currentMonitor: idx + 5
         });
-    }
+    };
 
-    const toggleAddHub = (e) => {
+    const toggleAddHub = e => {
         e.preventDefault();
         // toggle plus hidden
-        addHubIconRef.current.classList.add("hidden");
+        addHubIconRef.current.classList.add('hidden');
         setState({
             ...state,
-            collapseAddHub: !state.collapseAddHub,
+            collapseAddHub: !state.collapseAddHub
         });
-    }
+    };
 
-    const toggleDeleteHub = (e) => {
+    const toggleDeleteHub = e => {
         e.preventDefault();
         // toggle plus visible
-        addHubIconRef.current.classList.toggle("show");
-        addHubIconRef.current.classList.toggle("hidden");
+        addHubIconRef.current.classList.toggle('show');
+        addHubIconRef.current.classList.toggle('hidden');
         setState({
             ...state,
-            collapseAddHub: !state.collapseAddHub,
+            collapseAddHub: !state.collapseAddHub
         });
     };
 
     const toggleAddDevice = (e, idx) => {
         e.preventDefault();
         // toggle plus hidden
-        addDeviceIconRefs[idx].current.classList.toggle("show");
-        addDeviceIconRefs[idx].current.classList.toggle("hidden");
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,
-            collapseAddDevice:
-                state.collapseAddDevice === Number(idx) ? null : Number(idx),
+            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
     };
 
     const toggleDeleteDevice = (e, idx) => {
         e.preventDefault();
         // toggle plus visible
-        addDeviceIconRefs[idx].current.classList.toggle("show");
-        addDeviceIconRefs[idx].current.classList.toggle("hidden");
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
         setState({
             ...state,
-            collapseAddDevice:
-                state.collapseAddDevice === Number(idx) ? null : Number(idx),
+            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
         });
     };
+
 /* ********************************************************* DELETE HUB ********************************************************* */
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
-        const deleteHub = (hubID) => {
-            deleteHubPost(hubID)
-                .then((data) => {
-                    if (data !== 2) {
-                        setState({
-                            ...state,
-                            hubs: data,
-                            confirmModalShow: false,
-                        });
-                    } else {
-                        alert("Server error!");
-                    }
-                })
-                .catch((err) => {
-                    alert(err);
-                });
+        const deleteHub = hubID => {
+            deleteHubPost(hubID).then(data => {
+                if (data !== 2) {
+                    setState({
+                        ...state,
+                        hubs: data,
+                        confirmModalShow: false
+                    });
+                } else {
+                    alert('Server error!');
+                }
+            }).catch(err => {
+                alert(err);
+            });
         };
         setState({
             ...state,
@@ -389,151 +358,132 @@ const Products = (props) => {
                     All your devices connected to this hub will also be deleted.
                 </p>
             ),
-            confirmModalDelete: () => deleteHub(hubID),
+            confirmModalDelete: () => deleteHub(hubID)
         });
     };
 
-    /* ********************************************************* DELETE DEVICE ********************************************************* */
+/* ********************************************************* DELETE DEVICE ********************************************************* */
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
-        const deleteDevice = (deviceID) => {
-            deleteDevicePost(deviceID)
-                .then((data) => {
-                    if (data !== 2) {
-                        setState({
-                            ...state,
-                            devices: data,
-                            confirmModalShow: false,
-                        });
-                    } else {
-                        alert("Server error!");
-                    }
-                })
-                .catch((err) => {
-                    alert(err);
-                });
+        const deleteDevice = deviceID => {
+            deleteDevicePost(deviceID).then(data => {
+                if (data !== 2) {
+                    setState({
+                        ...state,
+                        devices: data,
+                        confirmModalShow: false
+                    });
+                } else {
+                    alert('Server error!');
+                }
+            }).catch(err => {
+                alert(err);
+            });
         };
         setState({
             ...state,
             confirmModalShow: true,
-            confirmModalContent: (
-                <p>Are you sure you want to delete this device?</p>
-            ),
-            confirmModalDelete: () => deleteDevice(deviceID),
+            confirmModalContent: <p>Are you sure you want to delete this device?</p>,
+            confirmModalDelete: () => deleteDevice(deviceID)
         });
     };
 
-    /* ********************************************************* ADD HUB ********************************************************* */
-    const onAddHubBtnClick = (e) => {
+/* ********************************************************* ADD HUB ********************************************************* */
+    const onAddHubBtnClick = e => {
         e.preventDefault();
         if (state.hubName.trim() && state.hubNum.trim()) {
-            checkHubNumPost(state.hubNum.trim())
-                .then((data) => {
-                    // 1 serialnumber found
-                    // 2 server error
-                    // 3 serialnumber not found
-                    // 4 serialnumber already registered
-                    switch (data) {
-                        case 1:
-                            addHubPost(
-                                state.hubName.trim(),
-                                state.hubNum.trim()
-                            )
-                                .then((data) => {
-                                    if (data !== 2) {
-                                        setState({
-                                            ...state,
-                                            hubs: data,
-                                            hubName: "",
-                                            hubNum: "",
-                                        });
-                                    } else {
-                                        alert("Server error!");
-                                    }
-                                })
-                                .catch((err) => {
-                                    alert(err);
+            checkHubNumPost(state.hubNum.trim()).then(data => {
+                // 1 serialnumber found
+                // 2 server error
+                // 3 serialnumber not found
+                // 4 serialnumber already registered
+                switch (data) {
+                    case 1:
+                        addHubPost(state.hubName.trim(), state.hubNum.trim()).then(data => {
+                            if (data !== 2) {
+                                setState({
+                                    ...state,
+                                    hubs: data,
+                                    hubName: '',
+                                    hubNum: ''
                                 });
-                            break;
-                        case 2:
-                            alert("Server error!");
-                            break;
-                        case 3:
-                            alert("Serialnumber not found!");
-                            break;
-                        case 4:
-                            alert("Serialnumber already registered!");
-                            break;
-                        default:
-                            break;
-                    }
-                })
-                .catch((err) => {
-                    alert(err);
-                });
+                            } else {
+                                alert('Server error!');
+                            }
+                        }).catch(err => {
+                            alert(err);
+                        });
+                        break;
+                    case 2:
+                        alert('Server error!');
+                        break;
+                    case 3:
+                        alert('Serialnumber not found!');
+                        break;
+                    case 4:
+                        alert('Serialnumber already registered!');
+                        break;
+                    default:
+                        break;
+                }
+            }).catch(err => {
+                alert(err);
+            });
         } else {
-            alert("Please fill out all inputs!");
+            alert('Please fill out all inputs!');
         }
     };
 
-    /* ********************************************************* ADD DEVICE ********************************************************* */
+/* ********************************************************* ADD DEVICE ********************************************************* */
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
         if (state.deviceName.trim() && state.deviceNum.trim()) {
-            checkDeviceNumPost(state.deviceNum.trim())
-                .then((data) => {
-                    // 1 serialnumber found
-                    // 2 server error
-                    // 3 serialnumber not found
-                    // 4 serialnumber already registered
-                    switch (data) {
-                        case 1:
-                            addDevicePost(
-                                state.deviceName.trim(),
-                                state.deviceNum.trim(),
-                                hubID
-                            )
-                                .then((data) => {
-                                    if (data !== 2) {
-                                        setState({
-                                            ...state,
-                                            devices: data,
-                                            deviceName: "",
-                                            deviceNum: "",
-                                        });
-                                    } else {
-                                        alert("Server error!");
-                                    }
-                                })
-                                .catch((err) => {
-                                    alert(err);
+            checkDeviceNumPost(state.deviceNum.trim()).then(data => {
+                // 1 serialnumber found
+                // 2 server error
+                // 3 serialnumber not found
+                // 4 serialnumber already registered
+                switch (data) {
+                    case 1:
+                        addDevicePost(state.deviceName.trim(), state.deviceNum.trim(), hubID).then(data => {
+                            if (data !== 2) {
+                                setState({
+                                    ...state,
+                                    devices: data,
+                                    deviceName: '',
+                                    deviceNum: ''
                                 });
-                            break;
-                        case 2:
-                            alert("Server error!");
-                            break;
-                        case 3:
-                            alert("Serialnumber not found!");
-                            break;
-                        case 4:
-                            alert("Serialnumber already registered!");
-                            break;
-                        default:
-                            break;
-                    }
-                })
-                .catch((err) => {
-                    alert(err);
-                });
+                            } else {
+                                alert('Server error!');
+                            }
+                        }).catch(err => {
+                            alert(err);
+                        });
+                        break;
+                    case 2:
+                        alert('Server error!');
+                        break;
+                    case 3:
+                        alert('Serialnumber not found!');
+                        break;
+                    case 4:
+                        alert('Serialnumber already registered!');
+                        break;
+                    default:
+                        break;
+                }
+            }).catch(err => {
+                alert(err);
+            });
         } else {
-            alert("Please fill out all inputs!");
+            alert('Please fill out all inputs!');
         }
     };
 /* ********************************************************* SHOW DEVICE DATA ********************************************************* */
     // rerender the data section
     const onShowDeviceDataClick = (e, hub, device) => {
         e.preventDefault();
-        // send order to RPI to stop the request from previous device
+        // send order to raspberry to stop the request from previous device
         if (state.currentDevice.sn_number && state.currentDevice.connected) {
             props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.currentDevice.sn_number});
         }
@@ -552,7 +502,6 @@ const Products = (props) => {
 
     // water on off switcher
     const statusChange = () => {
-        // console.log(!state.currentDevice.status);
         deviceOnOffPost(state.currentDevice.sn_number, !state.currentDevice.status).then(() => {
             props.socket.emit('waterOnOff', {sn: state.currentDevice.sn_number, status: !state.currentDevice.status});
             const newDevices = [...state.devices];
@@ -569,28 +518,42 @@ const Products = (props) => {
             newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].water_time = inputRangeTime;
             newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].water_duration = inputRangeDuration;
             newDevices[newDevices.map(device => device.sn_number).indexOf(state.currentDevice.sn_number)].moisture_device_id = soilMoistureDevice;
-            props.socket.emit('waterConf', {sn: state.currentDevice.sn_number, time: inputRangeTime, duration: inputRangeDuration, soilMoistureDevice: soilMoistureDevice});
+            props.socket.emit('waterConf', {
+                sn: state.currentDevice.sn_number,
+                time: inputRangeTime,
+                duration: inputRangeDuration,
+                soilMoistureDevice: soilMoistureDevice
+            });
             setState({...state, devices: newDevices});
         });
+    };
+
+/* ********************************************************* PROFILE ********************************************************* */
+    let img = '/uploads/1.jpg';
+    if (props.user.img) {
+        img = props.user.img;
     }
+    const o_date = new Intl.DateTimeFormat();
+    const f_date = (m_ca, m_it) => Object({...m_ca, [m_it.type]: m_it.value});
+    const m_date = o_date.formatToParts().reduce(f_date, {});
+    const data = m_date.day + '/' + m_date.month + '/' + m_date.year;
 
 /* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
         return (
             <Container className="pt-4 mt-5 mx-sm-5 mx-lg-auto px-sm-5 px-lg-0">
-                {/* ********************************************************* MODAL ********************************************************* */}
+
+{/* ********************************************************* MODAL ********************************************************* */}
                 <ConfirmModal
                     className="bg-danger"
                     title="Confirm Deletion"
                     show={state.confirmModalShow}
                     delete={state.confirmModalDelete}
-                    close={() =>
-                        setState({ ...state, confirmModalShow: false })
-                    }
+                    close={() => setState({...state, confirmModalShow: false})}
                 >
                     {state.confirmModalContent}
                 </ConfirmModal>
-{/* ********************************************************* BREADCRUMB ********************************************************* */}               
+{/* ********************************************************* BREADCRUMB ********************************************************* */}
                 <Col className="p-0 mb-3">
                     <Breadcrumb className="bg-transparent">
                         <BreadcrumbItem className="bg-transparent">
@@ -599,30 +562,24 @@ const Products = (props) => {
                         <BreadcrumbItem className="bg-transparent">
                             <Link to="/user">UserProfile</Link>
                         </BreadcrumbItem>
-                        <BreadcrumbItem className="bg-transparent" active>DashBoard</BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent" active>
+                            DashBoard
+                        </BreadcrumbItem>
                     </Breadcrumb>
                 </Col>
-{/* ********************************************************* PROFILE ********************************************************* */}               
+{/* ********************************************************* PROFILE ********************************************************* */}
                 <Row className="mb-5 d-flex align-items-center">
                     <Col className="d-flex align-items-center">
                         <div className="mr-2">
                             <span>
-                                <Image
-                                    src={img}
-                                    height={"32px"}
-                                    width={"32px"}
-                                    roundedCircle
-                                />
+                                <Image src={img} height={'32px'} width={'32px'} roundedCircle />
                             </span>
                         </div>
                         <div className="flex-grow-1 p-0 m-0">
                             <div>
-                                {props.user.firstName}{" "}
-                                {props.user.lastName}
+                                {props.user.firstName} {props.user.lastName}
                             </div>
-                            <div>
-                                {data}
-                            </div>
+                            <div>{data}</div>
                         </div>
                     </Col>
                 </Row>
@@ -632,33 +589,18 @@ const Products = (props) => {
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e)}}>
-                                        <h5 
-                                            style={state.currentMonitor === 0
-                                                ? {fontWeight: 'bold'}
-                                                : {fontWeight: 'normal'}
-                                            }
-                                        >hubs</h5>
+                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e);}}>
+                                        <h5 style={state.currentMonitor === 0 ? {fontWeight: 'bold'} : {fontWeight: 'normal'}}>
+                                            hubs
+                                        </h5>
                                     </Button>
-                                    {/* <span className="active-lcd mx-2"></span> */}
                                 </CardTitle>
                                 <CardSubtitle>
-                                    <Button
-                                        innerRef={addHubIconRef}
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 my-auto p-0 plus"
-                                        // show={state.collapseAddHub}
-                                        onClick={toggleAddHub}
-                                    >
-                                        <span></span>
-                                        <span></span>
+                                    <Button innerRef={addHubIconRef} className="badge-pill btn-outline-light bg-transparent ml-3 my-auto p-0 plus" onClick={toggleAddHub}>
+                                        <span></span><span></span>
                                     </Button>
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 my-auto up"
-                                        // innerRef={openHubsIconRef}
-                                        // onClick={toggleHubs}
-                                    >
-                                        <span></span>
-                                        <span></span>
+                                    <Button className="badge-pill btn-outline-light bg-transparent ml-3 my-auto up">
+                                        <span></span><span></span>
                                     </Button>
                                 </CardSubtitle>
                             </CardHeader>
@@ -666,45 +608,27 @@ const Products = (props) => {
                             <Collapse isOpen={state.collapseAddHub}>
                                 <CardHeader className="p-0 mb-3 d-flex align-items-center justify-align-space-between">
                                     <CardSubtitle>
-                                        <Button
-                                            className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
-                                            onClick={toggleDeleteHub}
-                                        >
-                                            <span></span>
-                                            <span></span>
+                                        <Button className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus" onClick={toggleDeleteHub}>
+                                            <span></span><span></span>
                                         </Button>
                                     </CardSubtitle>
                                     <CardTitle className="flex-grow-1 m-0">
                                         <Input
                                             className="badge-pill bg-transparent py-0 mb-3"
                                             placeholder="Enter a serial number"
-                                            onChange={(e) =>
-                                                setState({
-                                                    ...state,
-                                                    hubNum: e.target.value,
-                                                })
-                                            }
+                                            onChange={e => setState({...state, hubNum: e.target.value})}
                                             value={state.hubNum}
                                         />
                                         <Input
                                             className="badge-pill bg-transparent py-0"
                                             placeholder="Enter a name for your hub"
-                                            onChange={(e) =>
-                                                setState({
-                                                    ...state,
-                                                    hubName: e.target.value,
-                                                })
-                                            }
+                                            onChange={e => setState({...state, hubName: e.target.value})}
                                             value={state.hubName}
                                         />
                                     </CardTitle>
                                     <CardSubtitle>
-                                        <Button
-                                            className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                            onClick={onAddHubBtnClick}
-                                        >
-                                            <span></span>
-                                            <span></span>
+                                        <Button className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus" onClick={onAddHubBtnClick}>
+                                            <span></span><span></span>
                                         </Button>
                                     </CardSubtitle>
                                 </CardHeader>
@@ -722,47 +646,35 @@ const Products = (props) => {
                                         return (
                                             <div key={idx} ref={shineHubRef}>
                                                 <CardHeader className="p-0 mb-2 d-flex align-items-center">
-                                                    <Button className="accordion p-0 flex-grow-1" onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e);}}>
+                                                    <Button
+                                                        className="accordion p-0 flex-grow-1"
+                                                        onClick={e => {toggleHub(e, idx); shineHub(e, idx); toggleDevices(e);}}
+                                                    >
                                                         <CardTitle className="m-0 text-left d-flex align-items-center">
-                                                                {hub.name}
+                                                            {hub.name}
                                                             <span className={hub.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
                                                         </CardTitle>
                                                     </Button>
                                                     <CardSubtitle>
                                                         <Button
                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                                            onClick={(e) =>
-                                                                onDeleteHubBtnClick(
-                                                                    e,
-                                                                    hub.id
-                                                                )
-                                                            }
+                                                            onClick={e => onDeleteHubBtnClick(e, hub.id)}
                                                         >
-                                                            <span></span>
-                                                            <span></span>
+                                                            <span></span><span></span>
                                                         </Button>
                                                         <Button
                                                             className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                            innerRef={
-                                                                addDeviceIconRef
-                                                            }
-                                                            onClick={(e) =>
-                                                                toggleAddDevice(
-                                                                    e,
-                                                                    idx
-                                                                )
-                                                            }
+                                                            innerRef={addDeviceIconRef}
+                                                            onClick={e => toggleAddDevice(e, idx)}
                                                         >
-                                                            <span></span>
-                                                            <span></span>
+                                                            <span></span><span></span>
                                                         </Button>
                                                         <Button
                                                             className="badge-pill btn-outline-light bg-transparent ml-3 up"
                                                             innerRef={openHubIconRef}
-                                                            onClick={e => {toggleHub(e, idx); shineHub(e, idx)}}
+                                                            onClick={e => {toggleHub(e, idx); shineHub(e, idx);}}
                                                         >
-                                                            <span></span>
-                                                            <span></span>
+                                                            <span></span><span></span>
                                                         </Button>
                                                     </CardSubtitle>
                                                 </CardHeader>
@@ -773,75 +685,31 @@ const Products = (props) => {
                                                             <CardSubtitle className="p-0">
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus"
-                                                                    onClick={(
-                                                                        e
-                                                                    ) =>
-                                                                        toggleDeleteDevice(
-                                                                            e,
-                                                                            idx
-                                                                        )
-                                                                    }
+                                                                    onClick={e => toggleDeleteDevice(e, idx)}
                                                                 >
-                                                                    <span></span>
-                                                                    <span></span>
+                                                                    <span></span><span></span>
                                                                 </Button>
                                                             </CardSubtitle>
                                                             <CardTitle className="flex-grow-1 m-0">
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0 mb-3"
                                                                     placeholder="Enter a serial number"
-                                                                    onChange={(
-                                                                        e
-                                                                    ) =>
-                                                                        setState(
-                                                                            {
-                                                                                ...state,
-                                                                                deviceNum:
-                                                                                    e
-                                                                                        .target
-                                                                                        .value,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    value={
-                                                                        state.deviceNum
-                                                                    }
+                                                                    onChange={e => setState({...state, deviceNum: e.target.value})}
+                                                                    value={state.deviceNum}
                                                                 />
                                                                 <Input
                                                                     className="badge-pill bg-transparent py-0"
                                                                     placeholder="Enter a name for your device"
-                                                                    onChange={(
-                                                                        e
-                                                                    ) =>
-                                                                        setState(
-                                                                            {
-                                                                                ...state,
-                                                                                deviceName:
-                                                                                    e
-                                                                                        .target
-                                                                                        .value,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    value={
-                                                                        state.deviceName
-                                                                    }
+                                                                    onChange={e => setState({...state, deviceName: e.target.value})}
+                                                                    value={state.deviceName}
                                                                 />
                                                             </CardTitle>
                                                             <CardSubtitle className="p-0">
                                                                 <Button
                                                                     className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus"
-                                                                    onClick={(
-                                                                        e
-                                                                    ) =>
-                                                                        onAddDeviceBtnClick(
-                                                                            e,
-                                                                            hub.id
-                                                                        )
-                                                                    }
+                                                                    onClick={e => onAddDeviceBtnClick(e, hub.id)}
                                                                 >
-                                                                    <span></span>
-                                                                    <span></span>
+                                                                    <span></span><span></span>
                                                                 </Button>
                                                             </CardSubtitle>
                                                         </CardHeader>
@@ -857,12 +725,9 @@ const Products = (props) => {
                                                                 <div key={device.sn_number} id={device.sn_number} ref={shineDeviceRef}>
                                                                     <CardHeader className="p-0 pl-3 d-flex align-items-center">
                                                                         <Button className="accordion p-0 flex-grow-1">
-                                                                            <CardTitle className="m-0 text-left d-flex align-items-center"
-                                                                                onClick={e => {
-                                                                                    onShowDeviceDataClick(e, hub, device);
-                                                                                    shineDevice(e, device.sn_number);
-                                                                                    toggleHubs(e);
-                                                                                }}
+                                                                            <CardTitle
+                                                                                className="m-0 text-left d-flex align-items-center"
+                                                                                onClick={e => {onShowDeviceDataClick(e, hub, device); shineDevice(e, device.sn_number); toggleHubs(e);}}
                                                                             >
                                                                                 {device.name}
                                                                                 <span className={device.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -880,7 +745,7 @@ const Products = (props) => {
                                                                             </Button>
                                                                             <Button className="badge-pill btn-outline-light bg-transparent ml-3 up">
                                                                                 <span></span><span></span>
-                                                                            </Button> 
+                                                                            </Button>
                                                                         </CardSubtitle>
                                                                     </CardHeader>
                                                                     <CardBody className="p-0 pl-3">
@@ -894,33 +759,54 @@ const Products = (props) => {
                                                                             {state.currentMonitor === 1 && device.type_id === 1 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3 pt-sm-3">
-                                                                                        <MonitorSoil chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                        <MonitorSoil
+                                                                                            chartData={{fontSize: 6, pointRadius: 1}}
+                                                                                            data={state.realTimeData}
+                                                                                            hub={state.currentHub}
+                                                                                            device={state.currentDevice}
+                                                                                        />
                                                                                     </Col>
-                                                                                </Col>  
+                                                                                </Col>
                                                                             )}
                                                                             {state.currentMonitor === 2 && device.type_id === 2 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3 pt-sm-3">
-                                                                                        <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
+                                                                                        <MonitorWater
+                                                                                            devices={state.devices}
+                                                                                            hub={state.currentHub}
+                                                                                            device={state.currentDevice}
+                                                                                            statusChange={statusChange} 
+                                                                                            save={onSaveBtnClick} 
+                                                                                        />
                                                                                     </Col>
-                                                                                </Col>  
+                                                                                </Col>
                                                                             )}
                                                                             {state.currentMonitor === 3 && device.type_id === 3 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3 pt-sm-3">
-                                                                                        <MonitorTempHum chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
+                                                                                        <MonitorTempHum
+                                                                                            chartData={{fontSize: 6, pointRadius: 1}}
+                                                                                            data={state.realTimeData}
+                                                                                            hub={state.currentHub}
+                                                                                            device={state.currentDevice}
+                                                                                        />
                                                                                     </Col>
-                                                                                </Col>  
+                                                                                </Col>
                                                                             )}
                                                                             {state.currentMonitor === 4 && device.type_id === 4 && device.sn_number === state.currentDevice.sn_number && (
                                                                                 <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                                     <Col className="p-0 px-sm-3 pt-sm-3">
-                                                                                        <MonitorLight chartData={{fontSize: 6, pointRadius: 1}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                                                                        <MonitorLight
+                                                                                            chartData={{fontSize: 6, pointRadius: 1}}
+                                                                                            data={state.realTimeData}
+                                                                                            hub={state.currentHub}
+                                                                                            device={state.currentDevice}
+                                                                                        />
                                                                                     </Col>
-                                                                                </Col> 
+                                                                                </Col>
                                                                             )}
                                                                         </Fragment>
-                                                                    )}                                                            
+                                                                    )}
                                                                 </div>
                                                             );
                                                         })}
@@ -933,31 +819,31 @@ const Products = (props) => {
                                                                 <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorKitchen />
                                                                 </Col>
-                                                            </Col>  
+                                                            </Col>
                                                         )}
                                                         {state.currentMonitor === 6 && hub.id === 2 && (
                                                             <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                 <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorHomeOffice />
                                                                 </Col>
-                                                            </Col>  
+                                                            </Col>
                                                         )}
                                                         {state.currentMonitor === 7 && hub.id === 5 && (
                                                             <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                 <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorGarden />
                                                                 </Col>
-                                                            </Col>  
+                                                            </Col>
                                                         )}
                                                         {state.currentMonitor === 8 && hub.id === 7 && (
                                                             <Col className="p-0 mt-lg-0 my-4" lg="7">
                                                                 <Col className="p-0 px-sm-3 pt-sm-3">
                                                                     <MonitorBalcony />
                                                                 </Col>
-                                                            </Col> 
+                                                            </Col>
                                                         )}
                                                     </Fragment>
-                                                )}                                                            
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -972,41 +858,52 @@ const Products = (props) => {
                                     <Col className="p-0 px-sm-3 pt-sm-3">
                                         <MonitorAll />
                                     </Col>
-                                </Col>  
+                                </Col>
                             )}
                         </Fragment>
-                    )}                                                            
+                    )}
 {/* ******************************************************** MONITOR DESKTOP ********************************************************* */}
                     {width > 991 && (
                         <Col className="px-3 mt-lg-0 mt-3" lg="7">
                             <Col className="p-3">
-                                {state.currentMonitor === 0 && (
-                                    <MonitorAll />
-                                )}
+                                {state.currentMonitor === 0 && <MonitorAll />}
                                 {state.currentMonitor === 1 && (
-                                    <MonitorSoil chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                    <MonitorSoil
+                                        chartData={{fontSize: 12, pointRadius: 2}}
+                                        data={state.realTimeData}
+                                        hub={state.currentHub}
+                                        device={state.currentDevice}
+                                    />
                                 )}
                                 {state.currentMonitor === 2 && (
-                                    <MonitorWater devices={state.devices} hub={state.currentHub} device={state.currentDevice} statusChange={statusChange} save={onSaveBtnClick} />
+                                    <MonitorWater
+                                        devices={state.devices}
+                                        hub={state.currentHub}
+                                        device={state.currentDevice}
+                                        statusChange={statusChange}
+                                        save={onSaveBtnClick}
+                                    />
                                 )}
                                 {state.currentMonitor === 3 && (
-                                    <MonitorTempHum chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />  
+                                    <MonitorTempHum
+                                        chartData={{fontSize: 12, pointRadius: 2}}
+                                        data={state.realTimeData}
+                                        hub={state.currentHub}
+                                        device={state.currentDevice}
+                                    />
                                 )}
                                 {state.currentMonitor === 4 && (
-                                    <MonitorLight chartData={{fontSize: 12, pointRadius: 2}} data={state.realTimeData} hub={state.currentHub} device={state.currentDevice} />
+                                    <MonitorLight
+                                        chartData={{fontSize: 12, pointRadius: 2}}
+                                        data={state.realTimeData}
+                                        hub={state.currentHub}
+                                        device={state.currentDevice}
+                                    />
                                 )}
-                                {state.currentMonitor === 5 && (
-                                    <MonitorKitchen />
-                                )}
-                                {state.currentMonitor === 6 && (
-                                    <MonitorHomeOffice />
-                                )}
-                                {state.currentMonitor === 7 && (
-                                    <MonitorGarden />
-                                )}
-                                {state.currentMonitor === 8 && (
-                                    <MonitorBalcony />
-                                )}
+                                {state.currentMonitor === 5 && <MonitorKitchen />}
+                                {state.currentMonitor === 6 && <MonitorHomeOffice />}
+                                {state.currentMonitor === 7 && <MonitorGarden />}
+                                {state.currentMonitor === 8 && <MonitorBalcony />}
                             </Col>
                         </Col>
                     )}
@@ -1017,6 +914,7 @@ const Products = (props) => {
         return <div>Loading...</div>;
     }
 };
+
 const mapStateToProps = state => {
     return {
         user: state.user,
