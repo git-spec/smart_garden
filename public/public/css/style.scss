@@ -469,7 +469,13 @@ a {
 }
 
 // Extra large devices (large desktops, 1200px and up)
-@media (min-width: 1200px) {}
+@media (min-width: 2200px) {
+  html { font-size: 18px; }
+  // bigger container
+  .container {
+    min-width: 1800px;
+  }
+}
 
 /* *********************************************************** IMPORT ********************************************************* */
 @import 'breadcrumb';

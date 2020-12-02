@@ -13,7 +13,7 @@ import {
 function Footer({location}) {
     if(location.pathname !== '/'){
         return (
-            <Container>
+            <Container fluid={true}>
                 <Col className="d-flex justify-content-center mt-5 mb-2">
                     <a href="https://www.youtube.com" className="mx-2"><i className="fab fa-youtube"></i></a>
                     <a href="https://www.instagram.com" className="mx-2"><i className="fab fa-instagram"></i></a>
