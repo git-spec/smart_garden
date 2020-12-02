@@ -124,7 +124,6 @@ export const getDevicesPost = () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            // body: JSON.stringify({hubID})
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {

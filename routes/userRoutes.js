@@ -21,10 +21,8 @@ const {
 } = require('../modules/productsAuth');
 
 /* ---------------------------------------- ROUTES ---------------------------------------- */
-
 // check if there is a valid session, all user routes have to pass this middleware 
 userRouter.use((req, res, next) => {
-    // console.log(req.session.user)
     if (req.session.user) {
         next();
     } else {
@@ -49,7 +47,7 @@ userRouter.post('/checkhubnum', (req, res) => {
     // 4 serialnumber already registered
     const hubNum = req.body.hubNum.trim();
     if (hubNum) {
-        checkHubNum(hubNum).then(data => {
+        checkHubNum(hubNum).then(() => {
             res.json(1);
         }).catch(err => {
             if (err === "not found") {
@@ -98,6 +96,7 @@ userRouter.post('/addhub', (req, res) => {
         addHub(hubName, hubNum, userID).then(data => {
             res.json(data);
         }).catch(err => {
+            console.log(err);
             res.json(2);
         });
     } else {
@@ -116,6 +115,7 @@ userRouter.post('/adddevice', (req, res) => {
         addDevice(deviceName, deviceNum, hubID, userID).then(data => {
             res.json(data);
         }).catch(err => {
+            console.log(err);
             res.json(2);
         });
     } else {
@@ -130,6 +130,7 @@ userRouter.post('/gethubs', (req, res) => {
         getHubs(userID).then(data => {
             res.json(data);
         }).catch(err => {
+            console.log(err);
             res.json(2);
         });
     } else {
@@ -139,12 +140,12 @@ userRouter.post('/gethubs', (req, res) => {
 
 userRouter.post('/getdevices', (req, res) => {
     // 2 server error
-    // const hubID = req.body.hubID;
     const userID = req.session.user.id;
     if (userID) {
         getDevices(userID).then(data => {
             res.json(data);
         }).catch(err => {
+            console.log(err);
             res.json(2);
         });
     } else {
@@ -161,6 +162,7 @@ userRouter.post('/deletehub', (req, res) => {
         deleteHub(hubID, userID).then(data => {
             res.json(data);
         }).catch(err => {
+            console.log(err);
             res.json(2);
         });
     } else {
@@ -177,6 +179,7 @@ userRouter.post('/deletedevice', (req, res) => {
         deleteDevice(deviceID, userID).then(data => {
             res.json(data);
         }).catch(err => {
+            console.log(err);
             res.json(2);
         });
     } else {
@@ -185,6 +188,7 @@ userRouter.post('/deletedevice', (req, res) => {
 });
 
 userRouter.post('/deviceonoff', (req, res) => {
+    // 1 status (on/off) of the waterpump device has changed successfully
     const deviceSN = req.body.deviceSN;
     const deviceStatus = req.body.deviceStatus;
     if (deviceSN && deviceStatus !== null) {
@@ -199,6 +203,7 @@ userRouter.post('/deviceonoff', (req, res) => {
 });
 
 userRouter.post('/saveranges', (req, res) => {
+    // 1 ranges for waterpump device were saved successfully
     const inputRangeTime = req.body.inputRangeTime;
     const inputRangeDuration = req.body.inputRangeDuration;
     const deviceSn = req.body.deviceSn;
@@ -215,6 +220,7 @@ userRouter.post('/saveranges', (req, res) => {
 });
 
 userRouter.post('/devicemoisturedata', (req, res) => {
+    // data: received data from the database for soil moisture device
     const deviceID = req.body.deviceID;
     if (deviceID) {
         deviceMoistureData(deviceID).then(data => {
@@ -228,6 +234,7 @@ userRouter.post('/devicemoisturedata', (req, res) => {
 });
 
 userRouter.post('/devicetemphumdata', (req, res) => {
+    // data: received data from the database for temperature & humidity device
     const deviceID = req.body.deviceID;
     if (deviceID) {
         deviceTempHumData(deviceID).then(data => {
@@ -241,6 +248,7 @@ userRouter.post('/devicetemphumdata', (req, res) => {
 });
 
 userRouter.post('/devicelightdata', (req, res) => {
+    // data: received data from the database for light device
     const deviceID = req.body.deviceID;
     if (deviceID) {
         deviceLightData(deviceID).then(data => {

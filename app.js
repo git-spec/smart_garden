@@ -44,8 +44,8 @@ const {
     resetPass,
     getAllUsers,
     getUser,
-    changeVerificationPost,
-    tellUserAboutAccountState,
+    changeVerification,
+    blockAccount,
     deleteUser,
     changeUserRole,
     sendMessage
@@ -61,23 +61,23 @@ const port = process.env.PORT || 5000;
 const {log} = require("console");
 
 /* ********************************************************* POST ROUTES ********************************************************* */
-// register
+// register user
 app.post('/register', (req, res) => {
     // 1 user registered successfully
     // 2 data error
     // 3 user exists
     // 4 server error
-    const firstName = req.body.firstName.trim();
-    const lastName = req.body.lastName.trim();
-    const userName = req.body.userName.trim();
-    const email = req.body.email.trim();
+    const firstName = entities.encode(req.body.firstName.trim());
+    const lastName = entities.encode(req.body.lastName.trim());
+    const userName = entities.encode(req.body.userName.trim());
+    const email = entities.encode(req.body.email.trim());
     const password = req.body.password;
     const repassword = req.body.repassword;
-    if (firstName && lastName && userName && email && password && password == repassword){
-        registerUser(entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(email), password).then(() => {
+    if (firstName && lastName && userName && email && password && password === repassword){
+        registerUser(firstName, lastName, userName, email, password).then(() => {
             res.json(1);
-        }).catch(error => {
-            if (error == "exist") {
+        }).catch(err => {
+            if (err === "exist") {
                 res.json(3);
             } else{
                 res.json(4);
@@ -88,130 +88,31 @@ app.post('/register', (req, res) => {
     };
 });
 
-// edit
-app.post('/edit', (req, res) => {
-    // 1 user edited successfully
-    // 2 data error
-    // 3 user exists
-    // 4 server error
- 
-    const id = req.body.id;
-    const firstName = req.body.firstName.trim();
-    const lastName = req.body.lastName.trim();
-    const userName = req.body.userName.trim();
-    const city = req.body.city;
-    const password = req.body.password;
-    if ( req.files) {
-        const userImg = req.files.userImg;
-        if (id && firstName && lastName && userName ) {
-            editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password, userImg).then(() => {
-                res.json(1);
-            }).catch(error => {
-                if (error == "exist") {
-                    res.json(3);
-                } else{
-                    res.json(4);
-                }
-            })
-        } else {
-            res.json(2);
-        };
-    }else{
-
-        if (id && firstName && lastName && userName ) {
-            editUser(id, entities.encode(firstName), entities.encode(lastName), entities.encode(userName), entities.encode(city), password).then(() => {
-                res.json(1);
-            }).catch(error => {
-                if (error == "exist") {
-                    res.json(3);
-                } else{
-                    res.json(4);
-                }
-            })
-        } else {
-            res.json(2);
-        };
-    }
-
-});
-
-// login
+// login user
 app.post('/login', (req, res) => {
-    // 1 login successful
+    // 1 user logged in successfully
     // 2 server error
     // 3 password is wrong
     // 4 user does not exist
-    if (req.body.email && req.body.password) {
-        checkUser(entities.encode(req.body.email.trim()), req.body.password).then(user => {
+    const email = entities.encode(req.body.email.trim());
+    const password = req.body.password;
+    if (email && password) {
+        checkUser(email, password).then(user => {
             req.session.user = user;
-            // res.json({result: 1, id: user.id})
             res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role, img: user.img});
-        }).catch(error => {
-            if (error == 3) {
-                // res.json({result: 3})
+        }).catch(err => {
+            if (err === 3) {
                 res.json(3);
             } else {
-                // res.json({result: 4})
                 res.json(4);
             };
         })
     } else {
-        // res.json({result: 2})
         res.json(2);
     };
 });
 
-// verify user
-app.post('/verification', (req, res) => {
-    // user updated successfully to verified 
-    // 2 server error
-    verifyUser(req.body.email).then(() => {
-        // confirm the user with email 
-        // 1 email successfully sent
-        // 2 email NOT sent
-        confirmVerifiedUser(req.body.email).then(() => {
-            res.json(1);
-        }).catch(err => {
-            res.json(2);
-        });
-    }).catch(err => {
-        res.json(2)
-    });
-});
-
-// reset user pass page
-app.post('/sendResetLink', (req, res) => {
-    // 1 email successfully sent
-    // 2 server error
-    // 4 user does not exist
-    sendResetLink(req.body.email).then(() => {
-        res.json(1);
-    }).catch(err => {
-        if (err == 4) {
-            res.json(4)
-        } else {
-            res.json(2)
-        }
-    });
-});
-
-// reset user pass query
-app.post('/resetPass', (req, res) => {
-    // 1 sending success
-    // 2 server error
-    // 4 user does not exist
-    resetPass(req.body.email, req.body.id, req.body.pass).then(() => {
-        res.json(1);
-    }).catch(err => {
-        if (err == 4) {
-            res.json(4);
-        } else {
-            res.json(2);
-        }
-    });
-});
-
-// checklogin
+// check if user is logged in
 app.post('/checklogin', (req, res) => {
     // // just for development, delete for production!!!
     // req.session.user = {
@@ -223,7 +124,6 @@ app.post('/checklogin', (req, res) => {
     //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
     //     verified: 1
     // };
-    
     // 10 session does not exist
     if (req.session.user) {
         const user = req.session.user;
@@ -233,55 +133,39 @@ app.post('/checklogin', (req, res) => {
     }
 });
 
-
-// get All Users
-app.post('/getAllUsers', (req, res) => {
-    // 1 sending success
-    // 2 no users founded
-    getAllUsers().then((users) => {
-        res.json(users);
-    }).catch(err => {
-        if (err == 2) {
+// verify user
+app.post('/verification', (req, res) => {
+    // 1 user updated successfully to verified 
+    // 2 server error
+    verifyUser(req.body.email).then(() => {
+        confirmVerifiedUser(req.body.email).then(() => {
+            res.json(1);
+        }).catch(err => {
             res.json(2);
-        } else {
-            res.json(err);
-        }
+        });
+    }).catch(err => {
+        res.json(2)
     });
 });
 
-// get User for Edit page 
-app.post('/getuser', (req, res) => {
-    // 1 sending success
-    // 2 no users founded
-    getUser(req.body.id).then(user => {
-        res.json(user);
-    }).catch(err => {
-        if (err == 2) {
-            res.json(2);
-        } else {
-            res.json(err);
-        }
-    });
-});
-
-// change Verification for a user
-app.post('/changeVerificationPost', (req, res) => {
+// change user verification
+app.post('/changeverification', (req, res) => {
+    // 1 email has been sent successfully
+    // 2 server error
+    // 3 email has not been sent
     if (req.body.verified) {
-        changeVerificationPost(req.body.id).then(() => {
-            // confirm the user with email 
-            // 1 email successfully sent
-            // 2 email NOT sent
-            tellUserAboutAccountState(req.body.email).then(() => {
-                // tell the user that his account is blocked and he have to speak with the admin
+        changeVerification(req.body.id).then(() => {
+            // inform the user by email that his account has been blocked
+            blockAccount(req.body.email).then(() => {
                 res.json(1);
             }).catch(err => {
-                res.json(2);
+                res.json(3);
             });
         }).catch(err => {
             res.json(2)
         });
-    }else{
-        changeVerificationPost(req.body.id).then(() => {
+    } else {
+        changeVerification(req.body.id).then(() => {
            res.json(1)
         }).catch(err => {
             res.json(2)
@@ -289,21 +173,10 @@ app.post('/changeVerificationPost', (req, res) => {
     }
 });
 
-// Delete user Account 
-app.post('/deleteUserPost', (req, res) => {
-    // 1 mean deleting is success
-    // 2 mean deleting is not success
-    deleteUser(req.body.id).then(() => {
-        res.json(1)
-    }).catch(err => {
-        res.json(2)
-    });
-});
-
-
-//Change user Role 
-app.post('/changeUserRolePost', (req, res) => {
-    // console.log('body id is '+req.body.id ,'body role is '+req.body.role );
+// change user role 
+app.post('/changeuserrole', (req, res) => {
+    // 1 user role was changed successfully 
+    // 2 user role was not changed 
     changeUserRole(req.body.id, req.body.role).then(() => {
         res.json(1)
     }).catch(err => {
@@ -311,10 +184,129 @@ app.post('/changeUserRolePost', (req, res) => {
     });
 });
 
-// send Message Post for Kontakt
-app.post('/sendMessagePost', (req, res) => {
-    // 1 sending successful
-    // 2 error in the message
+// edit user
+app.post('/edit', (req, res) => {
+    // 1 user edited successfully
+    // 2 data error
+    // 3 user exists
+    // 4 server error
+    const id = req.body.id;
+    const firstName = entities.encode(req.body.firstName.trim());
+    const lastName = entities.encode(req.body.lastName.trim());
+    const userName = entities.encode(req.body.userName.trim());
+    const city = entities.encode(req.body.city);
+    const password = req.body.password;
+    if (req.files) {
+        const userImg = req.files.userImg;
+        if (id && firstName && lastName && userName) {
+            editUser(id, firstName, lastName, userName, city, password, userImg).then(() => {
+                res.json(1);
+            }).catch(err => {
+                if (err === "exist") {
+                    res.json(3);
+                } else{
+                    res.json(4);
+                }
+            })
+        } else {
+            res.json(2);
+        };
+    } else {
+        if (id && firstName && lastName && userName) {
+            editUser(id, firstName, lastName, userName, city, password).then(() => {
+                res.json(1);
+            }).catch(err => {
+                if (err === "exist") {
+                    res.json(3);
+                } else{
+                    res.json(4);
+                }
+            })
+        } else {
+            res.json(2);
+        };
+    }
+});
+
+// send an email where the user can reset his password
+app.post('/sendresetlink', (req, res) => {
+    // 1 email was sent successfully
+    // 2 server error
+    // 4 user does not exist
+    sendResetLink(req.body.email).then(() => {
+        res.json(1);
+    }).catch(err => {
+        if (err === 4) {
+            res.json(4)
+        } else {
+            res.json(2)
+        }
+    });
+});
+
+// reset the password of the user
+app.post('/resetpass', (req, res) => {
+    // 1 password reset was successful
+    // 2 server error
+    // 4 user does not exist
+    resetPass(req.body.email, req.body.id, req.body.pass).then(() => {
+        res.json(1);
+    }).catch(err => {
+        if (err === 4) {
+            res.json(4);
+        } else {
+            res.json(2);
+        }
+    });
+});
+
+// delete user account 
+app.post('/deleteuser', (req, res) => {
+    // 1 account was deleted successfully
+    // 2 account was not deleted
+    deleteUser(req.body.id).then(() => {
+        res.json(1)
+    }).catch(err => {
+        res.json(2)
+    });
+});
+
+// get all users
+app.post('/getallusers', (req, res) => {
+    // 1 get all users from db successfully
+    // 2 server error
+    // 3 no users found
+    getAllUsers().then((users) => {
+        res.json(users);
+    }).catch(err => {
+        if (err === 3) {
+            res.json(3);
+        } else {
+            res.json(2);
+        }
+    });
+});
+
+// get user to edit his data
+app.post('/getuser', (req, res) => {
+    // 1 get user successfully
+    // 2 server error
+    // 3 no user found
+    getUser(req.body.id).then(user => {
+        res.json(user);
+    }).catch(err => {
+        if (err === 2) {
+            res.json(3);
+        } else {
+            res.json(2);
+        }
+    });
+});
+
+// send message from contact form
+app.post('/sendmessage', (req, res) => {
+    // 1 message was sent successfully
+    // 2 message was not sent
     if (req.body.email.trim() && req.body.message.trim()) {
         sendMessage(req.body.email.trim(), req.body.message).then(data => {
             res.json(1);
@@ -325,6 +317,7 @@ app.post('/sendMessagePost', (req, res) => {
         res.json(2);
     };
 });
+
 /* ********************************************************* USE ROUTES ********************************************************* */
 app.use('/user', userRoutes);
 
@@ -346,7 +339,7 @@ io.on('connection', socket => {
     log('Hub is connected');
 
     socket.on('user_connect', userID => {
-
+        // join user
         socket.join(userID.toString());
         log(`user ${userID} is connected`);
         socket.broadcast.to(userID).emit('user_connect');
@@ -366,11 +359,12 @@ io.on('connection', socket => {
             socket.broadcast.to(userID).emit("waterOnOff", data);
         })
 
+        // send the new configuration for waterpump
         socket.on('waterConf', data => {
             socket.broadcast.to(userID).emit("waterConf", data);
         })
         
-        // user disconnected
+        // user is disconnected
         socket.on('user_disconnect', userId => {
             socket.broadcast.to(userId).emit("user_disconnect");
         })
@@ -387,7 +381,6 @@ io.on('connection', socket => {
         SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(hubs => {
             if (hubs.length > 0) {
                 if (hubs[0].user_id) {
-
                     // join user
                     socket.join(hubs[0].user_id);
 
@@ -397,13 +390,13 @@ io.on('connection', socket => {
                         log(`Hub ${hubs[0].name} is connected now!`);
                         // get the devices that belong to this hub
                         SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
-                            // send all devices to raspberry
+                            // send info about connected devices to raspberry
                             socket.emit('toDevice', devices);
-                        }).catch(error => {
-                            log(error);
+                        }).catch(err => {
+                            log(err);
                         });
-                    }).catch(error => {
-                        log(error);
+                    }).catch(err => {
+                        log(err);
                     });
 
                     // listening to info from raspberry
@@ -412,8 +405,8 @@ io.on('connection', socket => {
                         SQL.updateRecord('iot_device', {connected: 1}, {sn_number: sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('device_connect', sn_number);
                             log(`Device "${sn_number}" is connected now`);
-                        }).catch(error => {
-                            log(error);
+                        }).catch(err => {
+                            log(err);
                         });
                     });
 
@@ -423,8 +416,8 @@ io.on('connection', socket => {
                         SQL.updateRecord('iot_device', {connected: 0}, {sn_number: sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('device_disconnect', sn_number);
                             log(`Device "${sn_number}" is disconnected now`);
-                        }).catch(error => {
-                            log(error);
+                        }).catch(err => {
+                            log(err);
                         });
                     });
                     
@@ -434,9 +427,9 @@ io.on('connection', socket => {
                         socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
                     });
 
+                    // save data from devices to db
                     socket.on("deviceDataInterval", info => {
                         SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, 'now()']).then(result => {
-                            // log(result);
                         });
                     });
 
@@ -447,12 +440,11 @@ io.on('connection', socket => {
                             socket.broadcast.to(hubs[0].user_id).emit('hub_disconnect', data.sn_number);
                             log(`Hub "${hubs[0].name}" is disconnected now`);  
                             socket.disconnect();                      
-                        }).catch(error => {
-                            log(error);
+                        }).catch(err => {
+                            log(err);
                             socket.disconnect();
                         });
                     });
-                    
                 } else {
                     // hub is not registered
                     log(`Hub ${data.sn_number} is not registered!`);
@@ -463,8 +455,8 @@ io.on('connection', socket => {
                 log(`Hub with ${data.sn_number} is not existing!`);
                 socket.disconnect();
             }
-        }).catch(error => {
-            log(error);
+        }).catch(err => {
+            log(err);
             socket.disconnect();
         });
     });
