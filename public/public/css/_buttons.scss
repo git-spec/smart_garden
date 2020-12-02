@@ -50,6 +50,10 @@ button {
       transform: scale(1.2);
       @include changeBorder;
     }
+    // change color of button type
+    &.btn-outline-light {
+      @include changeColor;
+    }
     // change bg-color & color of buttons up & down
     &.btn-outline-light:active {
       // border-color: $color-5 !important;
@@ -61,9 +65,9 @@ button {
         background-color: none !important;
       }
     }
+    // change color of button border
     &.btn-outline-light:focus {
       @include changeBorder;
-      @include changeColor;
     }
     // buttons plus & minus
     &.plus,

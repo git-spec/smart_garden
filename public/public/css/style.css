@@ -550,6 +550,16 @@ a.nav-link:hover {
 }
 
 @media (max-width: 576px) {
+  .navbar .navbar-brand {
+    width: 2.6rem;
+    height: 2.6rem;
+    background-image: url("../imgs/inuta_icon_light.svg");
+  }
+  .color-5 + .navbar .navbar-brand {
+    width: 2.6rem;
+    height: 2.6rem;
+    background-image: url("../imgs/inuta_icon_dark.svg");
+  }
   .sidebar.active {
     left: 0;
   }
@@ -633,6 +643,11 @@ button.btn-outline-light:hover {
   border-color: #fdd79d;
 }
 
+.btn.btn-outline-light,
+button.btn-outline-light {
+  color: #fdd79d !important;
+}
+
 .btn.btn-outline-light:active,
 button.btn-outline-light:active {
   background-color: #fdd79d !important;
@@ -651,7 +666,6 @@ button.btn-outline-light:focus {
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
-  color: #fdd79d !important;
 }
 
 .btn.plus, .btn.minus,

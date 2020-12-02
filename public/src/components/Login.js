@@ -128,9 +128,8 @@ const Login = props => {
                     <span className="breadcrumb-item active">Login</span>
                 </div>
                 </div> */}
-                <Row className="my-4"><Col></Col></Row>
-                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Login</h1>
-                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4">Log in to access your device management.</p>
+                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Login</h1>
+                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Log in to access your device management.</p>
                 <Form className="pb-md-0 pb-5">
                     <Row xs="1" sm="1">
                         <Col sm="12" md={{size: 6, offset: 3}}>

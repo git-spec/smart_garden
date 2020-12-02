@@ -541,7 +541,8 @@ const Products = props => {
 /* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
         return (
-            <Container className="pt-4 mt-5 mx-sm-5 mx-lg-auto px-5 px-sm-5 px-lg-0">
+            <Container className="pt-4 mt-5 mx-sm-5 mx-lg-auto px-sm-5 px-lg-0">
+
 {/* ********************************************************* MODAL ********************************************************* */}
                 <ConfirmModal
                     className="bg-danger"
