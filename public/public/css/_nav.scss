@@ -208,6 +208,17 @@ a.nav-link {
 
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
+    // logo
+    .navbar .navbar-brand {
+        width: 2.6rem;
+        height: 2.6rem;
+        background-image: url('../imgs/inuta_icon_light.svg');
+    }
+    .color-5 + .navbar .navbar-brand {
+        width: 2.6rem;
+        height: 2.6rem;
+        background-image: url('../imgs/inuta_icon_dark.svg');
+    }
     // show sidebar
     .sidebar.active {
         left: 0;
