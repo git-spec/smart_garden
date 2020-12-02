@@ -125,8 +125,8 @@ function Navigation(props) {
         </Fragment>
     )
     return (
-        <Navbar onBlur={toggleNavbarBlur} fixed="top" >
-            <Container  className="px-sm-3 px-0">
+        <Navbar onBlur={toggleNavbarBlur} fixed="top" className="px-0 justify-content-center">
+            <Container  className="mx-sm-5 mx-lg-0 px-5 px-lg-0">
 
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
