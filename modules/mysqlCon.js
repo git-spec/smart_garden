@@ -1,6 +1,8 @@
+/* ******************************************************* SETUP ******************************************************* */
 const mySql = require('mysql');
 let con = null;
 
+/* ******************************************************* FUNCTIONS ******************************************************* */
 function connect() {
     return new Promise((resolve, reject) => {
         if (con) {
@@ -96,7 +98,7 @@ function checkExist(tableName, value, condition) {
  * @param {object} value
  * @param {object} condition 
  */
-function updateRecord(tableName, value, condition){
+function updateRecord(tableName, value, condition) {
     return new Promise((resolve, reject) => {
         let query = `UPDATE ${tableName}`;
         if (value) {
@@ -109,7 +111,7 @@ function updateRecord(tableName, value, condition){
                 }
             });
             query = query.substring(0, query.length - 5);
-        } 
+        }
         if (condition) {
             query += ' WHERE ';
             Object.keys(condition).forEach(key => {
@@ -120,7 +122,7 @@ function updateRecord(tableName, value, condition){
                 }
             });
             query = query.substring(0, query.length - 5);
-        } 
+        }
         query += ';';
         runQuery(query).then(() => {
             resolve();
@@ -146,7 +148,7 @@ function insertMulti(tableName, columns, values) {
         query = query.substring(0, query.length - 2);
         query += `) VALUES (`;
         values.forEach(val => {
-            if(val === 'now()'){
+            if (val === 'now()') {
                 query += `${val}, `;
             } else {
                 query += `'${val}', `;
@@ -162,32 +164,10 @@ function insertMulti(tableName, columns, values) {
     });
 }
 
-function twoDigits(d) {
-    if (0 <= d && d < 10) return '0' + d.toString();
-    if (-10 < d && d < 0) return '-0' + (-1 * d).toString();
-    return d.toString();
-}
-const toMysqlFormat = function () {
-    let date = new Date();
-    return (
-        date.getUTCFullYear() +
-        '-' +
-        twoDigits(1 + date.getUTCMonth()) +
-        '-' +
-        twoDigits(date.getUTCDate()) +
-        ' ' +
-        twoDigits(date.getUTCHours() + 1) +
-        ':' +
-        twoDigits(date.getUTCMinutes()) +
-        ':' +
-        twoDigits(date.getUTCSeconds())
-    );
-};
-
+/* ******************************************************* EXPORT ******************************************************* */
 module.exports = {
     runQuery,
     checkExist,
     updateRecord,
-    insertMulti,
-    toMysqlFormat
+    insertMulti
 };

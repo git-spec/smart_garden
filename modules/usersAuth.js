@@ -1,51 +1,45 @@
 /* ***************************************************** SETUP ******************************************************* */
-// modules
-const { runQuery } = require("./mysqlCon");
-const emailSender = require("./emailSender");
-var validator = require("validator");
-const passwordHash = require("password-hash");
+const {runQuery} = require('./mysqlCon');
+const emailSender = require('./emailSender');
+var validator = require('validator');
+const passwordHash = require('password-hash');
 
 /* ***************************************************** FUNCTIONS ******************************************************* */
 // login with checking the user's email OR username
 function checkUser(user, password) {
-    // console.log("this is the user: " + user + password);
     return new Promise((resolve, reject) => {
         if (validator.isEmail(user)) {
-            runQuery(`SELECT * FROM users where email like '${user}'`)
-                .then((result) => {
-                    if (result.length === 0) {
-                        reject(4);
-                    } else {
-                        if (passwordHash.verify(password, result[0].password)) {
-                            if (result[0].verified) {
-                                resolve(result[0]);
-                            }
-                        } else {
-                            reject(3);
+            runQuery(`SELECT * FROM users where email LIKE '${user}'`).then(result => {
+                if (result.length === 0) {
+                    reject(4);
+                } else {
+                    if (passwordHash.verify(password, result[0].password)) {
+                        if (result[0].verified) {
+                            resolve(result[0]);
                         }
+                    } else {
+                        reject(3);
                     }
-                })
-                .catch((error) => {
-                    reject(error);
-                });
+                }
+            }).catch(error => {
+                reject(error);
+            });
         } else {
-            runQuery(`SELECT * FROM users where username like '${user}'`)
-                .then((result) => {
-                    if (result.length === 0) {
-                        reject(4);
-                    } else {
-                        if (passwordHash.verify(password, result[0].password)) {
-                            if (result[0].verified) {
-                                resolve(result[0]);
-                            }
-                        } else {
-                            reject(3);
+            runQuery(`SELECT * FROM users where username LIKE '${user}'`).then(result => {
+                if (result.length === 0) {
+                    reject(4);
+                } else {
+                    if (passwordHash.verify(password, result[0].password)) {
+                        if (result[0].verified) {
+                            resolve(result[0]);
                         }
+                    } else {
+                        reject(3);
                     }
-                })
-                .catch((err) => {
-                    reject(err);
-                });
+                }
+            }).catch(err => {
+                reject(err);
+            });
         }
     });
 }
@@ -55,33 +49,25 @@ function registerUser(firstName, lastName, userName, email, password) {
     return new Promise((resolve, reject) => {
         runQuery(
             `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
-            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(
-                password
-            )}', 0, 'user')`
-        )
-            .then(() => {
-                // email message
-                let message = `Hello ${firstName} ${lastName},\n`;
-                message += "Welcome to our website!\n";
-                message +=
-                    "To verify your email address please click on the following link:\n";
-                message += `http://localhost:3000/verify/${email}/`;
-                emailSender
-                    .sendEmail(email, "Verify your email", message)
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    });
-            })
-            .catch((err) => {
-                if (err.errno === 1062) {
-                    reject("exist");
-                } else {
-                    reject(err);
-                }
+            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
+        ).then(() => {
+            // email message
+            let message = `Hello ${firstName} ${lastName},\n`;
+            message += 'Welcome to our website!\n';
+            message += 'To verify your email address please click on the following link:\n';
+            message += `http://localhost:3000/verify/${email}/`;
+            emailSender.sendEmail(email, 'Verify your email', message).then(() => {
+                resolve();
+            }).catch(error => {
+                reject(error);
             });
+        }).catch(err => {
+            if (err.errno === 1062) {
+                reject('exist');
+            } else {
+                reject(err);
+            }
+        });
     });
 }
 
@@ -89,86 +75,68 @@ function registerUser(firstName, lastName, userName, email, password) {
 function editUser(id, firstName, lastName, userName, city, password, userImg) {
     if (password) {
         return new Promise((resolve, reject) => {
-            console.log(userImg);
             runQuery(
                 `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
-                users.city='${city}', users.password='${passwordHash.generate(
-                    password
-                )}' WHERE users.id=${id}`
-            )
-                .then((result) => {
-                    if (userImg) {
-                        let saveImgsQuery = "";
-                            // get file extension
-                            let ext = userImg.name.substr(userImg.name.lastIndexOf("."));
-                            // set the new image name
-                            let newName =
-                            userName.trim().replace(/ /g, "_") + ext;
-                            userImg.mv("./public/uploads/" + newName);
-                            const imgUrl = "/uploads/" + newName;
-                            saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
-                        
-                        runQuery(saveImgsQuery)
-                            .then(() => {
-                                resolve(result);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                                reject(error);
-                            });
-                    } else {
+                users.city='${city}', users.password='${passwordHash.generate(password)}' WHERE users.id=${id}`
+            ).then(result => {
+                if (userImg) {
+                    let saveImgsQuery = '';
+                    // get file extension
+                    let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
+                    // set new image name
+                    let newName = userName.trim().replace(/ /g, '_') + ext;
+                    userImg.mv('./public/uploads/' + newName);
+                    const imgUrl = '/uploads/' + newName;
+                    saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
+                    runQuery(saveImgsQuery).then(() => {
                         resolve(result);
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-
-                    if (err.errno === 1062) {
-                        reject("exist");
-                    } else {
-                        reject(err);
-
-                    }
-                });
+                    }).catch(error => {
+                        console.log(error);
+                        reject(error);
+                    });
+                } else {
+                    resolve(result);
+                }
+            }).catch(err => {
+                console.log(err);
+                if (err.errno === 1062) {
+                    reject('exist');
+                } else {
+                    reject(err);
+                }
+            });
         });
     } else {
-
         return new Promise((resolve, reject) => {
             runQuery(
                 `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
                 users.city='${city}' WHERE users.id=${id}`
-            )
-                .then((result) => {
-                    if (userImg) {
-                        let saveImgsQuery = "";
-                            // get file extension
-                            let ext = userImg.name.substr(userImg.name.lastIndexOf("."));
-                            // set the new image name
-                            let newName =
-                            userName.trim().replace(/ /g, "_") + ext;
-                            userImg.mv("./public/uploads/" + newName);
-                            const imgUrl = "/uploads/" + newName;
-                            saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
-                        
-                        runQuery(saveImgsQuery)
-                            .then(() => {
-                                resolve(result);
-                            })
-                            .catch((error) => {
-                                console.log(error);
-                                reject(error);
-                            });
-                    } else {
+            ).then(result => {
+                if (userImg) {
+                    let saveImgsQuery = '';
+                    // get file extension
+                    let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
+                    // set the new image name
+                    let newName = userName.trim().replace(/ /g, '_') + ext;
+                    userImg.mv('./public/uploads/' + newName);
+                    const imgUrl = '/uploads/' + newName;
+                    saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
+                    runQuery(saveImgsQuery).then(() => {
                         resolve(result);
-                    }
-                })
-                .catch((err) => {
-                    if (err.errno === 1062) {
-                        reject("exist");
-                    } else {
-                        reject(err);
-                    }
-                });
+                    }).catch(error => {
+                        console.log(error);
+                        reject(error);
+                    });
+                } else {
+                    resolve(result);
+                }
+            }).catch(err => {
+                if (err.errno === 1062) {
+                    reject('exist');
+                } else {
+                    reject(err);
+                }
+            });
         });
     }
 }
@@ -176,15 +144,11 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
 // verify user
 function verifyUser(email) {
     return new Promise((resolve, reject) => {
-        runQuery(
-            `UPDATE users SET users.verified = 1 WHERE users.email = '${email}'`
-        )
-            .then(() => {
-                resolve();
-            })
-            .catch((err) => {
-                reject(err);
-            });
+        runQuery(`UPDATE users SET users.verified=1 WHERE users.email='${email}'`).then(() => {
+            resolve();
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
 
@@ -192,48 +156,37 @@ function verifyUser(email) {
 function confirmVerifiedUser(email) {
     return new Promise((resolve, reject) => {
         // email message
-        let message = "Thanks for verifying your email!\n";
-        message += "You can now log in on our site:\n";
-        message += "http://localhost:3000/login\n";
-        message += "Have fun!";
-        emailSender
-            .sendEmail(email, "Email verification confirmed", message)
-            .then(() => {
-                resolve();
-            })
-            .catch((error) => {
-                reject(error);
-            });
+        let message = 'Thanks for verifying your email!\n';
+        message += 'You can now log in on our site:\n';
+        message += 'http://localhost:3000/login\n';
+        message += 'Have fun!';
+        emailSender.sendEmail(email, 'Email verification confirmed', message).then(() => {
+            resolve();
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 
 // send link to reset users password
 function sendResetLink(email) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT * FROM users where email like '${email}'`)
-            .then((result) => {
-                if (result.length) {
-                    // email message
-                    let message = "Please click here to reset your password:\n";
-                    message += `http://localhost:3000/reset/${
-                        result[0].id * 135531
-                    }/${email}`;
-                    emailSender
-                        .sendEmail(email, "Reset account password", message)
-                        .then(() => {
-                            resolve();
-                        })
-                        .catch((error) => {
-                            reject(error);
-                        });
-                    // resolve(result);
-                } else {
-                    reject(4);
-                }
-            })
-            .catch((err) => {
-                reject(2);
-            });
+        runQuery(`SELECT * FROM users WHERE email LIKE '${email}'`).then(result => {
+            if (result.length) {
+                // email message
+                let message = 'Please click here to reset your password:\n';
+                message += `http://localhost:3000/reset/${result[0].id * 135531}/${email}`;
+                emailSender.sendEmail(email, 'Reset account password', message).then(() => {
+                    resolve();
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(4);
+            }
+        }).catch(err => {
+            reject(2);
+        });
     });
 }
 
@@ -242,145 +195,116 @@ function resetPass(email, id, pass) {
     return new Promise((resolve, reject) => {
         const Id = id / 135531;
         runQuery(
-            `UPDATE users SET password = '${passwordHash.generate(
-                pass
-            )}' WHERE email like '${email}' and id = ${Id}`
-        )
-            .then((result) => {
-                // console.log('here is the result ' + result);
-                if (result) {
-                    // email message
-                    let message =
-                        "You have successfully changed your password!\n";
-                    message += "Log in now with your new password:\n";
-                    message += "http://localhost:3000/login";
-                    emailSender
-                        .sendEmail(email, "Password changed", message)
-                        .then(() => {
-                            resolve();
-                        })
-                        .catch((error) => {
-                            reject(error);
-                        });
-                    // resolve(result);
-                } else {
-                    reject(4);
-                }
-            })
-            .catch((err) => {
-                reject(2);
-            });
+            `UPDATE users SET password='${passwordHash.generate(pass)}' WHERE email LIKE '${email}' AND id=${Id}`
+        ).then(result => {
+            if (result) {
+                // email message
+                let message = 'You have successfully changed your password!\n';
+                message += 'Log in now with your new password:\n';
+                message += 'http://localhost:3000/login';
+                emailSender.sendEmail(email, 'Password changed', message).then(() => {
+                    resolve();
+                }).catch(error => {
+                    reject(error);
+                });
+            } else {
+                reject(4);
+            }
+        }).catch(err => {
+            reject(2);
+        });
     });
 }
 
 // get all users
 function getAllUsers() {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT * FROM users`)
-            .then((users) => {
-                if (users.length === 0) {
-                    reject(2);
-                } else {
-                    // console.log(users[0]);
-                    resolve(users);
-                }
-
-                // resolve(users);
-            })
-            .catch((error) => {
-                reject(error);
-            });
+        runQuery('SELECT * FROM users').then(users => {
+            if (users.length === 0) {
+                reject(3);
+            } else {
+                resolve(users);
+            }
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 
 // get user for edit page
 function getUser(id) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT * FROM users WHERE id = ${id}`)
-            .then((users) => {
-                if (users.length === 0) {
-                    reject(2);
-                } else {
-                    resolve(users[0]);
-                }
-            })
-            .catch((error) => {
-                reject(error);
-            });
+        runQuery(`SELECT * FROM users WHERE id=${id}`).then(users => {
+            if (users.length === 0) {
+                reject(3);
+            } else {
+                resolve(users[0]);
+            }
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 
-// changeVerificationPost
-function changeVerificationPost(id) {
+// change verification / block user
+function changeVerification(id) {
     return new Promise((resolve, reject) => {
-        runQuery(`UPDATE users SET verified = !verified  WHERE users.id=${id}`)
-            .then((result) => {
-                resolve(result);
-            })
-            .catch((err) => {
-                reject(err);
-            });
+        runQuery(`UPDATE users SET verified=!verified WHERE users.id=${id}`).then(result => {
+            resolve(result);
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
 
-// messaging the user about his account issues
-function tellUserAboutAccountState(email) {
+// inform the user by email that his account has been blocked
+function blockAccount(email) {
     return new Promise((resolve, reject) => {
         // email message
-        let message = "Your email is Blocked!\n";
-        message += "You can not log in on our site:\n";
-        message += "Please call the Administrator to solve this issues \n";
-        emailSender
-            .sendEmail(email, "Email is Blocked", message)
-            .then(() => {
-                resolve();
-            })
-            .catch((error) => {
-                reject(error);
-            });
+        let message = 'Your account has been blocked!\n';
+        message += 'You can no longer log in to our site.\n';
+        message += 'Please contact the administrator to solve this problem.';
+        emailSender.sendEmail(email, 'Account has been blocked', message).then(() => {
+            resolve();
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 
-// Deleting user account
+// deleting user account
 function deleteUser(id) {
     return new Promise((resolve, reject) => {
-        runQuery(`DELETE FROM users WHERE  users.id=${id}`)
-            .then((result) => {
-                resolve(result);
-            })
-            .catch((err) => {
-                reject(err);
-            });
+        runQuery(`DELETE FROM users WHERE users.id=${id}`).then(result => {
+            resolve(result);
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
 
-// change User Role
+// change user role
 function changeUserRole(id, role) {
     return new Promise((resolve, reject) => {
-        console.log(id, role);
-        runQuery(`UPDATE users SET role = '${role}'  WHERE users.id=${id}`)
-            .then((result) => {
-                resolve(result);
-            })
-            .catch((err) => {
-                reject(err);
-            });
+        runQuery(`UPDATE users SET role='${role}' WHERE users.id=${id}`).then(result => {
+            resolve(result);
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
-// sending Message in kontakt page
-function sendMessage(email, message) {
+// send message from contact page
+function sendMessage(email, userMessage) {
     return new Promise((resolve, reject) => {
         // email message
-        let messages = "Message Form Kontakt Page From The Email: " + email + " \n";
-        messages += "Message content: \n "+ message + "\n";
-        emailSender
-            .sendEmail("hshwairi@gmail.com", " Email From Kontakt Page ", messages)
-            .then(() => {
-                resolve();
-            })
-            .catch((error) => {
-                reject(error);
-            });
+        let message = `Message received from contact page from ${email}\n`;
+        message += 'Content:\n';
+        message += userMessage;
+        emailSender.sendEmail('felix.wurst@gmail.com', 'Message from contact page', message).then(() => {
+            resolve();
+        }).catch(error => {
+            reject(error);
+        });
     });
 }
 /* ***************************************************** EXPORT ******************************************************* */
@@ -394,8 +318,8 @@ module.exports = {
     resetPass,
     getAllUsers,
     getUser,
-    changeVerificationPost,
-    tellUserAboutAccountState,
+    changeVerification,
+    blockAccount,
     deleteUser,
     changeUserRole,
     sendMessage

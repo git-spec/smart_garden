@@ -1,10 +1,11 @@
+/* ******************************************************* SETUP ******************************************************* */
 const nodemailer = require('nodemailer');
 // create delivery box for email
 const transporter = nodemailer.createTransport({
-    host: "mail.coding-school.org",
+    host: 'mail.coding-school.org',
     port: 465,
     auth: {
-        user: "info@coding-school.org",
+        user: 'info@coding-school.org',
         pass: '!234qweR'
     },
     tls: {
@@ -12,15 +13,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Configuration with out hosting
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: 'ali.asra.bina@gmail.com',
-//         pass: '123456789kabul'
-//     }
-// })
-
+/* ******************************************************* FUNCTIONS ******************************************************* */
 // sending email to client
 function sendEmail(email, subject, message) {
     return new Promise((resolve, reject) => {
@@ -31,13 +24,14 @@ function sendEmail(email, subject, message) {
             text: message
         };
         transporter.sendMail(mailOption, function (error, info) {
-            if(error){
+            if (error) {
                 reject(error);
             } else {
                 resolve(info.response);
-            };
+            }
         });
     });
-};
+}
 
+/* ******************************************************* EXPORT ******************************************************* */
 module.exports = {sendEmail};
