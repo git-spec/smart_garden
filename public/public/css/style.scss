@@ -413,7 +413,9 @@ a {
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
-  html { font-size: 12px; }
+  html {
+    font-size: 12px;
+  }
   // frame border of container outside container
   body #root > div:last-child > .container {
     padding-top: 6rem;
@@ -452,7 +454,9 @@ a {
 
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) {
-  html { font-size: 14px; }
+  html {
+    font-size: 14px;
+  }
 }
 
 // Medium devices (tablets, 768px and up)
@@ -469,7 +473,15 @@ a {
 }
 
 // Extra large devices (large desktops, 1200px and up)
-@media (min-width: 1200px) {}
+@media (min-width: 2200px) {
+  html {
+    font-size: 18px;
+  }
+  // bigger container
+  .container {
+    min-width: 1800px;
+  }
+}
 
 /* *********************************************************** IMPORT ********************************************************* */
 @import 'breadcrumb';
