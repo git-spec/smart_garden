@@ -129,7 +129,6 @@ class Register extends React.Component {
                     {this.state.errorComponent}
                 </PopUpModal>
                 <Container className="pt-5 mt-5">
-                    <Row className="my-4"><Col></Col></Row>
                     <h1 className="text-trans mb-4">Registration</h1>
                     {/* <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p> */}
                     <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
