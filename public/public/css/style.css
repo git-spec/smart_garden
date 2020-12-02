@@ -609,30 +609,6 @@ button:focus {
   color: inherit;
 }
 
-.btn:hover.minus, .btn:active.minus, .btn.visited.minus, .btn:focus.minus, .btn:hover.plus, .btn:active.plus, .btn.visited.plus, .btn:focus.plus, .btn:hover.up, .btn:active.up, .btn.visited.up, .btn:focus.up, .btn:hover.down, .btn:active.down, .btn.visited.down, .btn:focus.down,
-button:hover.minus,
-button:active.minus,
-button.visited.minus,
-button:focus.minus,
-button:hover.plus,
-button:active.plus,
-button.visited.plus,
-button:focus.plus,
-button:hover.up,
-button:active.up,
-button.visited.up,
-button:focus.up,
-button:hover.down,
-button:active.down,
-button.visited.down,
-button:focus.down {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-  text-shadow: none !important;
-  outline: none;
-  opacity: 1;
-}
-
 .btn.btn-outline-light:hover,
 button.btn-outline-light:hover {
   color: inherit !important;
@@ -784,6 +760,30 @@ button.up > span:last-child {
   -webkit-transform: rotate(-45deg);
           transform: rotate(-45deg);
   float: right;
+}
+
+.btn:hover.minus, .btn:active.minus, .btn.visited.minus, .btn:focus.minus, .btn:hover.plus, .btn:active.plus, .btn.visited.plus, .btn:focus.plus, .btn:hover.up, .btn:active.up, .btn.visited.up, .btn:focus.up, .btn:hover.down, .btn:active.down, .btn.visited.down, .btn:focus.down,
+button:hover.minus,
+button:active.minus,
+button.visited.minus,
+button:focus.minus,
+button:hover.plus,
+button:active.plus,
+button.visited.plus,
+button:focus.plus,
+button:hover.up,
+button:active.up,
+button.visited.up,
+button:focus.up,
+button:hover.down,
+button:active.down,
+button.visited.down,
+button:focus.down {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  outline: none;
+  opacity: 1;
 }
 
 .color-5 ~ div .plus,
