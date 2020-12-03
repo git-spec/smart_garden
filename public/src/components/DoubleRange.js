@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class Range extends Component{
+class Range extends Component {
     render() {
         return(
             <div className="wrap-range"role="group" aria-label="multi thumb slider with ruler">

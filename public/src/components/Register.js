@@ -1,9 +1,13 @@
+/* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {Fragment} from 'react';
 // redux
 import {connect} from 'react-redux';
-import {setBackgroundImageAction} from '../actions';
-import {setBackgroundColor1Action} from '../actions';
-import {setBackgroundColor5Action} from '../actions';
+import {
+    setBackgroundImageAction,
+    setBackgroundColor1Action,
+    setBackgroundColor5Action
+} from '../actions';
 // reactstrap
 import {
     Container,
@@ -15,11 +19,16 @@ import {
     Input,
     Button
 } from 'reactstrap';
+// router dom
 import {Link} from 'react-router-dom';
+// components
 import PopUpModal from './PopUpModal';
-import validator from 'validator';
+// services
 import {registerPost} from '../services/api';
+// validator
+import validator from 'validator';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 class Register extends React.Component {
 
     constructor(props) {
@@ -42,6 +51,7 @@ class Register extends React.Component {
         this.props.setBackgroundColor5Action(null);
     }
 
+/* ********************************************************* EVENTS ********************************************************* */
     onRegisterBtnClick = e => {
         e.preventDefault();
         if (
@@ -85,13 +95,13 @@ class Register extends React.Component {
                         badgeClass = 'alert alert-danger';
                         badgeMessage = 'Server error, please contact the administrator!';
                         break;
-                    case 4:
-                        badgeClass = 'alert alert-danger';
-                        badgeMessage = 'Server error, please contact the administrator!';
-                        break;
                     case 3:
                         badgeClass = 'alert alert-danger';
                         badgeMessage = 'There is already a user with this email, please choose another one!';
+                        break;
+                    case 4:
+                        badgeClass = 'alert alert-danger';
+                        badgeMessage = 'Server error, please contact the administrator!';
                         break;
                     default:
                         break;
@@ -117,6 +127,7 @@ class Register extends React.Component {
         this.setState({showErrorModal: false});
     };
 
+/* ********************************************************* RENDER ********************************************************* */
     render() {
         return (
             <Fragment>
@@ -130,7 +141,6 @@ class Register extends React.Component {
                 </PopUpModal>
                 <Container className="pt-5 mt-5">
                     <h1 className="text-trans mb-4">Registration</h1>
-                    {/* <p className="text-trans mb-4">Welcome in the Smart Garden here you will live the future</p> */}
                     <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
                     <Form className="pb-md-0 pb-5">
                         <div className="col-lg-12 col-md-12">{this.state.resultElement}</div>
@@ -143,9 +153,7 @@ class Register extends React.Component {
                                         type="text"
                                         placeholder="Enter your first name"
                                         required
-                                        onChange={e => {
-                                            this.setState({firstName: e.target.value});
-                                        }}
+                                        onChange={e => this.setState({firstName: e.target.value})}
                                         value={this.state.firstName}
                                     />
                                 </FormGroup>
@@ -158,9 +166,7 @@ class Register extends React.Component {
                                         type="text"
                                         placeholder="Enter your last name"
                                         required
-                                        onChange={e => {
-                                            this.setState({lastName: e.target.value});
-                                        }}
+                                        onChange={e => this.setState({lastName: e.target.value})}
                                         value={this.state.lastName}
                                     />
                                 </FormGroup>
@@ -173,9 +179,7 @@ class Register extends React.Component {
                                         type="email"
                                         placeholder="Enter your email"
                                         required
-                                        onChange={e => {
-                                            this.setState({email: e.target.value});
-                                        }}
+                                        onChange={e => this.setState({email: e.target.value})}
                                         value={this.state.email}
                                     />
                                 </FormGroup>
@@ -188,9 +192,7 @@ class Register extends React.Component {
                                         type="text"
                                         placeholder="Enter an user name"
                                         required
-                                        onChange={e => {
-                                            this.setState({userName: e.target.value});
-                                        }}
+                                        onChange={e => this.setState({userName: e.target.value})}
                                         value={this.state.userName}
                                     />
                                 </FormGroup>
@@ -203,9 +205,7 @@ class Register extends React.Component {
                                         type="password"
                                         placeholder="Enter a password"
                                         required
-                                        onChange={e => {
-                                            this.setState({password: e.target.value});
-                                        }}
+                                        onChange={e => this.setState({password: e.target.value})}
                                         value={this.state.password}
                                     />
                                 </FormGroup>
@@ -218,9 +218,7 @@ class Register extends React.Component {
                                         type="password"
                                         placeholder="Repeat your password"
                                         required
-                                        onChange={e => {
-                                            this.setState({repassword: e.target.value});
-                                        }}
+                                        onChange={e => this.setState({repassword: e.target.value})}
                                         value={this.state.repassword}
                                     />
                                 </FormGroup>

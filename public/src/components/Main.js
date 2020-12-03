@@ -1,3 +1,5 @@
+/* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {Fragment, useEffect} from 'react';
 // redux
 import {connect} from "react-redux";
@@ -8,6 +10,7 @@ import {setBackgroundColor1Action} from '../actions';
 // import Images from "./images"
 import {Link} from 'react-router-dom';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 function Main(props) {
 
     useEffect(() => {
@@ -29,6 +32,7 @@ function Main(props) {
         </Fragment>
     );
 }
+
 const mapStateToProps = state => {
     return {
         backgroundUrl: state.backgroundUrl,
