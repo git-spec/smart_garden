@@ -7,7 +7,6 @@ export function useWindowDimension() {
 
     useEffect(() => {
         const debouncedResizeHandler = debounce(() => {
-            // console.log('***** debounced resize');
             setDimension([window.innerWidth, window.innerHeight]);
         }, 100); // 100ms
 
@@ -15,7 +14,6 @@ export function useWindowDimension() {
 
         return () => window.removeEventListener('resize', debouncedResizeHandler);
     }, []);
-
     return dimension;
 }
 

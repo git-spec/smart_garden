@@ -8,7 +8,6 @@ class PopUpModal extends React.Component {
     };
 
     render() {
-        // const {className, title, children} = this.props;
         return (
             <Modal isOpen={this.props.show} toggle={this.toggle}>
                 <ModalHeader toggle={this.toggle} className={this.props.className}>

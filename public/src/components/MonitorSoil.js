@@ -1,3 +1,4 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {Fragment, Component} from 'react';
 // reactstrap
@@ -9,7 +10,7 @@ import LineChart from './LineChart';
 // services
 import {deviceMoistureDataPost} from '../services/productsApi';
 
-
+/* ********************************************************* COMPONENT ********************************************************* */
 class MonitorSoil extends Component {
 
     state = {

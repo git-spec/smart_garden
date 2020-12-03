@@ -1,13 +1,19 @@
+/* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {Fragment, useState} from 'react';
+// reactstrap
 import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+// router dom
 import {useParams, Link} from 'react-router-dom';
+// components
 import PopUpModal from './PopUpModal';
+// services
 import {resetPass} from '../services/api';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 const Reset = () => {
-    const params = useParams();
 
-    // console.log(params.id / 135531);
+    const params = useParams();
 
     const initialState = {
         password: '',
@@ -16,33 +22,34 @@ const Reset = () => {
         errorElement: null,
         errorTitle: ''
     };
-    const [myState, setMyState] = useState(initialState);
+    const [state, setState] = useState(initialState);
 
+/* ********************************************************* EVENTS ********************************************************* */
     const onConfirmBtnClick = e => {
         e.preventDefault();
-        if (myState.password !== myState.repassword || myState.password.trim() === '') {
+        if (state.password !== state.repassword || state.password.trim() === '') {
             const errorElement = (
                 <ul>
-                    {myState.password.trim() === '' ? (
+                    {state.password.trim() === '' ? (
                         <li>Please enter a password</li>
                     ) : null}
-                    {myState.password !== myState.repassword ? (
+                    {state.password !== state.repassword ? (
                         <li>Passwords do not match</li>
                     ) : null}
                 </ul>
             );
-            setMyState({
-                ...myState,
+            setState({
+                ...state,
                 entriesError: true,
                 errorElement,
                 errorTitle: 'Entry Error'
             });
         } else {
-            resetPass(params.email, params.id, myState.password).then(data => {
+            resetPass(params.email, params.id, state.password).then(data => {
                 switch (data) {
                     case 1:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorElement: (
                                 <p> 
@@ -54,16 +61,16 @@ const Reset = () => {
                         });
                         break;
                     case 2:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorElement: <p>There was a server error</p>,
                             errorTitle: 'Server Error'
                         });
                         break;
                     case 4:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorElement: <p>The email you have used does not exist</p>,
                             errorTitle: 'Email Does Not Exist'
@@ -72,9 +79,9 @@ const Reset = () => {
                     default:
                         break;
                 }
-            }).catch(error => {
-                setMyState({
-                    ...myState,
+            }).catch(() => {
+                setState({
+                    ...state,
                     entriesError: true,
                     errorElement: <p>Can not send the data</p>,
                     errorTitle: 'Unknown Error'
@@ -82,17 +89,19 @@ const Reset = () => {
             });
         }
     };
+
     const closeModal = () => {
-        setMyState({
-            ...myState,
+        setState({
+            ...state,
             entriesError: false
         });
     };
 
+/* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal show={myState.entriesError} close={closeModal} className="bg-danger" title={myState.errorTitle}>
-                {myState.errorElement}
+            <PopUpModal show={state.entriesError} close={closeModal} className="bg-danger" title={state.errorTitle}>
+                {state.errorElement}
             </PopUpModal>
             <Container>
                 <h1 className="text-trans mb-4">Reset Password</h1><br />
@@ -107,13 +116,8 @@ const Reset = () => {
                                     type="password"
                                     placeholder="Enter your new password"
                                     required
-                                    onChange={e => {
-                                        setMyState({
-                                            ...myState,
-                                            password: e.target.value
-                                        });
-                                    }}
-                                    value={myState.password}
+                                    onChange={e => setState({...state, password: e.target.value})}
+                                    value={state.password}
                                 />
                                 <span className="required-star">*</span>
                             </Col>
@@ -124,13 +128,8 @@ const Reset = () => {
                                     type="password"
                                     placeholder="Repeat your new password"
                                     required
-                                    onChange={e => {
-                                        setMyState({
-                                            ...myState,
-                                            repassword: e.target.value
-                                        });
-                                    }}
-                                    value={myState.repassword}
+                                    onChange={e => setState({...state, repassword: e.target.value})}
+                                    value={state.repassword}
                                 />
                                 <span className="required-star">*</span>
                             </Col>
@@ -148,43 +147,3 @@ const Reset = () => {
 };
 
 export default Reset;
-
-// import React, {useEffect, useState} from 'react';
-// import {useParams, Link, useHistory} from 'react-router-dom';
-
-// import {sendParams} from '../services/api';
-
-// const resetPage = () => {
-//     const params = useParams();
-//     const history = useHistory();
-
-//     useEffect(() => {
-//         sendParams(params.email)
-//             .then(data => {
-//                 console.log(data);
-//                 if (data !== 2) {
-//                     history.push('/login');
-//                 } else {
-//                     history.push('/register');
-//                 }
-//             })
-//             .catch(err => {
-//                 history.push('/register');
-//             });
-//     }, []);
-
-//     return (
-//         <React.Fragment>
-//             <div className="breadcrumb">
-//                 <p>Thanks For Your Register</p>
-//                 <div className="container">
-//                     <Link className="breadcrumb-item" to="/login">
-//                         Login
-//                     </Link>
-//                 </div>
-//             </div>
-//         </React.Fragment>
-//     );
-// };
-
-// export default resetPage;

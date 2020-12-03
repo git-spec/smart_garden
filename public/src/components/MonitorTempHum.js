@@ -1,15 +1,14 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {Component, Fragment} from 'react';
 // reactstrap
-import {
-    Table
-} from 'reactstrap';
+import {Table} from 'reactstrap';
 // components
 import LineChartMultiple from './LineChartMultiple';
 // services
 import {deviceTempHumDataPost} from '../services/productsApi';
 
-
+/* ********************************************************* COMPONENT ********************************************************* */
 class MonitorTempHum extends Component {
 
     state = {

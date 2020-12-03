@@ -30,7 +30,6 @@ const CheckLogin = props => {
     } else {
         return <div>Loading...</div>;
     }
-
 };
 
 const mapStateToProps = state => {

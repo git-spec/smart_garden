@@ -1,3 +1,5 @@
+/* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {useEffect,useRef} from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 // redux
@@ -8,29 +10,36 @@ import {checkLoginPost} from '../services/api';
 // components
 import Navigation from './Navigation';
 import Footer from './Footer';
+import Fader from './Fader'
+
 import Main from './Main';
-import CheckLogin from './CheckLogin';
+
 import Register from './Register';
 import Login from './Login';
+import CheckLogin from './CheckLogin';
+
 import Verification from './Verification';
 import Password from './Password'
 import Reset from './Reset'
-import ErrorPage from './ErrorPage';
+
 import Products from './Products';
 import User from './User';
+
 import Admin from './Admin';
 import SubAdmin from './SubAdmin';
-import Impressum from './Impressum';
-import AGB from './AGB';
-import Kontakt from './Kontakt';
-import Fader from './Fader'
+
+import Terms from './Terms';
+import About from './About';
+import Contact from './Contact';
+
+import ErrorPage from './ErrorPage';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 const Router = props => {
 
     const divRef = useRef();
-
     const {setUserAction} = props;
+
     useEffect(() => {
         checkLoginPost().then(data => {
             if (data !== 10) { // user is logged in
@@ -47,10 +56,8 @@ const Router = props => {
                 divRef.current.style.visibility = 'hidden';
             };
         });
-
     // eslint-disable-next-line
     }, []);
-
 
 /* ******************************************************** RETURN ********************************************************* */
 return (
@@ -60,18 +67,18 @@ return (
             <Fader>
                 <Switch>
                     <Route path="/" exact component={Main} />
-                    <Route path="/AGB" exact component={AGB} />
-                    <Route path="/impressum" exact component={Impressum} />
-                    <Route path="/kontakt" exact component={Kontakt} />
                     <Route path="/register" exact component={Register} />
                     <Route path="/login" exact component={Login} />
                     <Route path="/verify/:email" exact component={Verification} />
                     <Route path='/password' exact component={Password} />
                     <Route path='/reset/:id/:email' exact component={Reset} />
+                    <Route path="/user/profile" exact component={() => <CheckLogin><User /></CheckLogin>} />
                     <Route path="/user/adminpanel" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
                     <Route path="/user/subadminpanel" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
-                    <Route path="/user/profile" exact component={() => <CheckLogin><User /></CheckLogin>} />
                     <Route path="/user/dashboard" exact component={() => <CheckLogin><Products /></CheckLogin>} />
+                    <Route path="/contact" exact component={Contact} />
+                    <Route path="/terms" exact component={Terms} />
+                    <Route path="/about" exact component={About} />
                     <Route path="/" component={ErrorPage} />
                 </Switch>
                 <Footer />

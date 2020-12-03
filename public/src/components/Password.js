@@ -1,16 +1,23 @@
+/* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {Fragment, useState} from 'react';
-import {Container,
-        Row,
-        Col,
-        Form,
-        FormGroup,
-        Label,
-        Input,
-        Button
+// reactstrap
+import {
+    Container,
+    Row,
+    Col,
+    Form,
+    FormGroup,
+    Label,
+    Input,
+    Button
 } from 'reactstrap';
+// components
 import PopUpModal from './PopUpModal';
+// services
 import {sendResetLink} from '../services/api';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 const Password = props => {
 
     const initialState = {
@@ -20,29 +27,30 @@ const Password = props => {
         errorTitle: '',
         modalClass: ''
     };
-    const [myState, setMyState] = useState(initialState);
+    const [state, setState] = useState(initialState);
 
+/* ********************************************************* EVENTS ********************************************************* */
     const onSendBtnClick = e => {
         e.preventDefault();
-        if (myState.email.trim() === '') {
+        if (state.email.trim() === '') {
             const errorElement = (
                 <ul>
-                    {myState.email.trim() === '' ? <li>Please enter your email</li> : null}
+                    {state.email.trim() === '' ? <li>Please enter your email</li> : null}
                 </ul>
             );
-            setMyState({
-                ...myState,
+            setState({
+                ...state,
                 entriesError: true,
                 errorTitle: 'Entry Error',
                 errorElement,
                 modalClass: 'bg-danger'
             });
         } else {
-            sendResetLink(myState.email).then(data => {
+            sendResetLink(state.email).then(data => {
                 switch (data) {
                     case 1:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorTitle: 'Reset Email Sent',
                             errorElement: <p>We have sent you a reset email,<br/>please check your emails!</p>,
@@ -50,8 +58,8 @@ const Password = props => {
                         });
                         break;
                     case 2:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorTitle: 'Server Error',
                             errorElement: <p>There was a server error</p>,
@@ -59,8 +67,8 @@ const Password = props => {
                         });
                         break;
                     case 4:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorTitle: 'Email Does Not Exist',
                             errorElement: <p>The email you have used does not exist</p>,
@@ -70,9 +78,9 @@ const Password = props => {
                     default:
                         break;
                 }
-            }).catch(error => {
-                setMyState({
-                    ...myState,
+            }).catch(() => {
+                setState({
+                    ...state,
                     entriesError: true,
                     errorTitle: 'Unknown Error',
                     errorElement: <p>Can not send the data</p>,
@@ -83,18 +91,19 @@ const Password = props => {
     };
 
     const closeModal = () => {
-        setMyState({
-            ...myState,
+        setState({
+            ...state,
             entriesError: false
         });
     };
 
+/* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal show={myState.entriesError} close={closeModal} className={myState.modalClass} title={myState.errorTitle}>
-                {myState.errorElement}
+            <PopUpModal show={state.entriesError} close={closeModal} className={state.modalClass} title={state.errorTitle}>
+                {state.errorElement}
             </PopUpModal>
-            <Container>
+            <Container className="pt-4 mt-5">
                 <Col sm="12" md={{size: 6, offset: 3}}>
                     <h1 className="text-trans mb-4">Password</h1>
                     <p className="text-trans mb-4">Forgot your password? Enter your email address to receive a link to reset it.</p>
@@ -109,13 +118,8 @@ const Password = props => {
                                     type="email"
                                     placeholder="Enter your email"
                                     required
-                                    onChange={e => {
-                                        setMyState({
-                                            ...myState,
-                                            email: e.target.value
-                                        });
-                                    }}
-                                    value={myState.email}
+                                    onChange={e => setState({...state, email: e.target.value})}
+                                    value={state.email}
                                 />
                             </FormGroup>
                         </Col>

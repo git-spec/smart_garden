@@ -1,93 +1,89 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { Container, Row, Col, Button, Table, Breadcrumb, BreadcrumbItem} from "reactstrap";
-import { Link } from "react-router-dom";
-import PopUpModal from "./PopUpModal";
-import {
-    getAllUsers,
-    changeVerificationPost,
-    deleteUserPost,
-} from "../services/api";
-import ConfirmModal from "./ConfirmModal";
+/* ********************************************************* IMPORT ********************************************************* */
+// react
+import React, {Fragment, useState, useEffect} from 'react';
+// redux
+import {connect} from 'react-redux';
+// router dom
+import {Link} from 'react-router-dom';
+// reactstrap
+import {Container, Row, Col, Button, Table, Breadcrumb, BreadcrumbItem} from 'reactstrap';
+// components
+import PopUpModal from './PopUpModal';
+import ConfirmModal from './ConfirmModal';
+// services
+import {getAllUsers, changeVerificationPost, deleteUserPost} from '../services/api';
 
-import { connect } from "react-redux";
+/* ********************************************************* COMPONENT ********************************************************* */
+const SubAdmin = props => {
 
-const SubAdmin = (props) => {
     const initialState = {
         users: [],
-        lastName: "",
-        userName: "",
-        City: "",
-        password: "",
-        repassword: "",
+        lastName: '',
+        userName: '',
+        City: '',
+        password: '',
+        repassword: '',
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-
         dropdownOpen: false,
         errorComponent: null,
         showErrorModal: false,
-        resultElement: null,
+        resultElement: null
     };
-
     const [myState, setMyState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers().then((data) => {
+        getAllUsers().then(data => {
             setMyState({
                 ...myState,
-                users: data,
+                users: data
             });
-        }).catch((err) => {
+        }).catch(err => {
             console.log(err);
         });
     // eslint-disable-next-line
     }, []);
 
-    /* ********************************************************* Change User Verification ********************************************************* */
-
+/* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        changeVerificationPost(userID, email, verified)
-            .then((data) => {
-                // changing user array in the component state
-                let newUsers = myState.users.map((user) => {
-                    if (user.id === userID) {
-                        user.verified = !user.verified;
-                    }
-                    return user;
-                });
-                setMyState({
-                    ...myState,
-                    users: newUsers,
-                });
-            })
-            .catch((err) => {
-                console.log(err);
+        changeVerificationPost(userID, email, verified).then(data => {
+            // change the user array in the state after it has been changed in the database
+            let newUsers = myState.users.map(user => {
+                if (user.id === userID) {
+                    user.verified = !user.verified;
+                }
+                return user;
             });
+            setMyState({
+                ...myState,
+                users: newUsers
+            });
+        }).catch(err => {
+            console.log(err);
+        });
     };
 
-    /* ********************************************************* DELETE User ********************************************************* */
-
+/* ********************************************************* DELETE USER ********************************************************* */
     const onDeleteBtnClick = (e, userID, idx) => {
         e.preventDefault();
-        const deleteUser = (userID) => {
-            deleteUserPost(userID)
-                .then((data) => {
-                    if (data === 1) {
-                        myState.users.splice(idx, 1);
-                        // changing user array in the component state
-                        setMyState({
-                            ...myState,
-                            users: myState.users,
-                            confirmModalShow: false,
-                        });
-                    } else {
-                        alert("Server error!");
-                    }
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
+        const deleteUser = userID => {
+            deleteUserPost(userID).then(data => {
+                if (data === 1) {
+                    myState.users.splice(idx, 1);
+                    // change the user array in the state after it has been changed in the database
+                    setMyState({
+                        ...myState,
+                        users: myState.users,
+                        confirmModalShow: false
+                    });
+                } else {
+                    alert('Server error!');
+                }
+            }).catch(err => {
+                console.log(err);
+            });
         };
         setMyState({
             ...myState,
@@ -99,48 +95,38 @@ const SubAdmin = (props) => {
                     You can not get it back after deleting.
                 </p>
             ),
-            confirmModalDelete: () => deleteUser(userID),
+            confirmModalDelete: () => deleteUser(userID)
         });
     };
 
-   /* ********************************************************* PopupModal ********************************************************* */
+/* ********************************************************* PopupModal ********************************************************* */
 
     const closeModal = () => {
         setMyState({
             ...myState,
-            showErrorModal: false,
+            showErrorModal: false
         });
     };
 
-    /* ********************************************************* start Rendering ********************************************************* */
-
+/* ********************************************************* start Rendering ********************************************************* */
     return (
         <Fragment>
-            {/* ********************************************************* ConfirmModal ********************************************************* */}
+{/* ********************************************************* ConfirmModal ********************************************************* */}
             <ConfirmModal
                 className="bg-danger"
                 title="Confirm Deletion"
                 show={myState.confirmModalShow}
                 delete={myState.confirmModalDelete}
-                close={() =>
-                    setMyState({ ...myState, confirmModalShow: false })
-                }
+                close={() => setMyState({...myState, confirmModalShow: false})}
             >
                 {myState.confirmModalContent}
             </ConfirmModal>
-            {/* ********************************************************* ConfirmModal ********************************************************* */}
-
-            <PopUpModal
-                show={myState.showErrorModal}
-                close={closeModal}
-                className="bg-danger"
-                title="Entries Error"
-            >
+{/* ********************************************************* ConfirmModal ********************************************************* */}
+            <PopUpModal show={myState.showErrorModal} close={closeModal} className="bg-danger" title="Entries Error">
                 {myState.errorComponent}
             </PopUpModal>
-
             <Container>
-                {/* ********************************************************* Breadcrumb ********************************************************* */}
+{/* ********************************************************* Breadcrumb ********************************************************* */}
                 <Row>
                     <Col lg="5"></Col>
                     <Col>
@@ -152,30 +138,23 @@ const SubAdmin = (props) => {
                                 <BreadcrumbItem>
                                     <Link to="/user">UserProfile</Link>
                                 </BreadcrumbItem>
-                                <BreadcrumbItem active>
-                                    S-AdminPanel
-                                </BreadcrumbItem>
+                                <BreadcrumbItem active>S-AdminPanel</BreadcrumbItem>
                             </Breadcrumb>
                         </Row>
                     </Col>
                     <br />
-                </Row>{" "}
+                </Row>{' '}
                 <br />
-                {/* ********************************************************* End ********************************************************* */}
+{/* ********************************************************* End ********************************************************* */}
                 <Row>
                     <Col xs={6} md={9}>
                         <br />
                         <h1 className="text-trans mb-4">
                             {/* Hello Admin: {props.user.firstName + " " + props.user.lastName} */}
                         </h1>
-                        <h3 className="text-trans mb-4">
-                            {" "}
-                            Welcome In Your Page
-                        </h3>
+                        <h3 className="text-trans mb-4"> Welcome In Your Page</h3>
                         <br />
-                        <p className="text-trans mb-4">
-                            Here you can easily edit your Profile
-                        </p>
+                        <p className="text-trans mb-4">Here you can easily edit your Profile</p>
                     </Col>
                 </Row>
                 <br />
@@ -196,9 +175,8 @@ const SubAdmin = (props) => {
                         <tbody>
                             {myState.users.map((user, idx) => {
                                 if (user.role === 'admin' || user.role === 'subadmin') {
-                                    return (null)
+                                    return null;
                                 } else {
-                                    
                                     return (
                                         <tr key={user.id}>
                                             <td>{user.firstname}</td>
@@ -207,48 +185,23 @@ const SubAdmin = (props) => {
                                             <td>{user.email}</td>
                                             <td>
                                                 <Button
-                                                    outline={
-                                                        user.verified ? false : true
-                                                    }
-                                                    color={
-                                                        user.verified
-                                                            ? "info"
-                                                            : "secondary"
-                                                    }
-                                                    disabled={
-                                                        user.role === "admin"
-                                                            ? true
-                                                            : false
-                                                    }
-                                                    onClick={(e) =>
-                                                        onVerifiedBtnClick(
-                                                            e,
-                                                            user.id,
-                                                            user.email,
-                                                            user.verified
-                                                        )
+                                                    outline={user.verified ? false : true}
+                                                    color={user.verified ? 'info' : 'secondary'}
+                                                    disabled={user.role === 'admin' ? true : false}
+                                                    onClick={e =>
+                                                        onVerifiedBtnClick(e, user.id, user.email, user.verified)
                                                     }
                                                 >
-                                                    {user.verified ? "Yes" : "No"}
+                                                    {user.verified ? 'Yes' : 'No'}
                                                 </Button>
                                             </td>
-                                            
+
                                             <td>
                                                 <Button
-                                                    onClick={(e) =>
-                                                        onDeleteBtnClick(
-                                                            e,
-                                                            user.id,
-                                                            idx
-                                                        )
-                                                    }
+                                                    onClick={e => onDeleteBtnClick(e, user.id, idx)}
                                                     outline
                                                     color="danger"
-                                                    disabled={
-                                                        user.role === "admin"
-                                                            ? true
-                                                            : false
-                                                    }
+                                                    disabled={user.role === 'admin' ? true : false}
                                                 >
                                                     Delete
                                                 </Button>
@@ -268,8 +221,7 @@ const SubAdmin = (props) => {
     );
 };
 
-const mapStateToProps = (state) => {
-    return { user: state.user };
+const mapStateToProps = state => {
+    return {user: state.user};
 };
-
 export default connect(mapStateToProps)(SubAdmin);
