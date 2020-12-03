@@ -1,8 +1,11 @@
+/* ********************************************************* IMPORT ********************************************************* */
 import React, {useEffect} from 'react';
 import {useParams, Link, useHistory} from 'react-router-dom';
 import {sendParams} from '../services/api';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 const Verification = () => {
+
     const params = useParams();
     const history = useHistory();
 
@@ -13,7 +16,7 @@ const Verification = () => {
             } else {
                 history.push('/register');
             }
-        }).catch(err => {
+        }).catch(() => {
             history.push('/register');
         });
     // eslint-disable-next-line

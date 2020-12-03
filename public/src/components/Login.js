@@ -1,38 +1,20 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {Fragment, useState, useEffect} from 'react';
 // reactstrap
-import {
-    Container,
-    Row,
-    Col,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    Button
-} from 'reactstrap';
+import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 // router dom
 import {Link, useHistory} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
-import {setUserAction,
-        setSocketAction,
-        setBackgroundColor5Action,
-        setBackgroundColor1Action
-} from '../actions';
+import {setUserAction, setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action} from '../actions';
 // components
 import PopUpModal from './PopUpModal';
 // services
 import {loginPost} from '../services/api';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 const Login = props => {
-
-    useEffect(() => {
-        props.setUserAction(null);
-        props.setBackgroundColor1Action("color-1");
-        props.setBackgroundColor5Action(null);
-    // eslint-disable-next-line
-    }, []);
 
     const history = useHistory();
 
@@ -43,45 +25,53 @@ const Login = props => {
         errorTitle: '',
         errorElement: null
     };
-    const [myState, setMyState] = useState(initialState);
+    const [state, setState] = useState(initialState);
 
+    useEffect(() => {
+        props.setUserAction(null);
+        props.setBackgroundColor1Action('color-1');
+        props.setBackgroundColor5Action(null);
+    // eslint-disable-next-line
+    }, []);
+
+/* ********************************************************* EVENTS ********************************************************* */
     const onLoginBtnClick = e => {
         e.preventDefault();
-        if (myState.email.trim() === '' || myState.password === '') {
+        if (state.email.trim() === '' || state.password === '') {
             const errorElement = (
                 <ul>
-                    {myState.email.trim() === '' ? <li>Please enter your email</li> : null}
-                    {myState.password === '' ? <li>Please enter your password</li> : null}
+                    {state.email.trim() === '' ? <li>Please enter your email</li> : null}
+                    {state.password === '' ? <li>Please enter your password</li> : null}
                 </ul>
             );
-            setMyState({
-                ...myState,
+            setState({
+                ...state,
                 entriesError: true,
                 errorTitle: 'Entry Error',
                 errorElement
             });
         } else {
-            loginPost(myState.email, myState.password).then(data => {
+            loginPost(state.email, state.password).then(data => {
                 switch (data) {
                     case 2:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorTitle: 'Server Error',
                             errorElement: <p>There was a server error</p>
                         });
                         break;
                     case 3:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorTitle: 'Wrong Password',
                             errorElement: <p>Your password is wrong</p>
                         });
                         break;
                     case 4:
-                        setMyState({
-                            ...myState,
+                        setState({
+                            ...state,
                             entriesError: true,
                             errorTitle: 'Email Does Not Exist',
                             errorElement: <p>The email you have used does not exist</p>
@@ -91,16 +81,16 @@ const Login = props => {
                         props.setUserAction(data);
                         if (data.role === 'admin') {
                             history.push('/user/adminpanel');
-                        } else if(data.role === 'subadmin'){
+                        } else if (data.role === 'subadmin') {
                             history.push('/user/subadminpanel');
-                        }else {
+                        } else {
                             history.push('/user/dashboard');
                         }
                         break;
                 }
-            }).catch(error => {
-                setMyState({
-                    ...myState,
+            }).catch(() => {
+                setState({
+                    ...state,
                     entriesError: true,
                     errorTitle: 'Unknown Error',
                     errorElement: <p>Can not send the data</p>
@@ -108,28 +98,25 @@ const Login = props => {
             });
         }
     };
-    
+
     const closeModal = () => {
-        setMyState({
-            ...myState,
+        setState({
+            ...state,
             entriesError: false
         });
     };
 
+/* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal show={myState.entriesError} close={closeModal} className="bg-danger" title={myState.errorTitle}>
-                {myState.errorElement}
+            <PopUpModal show={state.entriesError} close={closeModal} className="bg-danger" title={state.errorTitle}>
+                {state.errorElement}
             </PopUpModal>
             <Container className="pt-5 mt-5">
-                {/* <div className="breadcrumb">
-                <div className="container">
-                    <Link className="breadcrumb-item" to="/">Home</Link>
-                    <span className="breadcrumb-item active">Login</span>
-                </div>
-                </div> */}
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Login</h1>
-                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Log in to access your device management.</p>
+                <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
+                    Log in to access your device management.
+                </p>
                 <Form className="pb-md-0 pb-5">
                     <Row xs="1" sm="1">
                         <Col sm="12" md={{size: 6, offset: 3}}>
@@ -140,13 +127,8 @@ const Login = props => {
                                     type="email"
                                     placeholder="Enter your email or user name"
                                     required
-                                    onChange={e => {
-                                        setMyState({
-                                            ...myState,
-                                            email: e.target.value
-                                        });
-                                    }}
-                                    value={myState.email}
+                                    onChange={e => setState({...state, email: e.target.value})}
+                                    value={state.email}
                                 />
                             </FormGroup>
                         </Col>
@@ -157,7 +139,13 @@ const Login = props => {
                                         <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                     </Col>
                                     <Col xs="8" lg="6" className="text-right">
-                                        <span className="pr-2">Forgot your <Link to="/password" className="pr-1">Password</Link>?</span>
+                                        <span className="pr-2">
+                                            Forgot your{' '}
+                                            <Link to="/password" className="pr-1">
+                                                Password
+                                            </Link>
+                                            ?
+                                        </span>
                                     </Col>
                                 </Row>
                                 <Input
@@ -165,13 +153,8 @@ const Login = props => {
                                     type="password"
                                     placeholder="Enter your password"
                                     required
-                                    onChange={e => {
-                                        setMyState({
-                                            ...myState,
-                                            password: e.target.value
-                                        });
-                                    }}
-                                    value={myState.password}
+                                    onChange={e => setState({...state, password: e.target.value})}
+                                    value={state.password}
                                 />
                             </FormGroup>
                         </Col>

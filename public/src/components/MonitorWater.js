@@ -1,5 +1,6 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, { Fragment, Component } from 'react';
+import React, {Fragment, Component} from 'react';
 // reactstrap
 import {
     Input,
@@ -10,7 +11,7 @@ import {
     CustomInput
 } from 'reactstrap';
 
-
+/* ********************************************************* COMPONENT ********************************************************* */
 class MonitorWater extends Component {
 
     constructor(props) {
@@ -20,9 +21,6 @@ class MonitorWater extends Component {
             inputRangeDuration: this.props.device.water_duration,
             soilMoistureDevice: this.props.device.moisture_device_id,
             deviceID: null
-            // inputRangeMax: "100",
-            // graphHeightMax: 160,
-            // graphHeightMin: 20
         };
         this.rangeStatusMinRef = React.createRef();
         this.rangeStatusMaxRef = React.createRef();

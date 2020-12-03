@@ -1,37 +1,45 @@
 // react
-import React from "react";
+import React from 'react';
 // redux
-import { connect } from "react-redux";
+import {connect} from 'react-redux';
 // router dom
-import { Link, withRouter} from "react-router-dom";
+import {Link, withRouter} from 'react-router-dom';
 // reactstrap
-import {
-    Col,
-    Container
-} from "reactstrap";
+import {Col, Container} from 'reactstrap';
 
 function Footer({location}) {
-    if(location.pathname !== '/'){
+    if (location.pathname !== '/') {
         return (
             <Container fluid={true}>
                 <Col className="d-flex justify-content-center mt-5 mb-2">
-                    <a href="https://www.youtube.com" className="mx-2"><i className="fab fa-youtube"></i></a>
-                    <a href="https://www.instagram.com" className="mx-2"><i className="fab fa-instagram"></i></a>
-                    <a href="https://www.facebook.com" className="mx-2"><i className="fab fa-facebook"></i></a>
+                    <a href="https://www.youtube.com" className="mx-2">
+                        <i className="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://www.instagram.com" className="mx-2">
+                        <i className="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://www.facebook.com" className="mx-2">
+                        <i className="fab fa-facebook"></i>
+                    </a>
                 </Col>
                 <Col className="d-flex justify-content-center pb-4">
-                    <Link to="/Kontakt"  className="mx-3">Contact</Link>
-                    <Link to="/impressum" className="mx-3">Terms and Conditions</Link>
-                    <Link to="/AGB" className="mx-3">About</Link>
+                    <Link to="/contact" className="mx-3">
+                        Contact
+                    </Link>
+                    <Link to="/terms" className="mx-3">
+                        Terms and Conditions
+                    </Link>
+                    <Link to="/about" className="mx-3">
+                        About
+                    </Link>
                 </Col>
             </Container>
         );
     } else {
-        return(null)
-    }    
+        return null;
+    }
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
     return {user: state.user};
-}
-
+};
 export default connect(mapStateToProps)(withRouter(Footer));

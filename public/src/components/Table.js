@@ -1,13 +1,7 @@
 import React from 'react';
 import {Table} from 'reactstrap';
 
-const ReactTable = (props) => {
-
-    // const initialState = {
-    //   theadInput = '',
-    //   thInputs = []
-    // };
-    // const [state, setState] = React.useState(initialState);
+const ReactTable = props => {
 
     return (
         <Table borderless size="sm" className="mb-4">

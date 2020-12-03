@@ -1,3 +1,4 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {Fragment, Component} from 'react';
 // reactstrap
@@ -7,7 +8,7 @@ import LineChart from './LineChart';
 // services
 import {deviceLightDataPost} from '../services/productsApi';
 
-
+/* ********************************************************* COMPONENT ********************************************************* */
 class MonitorLight extends Component {
 
     state = {
