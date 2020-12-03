@@ -37,9 +37,9 @@ const Router = props => {
                 setUserAction(data);
             }
         });
-
+        // hide navbar background
         divRef.current.style.visibility = 'hidden';
-
+        // show navbar background
         window.addEventListener('scroll', e => {
             if(window.scrollY > 40) {
                 divRef.current.style.visibility = 'visible';
