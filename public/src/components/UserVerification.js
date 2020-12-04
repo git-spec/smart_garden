@@ -4,7 +4,7 @@ import {useParams, Link, useHistory} from 'react-router-dom';
 import {verifyUser} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const Verification = () => {
+const UserVerification = () => {
 
     const params = useParams();
     const history = useHistory();
@@ -36,4 +36,4 @@ const Verification = () => {
     );
 };
 
-export default Verification;
+export default UserVerification;

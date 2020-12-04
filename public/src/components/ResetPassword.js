@@ -11,7 +11,7 @@ import PopUpModal from './PopUpModal';
 import {resetPass} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const Reset = () => {
+const ResetPassword = () => {
 
     const params = useParams();
 
@@ -146,4 +146,4 @@ const Reset = () => {
     );
 };
 
-export default Reset;
+export default ResetPassword;

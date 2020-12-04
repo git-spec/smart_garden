@@ -16,7 +16,7 @@ import PopUpModal from './PopUpModal';
 import {editPost, getUser} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const User = props => {
+const UserProfile = props => {
 
     const imageInpRef = useRef();
 
@@ -293,4 +293,4 @@ const User = props => {
 const mapStateToProps = state => {
     return {user: state.user};
 };
-export default connect(mapStateToProps, {setBackgroundColor5Action, setBackgroundColor1Action})(User);
+export default connect(mapStateToProps, {setBackgroundColor5Action, setBackgroundColor1Action})(UserProfile);
