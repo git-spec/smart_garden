@@ -11,7 +11,7 @@ import {Container, Row, Col, Button, Table, ButtonGroup, Breadcrumb, BreadcrumbI
 import PopUpModal from './PopUpModal';
 import ConfirmModal from './ConfirmModal';
 // services
-import {getAllUsers, changeVerificationPost, deleteUserPost, changeUserRolePost} from '../services/api';
+import {getAllUsersPost, changeVerificationPost, deleteUserPost, changeUserRolePost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Admin = props => {
@@ -22,12 +22,12 @@ const Admin = props => {
         confirmModalContent: null,
         confirmModalDelete: null,
         errorComponent: null,
-        showErrorModal: false,
+        showErrorModal: false
     };
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers().then(data => {
+        getAllUsersPost().then(data => {
             setState({
                 ...state,
                 users: data

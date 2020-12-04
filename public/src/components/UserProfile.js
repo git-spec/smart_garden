@@ -13,7 +13,7 @@ import Image from 'react-bootstrap/Image';
 // components
 import PopUpModal from './PopUpModal';
 // services
-import {editPost, getUser} from '../services/api';
+import {editUserPost, getUserPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const UserProfile = props => {
@@ -41,7 +41,7 @@ const UserProfile = props => {
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
         // get user data from db
-        getUser(props.user.id).then(user => {
+        getUserPost(props.user.id).then(user => {
             if (user.img) {
                 setState({
                     ...state,
@@ -82,7 +82,7 @@ const UserProfile = props => {
                 showErrorModal: true
             });
         } else {
-            editPost(
+            editUserPost(
                 props.user.id,
                 state.firstName,
                 state.lastName,
@@ -98,7 +98,7 @@ const UserProfile = props => {
                     case 1:
                         badgeClass = 'alert alert-success';
                         badgeMessage = 'Your profile has been changed successfully.';
-                        getUser(props.user.id).then(user => {
+                        getUserPost(props.user.id).then(user => {
                             setState({
                                 ...state,
                                 userImg: user.img,
