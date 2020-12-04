@@ -73,8 +73,8 @@ return (
                     <Route path='/password' exact component={Password} />
                     <Route path='/reset/:id/:email' exact component={Reset} />
                     <Route path="/user/profile" exact component={() => <CheckLogin><User /></CheckLogin>} />
-                    <Route path="/user/adminpanel" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
-                    <Route path="/user/subadminpanel" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
+                    <Route path="/user/admin" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
+                    <Route path="/user/subadmin" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
                     <Route path="/user/dashboard" exact component={() => <CheckLogin><Products /></CheckLogin>} />
                     <Route path="/contact" exact component={Contact} />
                     <Route path="/terms" exact component={Terms} />
