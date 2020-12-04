@@ -55,7 +55,7 @@ import {
 } from '../services/productsApi';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const Products = props => {
+const Dashboard = props => {
     const history = useHistory();
     const [width] = useWindowDimension();
 
@@ -560,7 +560,7 @@ const Products = props => {
                             <Link to="/">Home</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem className="bg-transparent">
-                            <Link to="/user">UserProfile</Link>
+                            <Link to="/user/profile">UserProfile</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem className="bg-transparent" active>
                             DashBoard
@@ -921,4 +921,4 @@ const mapStateToProps = state => {
         socket: state.socket
     };
 };
-export default connect(mapStateToProps, {setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Products);
+export default connect(mapStateToProps, {setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Dashboard);

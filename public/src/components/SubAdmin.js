@@ -1,10 +1,10 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {Fragment, useState, useEffect} from 'react';
-// redux
-import {connect} from 'react-redux';
 // router dom
 import {Link} from 'react-router-dom';
+// redux
+import {connect} from 'react-redux';
 // reactstrap
 import {Container, Row, Col, Button, Table, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 // components
@@ -18,25 +18,18 @@ const SubAdmin = props => {
 
     const initialState = {
         users: [],
-        lastName: '',
-        userName: '',
-        City: '',
-        password: '',
-        repassword: '',
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-        dropdownOpen: false,
         errorComponent: null,
         showErrorModal: false,
-        resultElement: null
     };
-    const [myState, setMyState] = useState(initialState);
+    const [state, setState] = useState(initialState);
 
     useEffect(() => {
         getAllUsers().then(data => {
-            setMyState({
-                ...myState,
+            setState({
+                ...state,
                 users: data
             });
         }).catch(err => {
@@ -48,16 +41,16 @@ const SubAdmin = props => {
 /* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        changeVerificationPost(userID, email, verified).then(data => {
+        changeVerificationPost(userID, email, verified).then(() => {
             // change the user array in the state after it has been changed in the database
-            let newUsers = myState.users.map(user => {
+            let newUsers = state.users.map(user => {
                 if (user.id === userID) {
                     user.verified = !user.verified;
                 }
                 return user;
             });
-            setMyState({
-                ...myState,
+            setState({
+                ...state,
                 users: newUsers
             });
         }).catch(err => {
@@ -71,11 +64,11 @@ const SubAdmin = props => {
         const deleteUser = userID => {
             deleteUserPost(userID).then(data => {
                 if (data === 1) {
-                    myState.users.splice(idx, 1);
+                    state.users.splice(idx, 1);
                     // change the user array in the state after it has been changed in the database
-                    setMyState({
-                        ...myState,
-                        users: myState.users,
+                    setState({
+                        ...state,
+                        users: state.users,
                         confirmModalShow: false
                     });
                 } else {
@@ -83,83 +76,75 @@ const SubAdmin = props => {
                 }
             }).catch(err => {
                 console.log(err);
+                alert('Server error!');
             });
         };
-        setMyState({
-            ...myState,
+        setState({
+            ...state,
             confirmModalShow: true,
             confirmModalContent: (
                 <p>
                     Are you sure you want to delete this Users?
                     <br />
-                    You can not get it back after deleting.
+                    You can't undo it after deletion.
                 </p>
             ),
             confirmModalDelete: () => deleteUser(userID)
         });
     };
 
-/* ********************************************************* PopupModal ********************************************************* */
-
+/* ********************************************************* CLOSE MODAL ********************************************************* */
     const closeModal = () => {
-        setMyState({
-            ...myState,
+        setState({
+            ...state,
             showErrorModal: false
         });
     };
 
-/* ********************************************************* start Rendering ********************************************************* */
+/* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-{/* ********************************************************* ConfirmModal ********************************************************* */}
+{/* ********************************************************* MODALS ********************************************************* */}
             <ConfirmModal
                 className="bg-danger"
                 title="Confirm Deletion"
-                show={myState.confirmModalShow}
-                delete={myState.confirmModalDelete}
-                close={() => setMyState({...myState, confirmModalShow: false})}
+                show={state.confirmModalShow}
+                delete={state.confirmModalDelete}
+                close={() => setState({...state, confirmModalShow: false})}
             >
-                {myState.confirmModalContent}
+                {state.confirmModalContent}
             </ConfirmModal>
-{/* ********************************************************* ConfirmModal ********************************************************* */}
-            <PopUpModal show={myState.showErrorModal} close={closeModal} className="bg-danger" title="Entries Error">
-                {myState.errorComponent}
+            <PopUpModal 
+                show={state.showErrorModal} 
+                close={closeModal} 
+                className="bg-danger" 
+                title="Entries Error"
+            >
+                {state.errorComponent}
             </PopUpModal>
-            <Container>
-{/* ********************************************************* Breadcrumb ********************************************************* */}
-                <Row>
-                    <Col lg="5"></Col>
-                    <Col>
-                        <Row>
-                            <Breadcrumb>
-                                <BreadcrumbItem>
-                                    <Link to="/">Home</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbItem>
-                                    <Link to="/user">UserProfile</Link>
-                                </BreadcrumbItem>
-                                <BreadcrumbItem active>S-AdminPanel</BreadcrumbItem>
-                            </Breadcrumb>
-                        </Row>
-                    </Col>
-                    <br />
-                </Row>{' '}
-                <br />
-{/* ********************************************************* End ********************************************************* */}
+{/* ********************************************************* BREADCRUMB ********************************************************* */}
+            <Container className="pt-4 mt-5">
+                <Col className="p-0 mb-3">
+                    <Breadcrumb className="bg-transparent">
+                        <BreadcrumbItem className="bg-transparent">
+                            <Link to="/">Home</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent">
+                            <Link to="/user/profile">UserProfile</Link>
+                        </BreadcrumbItem>
+                        <BreadcrumbItem className="bg-transparent" active>
+                            SubAdminPanel
+                        </BreadcrumbItem>
+                    </Breadcrumb>
+                </Col>
+{/* ********************************************************* HEADLINE ********************************************************* */}
                 <Row>
                     <Col xs={6} md={9}>
-                        <br />
-                        <h1 className="text-trans mb-4">
-                            {/* Hello Admin: {props.user.firstName + " " + props.user.lastName} */}
-                        </h1>
-                        <h3 className="text-trans mb-4"> Welcome In Your Page</h3>
-                        <br />
-                        <p className="text-trans mb-4">Here you can easily edit your Profile</p>
+                        <h3 className="text-trans mb-4">Hello admin,</h3>
+                        <p className="text-trans mb-4">here you have access to the user settings:</p>
                     </Col>
                 </Row>
-                <br />
-                <br />
-                <br />
+{/* ********************************************************* TABLE ********************************************************* */}
                 <Row>
                     <Table hover dark responsive>
                         <thead>
@@ -173,7 +158,7 @@ const SubAdmin = props => {
                             </tr>
                         </thead>
                         <tbody>
-                            {myState.users.map((user, idx) => {
+                            {state.users.map((user, idx) => {
                                 if (user.role === 'admin' || user.role === 'subadmin') {
                                     return null;
                                 } else {
@@ -188,14 +173,11 @@ const SubAdmin = props => {
                                                     outline={user.verified ? false : true}
                                                     color={user.verified ? 'info' : 'secondary'}
                                                     disabled={user.role === 'admin' ? true : false}
-                                                    onClick={e =>
-                                                        onVerifiedBtnClick(e, user.id, user.email, user.verified)
-                                                    }
+                                                    onClick={e => onVerifiedBtnClick(e, user.id, user.email, user.verified)}
                                                 >
                                                     {user.verified ? 'Yes' : 'No'}
                                                 </Button>
                                             </td>
-
                                             <td>
                                                 <Button
                                                     onClick={e => onDeleteBtnClick(e, user.id, idx)}
@@ -213,9 +195,6 @@ const SubAdmin = props => {
                         </tbody>
                     </Table>
                 </Row>
-                <br />
-                <br />
-                <br />
             </Container>
         </Fragment>
     );

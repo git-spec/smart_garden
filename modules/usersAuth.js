@@ -5,7 +5,7 @@ var validator = require('validator');
 const passwordHash = require('password-hash');
 
 /* ***************************************************** FUNCTIONS ******************************************************* */
-// login with checking the user's email OR username
+// login with checking the user's email or username
 function checkUser(user, password) {
     return new Promise((resolve, reject) => {
         if (validator.isEmail(user)) {
@@ -152,7 +152,7 @@ function verifyUser(email) {
     });
 }
 
-// send verify confirm message
+// send verification confirmed email
 function confirmVerifiedUser(email) {
     return new Promise((resolve, reject) => {
         // email message
@@ -182,7 +182,7 @@ function sendResetLink(email) {
                     reject(error);
                 });
             } else {
-                reject(4);
+                reject(3);
             }
         }).catch(err => {
             reject(2);
@@ -208,7 +208,7 @@ function resetPass(email, id, pass) {
                     reject(error);
                 });
             } else {
-                reject(4);
+                reject(3);
             }
         }).catch(err => {
             reject(2);
@@ -225,8 +225,8 @@ function getAllUsers() {
             } else {
                 resolve(users);
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 }

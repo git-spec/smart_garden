@@ -11,7 +11,7 @@ import PopUpModal from './PopUpModal';
 import {resetPass} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const Reset = () => {
+const ResetPassword = () => {
 
     const params = useParams();
 
@@ -68,7 +68,7 @@ const Reset = () => {
                             errorTitle: 'Server Error'
                         });
                         break;
-                    case 4:
+                    case 3:
                         setState({
                             ...state,
                             entriesError: true,
@@ -146,4 +146,4 @@ const Reset = () => {
     );
 };
 
-export default Reset;
+export default ResetPassword;
