@@ -41,11 +41,11 @@ const {
     verifyUser, 
     confirmVerifiedUser, 
     sendResetLink, 
-    resetPass,
+    resetPassword,
     getAllUsers,
     getUser,
     changeVerification,
-    blockAccount,
+    blockUserAccount,
     deleteUser,
     changeUserRole,
     sendMessage
@@ -60,7 +60,9 @@ const port = process.env.PORT || 5000;
 // destructering
 const {log} = require("console");
 
-/* ********************************************************* POST ROUTES ********************************************************* */
+/* ***************************************************** POST ROUTES ******************************************************* */
+
+/* ***************************************************** REGISTRATION ******************************************************* */
 // register user
 app.post('/register', (req, res) => {
     // 1 user registered successfully
@@ -87,6 +89,22 @@ app.post('/register', (req, res) => {
     };
 });
 
+// verify user
+app.post('/verifyuser', (req, res) => {
+    // 1 user updated successfully to verified 
+    // 2 server error
+    verifyUser(req.body.email).then(() => {
+        confirmVerifiedUser(req.body.email).then(() => {
+            res.json(1);
+        }).catch(() => {
+            res.json(2);
+        });
+    }).catch(() => {
+        res.json(2);
+    });
+});
+
+/* ***************************************************** LOGIN ******************************************************* */
 // login user
 app.post('/login', (req, res) => {
     // user: user logged in successfully
@@ -123,6 +141,7 @@ app.post('/checklogin', (req, res) => {
     //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
     //     verified: 1
     // };
+    
     // 10 session does not exist
     if (req.session.user) {
         const user = req.session.user;
@@ -132,59 +151,25 @@ app.post('/checklogin', (req, res) => {
     }
 });
 
-// verify user
-app.post('/verifyuser', (req, res) => {
-    // 1 user updated successfully to verified 
+/* ***************************************************** USER PROFILE ******************************************************* */
+// get user to edit his data
+app.post('/getuser', (req, res) => {
+    // 1 get user successfully
     // 2 server error
-    verifyUser(req.body.email).then(() => {
-        confirmVerifiedUser(req.body.email).then(() => {
-            res.json(1);
-        }).catch(() => {
-            res.json(2);
-        });
-    }).catch(() => {
-        res.json(2);
-    });
-});
-
-// change user verification
-app.post('/changeverification', (req, res) => {
-    // 1 email has been sent successfully
-    // 2 server error
-    // 3 email has not been sent
-    if (req.body.verified) {
-        changeVerification(req.body.id).then(() => {
-            // inform the user by email that his account has been blocked
-            blockAccount(req.body.email).then(() => {
-                res.json(1);
-            }).catch(err => {
-                res.json(3);
-            });
-        }).catch(err => {
-            res.json(2)
-        });
-    } else {
-        changeVerification(req.body.id).then(() => {
-           res.json(1)
-        }).catch(err => {
-            res.json(2)
-        });
-    }
-});
-
-// change user role 
-app.post('/changeuserrole', (req, res) => {
-    // 1 user role was changed successfully 
-    // 2 user role was not changed 
-    changeUserRole(req.body.id, req.body.role).then(() => {
-        res.json(1)
+    // 3 no user found
+    getUser(req.body.id).then(user => {
+        res.json(user);
     }).catch(err => {
-        res.json(2)
+        if (err === 3) {
+            res.json(3);
+        } else {
+            res.json(2);
+        }
     });
 });
 
 // edit user
-app.post('/edit', (req, res) => {
+app.post('/edituser', (req, res) => {
     // 1 user edited successfully
     // 2 server error
     // 3 user already exists
@@ -226,6 +211,7 @@ app.post('/edit', (req, res) => {
     }
 });
 
+/* ***************************************************** RESET PASSWORD ******************************************************* */
 // send an email where the user can reset his password
 app.post('/sendresetlink', (req, res) => {
     // 1 email was sent successfully
@@ -243,11 +229,11 @@ app.post('/sendresetlink', (req, res) => {
 });
 
 // reset the password of the user
-app.post('/resetpass', (req, res) => {
+app.post('/resetpassword', (req, res) => {
     // 1 password reset was successful
     // 2 server error
     // 3 user does not exist
-    resetPass(req.body.email, req.body.id, req.body.pass).then(() => {
+    resetPassword(req.body.email, req.body.id, req.body.pass).then(() => {
         res.json(1);
     }).catch(err => {
         if (err === 3) {
@@ -258,17 +244,7 @@ app.post('/resetpass', (req, res) => {
     });
 });
 
-// delete user account 
-app.post('/deleteuser', (req, res) => {
-    // 1 account was deleted successfully
-    // 2 account was not deleted
-    deleteUser(req.body.id).then(() => {
-        res.json(1);
-    }).catch(() => {
-        res.json(2);
-    });
-});
-
+/* ***************************************************** ADMIN PANEL ******************************************************* */
 // get all users
 app.post('/getallusers', (req, res) => {
     // 1 get all users from db successfully
@@ -285,22 +261,54 @@ app.post('/getallusers', (req, res) => {
     });
 });
 
-// get user to edit his data
-app.post('/getuser', (req, res) => {
-    // 1 get user successfully
+// change user verification
+app.post('/changeverification', (req, res) => {
+    // 1 email has been sent successfully
     // 2 server error
-    // 3 no user found
-    getUser(req.body.id).then(user => {
-        res.json(user);
-    }).catch(err => {
-        if (err === 3) {
-            res.json(3);
-        } else {
+    // 3 email has not been sent
+    if (req.body.verified) {
+        changeVerification(req.body.id).then(() => {
+            // inform the user by email that his account has been blocked
+            blockUserAccount(req.body.email).then(() => {
+                res.json(1);
+            }).catch(err => {
+                res.json(3);
+            });
+        }).catch(err => {
             res.json(2);
-        }
+        });
+    } else {
+        changeVerification(req.body.id).then(() => {
+           res.json(1);
+        }).catch(err => {
+            res.json(2);
+        });
+    }
+});
+
+// change user role 
+app.post('/changeuserrole', (req, res) => {
+    // 1 user role was changed successfully 
+    // 2 user role was not changed 
+    changeUserRole(req.body.id, req.body.role).then(() => {
+        res.json(1);
+    }).catch(err => {
+        res.json(2);
     });
 });
 
+// delete user account 
+app.post('/deleteuser', (req, res) => {
+    // 1 account was deleted successfully
+    // 2 account was not deleted
+    deleteUser(req.body.id).then(() => {
+        res.json(1);
+    }).catch(() => {
+        res.json(2);
+    });
+});
+
+/* ***************************************************** CONTACT ******************************************************* */
 // send message from contact form
 app.post('/sendmessage', (req, res) => {
     // 1 message was sent successfully
