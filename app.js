@@ -64,9 +64,8 @@ const {log} = require("console");
 // register user
 app.post('/register', (req, res) => {
     // 1 user registered successfully
-    // 2 data error
-    // 3 user exists
-    // 4 server error
+    // 2 server error
+    // 3 user already exists
     const firstName = entities.encode(req.body.firstName.trim());
     const lastName = entities.encode(req.body.lastName.trim());
     const userName = entities.encode(req.body.userName.trim());
@@ -80,7 +79,7 @@ app.post('/register', (req, res) => {
             if (err === "exist") {
                 res.json(3);
             } else{
-                res.json(4);
+                res.json(2);
             }
         })
     } else {
@@ -90,7 +89,7 @@ app.post('/register', (req, res) => {
 
 // login user
 app.post('/login', (req, res) => {
-    // 1 user logged in successfully
+    // user: user logged in successfully
     // 2 server error
     // 3 password is wrong
     // 4 user does not exist
@@ -134,17 +133,17 @@ app.post('/checklogin', (req, res) => {
 });
 
 // verify user
-app.post('/verification', (req, res) => {
+app.post('/verifyuser', (req, res) => {
     // 1 user updated successfully to verified 
     // 2 server error
     verifyUser(req.body.email).then(() => {
         confirmVerifiedUser(req.body.email).then(() => {
             res.json(1);
-        }).catch(err => {
+        }).catch(() => {
             res.json(2);
         });
-    }).catch(err => {
-        res.json(2)
+    }).catch(() => {
+        res.json(2);
     });
 });
 
@@ -187,9 +186,8 @@ app.post('/changeuserrole', (req, res) => {
 // edit user
 app.post('/edit', (req, res) => {
     // 1 user edited successfully
-    // 2 data error
-    // 3 user exists
-    // 4 server error
+    // 2 server error
+    // 3 user already exists
     const id = req.body.id;
     const firstName = entities.encode(req.body.firstName.trim());
     const lastName = entities.encode(req.body.lastName.trim());
@@ -205,7 +203,7 @@ app.post('/edit', (req, res) => {
                 if (err === "exist") {
                     res.json(3);
                 } else{
-                    res.json(4);
+                    res.json(2);
                 }
             })
         } else {
@@ -219,7 +217,7 @@ app.post('/edit', (req, res) => {
                 if (err === "exist") {
                     res.json(3);
                 } else{
-                    res.json(4);
+                    res.json(2);
                 }
             })
         } else {
@@ -232,14 +230,14 @@ app.post('/edit', (req, res) => {
 app.post('/sendresetlink', (req, res) => {
     // 1 email was sent successfully
     // 2 server error
-    // 4 user does not exist
+    // 3 user does not exist
     sendResetLink(req.body.email).then(() => {
         res.json(1);
     }).catch(err => {
-        if (err === 4) {
-            res.json(4)
+        if (err === 3) {
+            res.json(3);
         } else {
-            res.json(2)
+            res.json(2);
         }
     });
 });
@@ -248,12 +246,12 @@ app.post('/sendresetlink', (req, res) => {
 app.post('/resetpass', (req, res) => {
     // 1 password reset was successful
     // 2 server error
-    // 4 user does not exist
+    // 3 user does not exist
     resetPass(req.body.email, req.body.id, req.body.pass).then(() => {
         res.json(1);
     }).catch(err => {
-        if (err === 4) {
-            res.json(4);
+        if (err === 3) {
+            res.json(3);
         } else {
             res.json(2);
         }
@@ -265,9 +263,9 @@ app.post('/deleteuser', (req, res) => {
     // 1 account was deleted successfully
     // 2 account was not deleted
     deleteUser(req.body.id).then(() => {
-        res.json(1)
-    }).catch(err => {
-        res.json(2)
+        res.json(1);
+    }).catch(() => {
+        res.json(2);
     });
 });
 
@@ -295,7 +293,7 @@ app.post('/getuser', (req, res) => {
     getUser(req.body.id).then(user => {
         res.json(user);
     }).catch(err => {
-        if (err === 2) {
+        if (err === 3) {
             res.json(3);
         } else {
             res.json(2);
@@ -308,10 +306,10 @@ app.post('/sendmessage', (req, res) => {
     // 1 message was sent successfully
     // 2 message was not sent
     if (req.body.email.trim() && req.body.message.trim()) {
-        sendMessage(req.body.email.trim(), req.body.message).then(data => {
+        sendMessage(req.body.email.trim(), req.body.message).then(() => {
             res.json(1);
-        }).catch(err => {
-            res.json(2)
+        }).catch(() => {
+            res.json(2);
         })
     } else {
         res.json(2);

@@ -1,16 +1,16 @@
 /* ********************************************************* IMPORT ********************************************************* */
 import React, {useEffect} from 'react';
 import {useParams, Link, useHistory} from 'react-router-dom';
-import {sendParams} from '../services/api';
+import {verifyUser} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const Verification = () => {
+const UserVerification = () => {
 
     const params = useParams();
     const history = useHistory();
 
     useEffect(() => {
-        sendParams(params.email).then(data => {
+        verifyUser(params.email).then(data => {
             if (data !== 2) {
                 history.push('/login');
             } else {
@@ -36,4 +36,4 @@ const Verification = () => {
     );
 };
 
-export default Verification;
+export default UserVerification;

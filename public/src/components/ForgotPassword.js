@@ -18,7 +18,7 @@ import PopUpModal from './PopUpModal';
 import {sendResetLink} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const Password = props => {
+const ForgotPassword = props => {
 
     const initialState = {
         email: '',
@@ -66,7 +66,7 @@ const Password = props => {
                             modalClass: 'bg-danger'
                         });
                         break;
-                    case 4:
+                    case 3:
                         setState({
                             ...state,
                             entriesError: true,
@@ -135,4 +135,4 @@ const Password = props => {
     );
 };
 
-export default Password;
+export default ForgotPassword;

@@ -18,12 +18,12 @@ import Register from './Register';
 import Login from './Login';
 import CheckLogin from './CheckLogin';
 
-import Verification from './Verification';
-import Password from './Password'
-import Reset from './Reset'
+import UserVerification from './UserVerification';
+import ForgotPassword from './ForgotPassword'
+import ResetPassword from './ResetPassword'
 
-import Products from './Products';
-import User from './User';
+import Dashboard from './Dashboard';
+import UserProfile from './UserProfile';
 
 import Admin from './Admin';
 import SubAdmin from './SubAdmin';
@@ -69,13 +69,13 @@ return (
                     <Route path="/" exact component={Main} />
                     <Route path="/register" exact component={Register} />
                     <Route path="/login" exact component={Login} />
-                    <Route path="/verify/:email" exact component={Verification} />
-                    <Route path='/password' exact component={Password} />
-                    <Route path='/reset/:id/:email' exact component={Reset} />
-                    <Route path="/user/profile" exact component={() => <CheckLogin><User /></CheckLogin>} />
-                    <Route path="/user/adminpanel" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
-                    <Route path="/user/subadminpanel" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
-                    <Route path="/user/dashboard" exact component={() => <CheckLogin><Products /></CheckLogin>} />
+                    <Route path="/verify/:email" exact component={UserVerification} />
+                    <Route path='/password' exact component={ForgotPassword} />
+                    <Route path='/reset/:id/:email' exact component={ResetPassword} />
+                    <Route path="/user/profile" exact component={() => <CheckLogin><UserProfile /></CheckLogin>} />
+                    <Route path="/user/admin" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
+                    <Route path="/user/subadmin" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
+                    <Route path="/user/dashboard" exact component={() => <CheckLogin><Dashboard /></CheckLogin>} />
                     <Route path="/contact" exact component={Contact} />
                     <Route path="/terms" exact component={Terms} />
                     <Route path="/about" exact component={About} />
