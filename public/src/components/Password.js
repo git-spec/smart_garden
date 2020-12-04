@@ -66,7 +66,7 @@ const Password = props => {
                             modalClass: 'bg-danger'
                         });
                         break;
-                    case 4:
+                    case 3:
                         setState({
                             ...state,
                             entriesError: true,

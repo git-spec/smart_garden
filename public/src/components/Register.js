@@ -99,10 +99,6 @@ class Register extends React.Component {
                         badgeClass = 'alert alert-danger';
                         badgeMessage = 'There is already a user with this email, please choose another one!';
                         break;
-                    case 4:
-                        badgeClass = 'alert alert-danger';
-                        badgeMessage = 'Server error, please contact the administrator!';
-                        break;
                     default:
                         break;
                 }

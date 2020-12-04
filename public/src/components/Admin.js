@@ -39,7 +39,6 @@ const Admin = props => {
     }, []);
 
 /* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
-
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
         changeVerificationPost(userID, email, verified).then(() => {
@@ -77,6 +76,7 @@ const Admin = props => {
                 }
             }).catch(err => {
                 console.log(err);
+                alert('Server error!');
             });
         };
         setState({

@@ -68,7 +68,7 @@ const Reset = () => {
                             errorTitle: 'Server Error'
                         });
                         break;
-                    case 4:
+                    case 3:
                         setState({
                             ...state,
                             entriesError: true,

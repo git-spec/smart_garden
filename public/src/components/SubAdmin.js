@@ -76,6 +76,7 @@ const SubAdmin = props => {
                 }
             }).catch(err => {
                 console.log(err);
+                alert('Server error!');
             });
         };
         setState({
