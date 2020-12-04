@@ -18,18 +18,11 @@ const Admin = props => {
 
     const initialState = {
         users: [],
-        lastName: '',
-        userName: '',
-        City: '',
-        password: '',
-        repassword: '',
         confirmModalShow: false,
         confirmModalContent: null,
         confirmModalDelete: null,
-        dropdownOpen: false,
         errorComponent: null,
         showErrorModal: false,
-        resultElement: null
     };
     const [state, setState] = useState(initialState);
 
@@ -93,14 +86,14 @@ const Admin = props => {
                 <p>
                     Are you sure you want to delete this user?
                     <br />
-                    You cannot undo it after deletion.
+                    You can't undo it after deletion.
                 </p>
             ),
             confirmModalDelete: () => deleteUser(userID)
         });
     };
 
-/* ********************************************************* ROLE BUTTON ********************************************************* */
+/* ********************************************************* CHANGE USER ROLE ********************************************************* */
     const changeUserRole = (e, role, userID) => {
         e.preventDefault();
         changeUserRolePost(userID, role).then(() => {
@@ -120,7 +113,7 @@ const Admin = props => {
         });
     };
 
-/* ********************************************************* POPUPMODAL ********************************************************* */
+/* ********************************************************* CLOSE MODAL ********************************************************* */
 
     const closeModal = () => {
         setState({
@@ -168,12 +161,10 @@ const Admin = props => {
 {/* ********************************************************* HEADLINE ********************************************************* */}
                 <Row>
                     <Col xs={6} md={9}>
-                        <br />
                         <h3 className="text-trans mb-4">Hello admin,</h3>
                         <p className="text-trans mb-4">here you have access to the user settings.</p>
                     </Col>
                 </Row>
-                <br />
 {/* ********************************************************* TABLE ********************************************************* */}
                 <Row>
                     <Table hover dark responsive>
@@ -252,9 +243,6 @@ const Admin = props => {
                         </tbody>
                     </Table>
                 </Row>
-                <br />
-                <br />
-                <br />
             </Container>
         </Fragment>
     );
