@@ -90,9 +90,9 @@ export const loginPost = (email, password) => {
     });
 };
 
-export const sendParams = email => {
+export const verifyUser = email => {
     return new Promise((resolve, reject) => {
-        fetch('/verification', {
+        fetch('/verifyuser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
