@@ -45,7 +45,7 @@ const {
     getAllUsers,
     getUser,
     changeVerification,
-    blockUserAccount,
+    informBlockedUserByEmail,
     deleteUser,
     changeUserRole,
     sendMessage
@@ -141,7 +141,7 @@ app.post('/checklogin', (req, res) => {
     //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
     //     verified: 1
     // };
-    
+
     // 10 session does not exist
     if (req.session.user) {
         const user = req.session.user;
@@ -154,7 +154,7 @@ app.post('/checklogin', (req, res) => {
 /* ***************************************************** USER PROFILE ******************************************************* */
 // get user to edit his data
 app.post('/getuser', (req, res) => {
-    // 1 get user successfully
+    // user: get user successfully
     // 2 server error
     // 3 no user found
     getUser(req.body.id).then(user => {
@@ -247,7 +247,7 @@ app.post('/resetpassword', (req, res) => {
 /* ***************************************************** ADMIN PANEL ******************************************************* */
 // get all users
 app.post('/getallusers', (req, res) => {
-    // 1 get all users from db successfully
+    // users: get all users from db successfully
     // 2 server error
     // 3 no users found
     getAllUsers().then((users) => {
@@ -263,24 +263,24 @@ app.post('/getallusers', (req, res) => {
 
 // change user verification
 app.post('/changeverification', (req, res) => {
-    // 1 email has been sent successfully
+    // 1 account has been blocked and email has been sent successfully
     // 2 server error
     // 3 email has not been sent
     if (req.body.verified) {
         changeVerification(req.body.id).then(() => {
             // inform the user by email that his account has been blocked
-            blockUserAccount(req.body.email).then(() => {
+            informBlockedUserByEmail(req.body.email).then(() => {
                 res.json(1);
-            }).catch(err => {
+            }).catch(() => {
                 res.json(3);
             });
-        }).catch(err => {
+        }).catch(() => {
             res.json(2);
         });
     } else {
         changeVerification(req.body.id).then(() => {
            res.json(1);
-        }).catch(err => {
+        }).catch(() => {
             res.json(2);
         });
     }
@@ -289,10 +289,10 @@ app.post('/changeverification', (req, res) => {
 // change user role 
 app.post('/changeuserrole', (req, res) => {
     // 1 user role was changed successfully 
-    // 2 user role was not changed 
+    // 2 server error 
     changeUserRole(req.body.id, req.body.role).then(() => {
         res.json(1);
-    }).catch(err => {
+    }).catch(() => {
         res.json(2);
     });
 });

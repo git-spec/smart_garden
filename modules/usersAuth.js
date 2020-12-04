@@ -262,7 +262,7 @@ function changeVerification(id) {
 }
 
 // inform the user by email that his account has been blocked
-function blockUserAccount(email) {
+function informBlockedUserByEmail(email) {
     return new Promise((resolve, reject) => {
         // email message
         let message = 'Your account has been blocked!\n';
@@ -326,7 +326,7 @@ module.exports = {
     getAllUsers,
     getUser,
     changeVerification,
-    blockUserAccount,
+    informBlockedUserByEmail,
     deleteUser,
     changeUserRole,
     sendMessage
