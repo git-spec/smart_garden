@@ -114,7 +114,6 @@ const Admin = props => {
     };
 
 /* ********************************************************* CLOSE MODAL ********************************************************* */
-
     const closeModal = () => {
         setState({
             ...state,
@@ -162,7 +161,7 @@ const Admin = props => {
                 <Row>
                     <Col xs={6} md={9}>
                         <h3 className="text-trans mb-4">Hello admin,</h3>
-                        <p className="text-trans mb-4">here you have access to the user settings.</p>
+                        <p className="text-trans mb-4">here you have access to the user settings:</p>
                     </Col>
                 </Row>
 {/* ********************************************************* TABLE ********************************************************* */}

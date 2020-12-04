@@ -560,7 +560,7 @@ const Products = props => {
                             <Link to="/">Home</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem className="bg-transparent">
-                            <Link to="/user">UserProfile</Link>
+                            <Link to="/user/profile">UserProfile</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem className="bg-transparent" active>
                             DashBoard
