@@ -28,10 +28,17 @@ const Admin = props => {
 
     useEffect(() => {
         getAllUsersPost().then(data => {
-            setState({
-                ...state,
-                users: data
-            });
+            switch (data) {
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('No users found!');
+                    break;
+                default:
+                    setState({...state, users: data});
+                    break;
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -41,18 +48,27 @@ const Admin = props => {
 /* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        changeVerificationPost(userID, email, verified).then(() => {
-            // change the user array in the state after it has been changed in the database
-            let newUsers = state.users.map(user => {
-                if (user.id === userID) {
-                    user.verified = !user.verified;
-                }
-                return user;
-            });
-            setState({
-                ...state,
-                users: newUsers
-            });
+        changeVerificationPost(userID, email, verified).then(data => {
+            switch (data) {
+                case 1:
+                    // change the user array in the state after it has been changed in the database
+                    let newUsers = state.users.map(user => {
+                        if (user.id === userID) {
+                            user.verified = !user.verified;
+                        }
+                        return user;
+                    });
+                    setState({...state, users: newUsers});
+                    break;
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('Email has not been sent!');
+                    break;
+                default:
+                    break;
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -96,18 +112,19 @@ const Admin = props => {
 /* ********************************************************* CHANGE USER ROLE ********************************************************* */
     const changeUserRole = (e, role, userID) => {
         e.preventDefault();
-        changeUserRolePost(userID, role).then(() => {
-            // change the user array in the state after it has been changed in the database
-            let newUsers = state.users.map(user => {
-                if (user.id === userID) {
-                    user.role = role;
-                }
-                return user;
-            });
-            setState({
-                ...state,
-                users: newUsers
-            });
+        changeUserRolePost(userID, role).then(data => {
+            if (data === 1) {
+                // change the user array in the state after it has been changed in the database
+                let newUsers = state.users.map(user => {
+                    if (user.id === userID) {
+                        user.role = role;
+                    }
+                    return user;
+                });
+                setState({...state, users: newUsers});
+            } else {
+                alert('Server error!');
+            }
         }).catch(err => {
             console.log(err);
         });

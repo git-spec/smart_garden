@@ -42,23 +42,33 @@ const UserProfile = props => {
         props.setBackgroundColor5Action(null);
         // get user data from db
         getUserPost(props.user.id).then(user => {
-            if (user.img) {
-                setState({
-                    ...state,
-                    firstName: user.firstname,
-                    lastName: user.lastname,
-                    userName: user.username,
-                    city: user.city,
-                    userImg: user.img
-                });
-            } else {
-                setState({
-                    ...state,
-                    firstName: user.firstname,
-                    lastName: user.lastname,
-                    userName: user.username,
-                    city: user.city
-                });
+            switch (user) {
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('No user found!');
+                    break;
+                default:
+                    if (user.img) {
+                        setState({
+                            ...state,
+                            firstName: user.firstname,
+                            lastName: user.lastname,
+                            userName: user.username,
+                            city: user.city,
+                            userImg: user.img
+                        });
+                    } else {
+                        setState({
+                            ...state,
+                            firstName: user.firstname,
+                            lastName: user.lastname,
+                            userName: user.username,
+                            city: user.city
+                        });
+                    }        
+                    break;
             }
         }).catch(err => {
             console.log(err);
