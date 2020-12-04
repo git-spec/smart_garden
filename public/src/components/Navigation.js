@@ -79,14 +79,14 @@ function Navigation(props) {
                     </NavItem>
                     {props.user.role === 'admin' && (
                         <NavItem>
-                            <NavLink tag={Link} to="/user/adminPanel">
+                            <NavLink tag={Link} to="/user/admin">
                                 panel
                             </NavLink>
                         </NavItem>
                     )}
                     {props.user.role === 'subadmin' && (
                         <NavItem>
-                            <NavLink tag={Link} to="/user/subadminPanel">
+                            <NavLink tag={Link} to="/user/subadmin">
                                 panel
                             </NavLink>
                         </NavItem>
