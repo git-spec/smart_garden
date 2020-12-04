@@ -10,14 +10,14 @@ export const checkHubNumPost = hubNum => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -34,14 +34,14 @@ export const checkDeviceNumPost = deviceNum => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -58,14 +58,14 @@ export const addHubPost = (hubName, hubNum) => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -82,14 +82,14 @@ export const addDevicePost = (deviceName, deviceNum, hubID) => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -105,14 +105,14 @@ export const getHubsPost = () => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -128,14 +128,14 @@ export const getDevicesPost = () => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -152,14 +152,14 @@ export const deleteHubPost = hubID => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -176,14 +176,14 @@ export const deleteDevicePost = deviceID => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -200,14 +200,14 @@ export const deviceOnOffPost = (deviceSN, deviceStatus) => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -224,14 +224,14 @@ export const saveRangesPost = (inputRangeTime, inputRangeDuration, deviceSn, soi
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -248,14 +248,14 @@ export const deviceMoistureDataPost = (deviceID) => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -272,14 +272,14 @@ export const deviceTempHumDataPost = (deviceID) => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };
@@ -296,14 +296,14 @@ export const deviceLightDataPost = (deviceID) => {
             if (response.status === 200) {
                 response.json().then(data => {
                     resolve(data);
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(new Error('Can not send data to server. Response number: ' + response.status));
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 };

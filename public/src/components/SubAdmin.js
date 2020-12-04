@@ -11,7 +11,7 @@ import {Container, Row, Col, Button, Table, Breadcrumb, BreadcrumbItem} from 're
 import PopUpModal from './PopUpModal';
 import ConfirmModal from './ConfirmModal';
 // services
-import {getAllUsers, changeVerificationPost, deleteUserPost} from '../services/api';
+import {getAllUsersPost, changeVerificationPost, deleteUserPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const SubAdmin = props => {
@@ -22,16 +22,23 @@ const SubAdmin = props => {
         confirmModalContent: null,
         confirmModalDelete: null,
         errorComponent: null,
-        showErrorModal: false,
+        showErrorModal: false
     };
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers().then(data => {
-            setState({
-                ...state,
-                users: data
-            });
+        getAllUsersPost().then(data => {
+            switch (data) {
+                case 2:
+                    alert('Server Error!');
+                    break;
+                case 3:
+                    alert('No Users Found!');
+                    break;
+                default:
+                    setState({...state, users: data});
+                    break;
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -41,18 +48,27 @@ const SubAdmin = props => {
 /* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        changeVerificationPost(userID, email, verified).then(() => {
-            // change the user array in the state after it has been changed in the database
-            let newUsers = state.users.map(user => {
-                if (user.id === userID) {
-                    user.verified = !user.verified;
-                }
-                return user;
-            });
-            setState({
-                ...state,
-                users: newUsers
-            });
+        changeVerificationPost(userID, email, verified).then(data => {
+            switch (data) {
+                case 1:
+                    // change the user array in the state after it has been changed in the database
+                    let newUsers = state.users.map(user => {
+                        if (user.id === userID) {
+                            user.verified = !user.verified;
+                        }
+                        return user;
+                    });
+                    setState({...state, users: newUsers});
+                    break;
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('Email has not been sent!');
+                    break;
+                default:
+                    break;
+            }    
         }).catch(err => {
             console.log(err);
         });

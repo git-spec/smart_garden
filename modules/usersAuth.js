@@ -4,8 +4,63 @@ const emailSender = require('./emailSender');
 var validator = require('validator');
 const passwordHash = require('password-hash');
 
-/* ***************************************************** FUNCTIONS ******************************************************* */
-// login with checking the user's email or username
+/* ***************************************************** REGISTRATION ******************************************************* */
+// register user
+function registerUser(firstName, lastName, userName, email, password) {
+    return new Promise((resolve, reject) => {
+        runQuery(
+            `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
+            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
+        ).then(() => {
+            // email message
+            let message = `Hello ${firstName} ${lastName},\n`;
+            message += 'Welcome to our website!\n';
+            message += 'To verify your email address please click on the following link:\n';
+            message += `http://localhost:3000/verify/${email}/`;
+            emailSender.sendEmail(email, 'Verify your email', message).then(() => {
+                resolve();
+            }).catch(err => {
+                reject(err);
+            });
+        }).catch(err => {
+            if (err.errno === 1062) {
+                reject('exist');
+            } else {
+                reject(err);
+            }
+        });
+    });
+}
+
+// verify the user after registration
+function verifyUser(email) {
+    return new Promise((resolve, reject) => {
+        runQuery(`UPDATE users SET users.verified=1 WHERE users.email='${email}'`).then(() => {
+            resolve();
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
+// send email that verification is confirmed
+function confirmVerifiedUser(email) {
+    return new Promise((resolve, reject) => {
+        // email message
+        let message = 'Thanks for verifying your email!\n';
+        message += 'You can now log in on our site:\n';
+        message += 'http://localhost:3000/login\n';
+        message += 'Have fun!';
+        emailSender.sendEmail(email, 'Email verification confirmed', message).then(() => {
+            resolve();
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
+/* ***************************************************** LOGIN ******************************************************* */
+// check the email or username of the user at login
 function checkUser(user, password) {
     return new Promise((resolve, reject) => {
         if (validator.isEmail(user)) {
@@ -21,8 +76,8 @@ function checkUser(user, password) {
                         reject(3);
                     }
                 }
-            }).catch(error => {
-                reject(error);
+            }).catch(err => {
+                reject(err);
             });
         } else {
             runQuery(`SELECT * FROM users where username LIKE '${user}'`).then(result => {
@@ -44,34 +99,23 @@ function checkUser(user, password) {
     });
 }
 
-// register user
-function registerUser(firstName, lastName, userName, email, password) {
+/* ***************************************************** USER PROFILE ******************************************************* */
+// get user data to edit them in the user profile page
+function getUser(id) {
     return new Promise((resolve, reject) => {
-        runQuery(
-            `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
-            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
-        ).then(() => {
-            // email message
-            let message = `Hello ${firstName} ${lastName},\n`;
-            message += 'Welcome to our website!\n';
-            message += 'To verify your email address please click on the following link:\n';
-            message += `http://localhost:3000/verify/${email}/`;
-            emailSender.sendEmail(email, 'Verify your email', message).then(() => {
-                resolve();
-            }).catch(error => {
-                reject(error);
-            });
-        }).catch(err => {
-            if (err.errno === 1062) {
-                reject('exist');
+        runQuery(`SELECT * FROM users WHERE id=${id}`).then(users => {
+            if (users.length === 0) {
+                reject(3);
             } else {
-                reject(err);
+                resolve(users[0]);
             }
+        }).catch(err => {
+            reject(err);
         });
     });
 }
 
-// edit user
+// edit the user in the profile page
 function editUser(id, firstName, lastName, userName, city, password, userImg) {
     if (password) {
         return new Promise((resolve, reject) => {
@@ -90,9 +134,9 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
                     saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
                     runQuery(saveImgsQuery).then(() => {
                         resolve(result);
-                    }).catch(error => {
-                        console.log(error);
-                        reject(error);
+                    }).catch(err => {
+                        console.log(err);
+                        reject(err);
                     });
                 } else {
                     resolve(result);
@@ -123,9 +167,9 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
                     saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
                     runQuery(saveImgsQuery).then(() => {
                         resolve(result);
-                    }).catch(error => {
-                        console.log(error);
-                        reject(error);
+                    }).catch(err => {
+                        console.log(err);
+                        reject(err);
                     });
                 } else {
                     resolve(result);
@@ -141,34 +185,8 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
     }
 }
 
-// verify user
-function verifyUser(email) {
-    return new Promise((resolve, reject) => {
-        runQuery(`UPDATE users SET users.verified=1 WHERE users.email='${email}'`).then(() => {
-            resolve();
-        }).catch(err => {
-            reject(err);
-        });
-    });
-}
-
-// send verification confirmed email
-function confirmVerifiedUser(email) {
-    return new Promise((resolve, reject) => {
-        // email message
-        let message = 'Thanks for verifying your email!\n';
-        message += 'You can now log in on our site:\n';
-        message += 'http://localhost:3000/login\n';
-        message += 'Have fun!';
-        emailSender.sendEmail(email, 'Email verification confirmed', message).then(() => {
-            resolve();
-        }).catch(error => {
-            reject(error);
-        });
-    });
-}
-
-// send link to reset users password
+/* ***************************************************** RESET PASSWORD ******************************************************* */
+// send email with link to reset users password
 function sendResetLink(email) {
     return new Promise((resolve, reject) => {
         runQuery(`SELECT * FROM users WHERE email LIKE '${email}'`).then(result => {
@@ -178,8 +196,8 @@ function sendResetLink(email) {
                 message += `http://localhost:3000/reset/${result[0].id * 135531}/${email}`;
                 emailSender.sendEmail(email, 'Reset account password', message).then(() => {
                     resolve();
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(3);
@@ -190,8 +208,8 @@ function sendResetLink(email) {
     });
 }
 
-// send link to reset users password
-function resetPass(email, id, pass) {
+// send email that user has changed his password successfully
+function resetPassword(email, id, pass) {
     return new Promise((resolve, reject) => {
         const Id = id / 135531;
         runQuery(
@@ -204,8 +222,8 @@ function resetPass(email, id, pass) {
                 message += 'http://localhost:3000/login';
                 emailSender.sendEmail(email, 'Password changed', message).then(() => {
                     resolve();
-                }).catch(error => {
-                    reject(error);
+                }).catch(err => {
+                    reject(err);
                 });
             } else {
                 reject(3);
@@ -216,7 +234,8 @@ function resetPass(email, id, pass) {
     });
 }
 
-// get all users
+/* ***************************************************** ADMIN PANEL ******************************************************* */
+// get all users for admin panel
 function getAllUsers() {
     return new Promise((resolve, reject) => {
         runQuery('SELECT * FROM users').then(users => {
@@ -227,21 +246,6 @@ function getAllUsers() {
             }
         }).catch(err => {
             reject(err);
-        });
-    });
-}
-
-// get user for edit page
-function getUser(id) {
-    return new Promise((resolve, reject) => {
-        runQuery(`SELECT * FROM users WHERE id=${id}`).then(users => {
-            if (users.length === 0) {
-                reject(3);
-            } else {
-                resolve(users[0]);
-            }
-        }).catch(error => {
-            reject(error);
         });
     });
 }
@@ -258,7 +262,7 @@ function changeVerification(id) {
 }
 
 // inform the user by email that his account has been blocked
-function blockAccount(email) {
+function informBlockedUserByEmail(email) {
     return new Promise((resolve, reject) => {
         // email message
         let message = 'Your account has been blocked!\n';
@@ -266,13 +270,24 @@ function blockAccount(email) {
         message += 'Please contact the administrator to solve this problem.';
         emailSender.sendEmail(email, 'Account has been blocked', message).then(() => {
             resolve();
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 }
 
-// deleting user account
+// change the role of the user
+function changeUserRole(id, role) {
+    return new Promise((resolve, reject) => {
+        runQuery(`UPDATE users SET role='${role}' WHERE users.id=${id}`).then(result => {
+            resolve(result);
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
+// delete a user account
 function deleteUser(id) {
     return new Promise((resolve, reject) => {
         runQuery(`DELETE FROM users WHERE users.id=${id}`).then(result => {
@@ -283,16 +298,7 @@ function deleteUser(id) {
     });
 }
 
-// change user role
-function changeUserRole(id, role) {
-    return new Promise((resolve, reject) => {
-        runQuery(`UPDATE users SET role='${role}' WHERE users.id=${id}`).then(result => {
-            resolve(result);
-        }).catch(err => {
-            reject(err);
-        });
-    });
-}
+/* ***************************************************** CONTACT ******************************************************* */
 // send message from contact page
 function sendMessage(email, userMessage) {
     return new Promise((resolve, reject) => {
@@ -302,11 +308,12 @@ function sendMessage(email, userMessage) {
         message += userMessage;
         emailSender.sendEmail('felix.wurst@gmail.com', 'Message from contact page', message).then(() => {
             resolve();
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 }
+
 /* ***************************************************** EXPORT ******************************************************* */
 module.exports = {
     editUser,
@@ -315,11 +322,11 @@ module.exports = {
     verifyUser,
     confirmVerifiedUser,
     sendResetLink,
-    resetPass,
+    resetPassword,
     getAllUsers,
     getUser,
     changeVerification,
-    blockAccount,
+    informBlockedUserByEmail,
     deleteUser,
     changeUserRole,
     sendMessage
