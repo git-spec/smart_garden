@@ -39,7 +39,7 @@ import MonitorHomeOffice from './MonitorHomeOffice';
 import MonitorGarden from './MonitorGarden';
 import MonitorBalcony from './MonitorBalcony';
 // window dimension hook
-import {useWindowDimension} from './UseWindowDimension';
+import {useWindowDimension} from '../services/useWindowDimension';
 // services
 import {
     checkHubNumPost,

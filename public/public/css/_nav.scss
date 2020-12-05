@@ -91,11 +91,6 @@
         @include changeBGColor($color-5);
     }
 }
-// logo svg
-// .logo {
-//   width: 7rem;
-//   height: 2.4rem;
-// }
 // set link bold
 .nav-item {
     font-size: $font-size-3;
@@ -180,8 +175,8 @@ a.nav-link {
                 left: 26px;
             }
         }
-        &.open > span:nth-child(2)::before,
-        &.open > span:nth-child(2)::after {
+        &.active > span:nth-child(2)::before,
+        &.active > span:nth-child(2)::after {
             width: ($font-size-5 / 2 + $border);
         }
     }
@@ -220,7 +215,7 @@ a.nav-link {
         background-image: url('../imgs/inuta_icon_dark.svg');
     }
     // show sidebar
-    .sidebar.active {
+    .sidebar.open {
         left: 0;
     }
     // hide topbar
