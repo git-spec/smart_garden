@@ -528,8 +528,8 @@ a.nav-link:hover {
   left: 26px;
 }
 
-.navbar-toggler .menu-icon.open > span:nth-child(2)::before,
-.navbar-toggler .menu-icon.open > span:nth-child(2)::after {
+.navbar-toggler .menu-icon.active > span:nth-child(2)::before,
+.navbar-toggler .menu-icon.active > span:nth-child(2)::after {
   width: 0.5rem;
 }
 
@@ -560,7 +560,7 @@ a.nav-link:hover {
     height: 2.6rem;
     background-image: url("../imgs/inuta_icon_dark.svg");
   }
-  .sidebar.active {
+  .sidebar.open {
     left: 0;
   }
   .topbar {

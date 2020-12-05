@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {useState, Fragment} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setSocketAction, setUserAction} from '../actions';
@@ -14,15 +14,12 @@ import {logoutPost} from '../services/api';
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
 
-/* *********************************************************** REFERENCES ********************************************************* */
-    const toggleNavbarRef = React.createRef();
-    const toggleMenuIconRef = React.createRef();
+/* *********************************************************** REFERENCE ********************************************************* */
+    const openRef = React.createRef();
+    const activeRef = React.createRef();
 
-/* *********************************************************** STATE ********************************************************* */
-    const initialState = {
-        collapsed: true
-    };
-    const [state, setState] = useState(initialState);
+/* *********************************************************** STATE ********************************************************* */  
+    const [isOpen, setIsOpen] = useState(true);
 
 /* *********************************************************** LOGOUT ********************************************************* */
     const history = useHistory();
@@ -37,23 +34,33 @@ function Navigation(props) {
         }).catch(err => {
             console.log(err);
         });
-        toggleNavbar();
+        toggle();
     };
 
 /* *********************************************************** TOGGLES ********************************************************* */
-    // set menu point active and toggle collapse
-    const toggleNavbar = () => {
-        setState({...state, collapsed: !state.collapsed});
-        toggleNavbarRef.current.classList.toggle('active');
-        toggleMenuIconRef.current.classList.toggle('open');
-    };
+    // toggle menu icon
+    const toggle = () => {
+        openRef.current.classList.toggle('open');
+        activeRef.current.classList.toggle('active');
+        setIsOpen(!isOpen);
+    };;
+
+/* ********************************************************* USE EFFECT ********************************************************* */
+    // set outside listener
+    useEffect(() => {
+        document.addEventListener('click', globalClickListener);
+        // cleanup 
+        return () => {
+            document.removeEventListener('click', globalClickListener);
+        };
+    // eslint-disable-next-line
+    });
     // close menubar
-    const toggleNavbarBlur = e => {
-        // if(e.relatedTarget === null){
-        setState({...state, collapsed: true});
-        toggleMenuIconRef.current.classList.remove('open');
-        // }
-    };
+    const globalClickListener = () => {
+        activeRef.current.classList.remove('active');
+        document.removeEventListener('click', globalClickListener);
+        setIsOpen(true);
+    }
 
 /* *********************************************************** NAV ITEMS ********************************************************* */
     let location = useLocation();
@@ -61,32 +68,32 @@ function Navigation(props) {
     const navItemsElement = (
         <Fragment>
             <NavItem active={location.pathname === '/' ? true : false}>
-                <NavLink title="home" onClick={toggleNavbar} tag={Link} to="/">
+                <NavLink onClick={toggle} title="home" tag={Link} to="/">
                     home
                 </NavLink>
             </NavItem>
             {props.user ? (
                 <Fragment>
                     <NavItem active={location.pathname === '/user/dashboard' ? true : false}>
-                        <NavLink title="dashboard" onClick={toggleNavbar} tag={Link} to="/user/dashboard">
+                        <NavLink title="dashboard" onClick={toggle} tag={Link} to="/user/dashboard">
                             dashboard
                         </NavLink>
                     </NavItem>
                     <NavItem active={location.pathname === '/user/profile' ? true : false}>
-                        <NavLink title="profile" onClick={toggleNavbar} tag={Link} to="/user/profile">
+                        <NavLink title="profile" onClick={toggle} tag={Link} to="/user/profile">
                             profile
                         </NavLink>
                     </NavItem>
                     {props.user.role === 'admin' && (
-                        <NavItem>
-                            <NavLink tag={Link} to="/user/admin">
+                        <NavItem active={location.pathname === '/user/admin' ? true : false}>
+                            <NavLink onClick={toggle} tag={Link} to="/user/admin">
                                 panel
                             </NavLink>
                         </NavItem>
                     )}
                     {props.user.role === 'subadmin' && (
-                        <NavItem>
-                            <NavLink tag={Link} to="/user/subadmin">
+                        <NavItem active={location.pathname === '/user/subadmin' ? true : false}>
+                            <NavLink onClick={toggle} tag={Link} to="/user/subadmin">
                                 panel
                             </NavLink>
                         </NavItem>
@@ -100,12 +107,12 @@ function Navigation(props) {
             ) : (
                 <Fragment>
                     <NavItem active={location.pathname === '/login' ? true : false}>
-                        <NavLink title="login" onClick={toggleNavbar} tag={Link} to="/login">
+                        <NavLink onClick={toggle} title="login" tag={Link} to="/login">
                             login
                         </NavLink>
                     </NavItem>
                     <NavItem active={location.pathname === '/register' ? true : false}>
-                        <NavLink title="register" onClick={toggleNavbar} tag={Link} to="/register">
+                        <NavLink onClick={toggle} title="register" tag={Link} to="/register">
                             register
                         </NavLink>
                     </NavItem>
@@ -115,7 +122,7 @@ function Navigation(props) {
     );
 /* *********************************************************** RETURN ********************************************************* */
     return (
-        <Navbar onBlur={toggleNavbarBlur} fixed="top" className="px-0 justify-content-center">
+        <Navbar fixed="top" className="px-0 justify-content-center">
             <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 mt-2 mt-sm-0">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
@@ -128,19 +135,19 @@ function Navigation(props) {
                     </h4>
                 </NavLink>
                 {/* navbar toggle for devices smaller than 576px */}
-                <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggleNavbar}>
-                    <div ref={toggleMenuIconRef} className="menu-icon">
+                <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggle}>
+                    <div ref={activeRef} className="menu-icon">
                         <span></span><span></span><span></span>
                     </div>
                 </NavbarToggler>
 {/* *********************************************************** SIDEBAR ********************************************************* */}
-                <div ref={toggleNavbarRef} className="sidebar">
+                <div ref={openRef} className="sidebar">
                     <Nav vertical className="mx-3">
                         {navItemsElement}
                     </Nav>
                 </div>
 {/* *********************************************************** TOPBAR ********************************************************* */}
-                <Collapse className="topbar" isOpen={!state.collapsed} navbar>
+                <Collapse className="topbar" isOpen={!isOpen} navbar>
                     <Nav horizontal="center" vertical="align-items-end">
                         {navItemsElement}
                     </Nav>
