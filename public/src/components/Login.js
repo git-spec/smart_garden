@@ -113,7 +113,7 @@ const Login = props => {
                 {state.errorElement}
             </PopUpModal>
             <Container className="pt-5 mt-5">
-                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Login</h1>
+                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 mt-5 px-0 px-md-3">Login</h1>
                 <p className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
                     Log in to access your device management.
                 </p>

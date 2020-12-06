@@ -43,7 +43,7 @@ function Navigation(props) {
         openRef.current.classList.toggle('open');
         activeRef.current.classList.toggle('active');
         setIsOpen(!isOpen);
-    };;
+    };
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     // set outside listener
@@ -57,7 +57,8 @@ function Navigation(props) {
     });
     // close menubar
     const globalClickListener = () => {
-        activeRef.current.classList.remove('active');
+        if (activeRef.current) activeRef.current.classList.remove('active');
+        if (openRef.current) openRef.current.classList.remove('open');
         document.removeEventListener('click', globalClickListener);
         setIsOpen(true);
     }
