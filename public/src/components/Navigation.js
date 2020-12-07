@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {Fragment, useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect, createRef} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setSocketAction, setUserAction} from '../actions';
@@ -10,16 +10,23 @@ import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
 // services
 import {logoutPost} from '../services/api';
+// window dimension hook
+import {useWindowDimension} from '../services/useWindowDimension';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
+    const [width] = useWindowDimension();
 
 /* *********************************************************** REFERENCE ********************************************************* */
-    const openRef = React.createRef();
-    const activeRef = React.createRef();
+    const openRef = createRef();
+    const activeRef = createRef();
 
 /* *********************************************************** STATE ********************************************************* */  
-    const [isOpen, setIsOpen] = useState(true);
+    const initialState = {
+        isOpen: true,
+        top: 0
+    };
+    const [state, setState] = useState(initialState);
 
 /* *********************************************************** LOGOUT ********************************************************* */
     const history = useHistory();
@@ -38,12 +45,33 @@ function Navigation(props) {
     };
 
 /* *********************************************************** TOGGLES ********************************************************* */
-    // toggle menu icon
     const toggle = () => {
+        // toggle sidebar
         openRef.current.classList.toggle('open');
+        // toggle menu icon
         activeRef.current.classList.toggle('active');
-        setIsOpen(!isOpen);
+        // toggle topbar
+        setState({...state, isOpen: !state.isOpen});
     };
+
+/* ********************************************************* FUNCTIONS ********************************************************* */
+    let prevScrollpos = window.pageYOffset;
+    // set media query
+    if (width <= 576) {
+        window.onscroll = function() {
+            let currentScrollPos = window.pageYOffset;
+            if (prevScrollpos > currentScrollPos) {
+                // show menubar while scroll up
+                setState({...state, top: 0});
+            } else {
+                // hide menubar while scroll down
+                setState({...state, top: '-50px'});
+            }
+            prevScrollpos = currentScrollPos;
+        }
+    } else {
+        window.onscroll = false;
+    }
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     // set outside listener
@@ -60,7 +88,7 @@ function Navigation(props) {
         if (activeRef.current) activeRef.current.classList.remove('active');
         if (openRef.current) openRef.current.classList.remove('open');
         document.removeEventListener('click', globalClickListener);
-        setIsOpen(true);
+        setState({...state, isOpen: true});
     }
 
 /* *********************************************************** NAV ITEMS ********************************************************* */
@@ -123,7 +151,7 @@ function Navigation(props) {
     );
 /* *********************************************************** RETURN ********************************************************* */
     return (
-        <Navbar fixed="top" className="px-0 justify-content-center">
+        <Navbar fixed="top" className="px-0 justify-content-center" style={{top: state.top}}>
             <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 mt-2 mt-sm-0">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
@@ -148,7 +176,7 @@ function Navigation(props) {
                     </Nav>
                 </div>
 {/* *********************************************************** TOPBAR ********************************************************* */}
-                <Collapse className="topbar" isOpen={!isOpen} navbar>
+                <Collapse className="topbar" isOpen={!state.isOpen} navbar>
                     <Nav horizontal="center" vertical="align-items-end">
                         {navItemsElement}
                     </Nav>

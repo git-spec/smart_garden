@@ -32,8 +32,10 @@
     // @include changeBGColor();
     // background-color: $color-1-transp;
     background-color: rgba(255, 255, 255, 0) !important;
-    transition: none;
+    // transition: none;
     height: $nav-height;
+    transition: top 0.3s; // transition effect when sliding down (and up)
+
     // logo
     & .navbar-brand {
         width: 7.5rem;

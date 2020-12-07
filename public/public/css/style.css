@@ -365,9 +365,9 @@ body .breadcrumb-item.active {
 
 .navbar {
   background-color: rgba(255, 255, 255, 0) !important;
-  -webkit-transition: none;
-  transition: none;
   height: 4rem;
+  -webkit-transition: top 0.3s;
+  transition: top 0.3s;
 }
 
 .navbar .navbar-brand {
