@@ -1,3 +1,4 @@
+/* ******************************************************* PRODUCT REGISTRATION ******************************************************* */
 export const checkHubNumPost = hubNum => {
     return new Promise((resolve, reject) => {
         fetch('/user/checkhubnum', {
@@ -94,6 +95,7 @@ export const addDevicePost = (deviceName, deviceNum, hubID) => {
     });
 };
 
+/* ******************************************************* GET PRODUCTS ******************************************************* */
 export const getHubsPost = () => {
     return new Promise((resolve, reject) => {
         fetch('/user/gethubs', {
@@ -140,6 +142,7 @@ export const getDevicesPost = () => {
     });
 };
 
+/* ******************************************************* DELETE PRODUCTS ******************************************************* */
 export const deleteHubPost = hubID => {
     return new Promise((resolve, reject) => {
         fetch('/user/deletehub', {
@@ -188,6 +191,7 @@ export const deleteDevicePost = deviceID => {
     });
 };
 
+/* ******************************************************* CONTROL WATER PUMP ******************************************************* */
 export const deviceOnOffPost = (deviceSN, deviceStatus) => {
     return new Promise((resolve, reject) => {
         fetch('/user/deviceonoff', {
@@ -236,6 +240,7 @@ export const saveRangesPost = (inputRangeTime, inputRangeDuration, deviceSn, soi
     });
 };
 
+/* ******************************************************* GET SENSOR DATA ******************************************************* */
 export const deviceMoistureDataPost = (deviceID) => {
     return new Promise((resolve, reject) => {
         fetch('/user/devicemoisturedata', {

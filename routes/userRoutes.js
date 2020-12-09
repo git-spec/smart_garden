@@ -1,8 +1,7 @@
-/* ---------------------------------------- SETUP ---------------------------------------- */
+/* ******************************************************* SETUP ******************************************************* */
 // express
 const express = require('express');
 const userRouter = express.Router();
-
 // database functions
 const {
     checkHubNum, 
@@ -20,8 +19,8 @@ const {
     deviceLightData
 } = require('../modules/productsAuth');
 
-/* ---------------------------------------- ROUTES ---------------------------------------- */
-// check if there is a valid session, all user routes have to pass this middleware 
+/* ******************************************************* GUARD ******************************************************* */
+// checks if there is a valid user session, all user routes must pass this middleware before letting the user in
 userRouter.use((req, res, next) => {
     if (req.session.user) {
         next();
@@ -40,6 +39,8 @@ userRouter.use((req, res, next) => {
     }
 });
 
+/* ******************************************************* PRODUCT REGISTRATION ******************************************************* */
+// checks if an entered serial number of a hub exists and is not already registered
 userRouter.post('/checkhubnum', (req, res) => {
     // 1 serialnumber found
     // 2 server error
@@ -63,6 +64,7 @@ userRouter.post('/checkhubnum', (req, res) => {
     }
 });
 
+// checks if an entered serial number of a device exists and is not already registered
 userRouter.post('/checkdevicenum', (req, res) => {
     // 1 serialnumber found
     // 2 server error
@@ -70,7 +72,7 @@ userRouter.post('/checkdevicenum', (req, res) => {
     // 4 serialnumber already registered
     const deviceNum = req.body.deviceNum.trim();
     if (deviceNum) {
-        checkDeviceNum(deviceNum).then(data => {
+        checkDeviceNum(deviceNum).then(() => {
             res.json(1);
         }).catch(err => {
             if (err === "not found") {
@@ -86,6 +88,7 @@ userRouter.post('/checkdevicenum', (req, res) => {
     }
 });
 
+// adds the userID and a name to the corresponding hub
 userRouter.post('/addhub', (req, res) => {
     // data: updated hubs
     // 2 server error
@@ -104,6 +107,7 @@ userRouter.post('/addhub', (req, res) => {
     }
 });
 
+// adds the userID and a name to the corresponding device
 userRouter.post('/adddevice', (req, res) => {
     // data: updated devices
     // 2 server error
@@ -123,7 +127,10 @@ userRouter.post('/adddevice', (req, res) => {
     }
 });
 
+/* ******************************************************* GET PRODUCTS ******************************************************* */
+// gets all hubs registered by the user
 userRouter.post('/gethubs', (req, res) => {
+    // data: all hubs registered by the user
     // 2 server error
     const userID = req.session.user.id;
     if (userID) {
@@ -138,7 +145,9 @@ userRouter.post('/gethubs', (req, res) => {
     }
 });
 
+// gets all devices registered by the user
 userRouter.post('/getdevices', (req, res) => {
+    // data: all devices registered by the user
     // 2 server error
     const userID = req.session.user.id;
     if (userID) {
@@ -153,6 +162,8 @@ userRouter.post('/getdevices', (req, res) => {
     }
 });
 
+/* ******************************************************* DELETE PRODUCTS ******************************************************* */
+// deletes a specific hub
 userRouter.post('/deletehub', (req, res) => {
     // data: updated hubs
     // 2 server error
@@ -170,6 +181,7 @@ userRouter.post('/deletehub', (req, res) => {
     }
 });
 
+// deletes a specific device
 userRouter.post('/deletedevice', (req, res) => {
     // data: updated devices
     // 2 server error
@@ -187,8 +199,10 @@ userRouter.post('/deletedevice', (req, res) => {
     }
 });
 
+/* ******************************************************* CONTROL WATER PUMP ******************************************************* */
+// turns the water pump on or off
 userRouter.post('/deviceonoff', (req, res) => {
-    // 1 status (on/off) of the waterpump device has changed successfully
+    // 1 status (on/off) of the water pump device has changed successfully
     const deviceSN = req.body.deviceSN;
     const deviceStatus = req.body.deviceStatus;
     if (deviceSN && deviceStatus !== null) {
@@ -202,8 +216,9 @@ userRouter.post('/deviceonoff', (req, res) => {
     }
 });
 
+// stores the settings for controlling the water pump
 userRouter.post('/saveranges', (req, res) => {
-    // 1 ranges for waterpump device were saved successfully
+    // 1 new values for the water pump were saved successfully
     const inputRangeTime = req.body.inputRangeTime;
     const inputRangeDuration = req.body.inputRangeDuration;
     const deviceSn = req.body.deviceSn;
@@ -219,8 +234,10 @@ userRouter.post('/saveranges', (req, res) => {
     }
 });
 
+/* ******************************************************* GET SENSOR DATA ******************************************************* */
+// get the average values of the last days of the soil moisture device
 userRouter.post('/devicemoisturedata', (req, res) => {
-    // data: received data from the database for soil moisture device
+    // data: received data for the soil moisture device
     const deviceID = req.body.deviceID;
     if (deviceID) {
         deviceMoistureData(deviceID).then(data => {
@@ -233,8 +250,9 @@ userRouter.post('/devicemoisturedata', (req, res) => {
     }
 });
 
+// get the average values of the last days of the temperature and humidity device
 userRouter.post('/devicetemphumdata', (req, res) => {
-    // data: received data from the database for temperature & humidity device
+    // data: received data for the temperature & humidity device
     const deviceID = req.body.deviceID;
     if (deviceID) {
         deviceTempHumData(deviceID).then(data => {
@@ -247,8 +265,9 @@ userRouter.post('/devicetemphumdata', (req, res) => {
     }
 });
 
+// get the average values of the last days of the light device
 userRouter.post('/devicelightdata', (req, res) => {
-    // data: received data from the database for light device
+    // data: received data for the light device
     const deviceID = req.body.deviceID;
     if (deviceID) {
         deviceLightData(deviceID).then(data => {
@@ -261,10 +280,12 @@ userRouter.post('/devicelightdata', (req, res) => {
     }
 });
 
+/* ******************************************************* LOGOUT ******************************************************* */
+// destroys the session & logs the user out
 userRouter.post('/logout', (req, res) => {
-    req.session.destroy(); // destroys session & logs user out
+    req.session.destroy();
     res.json(10);
 });
 
-/* ---------------------------------------- EXPORT ---------------------------------------- */
+/* ******************************************************* EXPORT ******************************************************* */
 module.exports = userRouter;
