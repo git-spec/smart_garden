@@ -1,6 +1,6 @@
 /* ******************************************************* SETUP ******************************************************* */
 const nodemailer = require('nodemailer');
-// create delivery box for email
+// creates a delivery box for e-mails
 const transporter = nodemailer.createTransport({
     host: 'mail.coding-school.org',
     port: 465,
@@ -13,8 +13,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-/* ******************************************************* FUNCTIONS ******************************************************* */
-// sending email to client
+/* ******************************************************* SEND EMAIL ******************************************************* */
+// sends an email to a client
 function sendEmail(email, subject, message) {
     return new Promise((resolve, reject) => {
         const mailOption = {

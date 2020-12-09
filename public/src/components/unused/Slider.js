@@ -1,5 +1,5 @@
 import React, {useRef} from 'react';
-import useSlider from '../hooks/useSlider';
+import useSlider from '../../hooks/useSlider';
 
 const Slider = ({images}) => {
 

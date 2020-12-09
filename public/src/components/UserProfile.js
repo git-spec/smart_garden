@@ -208,6 +208,7 @@ const UserProfile = props => {
                     />
                 </Col>
             </Row>
+{/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-5">
                 <div className="col-lg-12 col-md-12">{state.resultElement}</div>
                 <Row xs="1" sm="2">
@@ -300,7 +301,10 @@ const UserProfile = props => {
     );
 };
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {user: state.user};
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setBackgroundColor5Action, setBackgroundColor1Action})(UserProfile);

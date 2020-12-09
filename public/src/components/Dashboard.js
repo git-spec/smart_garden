@@ -29,17 +29,17 @@ import {
 } from 'reactstrap';
 // components
 import ConfirmModal from './ConfirmModal';
-import MonitorAll from './MonitorAll';
-import MonitorSoil from './MonitorSoil';
-import MonitorWater from './MonitorWater';
-import MonitorTempHum from './MonitorTempHum';
-import MonitorLight from './MonitorLight';
-import MonitorKitchen from './MonitorKitchen';
-import MonitorHomeOffice from './MonitorHomeOffice';
-import MonitorGarden from './MonitorGarden';
-import MonitorBalcony from './MonitorBalcony';
+import MonitorAll from './monitors/MonitorAll';
+import MonitorSoil from './monitors/MonitorSoil';
+import MonitorWater from './monitors/MonitorWater';
+import MonitorTempHum from './monitors/MonitorTempHum';
+import MonitorLight from './monitors/MonitorLight';
+import MonitorKitchen from './monitors/MonitorKitchen';
+import MonitorHomeOffice from './monitors/MonitorHomeOffice';
+import MonitorGarden from './monitors/MonitorGarden';
+import MonitorBalcony from './monitors/MonitorBalcony';
 // window dimension hook
-import {useWindowDimension} from '../services/useWindowDimension';
+import {useWindowDimension} from '../hooks/useWindowDimension';
 // services
 import {
     checkHubNumPost,
@@ -915,10 +915,13 @@ const Dashboard = props => {
     }
 };
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {
         user: state.user,
         socket: state.socket
     };
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Dashboard);

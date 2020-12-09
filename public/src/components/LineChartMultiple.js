@@ -1,11 +1,13 @@
+/* ********************************************************* IMPORT ********************************************************* */
 import React from 'react';
 import Chart from 'chart.js';
 
-// chart style options
+/* ******************************************************** CHART STYLE OPTIONS ********************************************************* */
 Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
 
+/* ******************************************************** COMPONENT ********************************************************* */
 class LineChartMultiple extends React.Component {
 
     constructor(props) {
@@ -102,9 +104,11 @@ class LineChartMultiple extends React.Component {
         this.myChart.update();
     }
 
+/* ******************************************************** RENDER ********************************************************* */
     render() {
         return <canvas ref={this.chartRef} />;
     }
 }
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default LineChartMultiple;

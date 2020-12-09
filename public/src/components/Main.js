@@ -33,6 +33,7 @@ function Main(props) {
     );
 }
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {
         backgroundUrl: state.backgroundUrl,
@@ -40,4 +41,6 @@ const mapStateToProps = state => {
         backgroundColor100: state.backgroundColor1
     };
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setBackgroundImageAction, setBackgroundColor5Action, setBackgroundColor1Action})(Main);

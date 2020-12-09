@@ -5,14 +5,14 @@ var validator = require('validator');
 const passwordHash = require('password-hash');
 
 /* ***************************************************** REGISTRATION ******************************************************* */
-// register user
+// registers the user
 function registerUser(firstName, lastName, userName, email, password) {
     return new Promise((resolve, reject) => {
         runQuery(
             `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
             VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
         ).then(() => {
-            // email message
+            // content of email
             let message = `Hello ${firstName} ${lastName},\n`;
             message += 'Welcome to our website!\n';
             message += 'To verify your email address please click on the following link:\n';
@@ -32,7 +32,7 @@ function registerUser(firstName, lastName, userName, email, password) {
     });
 }
 
-// verify the user after registration
+// verifies the user after registration
 function verifyUser(email) {
     return new Promise((resolve, reject) => {
         runQuery(`UPDATE users SET users.verified=1 WHERE users.email='${email}'`).then(() => {
@@ -43,10 +43,10 @@ function verifyUser(email) {
     });
 }
 
-// send email that verification is confirmed
+// sends an email that the verification is confirmed
 function confirmVerifiedUser(email) {
     return new Promise((resolve, reject) => {
-        // email message
+        // content of email
         let message = 'Thanks for verifying your email!\n';
         message += 'You can now log in on our site:\n';
         message += 'http://localhost:3000/login\n';
@@ -60,7 +60,7 @@ function confirmVerifiedUser(email) {
 }
 
 /* ***************************************************** LOGIN ******************************************************* */
-// check the email or username of the user at login
+// checks the email or username of the user at login
 function checkUser(user, password) {
     return new Promise((resolve, reject) => {
         if (validator.isEmail(user)) {
@@ -100,7 +100,7 @@ function checkUser(user, password) {
 }
 
 /* ***************************************************** USER PROFILE ******************************************************* */
-// get user data to edit them in the user profile page
+// gets the user data to edit them on the user profile page
 function getUser(id) {
     return new Promise((resolve, reject) => {
         runQuery(`SELECT * FROM users WHERE id=${id}`).then(users => {
@@ -115,7 +115,7 @@ function getUser(id) {
     });
 }
 
-// edit the user in the profile page
+// edits the user on the profile page
 function editUser(id, firstName, lastName, userName, city, password, userImg) {
     if (password) {
         return new Promise((resolve, reject) => {
@@ -125,9 +125,9 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
             ).then(result => {
                 if (userImg) {
                     let saveImgsQuery = '';
-                    // get file extension
+                    // gets file extension
                     let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
-                    // set new image name
+                    // sets new image name
                     let newName = userName.trim().replace(/ /g, '_') + ext;
                     userImg.mv('./public/uploads/' + newName);
                     const imgUrl = '/uploads/' + newName;
@@ -135,14 +135,12 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
                     runQuery(saveImgsQuery).then(() => {
                         resolve(result);
                     }).catch(err => {
-                        console.log(err);
                         reject(err);
                     });
                 } else {
                     resolve(result);
                 }
             }).catch(err => {
-                console.log(err);
                 if (err.errno === 1062) {
                     reject('exist');
                 } else {
@@ -158,9 +156,9 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
             ).then(result => {
                 if (userImg) {
                     let saveImgsQuery = '';
-                    // get file extension
+                    // gets file extension
                     let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
-                    // set the new image name
+                    // sets the new image name
                     let newName = userName.trim().replace(/ /g, '_') + ext;
                     userImg.mv('./public/uploads/' + newName);
                     const imgUrl = '/uploads/' + newName;
@@ -168,7 +166,6 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
                     runQuery(saveImgsQuery).then(() => {
                         resolve(result);
                     }).catch(err => {
-                        console.log(err);
                         reject(err);
                     });
                 } else {
@@ -186,12 +183,12 @@ function editUser(id, firstName, lastName, userName, city, password, userImg) {
 }
 
 /* ***************************************************** RESET PASSWORD ******************************************************* */
-// send email with link to reset users password
+// sends email with link to reset user password
 function sendResetLink(email) {
     return new Promise((resolve, reject) => {
         runQuery(`SELECT * FROM users WHERE email LIKE '${email}'`).then(result => {
             if (result.length) {
-                // email message
+                // content of email
                 let message = 'Please click here to reset your password:\n';
                 message += `http://localhost:3000/reset/${result[0].id * 135531}/${email}`;
                 emailSender.sendEmail(email, 'Reset account password', message).then(() => {
@@ -202,13 +199,13 @@ function sendResetLink(email) {
             } else {
                 reject(3);
             }
-        }).catch(err => {
+        }).catch(() => {
             reject(2);
         });
     });
 }
 
-// send email that user has changed his password successfully
+// sends email that user has changed his password successfully
 function resetPassword(email, id, pass) {
     return new Promise((resolve, reject) => {
         const Id = id / 135531;
@@ -216,7 +213,7 @@ function resetPassword(email, id, pass) {
             `UPDATE users SET password='${passwordHash.generate(pass)}' WHERE email LIKE '${email}' AND id=${Id}`
         ).then(result => {
             if (result) {
-                // email message
+                // content of email
                 let message = 'You have successfully changed your password!\n';
                 message += 'Log in now with your new password:\n';
                 message += 'http://localhost:3000/login';
@@ -228,14 +225,14 @@ function resetPassword(email, id, pass) {
             } else {
                 reject(3);
             }
-        }).catch(err => {
+        }).catch(() => {
             reject(2);
         });
     });
 }
 
 /* ***************************************************** ADMIN PANEL ******************************************************* */
-// get all users for admin panel
+// gets all users for admin panel
 function getAllUsers() {
     return new Promise((resolve, reject) => {
         runQuery('SELECT * FROM users').then(users => {
@@ -250,7 +247,7 @@ function getAllUsers() {
     });
 }
 
-// change verification / block user
+// changes verification / blocks user
 function changeVerification(id) {
     return new Promise((resolve, reject) => {
         runQuery(`UPDATE users SET verified=!verified WHERE users.id=${id}`).then(result => {
@@ -261,10 +258,10 @@ function changeVerification(id) {
     });
 }
 
-// inform the user by email that his account has been blocked
+// informs the user by email that his account has been blocked
 function informBlockedUserByEmail(email) {
     return new Promise((resolve, reject) => {
-        // email message
+        // content of email
         let message = 'Your account has been blocked!\n';
         message += 'You can no longer log in to our site.\n';
         message += 'Please contact the administrator to solve this problem.';
@@ -276,7 +273,7 @@ function informBlockedUserByEmail(email) {
     });
 }
 
-// change the role of the user
+// changes the role of the user
 function changeUserRole(id, role) {
     return new Promise((resolve, reject) => {
         runQuery(`UPDATE users SET role='${role}' WHERE users.id=${id}`).then(result => {
@@ -287,7 +284,7 @@ function changeUserRole(id, role) {
     });
 }
 
-// delete a user account
+// deletes a user account
 function deleteUser(id) {
     return new Promise((resolve, reject) => {
         runQuery(`DELETE FROM users WHERE users.id=${id}`).then(result => {
@@ -302,7 +299,7 @@ function deleteUser(id) {
 // send message from contact page
 function sendMessage(email, userMessage) {
     return new Promise((resolve, reject) => {
-        // email message
+        // content of email
         let message = `Message received from contact page from ${email}\n`;
         message += 'Content:\n';
         message += userMessage;

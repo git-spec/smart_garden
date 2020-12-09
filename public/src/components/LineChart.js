@@ -1,11 +1,13 @@
+/* ********************************************************* IMPORT ********************************************************* */
 import React from 'react';
 import Chart from 'chart.js';
 
-// chart style options
+/* ******************************************************** CHART STYLE OPTIONS ********************************************************* */
 Chart.defaults.global.defaultFontFamily = "Ubuntu";
 Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
 
+/* ******************************************************** COMPONENT ********************************************************* */
 class LineChart extends React.Component {
     
     constructor(props) {
@@ -101,6 +103,7 @@ class LineChart extends React.Component {
         });
     }
 
+/* ******************************************************** RENDER ********************************************************* */
     render() {
         return (
             <div className="lineGraph">
@@ -110,4 +113,5 @@ class LineChart extends React.Component {
     }
 }
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default LineChart;

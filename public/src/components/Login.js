@@ -176,4 +176,5 @@ const Login = props => {
     );
 };
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(null, {setUserAction, setSocketAction, setBackgroundColor5Action, setBackgroundColor1Action})(Login);

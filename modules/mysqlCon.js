@@ -3,13 +3,14 @@ const mySql = require('mysql');
 let con = null;
 
 /* ******************************************************* FUNCTIONS ******************************************************* */
+// establishes a connection to the database
 function connect() {
     return new Promise((resolve, reject) => {
         if (con) {
             if (con.state === 'disconnected') {
-                con.connect(error => {
-                    if (error) {
-                        reject(error);
+                con.connect(err => {
+                    if (err) {
+                        reject(err);
                     } else {
                         resolve();
                     }
@@ -26,9 +27,9 @@ function connect() {
                 password: '12345678',
                 database: 'smart_garden'
             });
-            con.connect(error => {
-                if (error) {
-                    reject(error);
+            con.connect(err => {
+                if (err) {
+                    reject(err);
                 } else {
                     resolve();
                 }
@@ -38,27 +39,27 @@ function connect() {
 }
 
 /**
- * Run SQL Query
+ * runs a sql query
  * @param {string} queryString 
  */
 function runQuery(queryString) {
     return new Promise((resolve, reject) => {
         connect().then(() => {
-            con.query(queryString, (error, result, fields) => {
-                if (error) {
-                    reject(error);
+            con.query(queryString, (err, result, fields) => {
+                if (err) {
+                    reject(err);
                 } else {
                     resolve(result);
                 }
             });
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 }
 
 /**
- * This function returns the value that was searched for
+ * checks if a certain value exists in a table
  * EX: checkExist('iot_hubs', '*', {sn_number: data.sn_number})
  * @param {string} tableName 
  * @param {string} value EX: * for all rows
@@ -86,13 +87,14 @@ function checkExist(tableName, value, condition) {
             } else {
                 reject('No Data Found');
             }
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 }
 
 /**
+ * accesses a certain value in a table, which is then changed
  * EX: updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number})
  * @param {string} tableName 
  * @param {object} value
@@ -126,14 +128,14 @@ function updateRecord(tableName, value, condition) {
         query += ';';
         runQuery(query).then(() => {
             resolve();
-        }).catch(error => {
-            reject(error);
+        }).catch(err => {
+            reject(err);
         });
     });
 }
 
 /**
- * 
+ * inserts several values in a table
  * @param {String} tableName 
  * @param {Array} columns  
  * @param {Array} values 
@@ -158,8 +160,8 @@ function insertMulti(tableName, columns, values) {
         query += `);`;
         runQuery(query).then(result => {
             resolve(result);
-        }).catch(error => {
-            reject(new Error(error));
+        }).catch(err => {
+            reject(new Error(err));
         });
     });
 }
