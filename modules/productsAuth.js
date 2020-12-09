@@ -76,7 +76,7 @@ function addDevice(deviceName, deviceNum, hubID, userID) {
 // gets all hubs registered by the user
 function getHubs(userID) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT * FROM iot_hubs WHERE user_id=${userID}`).then(data => {            
+        runQuery(`SELECT * FROM iot_hubs WHERE user_id=${userID}`).then(data => { 
             resolve(data);
         }).catch(err => {
             console.log(err);

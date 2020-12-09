@@ -323,13 +323,13 @@ app.post('/sendmessage', (req, res) => {
 });
 
 /* ********************************************************* USE ROUTES ********************************************************* */
+// protected user area
+app.use('/user', userRoutes);
+
 app.use('/', (req, res) => {
     const html = fs.readFileSync(__dirname + '/public/build/index.html', 'utf-8');
     res.send(html);
 });
-
-// protected user area
-app.use('/user', userRoutes);
 
 /* ********************************************************* LOCALHOST ********************************************************* */
 const server = app.listen(port, () => {
