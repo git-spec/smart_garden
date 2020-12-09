@@ -9,7 +9,7 @@ class PopUpModal extends React.Component {
 
     render() {
         return (
-            <Modal isOpen={this.props.show} toggle={this.toggle}>
+            <Modal isOpen={this.props.show} toggle={this.toggle} className="modal-dialog-centered">
                 <ModalHeader toggle={this.toggle} className={this.props.className}>
                     {this.props.title}
                 </ModalHeader>
