@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {Fragment, useState, useEffect, createRef} from 'react';
+import React, {Fragment, useState, useEffect, useRef} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setSocketAction, setUserAction} from '../actions';
@@ -18,12 +18,15 @@ function Navigation(props) {
     const [width] = useWindowDimension();
 
 /* *********************************************************** REFERENCE ********************************************************* */
-    const openRef = createRef();
-    const activeRef = createRef();
+    const openRefNAV = useRef();
+    const openRefACC = useRef();
+    const activeRef = useRef();
 
 /* *********************************************************** STATE ********************************************************* */  
     const initialState = {
-        isOpen: true,
+        isOpenNAV: true,
+        isOpenACC: true,
+        account: true,
         top: 0
     };
     const [state, setState] = useState(initialState);
@@ -41,17 +44,50 @@ function Navigation(props) {
         }).catch(err => {
             console.log(err);
         });
-        toggle();
+        toggleACC();
     };
 
 /* *********************************************************** TOGGLES ********************************************************* */
-    const toggle = () => {
-        // toggle sidebar
-        openRef.current.classList.toggle('open');
-        // toggle menu icon
-        activeRef.current.classList.toggle('active');
-        // toggle topbar
-        setState({...state, isOpen: !state.isOpen});
+    const toggleNAV = () => {
+        if (!state.isOpenACC) {
+            // close sidebar of acc
+            openRefACC.current.classList.remove('open');
+            setTimeout(() => {
+                // toggle menu icon
+                activeRef.current.classList.toggle('active');
+                // toggle topbar of nav
+                setState({...state, isOpenNAV: !state.isOpenNAV, account: false, isOpenACC: true});
+                // toggle sidebar of nav
+                openRefNAV.current.classList.toggle('open');
+            }, 300);
+        } else {
+            // toggle menu icon
+            activeRef.current.classList.toggle('active');
+            // toggle topbar of nav
+            setState({...state, isOpenNAV: !state.isOpenNAV, account: false, isOpenACC: true});
+            // toggle sidebar of nav
+            openRefNAV.current.classList.toggle('open');
+        };
+    };
+
+    const toggleACC = () => {
+        if (!state.isOpenNAV) {
+            // close sidebar of nav
+            openRefNAV.current.classList.remove('open');
+            // deactivate menu icon
+            activeRef.current.classList.remove('active');
+            setTimeout(() => {
+                // toggle topbar of acc
+                setState({...state, isOpenNAV: true, account: true, isOpenACC: !state.isOpenACC});
+                // toggle sidebar of acc
+                openRefACC.current.classList.toggle('open');
+            }, 300);
+        } else {
+            // toggle topbar of acc
+            setState({...state, isOpenNAV: true, account: true, isOpenACC: !state.isOpenACC});
+            // toggle sidebar of acc
+            openRefACC.current.classList.toggle('open');
+        };
     };
 
 /* ********************************************************* FUNCTIONS ********************************************************* */
@@ -76,6 +112,7 @@ function Navigation(props) {
 /* ********************************************************* USE EFFECT ********************************************************* */
     // set outside listener
     useEffect(() => {
+console.log(openRefACC.current.classList.contains(item => item === 'open'));
         document.addEventListener('click', globalClickListener);
         // cleanup 
         return () => {
@@ -86,99 +123,123 @@ function Navigation(props) {
     // close menubar
     const globalClickListener = () => {
         if (activeRef.current) activeRef.current.classList.remove('active');
-        if (openRef.current) openRef.current.classList.remove('open');
+        if (openRefNAV.current) openRefNAV.current.classList.remove('open');
+        if (openRefACC.current) openRefACC.current.classList.remove('open');
+        // cleanup
         document.removeEventListener('click', globalClickListener);
-        setState({...state, isOpen: true});
+        setState({...state, isOpenNAV: true, isOpenACC: true});
     }
 
 /* *********************************************************** NAV ITEMS ********************************************************* */
     let location = useLocation();
-
-    const navItemsElement = (
+    // navigation menu
+    const menuNAV = (
         <Fragment>
             <NavItem active={location.pathname === '/' ? true : false}>
-                <NavLink onClick={toggle} title="home" tag={Link} to="/">
-                    home
+                <NavLink onClick={toggleNAV} title="home" tag={Link} to="/">
+                    Home
                 </NavLink>
             </NavItem>
-            {props.user ? (
+            {props.user && (
                 <Fragment>
                     <NavItem active={location.pathname === '/user/dashboard' ? true : false}>
-                        <NavLink title="dashboard" onClick={toggle} tag={Link} to="/user/dashboard">
-                            dashboard
-                        </NavLink>
-                    </NavItem>
-                    <NavItem active={location.pathname === '/user/profile' ? true : false}>
-                        <NavLink title="profile" onClick={toggle} tag={Link} to="/user/profile">
-                            profile
+                        <NavLink title="dashboard" onClick={toggleNAV} tag={Link} to="/user/dashboard">
+                            Dashboard
                         </NavLink>
                     </NavItem>
                     {props.user.role === 'admin' && (
                         <NavItem active={location.pathname === '/user/admin' ? true : false}>
-                            <NavLink onClick={toggle} tag={Link} to="/user/admin">
-                                panel
+                            <NavLink onClick={toggleNAV} tag={Link} to="/user/admin">
+                                Panel
                             </NavLink>
                         </NavItem>
                     )}
                     {props.user.role === 'subadmin' && (
                         <NavItem active={location.pathname === '/user/subadmin' ? true : false}>
-                            <NavLink onClick={toggle} tag={Link} to="/user/subadmin">
-                                panel
+                            <NavLink onClick={toggleNAV} tag={Link} to="/user/subadmin">
+                                Panel
                             </NavLink>
                         </NavItem>
                     )}
+                </Fragment>
+            )}
+        </Fragment>
+    );
+    // account menu
+    const menuACC = (
+        <Fragment>
+            {props.user ? (
+                <Fragment>
+                    <NavItem active={location.pathname === '/user/profile' ? true : false}>
+                        <NavLink title="profile" onClick={toggleACC} tag={Link} to="/user/profile">
+                            Profile
+                        </NavLink>
+                    </NavItem>
                     <NavItem>
                         <NavLink title="logout" href="#" onClick={logoutBtnClick}>
-                            logout
+                            Logout
                         </NavLink>
                     </NavItem>
                 </Fragment>
             ) : (
                 <Fragment>
                     <NavItem active={location.pathname === '/login' ? true : false}>
-                        <NavLink onClick={toggle} title="login" tag={Link} to="/login">
-                            login
+                        <NavLink onClick={toggleACC} title="login" tag={Link} to="/login">
+                            Login
                         </NavLink>
                     </NavItem>
                     <NavItem active={location.pathname === '/register' ? true : false}>
-                        <NavLink onClick={toggle} title="register" tag={Link} to="/register">
-                            register
+                        <NavLink onClick={toggleACC} title="register" tag={Link} to="/register">
+                            Register
                         </NavLink>
                     </NavItem>
                 </Fragment>
             )}
         </Fragment>
     );
+
 /* *********************************************************** RETURN ********************************************************* */
     return (
-        <Navbar fixed="top" className="px-0 justify-content-center" style={{top: state.top}}>
-            <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 mt-2 mt-sm-0">
+        <Navbar fixed="top" className="p-0 justify-content-center" style={{top: state.top}}>
+            <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 pt-1 mt-2 mt-sm-0">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
                     <NavbarBrand className="m-0" title="home" tag={Link} to="/" />
                 </div>
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <NavLink title="login" tag={Link} to="/login" className=" p-0">
+                <NavLink title="account" className="p-0" onClick={toggleACC}>
                     <h4 className="d-flex text-align-center justify-content-center m-0">
-                        <i className="far fa-user-circle"></i>
+                        <i className="far fa-user-circle account"></i>
                     </h4>
                 </NavLink>
                 {/* navbar toggle for devices smaller than 576px */}
-                <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggle}>
+                <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggleNAV}>
                     <div ref={activeRef} className="menu-icon">
                         <span></span><span></span><span></span>
                     </div>
                 </NavbarToggler>
 {/* *********************************************************** SIDEBAR ********************************************************* */}
-                <div ref={openRef} className="sidebar">
+                <div ref={openRefNAV} className="sidebar text-center">
                     <Nav vertical className="mx-3">
-                        {navItemsElement}
+                        {menuNAV}
+                    </Nav>
+                </div>
+{/* *********************************************************** SIDEBAR ********************************************************* */}
+                <div ref={openRefACC} className="sidebar text-center">
+                    <Nav vertical className="mx-3">
+                        {menuACC}
                     </Nav>
                 </div>
 {/* *********************************************************** TOPBAR ********************************************************* */}
-                <Collapse className="topbar" isOpen={!state.isOpen} navbar>
+                <Collapse className="topbar" isOpen={!state.isOpenNAV} navbar>
                     <Nav horizontal="center" vertical="align-items-end">
-                        {navItemsElement}
+                        {menuNAV}
+                    </Nav>
+                </Collapse>
+{/* *********************************************************** ACCOUNTBAR ********************************************************* */}
+                <Collapse className="topbar" isOpen={!state.isOpenACC} navbar>
+                    <Nav horizontal="center" vertical="align-items-end">
+                        {menuACC}
                     </Nav>
                 </Collapse>
             </Container>

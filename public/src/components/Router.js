@@ -63,8 +63,8 @@ const Router = props => {
 return (
         <BrowserRouter>
             <div className={`${props.backgroundColor1} ${props.backgroundColor5}`} ref={divRef}></div>
-            <Navigation />
             <Fader>
+                <Navigation />
                 <Switch>
                     <Route path="/" exact component={Main} />
                     <Route path="/register" exact component={Register} />

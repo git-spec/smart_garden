@@ -103,6 +103,30 @@ body #root .bg-image {
   background-position: 20% 40%;
 }
 
+body #root > div:first-child {
+  height: 4rem;
+  width: 100vw;
+  position: fixed;
+  z-index: 1000;
+}
+
+body #root > div:first-child.color-1 {
+  background-color: #241b12 !important;
+  -webkit-box-shadow: 0 0.2rem 0.8rem 0.5rem #241b12;
+          box-shadow: 0 0.2rem 0.8rem 0.5rem #241b12;
+}
+
+body #root > div:first-child.color-5 {
+  background-color: #9ac992 !important;
+  -webkit-box-shadow: 0 0.2rem 0.8rem 0.5rem #9ac992;
+          box-shadow: 0 0.2rem 0.8rem 0.5rem #9ac992;
+}
+
+body #root > div:last-child {
+  min-height: 100vh;
+  background-color: #241b12 !important;
+}
+
 body #root > div:last-child > article {
   width: 42rem;
   position: fixed;
@@ -122,9 +146,36 @@ body #root > div:last-child > article a {
   text-align: right;
 }
 
+body #root > div:last-child > .container > div:nth-child(2) {
+  font-size: 0.8rem;
+}
+
+body #root .container {
+  position: relative;
+}
+
+body #root .container > form > .row .row > .col-6.text-right {
+  padding-left: 0;
+}
+
+body #root .container > form > .row .row > .col-6.text-right > span {
+  font-size: 1rem;
+}
+
+body #root .container .col-lg-7 > .col {
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #fdd79d;
+  border-radius: 1rem;
+}
+
+body #root > div > .container > .container {
+  padding-top: 8rem;
+}
+
 body #root .color-5 ~ div {
   color: #1d2c22 !important;
-  background-color: #9ac992;
+  background-color: #9ac992 !important;
 }
 
 body #root .color-5 ~ div input {
@@ -167,62 +218,6 @@ body #root .color-5 ~ div .container .col-lg-7 > .col {
 
 body #root .color-5 ~ div .container h3 {
   color: #007aa7;
-}
-
-body #root .color-5 ~ nav {
-  background-color: #9ac992;
-  color: #1d2c22 !important;
-}
-
-body #root > div:last-child > .container > div:nth-child(2) {
-  font-size: 0.8rem;
-}
-
-body #root > div:first-child {
-  height: 4rem;
-  width: 100vw;
-  position: fixed;
-  z-index: 1000;
-}
-
-body #root > div:first-child.color-1 {
-  background-color: #241b12;
-  -webkit-box-shadow: 0 0 1em 1em #241b12;
-          box-shadow: 0 0 1em 1em #241b12;
-}
-
-body #root > div:first-child.color-5 {
-  background-color: #9ac992;
-  -webkit-box-shadow: 0 0 1em 1em #9ac992;
-          box-shadow: 0 0 1em 1em #9ac992;
-}
-
-body #root > div:last-child {
-  min-height: 100vh;
-  background-color: #241b12;
-}
-
-body #root .container {
-  position: relative;
-}
-
-body #root .container > form > .row .row > .col-6.text-right {
-  padding-left: 0;
-}
-
-body #root .container > form > .row .row > .col-6.text-right > span {
-  font-size: 1rem;
-}
-
-body #root .container .col-lg-7 > .col {
-  border-width: 0.1rem;
-  border-style: solid;
-  border-color: #fdd79d;
-  border-radius: 1rem;
-}
-
-body #root > div > .container > .container {
-  padding-top: 8rem;
 }
 
 body h1,
@@ -365,7 +360,6 @@ body .breadcrumb-item.active {
 
 .navbar {
   background-color: rgba(255, 255, 255, 0) !important;
-  height: 4rem;
   -webkit-transition: top 0.3s;
   transition: top 0.3s;
 }
@@ -387,55 +381,6 @@ body .breadcrumb-item.active {
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
-}
-
-.color-5 + .navbar .navbar-brand {
-  background-image: url("../imgs/inuta_logo_dark.svg");
-}
-
-.color-5 + .navbar li {
-  color: #1d2c22 !important;
-}
-
-.color-5 + .navbar span,
-.color-5 + .navbar .btn {
-  border-width: 0.1rem;
-  border-style: solid;
-  border-color: #1d2c22;
-}
-
-.color-5 + .navbar > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
-.color-5 + .navbar > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
-  background-color: #1d2c22;
-}
-
-.color-5 + .navbar a.nav-link {
-  color: #1d2c22 !important;
-}
-
-.color-5 + .navbar .sidebar {
-  background-color: #9ac992;
-}
-
-.nav-item {
-  font-size: 1.2rem;
-}
-
-.nav-item:focus {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-  text-shadow: none !important;
-  border: none !important;
-  outline: none !important;
-}
-
-.nav-item.active {
-  font-weight: bold;
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-  text-shadow: none !important;
-  outline: none;
-  color: inherit;
 }
 
 a.nav-link {
@@ -503,7 +448,7 @@ a.nav-link:hover {
 .navbar-toggler .menu-icon > span:nth-child(2)::before, .navbar-toggler .menu-icon > span:nth-child(2)::after {
   content: '';
   position: absolute;
-  background-color: #fdd79d;
+  background-color: #fdd79d !important;
   height: 0.12rem;
   width: 0;
   -webkit-transition: width 0.3s;
@@ -533,20 +478,78 @@ a.nav-link:hover {
   width: 0.5rem;
 }
 
-/* mobile sidebar */
 .sidebar {
   width: 100vw;
   position: fixed;
   top: 0;
   left: -101vw;
   height: 100vh;
-  background-color: #241b12;
-  /* background: pink; */
+  background-color: #241b12 !important;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
   z-index: -1;
   padding-top: 8rem;
-  /* overflow-y: hidden; */
+}
+
+.color-5 + div .navbar {
+  background-color: #9ac992 !important;
+  -webkit-box-shadow: 0 0.2rem 0.8rem 0.5rem #9ac992;
+          box-shadow: 0 0.2rem 0.8rem 0.5rem #9ac992;
+}
+
+.color-5 + div .navbar .navbar-brand {
+  background-image: url("../imgs/inuta_logo_dark.svg");
+}
+
+.color-5 + div .navbar li {
+  color: #1d2c22 !important;
+}
+
+.color-5 + div .navbar span,
+.color-5 + div .navbar .btn {
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #1d2c22;
+}
+
+.color-5 + div .navbar > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+.color-5 + div .navbar > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+  background-color: #1d2c22 !important;
+}
+
+.color-5 + div .navbar a.nav-link {
+  color: #1d2c22 !important;
+}
+
+.color-5 + div .navbar .sidebar {
+  background-color: #9ac992 !important;
+}
+
+.color-1 + .navbar {
+  background-color: #241b12 !important;
+  -webkit-box-shadow: 0 0.2rem 0.8rem 0.5rem #241b12;
+          box-shadow: 0 0.2rem 0.8rem 0.5rem #241b12;
+}
+
+.nav-item {
+  font-size: 1.2rem;
+}
+
+.nav-item:focus {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.nav-item.active {
+  font-weight: bold;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  outline: none;
+  color: inherit;
 }
 
 @media (max-width: 576px) {
@@ -555,7 +558,7 @@ a.nav-link:hover {
     height: 2.6rem;
     background-image: url("../imgs/inuta_icon_light.svg");
   }
-  .color-5 + .navbar .navbar-brand {
+  .color-5 + div .navbar .navbar-brand {
     width: 2.6rem;
     height: 2.6rem;
     background-image: url("../imgs/inuta_icon_dark.svg");
@@ -699,7 +702,7 @@ button.plus > span:last-child {
 .btn.minus:active > span,
 button.plus:active > span,
 button.minus:active > span {
-  background-color: #241b12;
+  background-color: #241b12 !important;
 }
 
 .btn.down,
@@ -714,7 +717,7 @@ button.down > span {
   width: 0.1rem;
   height: 0.49rem;
   display: inline-block;
-  background-color: #241b12;
+  background-color: #241b12 !important;
   border-radius: 0.1rem;
 }
 
@@ -744,7 +747,7 @@ button.up > span {
   width: 0.1rem;
   height: 0.49rem;
   display: inline-block;
-  background-color: #241b12;
+  background-color: #241b12 !important;
   border-radius: 0.1rem;
 }
 
@@ -807,7 +810,7 @@ button:focus.down {
 
 .color-5 ~ div .plus:active > span,
 .color-5 ~ div .minus:active > span {
-  background-color: #9ac992;
+  background-color: #9ac992 !important;
 }
 
 .color-5 ~ div .up > span,

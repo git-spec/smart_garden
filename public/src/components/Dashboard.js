@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {useState, useEffect, Fragment} from 'react';
+import React, {useState, useEffect, createRef, Fragment} from 'react';
 // bootstrap
 import Image from 'react-bootstrap/Image';
 // router dom
@@ -60,7 +60,7 @@ const Dashboard = props => {
     const [width] = useWindowDimension();
 
 /* ********************************************************* REFERENCES ********************************************************* */
-    const addHubIconRef = React.createRef();
+    const addHubIconRef = createRef();
     const addDeviceIconRefs = [];
     const openHubIconRefs = [];
     const shineHubRefs = [];
@@ -637,11 +637,11 @@ const Dashboard = props => {
                                 <Collapse isOpen={true}>
 {/* ********************************************************* LOOP HUBS ********************************************************* */}
                                     {state.hubs.map((hub, idx) => {
-                                        const openHubIconRef = React.createRef();
+                                        const openHubIconRef = createRef();
                                         openHubIconRefs.push(openHubIconRef);
-                                        const addDeviceIconRef = React.createRef();
+                                        const addDeviceIconRef = createRef();
                                         addDeviceIconRefs.push(addDeviceIconRef);
-                                        const shineHubRef = React.createRef();
+                                        const shineHubRef = createRef();
                                         shineHubRefs.push(shineHubRef);
                                         return (
                                             <div key={idx} ref={shineHubRef}>
@@ -719,7 +719,7 @@ const Dashboard = props => {
                                                     <Collapse isOpen={state.collapseHub === idx}>
 {/* ********************************************************* LOOP DEVICE ********************************************************* */}
                                                         {state.devices.filter(device => device.hub_id === hub.id).map((device, idx) => {
-                                                            const shineDeviceRef = React.createRef();
+                                                            const shineDeviceRef = createRef();
                                                             shineDeviceRefs.push(shineDeviceRef);
                                                             return (
                                                                 <div key={device.sn_number} id={device.sn_number} ref={shineDeviceRef}>
