@@ -1,3 +1,4 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {useEffect} from 'react';
 // router dom
@@ -8,6 +9,7 @@ import {setUserAction} from '../actions';
 // services
 import {checkLoginPost} from '../services/api';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 const CheckLogin = props => {
 
     const history = useHistory();
@@ -19,7 +21,7 @@ const CheckLogin = props => {
             } else {
                 props.setUserAction(data);
             }
-        }).catch(err => {
+        }).catch(() => {
             history.push('/login');
         });
     // eslint-disable-next-line
@@ -32,7 +34,10 @@ const CheckLogin = props => {
     }
 };
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {user: state.user};
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setUserAction})(CheckLogin);

@@ -87,6 +87,7 @@ return (
     );
 }
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {
         backgroundUrl: state.backgroundUrl,
@@ -94,4 +95,6 @@ const mapStateToProps = state => {
         backgroundColor5: state.backgroundColor5
     };
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setUserAction})(Router);

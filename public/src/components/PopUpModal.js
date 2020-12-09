@@ -1,6 +1,8 @@
+/* ********************************************************* IMPORT ********************************************************* */
 import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 class PopUpModal extends React.Component {
 
     toggle = () => {
@@ -26,4 +28,5 @@ class PopUpModal extends React.Component {
     }
 }
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default PopUpModal;

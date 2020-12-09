@@ -186,10 +186,13 @@ function Navigation(props) {
     );
 }
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {
         user: state.user,
         socket: state.socket
     };
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);

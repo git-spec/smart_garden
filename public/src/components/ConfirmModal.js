@@ -1,6 +1,8 @@
+/* ********************************************************* IMPORT ********************************************************* */
 import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
+/* ********************************************************* COMPONENT ********************************************************* */
 const ConfirmModal = props => {
     return (
         <Modal isOpen={props.show} toggle={props.close}>
@@ -20,4 +22,5 @@ const ConfirmModal = props => {
     );
 }
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default ConfirmModal;
