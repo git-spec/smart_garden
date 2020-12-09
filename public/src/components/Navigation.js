@@ -11,7 +11,7 @@ import {Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, N
 // services
 import {logoutPost} from '../services/api';
 // window dimension hook
-import {useWindowDimension} from '../services/useWindowDimension';
+import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
