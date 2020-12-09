@@ -53,6 +53,7 @@ class MonitorWater extends Component {
         }
     }
 
+/* ********************************************************* EVENTS ********************************************************* */
     onBtnInputRangeTime = (e, output) => {
         e.preventDefault();
         // output of current value
@@ -76,6 +77,7 @@ class MonitorWater extends Component {
         this.setState({soilMoistureDevice: e.target.value});
     }
 
+/* ********************************************************* RENDER ********************************************************* */
     render() {
         let options = null;
         if(this.props.devices){
@@ -163,4 +165,5 @@ class MonitorWater extends Component {
     }
 };
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default MonitorWater;

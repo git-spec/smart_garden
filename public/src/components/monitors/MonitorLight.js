@@ -4,9 +4,9 @@ import React, {Fragment, Component} from 'react';
 // reactstrap
 import {Table} from 'reactstrap';
 // components
-import LineChart from './LineChart';
+import LineChart from '../LineChart';
 // services
-import {deviceLightDataPost} from '../services/productsApi';
+import {deviceLightDataPost} from '../../services/productsApi';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorLight extends Component {
@@ -31,6 +31,7 @@ class MonitorLight extends Component {
         }
     }
 
+/* ********************************************************* RENDER ********************************************************* */
     render() {
         let chart = null
         if (this.state.data.length) {
@@ -74,4 +75,5 @@ class MonitorLight extends Component {
     }
 }
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default MonitorLight;
