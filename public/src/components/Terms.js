@@ -4,179 +4,323 @@ import React from 'react';
 // reactstrap
 import {Container} from 'reactstrap';
 
-/* ******************************************************** COMPONENT ********************************************************* */
+/* ********************************************************* COMPONENT ********************************************************* */
 function Terms() {
     return (
-        <Container className="pt-4 mt-5">
-            <h1 className="adsimple-321232425">Impressum</h1>
-            <p className="adsimple-321232425">Informationspflicht laut § 5 TMG.</p>
-            <p className="adsimple-321232425">
-                MusterFirma
+        <Container className="p-0 pt-4 mt-5">
+            <h1>Allgemeine Geschäftsbedingungen</h1>
+            <br />
+            <br />
+            <p>§1 Geltung gegenüber Unternehmern und Begriffsdefinitionen</p>
+            (1) Die nachfolgenden Allgemeinen Geschäftbedingungen gelten für alle Lieferungen zwischen uns und einem
+            Verbraucher in ihrer zum Zeitpunkt der Bestellung gültigen Fassung.
+            <br />
+            <br />
+            Verbraucher ist jede natürliche Person, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend
+            weder ihrer gewerblichen noch ihrer selbständigen beruflichen Tätigkeit zugerechnet werden können (§ 13
+            BGB).
+            <br />
+            <br />
+            <p>§2 Zustandekommen eines Vertrages, Speicherung des Vertragstextes</p>
+            (1) Die folgenden Regelungen über den Vertragsabschluss gelten für Bestellungen über unseren
+            Internetshop http://www.beispielshop-online.de .<br />
+            <br />
+            <b>
+                (2) Im Falle des Vertragsschlusses kommt der Vertrag mit
                 <br />
-                Musterstrasse 1, Stiege 1 Tür 1, <br />
-                12345 Musterhausen, <br />
-                Deutschland
-            </p>
-            <p className="adsimple-321232425">
-                <strong>UID-Nummer:</strong> DE12345678
+                <div>
+                    <br />
+                    BeispielShop Online
+                    <br />
+                    Klaus Muster
+                    <br />
+                    Beispielstraße 42
+                    <br />
+                    D-98765 Musterstadt
+                    <br />
+                    Registernummer 12131415
+                    <br />
+                    Registergericht Amtsgericht Musterstadt
+                    <br />
+                    <br />
+                </div>
+                zustande.
                 <br />
-                <strong>Wirtschafts-ID:</strong> DE123456789
+            </b>
+            <br />
+            (3) Die Präsentation der Waren in unserem Internetshop stellen kein rechtlich bindendes Vertragsangebot
+            unsererseits dar, sondern sind nur eine unverbindliche Aufforderungen an den Verbraucher, Waren zu
+            bestellen. Mit der Bestellung der gewünschten Ware gibt der Verbraucher ein für ihn verbindliches
+            Angebot auf Abschluss eines Kaufvertrages ab.
+            <br />
+            (4) Bei Eingang einer Bestellung in unserem Internetshop gelten folgende Regelungen: Der Verbraucher
+            gibt ein bindendes Vertragsangebot ab, indem er die in unserem Internetshop vorgesehene Bestellprozedur
+            erfolgreich durchläuft.
+            <br />
+            <br />
+            Die Bestellung erfolgt in folgenden Schritten:
+            <br />
+            <br />
+            <div className="ml20">
+                1 Auswahl der gewünschten Ware
+                <br />
+                2 Bestätigen durch Anklicken der Buttons „Bestellen“ <br />
+                3 Prüfung der Angaben im Warenkorb
+                <br />
+                4 Betätigung des Buttons „zur Kasse“ <br />
+                5 Anmeldung im Internetshop nach Registrierung und Eingabe der Anmelderangaben (E-Mail-Adresse und
+                Passwort). <br />
+                6 Nochmalige Prüfung bzw. Berichtigung der jeweiligen eingegebenen Daten.
+                <br />
+                7 Verbindliche Absendung der Bestellung durch Anklicken des Buttons „kostenpflichtig bestellen“ bzw.
+                „kaufen“
+                <br />
+                <br />
+            </div>
+            Der Verbraucher kann vor dem verbindlichen Absenden der Bestellung durch Betätigen der in dem von ihm
+            verwendeten Internet-Browser enthaltenen „Zurück“-Taste nach Kontrolle seiner Angaben wieder zu der
+            Internetseite gelangen, auf der die Angaben des Kunden erfasst werden und Eingabefehler berichtigen bzw.
+            durch Schließen des Internetbrowsers den Bestellvorgang abbrechen. Wir bestätigen den Eingang der
+            Bestellung unmittelbar durch eine automatisch generierte E-Mail („Auftragsbestätigung“). Mit dieser
+            nehmen wir Ihr Angebot an.
+            <br />
+            <br />
+            (5) Speicherung des Vertragstextes bei Bestellungen über unseren Internetshop : Wir senden Ihnen die
+            Bestelldaten und unsere AGB per E-Mail zu. Die AGB können Sie jederzeit auch unter
+            http://www.beispielshop-online.de/agb.html einsehen. Ihre Bestelldaten sind aus Sicherheitsgründen nicht
+            mehr über das Internet zugänglich.
+            <br />
+            <br />
+            <p>§3 Preise, Versandkosten, Zahlung, Fälligkeit</p>
+            (1) Die angegebenen Preise enthalten die gesetzliche Umsatzsteuer und sonstige Preisbestandteile. Hinzu
+            kommen etwaige Versandkosten.
+            <br />
+            <br />
+            (2) Der Verbraucher hat die Möglichkeit der Zahlung per Vorkasse, Kreditkarte( Visa ) .<br />
+            <br />
+            (3) Hat der Verbraucher die Zahlung per Vorkasse gewählt, so verpflichtet er sich, den Kaufpreis
+            unverzüglich nach Vertragsschluss zu zahlen.
+            <br />
+            <br />
+            <p>§4 Lieferung</p>
+            (1) Sofern wir dies in der Produktbeschreibung nicht deutlich anders angegeben haben, sind alle von uns
+            angebotenen Artikel sofort versandfertig. Die Lieferung erfolgt hier spätesten innerhalb von 5
+            Werktagen. Dabei beginnt die Frist für die Lieferung im Falle der Zahlung per Vorkasse am Tag nach
+            Zahlungsauftrag an die mit der Überweisung beauftragte Bank und bei allen anderen Zahlungsarten am Tag
+            nach Vertragsschluss zu laufen. Fällt das Fristende auf einen Samstag, Sonntag oder gesetzlichen
+            Feiertag am Lieferort, so endet die Frist am nächsten Werktag.
+            <br />
+            <br />
+            (2) Die Gefahr des zufälligen Untergangs und der zufälligen Verschlechterung der verkauften Sache geht
+            auch beim Versendungskauf erst mit der Übergabe der Sache an den Käufer auf diesen über. <br />
+            <br />
+            <p>§5 Eigentumsvorbehalt</p>
+            Wir behalten uns das Eigentum an der Ware bis zur vollständigen Bezahlung des Kaufpreises vor. <br />
+            <br />
+            ****************************************************************************************************
+            <br />
+            <p>§6 Widerrufsrecht des Kunden als Verbraucher:</p>
+            <b>Widerrufsrecht für Verbraucher</b>
+            <br />
+            <br />
+            Verbrauchern steht ein Widerrufsrecht nach folgender Maßgabe zu, wobei Verbraucher jede natürliche
+            Person ist, die ein Rechtsgeschäft zu Zwecken abschließt, die überwiegend weder ihrer gewerblichen noch
+            ihrer selbständigen beruflichen Tätigkeit zugerechnet werden können:
+            <br />
+            <br />
+            <p>Widerrufsbelehrung</p>
+            <br />
+            <b>Widerrufsrecht</b>
+            <br />
+            <br />
+            Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.
+            <br />
+            <br />
+            Die Widerrufsfrist beträgt vierzehn Tage, ab dem Tag, an dem Sie oder ein von Ihnen benannter Dritter,
+            der nicht der Beförderer ist, die Waren in Besitz genommen haben bzw. hat.
+            <br />
+            <br />
+            Um Ihr Widerrufsrecht auszuüben, müssen Sie uns
+            <br />
+            <div>
+                BeispielShop Online
+                <br />
+                Klaus Muster
+                <br />
+                Beispielstraße 42
+                <br />
+                D-98765 Musterstadt
+                <br />
+                E-Mail shop@beispielshop.com
+                <br />
+                Telefax 05123 45678910
+                <br />
+            </div>
+            mittels einer eindeutigen Erklärung (z.B. ein mit der Post versandter Brief, Telefax oder E-Mail) über
+            Ihren Entschluss, diesen Vertrag zu widerrufen, informieren. Sie können dafür das beigefügte
+            Muster-Widerrufsformular verwenden, das jedoch nicht vorgeschrieben ist.
+            <br />
+            <br />
+            <b>Widerrufsfolgen</b>
+            <br />
+            <br />
+            Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben,
+            einschließlich der Lieferkosten (mit Ausnahme der zusätzlichen Kosten, die sich daraus ergeben, dass Sie
+            eine andere Art der Lieferung als die von uns angebotene, günstigste Standardlieferung gewählt haben),
+            unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über
+            Ihren Widerruf dieses Vertrags bei uns eingegangen ist. Für diese Rückzahlung verwenden wir dasselbe
+            Zahlungsmittel, das Sie bei der ursprünglichen Transaktion eingesetzt haben, es sei denn, mit Ihnen
+            wurde ausdrücklich etwas anderes vereinbart; in keinem Fall werden Ihnen wegen dieser Rückzahlung
+            Entgelte berechnet.
+            <br />
+            <br />
+            Wir können die Rückzahlung verweigern, bis wir die Waren wieder zurückerhalten haben oder bis Sie den
+            Nachweis erbracht haben, dass Sie die Waren zurückgesandt haben, je nachdem, welches der frühere
+            Zeitpunkt ist.
+            <br />
+            <br />
+            Sie haben die Waren unverzüglich und in jedem Fall spätestens binnen vierzehn Tagen ab dem Tag, an dem
+            Sie uns über den Widerruf dieses Vertrages unterrichten, an uns zurückzusenden oder zu übergeben. Die
+            Frist ist gewahrt, wenn Sie die Waren vor Ablauf der Frist von vierzehn Tagen absenden.
+            <br />
+            <br />
+            Sie tragen die unmittelbaren Kosten der Rücksendung der Waren.
+            <br />
+            <br />
+            <b>Ende der Widerrufsbelehrung</b>
+            <br />
+            <br />
+            ****************************************************************************************************
+            <br />
+            <p>§7 Widerrufsformular</p>
+            <p>Muster-Widerrufsformular</p>
+            (Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es
+            zurück.)
+            <br />
+            <div>
+                An :<br />
+                BeispielShop Online
+                <br />
+                Klaus Muster
+                <br />
+                Beispielstraße 42
+                <br />
+                D-98765 Musterstadt
+                <br />
+                E-Mail shop@beispielshop.com
+                <br />
+                <br />
+                Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über den Kauf der
+                folgenden Waren (*)/die Erbringung der folgenden Dienstleistung (*)
+                <br />
+                <br />
+                _____________________________________________________
+                <br />
+                <br />
+                Bestellt am (*)/erhalten am (*)
+                <br />
+                <br />
+                __________________
+                <br />
+                <br />
+                Name des/der Verbraucher(s)
+                <br />
+                <br />
+                _____________________________________________________
+                <br />
+                <br />
+                Anschrift des/der Verbraucher(s)
+                <br />
+                <br />
+                <br />
+                _____________________________________________________
+                <br />
+                <br />
+                Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)
+                <br />
+                <br />
+                __________________
+                <br />
+                <br />
+                Datum
+                <br />
+                <br />
+                __________________
+                <br />
+                <br />
+            </div>
+            (*) Unzutreffendes streichen.
+            <br />
+            <br />
+            <p>§8 Gewährleistung</p>
+            Es gelten die gesetzlichen Gewährleistungsregelungen.
+            <br />
+            <br />
+            <p>§9 Verhaltenskodex</p>
+            Wir haben uns den Verhaltenskodizes der folgenden Einrichtungen unterworfen:
+            <br />
+            <p>
+                Euro-Label Germany
+                <br />
+                EHI-EuroHandelsinstitut GmbH
+                <br />
+                Spichernstraße 55
+                <br />
+                50672 Köln
                 <br />
             </p>
-            <p className="adsimple-321232425">
-                <strong>Tel.:</strong> 01234/56789
+            Den Euro-Label Verhaltenskodex können Sie durch Anklicken des auf unserer Webseite angebrachten
+            Euro-Label-Siegels oder unter http://www.euro-label.com abrufen.
+            <br />
+            <br />
+            und <br />
+            <br />
+            <p>
+                Trusted Shops GmbH
                 <br />
-                <strong>Fax:</strong> 01234/56789-0
+                Colonius Carré
                 <br />
-                <strong>E-Mail:</strong> <a href="mailto:office@musterfirma.de">office@musterfirma.de</a>
-            </p>
-            <p className="adsimple-321232425">
-                <strong>Aufsichtsbehörde</strong>
+                Subbelrather Straße 15c
                 <br />
-                Bezirkshauptmannschaft Musterhausen
-                <br />
-                <strong>Webseite der Aufsichtsbehörde</strong>
-                <br />
-                <a href="https://www.aufsichtsbeoerde-musterhausen.de/">
-                    https://www.aufsichtsbeoerde-musterhausen.de/
-                </a>
-                <br />
-                <strong>Anschrift der Aufsichtsbehörde</strong>
-                <br /> Musterweg 1, 12345 Musterhausen
+                50823 Köln
                 <br />
             </p>
-            <p className="adsimple-321232425">
-                <strong>Berufsbezeichnung:</strong> Webdesigner, Grafiker
-            </p>
-            <p className="adsimple-321232425">
-                <strong>Vertreten durch</strong>
+            Den Trusted Shops Verhaltenskodex können Sie durch Anklicken des auf unserer Webseite angebrachten
+            Trusted-Shops-Siegels oder unter www.trustedshops.de abrufen.
+            <br />
+            <br />
+            <p>§10 Vertragssprache</p>
+            Als Vertragssprache steht ausschließlich Deutsch zur Verfügung.
+            <br />
+            <br />
+            ****************************************************************************************************
+            <br />
+            <p>§11 Kundendienst</p>
+            <b>
+                Unser Kundendienst für Fragen, Reklamationen und Beanstandungen steht Ihnen werktags von 9:00 Uhr
+                bis 17:30 Uhr unter
                 <br />
-                Markus Muster
-            </p>
-            <p>
-                Quelle: Erstellt mit dem{' '}
-                <a
-                    title="Impressum Generator Deutschland"
-                    href="https://www.adsimple.de/impressum-generator/"
-                    rel="follow"
-                >
-                    Impressum Generator
-                </a>{' '}
-                von AdSimple in Kooperation mit{' '}
-                <a href="https://www.justmed.de" rel="follow" title="">
-                    justmed.de
-                </a>
-            </p>
-            <h2 className="adsimple-321232425">EU-Streitschlichtung</h2>
-            <p>
-                Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten
-                wir Sie über die Online-Streitbeilegungsplattform (OS-Plattform) informieren.
                 <br />
-                Verbraucher haben die Möglichkeit, Beschwerden an die Online Streitbeilegungsplattform der
-                Europäischen Kommission unter{' '}
-                <a
-                    className="adsimple-321232425"
-                    href="https://ec.europa.eu/consumers/odr/main/index.cfm?event=main.home2.show&amp;lng=DE"
-                    rel="noopener"
-                >
-                    http://ec.europa.eu/odr?tid=321232425
-                </a>{' '}
-                zu richten. Die dafür notwendigen Kontaktdaten finden Sie oberhalb in unserem Impressum.
-            </p>
+                <p>
+                    Telefon: 05123 45678911
+                    <br />
+                    Telefax: 05123 45678912
+                    <br />
+                    E-Mail: service@beispielshop.de
+                    <br />
+                </p>
+                zur Verfügung.
+            </b>
+            <br />
+            <br />
+            ****************************************************************************************************
+            <br />
+            <br />
+            <p>Stand der AGB Nov.2020</p>
             <p>
-                Wir möchten Sie jedoch darauf hinweisen, dass wir nicht bereit oder verpflichtet sind, an
-                Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
-            </p>
-            <h2 className="adsimple-321232425">Haftung für Inhalte dieser Website</h2>
-            <p>
-                Wir entwickeln die Inhalte dieser Webseite ständig weiter und bemühen uns korrekte und aktuelle
-                Informationen bereitzustellen. Laut Telemediengesetz{' '}
-                <a
-                    className="adsimple-321232425"
-                    href="https://www.gesetze-im-internet.de/tmg/__7.html?tid=321232425"
-                    rel="noopener"
-                >
-                    (TMG) §7 (1)
-                </a>{' '}
-                sind wir als Diensteanbieter für eigene Informationen, die wir zur Nutzung bereitstellen, nach den
-                allgemeinen Gesetzen verantwortlich. Leider können wir keine Haftung für die Korrektheit aller
-                Inhalte auf dieser Webseite übernehmen, speziell für jene die seitens Dritter bereitgestellt wurden.
-                Als Diensteanbieter im Sinne der §§ 8 bis 10 sind wir nicht verpflichtet, die von ihnen
-                übermittelten oder gespeicherten Informationen zu überwachen oder nach Umständen zu forschen, die
-                auf eine rechtswidrige Tätigkeit hinweisen.
-            </p>
-            <p>
-                Unsere Verpflichtungen zur Entfernung von Informationen oder zur Sperrung der Nutzung von
-                Informationen nach den allgemeinen Gesetzen aufgrund von gerichtlichen oder behördlichen Anordnungen
-                bleiben auch im Falle unserer Nichtverantwortlichkeit nach den §§ 8 bis 10 unberührt.{' '}
-            </p>
-            <p>
-                Sollten Ihnen problematische oder rechtswidrige Inhalte auffallen, bitte wir Sie uns umgehend zu
-                kontaktieren, damit wir die rechtswidrigen Inhalte entfernen können. Sie finden die Kontaktdaten im
-                Impressum.
-            </p>
-            <h2 className="adsimple-321232425">Haftung für Links auf dieser Website</h2>
-            <p>
-                Unsere Webseite enthält Links zu anderen Webseiten für deren Inhalt wir nicht verantwortlich sind.
-                Haftung für verlinkte Websites besteht für uns nicht, da wir keine Kenntnis rechtswidriger
-                Tätigkeiten hatten und haben, uns solche Rechtswidrigkeiten auch bisher nicht aufgefallen sind und
-                wir Links sofort entfernen würden, wenn uns Rechtswidrigkeiten bekannt werden.
-            </p>
-            <p>
-                Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitte wir Sie uns zu kontaktieren. Sie
-                finden die Kontaktdaten im Impressum.
-            </p>
-            <h2 className="adsimple-321232425">Urheberrechtshinweis</h2>
-            <p>
-                Alle Inhalte dieser Webseite (Bilder, Fotos, Texte, Videos) unterliegen dem Urheberrecht der
-                Bundesrepublik Deutschland. Bitte fragen Sie uns bevor Sie die Inhalte dieser Website verbreiten,
-                vervielfältigen oder verwerten wie zum Beispiel auf anderen Websites erneut veröffentlichen. Falls
-                notwendig, werden wir die unerlaubte Nutzung von Teilen der Inhalte unserer Seite rechtlich
-                verfolgen.
-            </p>
-            <p>
-                Sollten Sie auf dieser Webseite Inhalte finden, die das Urheberrecht verletzen, bitten wir Sie uns
-                zu kontaktieren.
-            </p>
-            <h2 className="adsimple-321232425">Bildernachweis</h2>
-            <p>Die Bilder, Fotos und Grafiken auf dieser Webseite sind urheberrechtlich geschützt.</p>
-            <p>Die Bilderrechte liegen bei den folgenden Fotografen und Unternehmen:</p>
-            <ul className="adsimple-321232425">
-                <li className="adsimple-321232425">Fotograf Mustermann</li>
-            </ul>
-            <h1 className="adsimple-321232425">Datenschutzerklärung</h1>
-            <h2 className="adsimple-321232425">Datenschutz</h2>
-            <p>
-                Wir haben diese Datenschutzerklärung (Fassung 18.11.2020-321232425) verfasst, um Ihnen gemäß der
-                Vorgaben der{' '}
-                <a
-                    className="adsimple-321232425"
-                    href="https://eur-lex.europa.eu/legal-content/DE/ALL/?uri=celex%3A32016R0679&amp;tid=321232425"
-                    rel="noopener"
-                >
-                    Datenschutz-Grundverordnung (EU) 2016/679
-                </a>{' '}
-                zu erklären, welche Informationen wir sammeln, wie wir Daten verwenden und welche
-                Entscheidungsmöglichkeiten Sie als Besucher dieser Webseite haben.
-            </p>
-            <p>
-                Leider liegt es in der Natur der Sache, dass diese Erklärungen sehr technisch klingen, wir haben uns
-                bei der Erstellung jedoch bemüht die wichtigsten Dinge so einfach und klar wie möglich zu
-                beschreiben.
-            </p>
-            <p>
-                Quelle: Erstellt mit dem 
-                <a
-                    title="Datenschutz Generator Deutschland"
-                    href="https://www.adsimple.de/datenschutz-generator/"
-                    rel="follow"
-                >
-                    Datenschutz Generator
-                </a>{' '}
-                von AdSimple in Kooperation mit{' '}
-                <a href="https://www.fashiongott.de" rel="follow" title="">
-                    fashiongott.de
-                </a>
+                <i>
+                    <a href="http://www.agb.de">Gratis AGB</a> erstellt von agb.de
+                </i>
             </p>
         </Container>
     );
