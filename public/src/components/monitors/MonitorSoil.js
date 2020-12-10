@@ -2,13 +2,11 @@
 // react
 import React, {Fragment, Component} from 'react';
 // reactstrap
-import {
-    Table
-} from 'reactstrap';
+import {Table} from 'reactstrap';
 // components
-import LineChart from './LineChart';
+import LineChart from '../LineChart';
 // services
-import {deviceMoistureDataPost} from '../services/productsApi';
+import {deviceMoistureDataPost} from '../../services/productsApi';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorSoil extends Component {
@@ -33,6 +31,7 @@ class MonitorSoil extends Component {
         };
     };
 
+/* ********************************************************* RENDER ********************************************************* */
     render() {
         let chart = null;
         if (this.state.data.length) {
@@ -76,4 +75,5 @@ class MonitorSoil extends Component {
     };
 };
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default MonitorSoil;

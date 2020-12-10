@@ -1,3 +1,4 @@
+/* ********************************************************* IMPORT ********************************************************* */
 // react
 import React from 'react';
 // redux
@@ -7,6 +8,7 @@ import {Link, withRouter} from 'react-router-dom';
 // reactstrap
 import {Col, Container} from 'reactstrap';
 
+/* ******************************************************** COMPONENT ********************************************************* */
 function Footer({location}) {
     if (location.pathname !== '/') {
         return (
@@ -39,7 +41,11 @@ function Footer({location}) {
         return null;
     }
 }
+
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {user: state.user};
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps)(withRouter(Footer));

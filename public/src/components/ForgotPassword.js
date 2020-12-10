@@ -15,7 +15,7 @@ import {
 // components
 import PopUpModal from './PopUpModal';
 // services
-import {sendResetLink} from '../services/api';
+import {sendResetLinkPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const ForgotPassword = props => {
@@ -46,7 +46,7 @@ const ForgotPassword = props => {
                 modalClass: 'bg-danger'
             });
         } else {
-            sendResetLink(state.email).then(data => {
+            sendResetLinkPost(state.email).then(data => {
                 switch (data) {
                     case 1:
                         setState({
@@ -135,4 +135,5 @@ const ForgotPassword = props => {
     );
 };
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default ForgotPassword;

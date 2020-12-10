@@ -5,11 +5,11 @@ import React, {Fragment} from 'react';
 import {Table} from 'reactstrap';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const MonitorGarden = props => {
+const MonitorKitchen = props => {
 
     return (
         <Fragment>
-            <h3 className="text-center">garden</h3>
+            <h3 className="text-center">kitchen</h3>
             <Table style={{tableLayout: "fixed"}} borderless size="sm" className="mb-4">
                 <thead>
                     <tr>
@@ -22,11 +22,11 @@ const MonitorGarden = props => {
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">tomatoes</th>
-                        <td>17°</td>
-                        <td>39%</td>
-                        <td>62%</td>
-                        <td>71%</td>
+                        <th scope="row">herbs</th>
+                        <td></td>
+                        <td></td>
+                        <td>51%</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </Table>
@@ -34,4 +34,5 @@ const MonitorGarden = props => {
     )    
 }
 
-export default MonitorGarden;
+/* ********************************************************* EXPORT ********************************************************* */
+export default MonitorKitchen;

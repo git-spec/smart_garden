@@ -238,4 +238,5 @@ class Register extends React.Component {
     }
 }
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(null, {setBackgroundImageAction, setBackgroundColor1Action, setBackgroundColor5Action})(Register);
