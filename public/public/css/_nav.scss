@@ -17,13 +17,23 @@
         background-size: contain;
         background-position: center;
     }
+    // profile
+    & > .container > button.btn {
+        @include killBorder;
+        &:hover {
+            transform: scale(1.2);
+        }
+        &:active {
+            @include changeButton;
+        }
+    }    
     // menu points
     & li {
-        @include changeColor();
+        @include changeColor;
     }
     // menu icon color
     & span {
-        @include changeBorder();
+        @include changeBorder;
     }
 }
 // color of links

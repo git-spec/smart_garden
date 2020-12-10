@@ -373,6 +373,21 @@ body .breadcrumb-item.active {
   background-position: center;
 }
 
+.navbar > .container > button.btn {
+  border: none !important;
+  outline: none !important;
+}
+
+.navbar > .container > button.btn:hover {
+  -webkit-transform: scale(1.2);
+          transform: scale(1.2);
+}
+
+.navbar > .container > button.btn:active {
+  background-color: #fdd79d !important;
+  color: #241b12 !important;
+}
+
 .navbar li {
   color: #fdd79d !important;
 }
@@ -587,15 +602,15 @@ button {
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
   text-shadow: none !important;
-  background-color: none;
-  color: inherit;
+  background-color: transparent !important;
+  color: inherit !important;
   font-weight: bold;
 }
 
 .btn.btn-secondary, .btn.btn-secondary:not(:disabled):not(.disabled):active,
 button.btn-secondary,
 button.btn-secondary:not(:disabled):not(.disabled):active {
-  color: inherit;
+  color: inherit !important;
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
@@ -1420,13 +1435,13 @@ input[type='range']::after {
           animation: fadeIn 0.5s;
 }
 
-#root > div:last-child > div:nth-child(2) a,
+#root > div:last-child > div:last-child a,
 #root > div:last-child > div:nth-child(3) a {
   color: #fdd79d !important;
   font-size: 1rem;
 }
 
-#root > .color-5 ~ div > div:nth-child(2) a,
+#root > .color-5 ~ div > div:last-child a,
 #root > .color-5 ~ div > div:nth-child(3) a {
   color: #005018 !important;
   font-size: 1rem;
