@@ -46,7 +46,7 @@ const ForgotPassword = props => {
                 modalClass: 'bg-danger'
             });
         } else {
-            sendResetLinkPost(state.email).then(data => {
+            sendResetLinkPost(state.email.trim()).then(data => {
                 switch (data) {
                     case 1:
                         setState({
