@@ -7,7 +7,17 @@ import {setSocketAction, setUserAction} from '../actions';
 // router dom
 import {Link, useHistory, useLocation} from 'react-router-dom';
 // reactstrap
-import {Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink} from 'reactstrap';
+import {
+    Container,
+    Collapse,
+    Navbar,
+    NavbarToggler,
+    NavbarBrand,
+    Nav,
+    NavItem,
+    NavLink,
+    Button
+} from 'reactstrap';
 // services
 import {logoutPost} from '../services/api';
 // window dimension hook
@@ -207,13 +217,13 @@ console.log(openRefACC.current.classList.contains(item => item === 'open'));
                     <NavbarBrand className="m-0" title="home" tag={Link} to="/" />
                 </div>
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <NavLink title="account" className="p-0" onClick={toggleACC}>
+                <Button title="100" className="p-0" onClick={toggleACC}>
                     <h4 className="d-flex text-align-center justify-content-center m-0">
                         <i className="far fa-user-circle account"></i>
                     </h4>
-                </NavLink>
+                </Button>
                 {/* navbar toggle for devices smaller than 576px */}
-                <NavbarToggler className="d-block p-0 py-3 ml-2" onClick={toggleNAV}>
+                <NavbarToggler className="d-block p-0 py-3 ml-3" onClick={toggleNAV}>
                     <div ref={activeRef} className="menu-icon">
                         <span></span><span></span><span></span>
                     </div>
