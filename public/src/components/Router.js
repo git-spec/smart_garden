@@ -28,9 +28,10 @@ import UserProfile from './UserProfile';
 import Admin from './Admin';
 import SubAdmin from './SubAdmin';
 
-import Terms from './Terms';
 import About from './About';
 import Contact from './Contact';
+import Terms from './Terms';
+import Protection from './Protection';
 
 import ErrorPage from './ErrorPage';
 
@@ -76,9 +77,10 @@ return (
                     <Route path="/user/admin" exact component={() => <CheckLogin><Admin /></CheckLogin>} />
                     <Route path="/user/subadmin" exact component={() => <CheckLogin><SubAdmin /></CheckLogin>} />
                     <Route path="/user/dashboard" exact component={() => <CheckLogin><Dashboard /></CheckLogin>} />
+                    <Route path="/about" exact component={About} />
                     <Route path="/contact" exact component={Contact} />
                     <Route path="/terms" exact component={Terms} />
-                    <Route path="/about" exact component={About} />
+                    <Route path="/protection" exact component={Protection} />
                     <Route path="/" component={ErrorPage} />
                 </Switch>
                 <Footer />

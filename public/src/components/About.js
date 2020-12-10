@@ -1,12 +1,27 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React from 'react';
+import React, {useEffect} from 'react';
+// redux
+import {connect} from 'react-redux';
+import {
+    setBackgroundColor1Action,
+    setBackgroundColor5Action
+} from '../actions';
 // reactstrap
 import {Container} from 'reactstrap';
 
 /* ******************************************************** COMPONENT ********************************************************* */
-function About() {
-    return (
+function About(props) {
+
+/* ******************************************************** USE EFFECT ********************************************************* */
+useEffect(() => {
+        // set background color of nav
+        props.setBackgroundColor5Action(null);
+        props.setBackgroundColor1Action('color-1');
+    }, []);
+
+/* ******************************************************** RETURN ********************************************************* */
+return (
         <Container className="p-0 pt-4 mt-5">
             <h1 className="adsimple-321232425">Impressum</h1>
             <p className="adsimple-321232425">Informationspflicht laut § 5 TMG.</p>
@@ -67,6 +82,7 @@ function About() {
                     justmed.de
                 </a>
             </p>
+            <br />
             <h2 className="adsimple-321232425">EU-Streitschlichtung</h2>
             <p>
                 Gemäß Verordnung über Online-Streitbeilegung in Verbraucherangelegenheiten (ODR-Verordnung) möchten
@@ -126,6 +142,7 @@ function About() {
                 Wenn Ihnen rechtswidrige Links auf unserer Website auffallen, bitte wir Sie uns zu kontaktieren. Sie
                 finden die Kontaktdaten im Impressum.
             </p>
+            <br />
             <h2 className="adsimple-321232425">Urheberrechtshinweis</h2>
             <p>
                 Alle Inhalte dieser Webseite (Bilder, Fotos, Texte, Videos) unterliegen dem Urheberrecht der
@@ -144,43 +161,9 @@ function About() {
             <ul className="adsimple-321232425 ml-4">
                 <li className="adsimple-321232425">Fotograf Mustermann</li>
             </ul>
-            <h1 className="adsimple-321232425">Datenschutzerklärung</h1>
-            <h2 className="adsimple-321232425">Datenschutz</h2>
-            <p>
-                Wir haben diese Datenschutzerklärung (Fassung 18.11.2020-321232425) verfasst, um Ihnen gemäß der
-                Vorgaben der{' '}
-                <a
-                    className="adsimple-321232425"
-                    href="https://eur-lex.europa.eu/legal-content/DE/ALL/?uri=celex%3A32016R0679&amp;tid=321232425"
-                    rel="noopener"
-                >
-                    Datenschutz-Grundverordnung (EU) 2016/679
-                </a>{' '}
-                zu erklären, welche Informationen wir sammeln, wie wir Daten verwenden und welche
-                Entscheidungsmöglichkeiten Sie als Besucher dieser Webseite haben.
-            </p>
-            <p>
-                Leider liegt es in der Natur der Sache, dass diese Erklärungen sehr technisch klingen, wir haben uns
-                bei der Erstellung jedoch bemüht die wichtigsten Dinge so einfach und klar wie möglich zu
-                beschreiben.
-            </p>
-            <p>
-                Quelle: Erstellt mit dem 
-                <a
-                    title="Datenschutz Generator Deutschland"
-                    href="https://www.adsimple.de/datenschutz-generator/"
-                    rel="follow"
-                >
-                    Datenschutz Generator
-                </a>{' '}
-                von AdSimple in Kooperation mit{' '}
-                <a href="https://www.fashiongott.de" rel="follow" title="">
-                    fashiongott.de
-                </a>
-            </p>
         </Container>
     );
 }
 
 /* ********************************************************* EXPORT ********************************************************* */
-export default About;
+export default connect(null, {setBackgroundColor5Action, setBackgroundColor1Action})(About);

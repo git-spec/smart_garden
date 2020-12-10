@@ -1,11 +1,26 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React from 'react';
+import React, {useEffect} from 'react';
+// redux
+import {connect} from 'react-redux';
+import {
+    setBackgroundColor1Action,
+    setBackgroundColor5Action
+} from '../actions';
 // reactstrap
 import {Container} from 'reactstrap';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-function Terms() {
+function Terms(props) {
+
+/* ******************************************************** USE EFFECT ********************************************************* */
+    useEffect(() => {
+        // set background color of nav
+        props.setBackgroundColor5Action(null);
+        props.setBackgroundColor1Action('color-1');
+    }, []);
+
+/* ******************************************************** RETURN ********************************************************* */
     return (
         <Container className="p-0 pt-4 mt-5">
             <h1>Allgemeine Geschäftsbedingungen</h1>
@@ -327,4 +342,4 @@ function Terms() {
 }
 
 /* ********************************************************* EXPORT ********************************************************* */
-export default Terms;
+export default connect(null, {setBackgroundColor5Action, setBackgroundColor1Action})(Terms);
