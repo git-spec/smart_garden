@@ -25,14 +25,17 @@ function Footer({location}) {
                     </a>
                 </Col>
                 <Col className="d-flex justify-content-center pb-4">
+                    <Link to="/about" className="mx-3">
+                        About
+                    </Link>
                     <Link to="/contact" className="mx-3">
                         Contact
                     </Link>
                     <Link to="/terms" className="mx-3">
                         Terms and Conditions
                     </Link>
-                    <Link to="/about" className="mx-3">
-                        About
+                    <Link to="/protection" className="mx-3">
+                        Data Protection
                     </Link>
                 </Col>
             </Container>

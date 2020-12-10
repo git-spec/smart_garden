@@ -1,8 +1,12 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 // redux
 import {connect} from 'react-redux';
+import {
+    setBackgroundColor1Action,
+    setBackgroundColor5Action
+} from '../actions';
 // router dom
 import {Link} from 'react-router-dom';
 // reactstrap
@@ -14,7 +18,7 @@ import {sendMessagePost} from '../services/api';
 import validator from 'validator';
 
 /* ******************************************************** COMPONENT ********************************************************* */
-function Contact() {
+function Contact(props) {
 
     const initialState = {
         email: '',
@@ -25,6 +29,13 @@ function Contact() {
         errorElement: null
     };
     const [state, setState] = useState(initialState);
+
+/* ******************************************************** USE EFFECT ********************************************************* */
+useEffect(() => {
+    // set background color of nav
+    props.setBackgroundColor5Action(null);
+    props.setBackgroundColor1Action('color-1');
+}, []);
 
 /* ******************************************************** EVENTS ********************************************************* */
     const onSendBtnClick = e => {
@@ -175,4 +186,4 @@ const mapStateToProps = state => {
 };
 
 /* ********************************************************* EXPORT ********************************************************* */
-export default connect(mapStateToProps)(Contact);
+export default connect(mapStateToProps, {setBackgroundColor5Action, setBackgroundColor1Action})(Contact);
