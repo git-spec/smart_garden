@@ -5,11 +5,11 @@ import React, {Fragment} from 'react';
 import {Table} from 'reactstrap';
 
 /* ********************************************************* COMPONENT ********************************************************* */
-const MonitorHomeOffice = props => {
+const MonitorBalcony = props => {
 
     return (
         <Fragment>
-            <h3 className="text-center">home office</h3>
+            <h3 className="text-center">balcony</h3>
             <Table style={{tableLayout: "fixed"}} borderless size="sm" className="mb-4">
                 <thead>
                     <tr>
@@ -22,11 +22,25 @@ const MonitorHomeOffice = props => {
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">cactus</th>
-                        <td>21°</td>
+                        <th scope="row">palm</th>
+                        <td></td>
+                        <td></td>
                         <td>54%</td>
-                        <td>37%</td>
-                        <td>52%</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">lavender</th>
+                        <td></td>
+                        <td></td>
+                        <td>58%</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">fuchsias</th>
+                        <td></td>
+                        <td></td>
+                        <td>48%</td>
+                        <td></td>
                     </tr>
                 </tbody>
             </Table>
@@ -34,4 +48,5 @@ const MonitorHomeOffice = props => {
     )    
 }
 
-export default MonitorHomeOffice;
+/* ********************************************************* EXPORT ********************************************************* */
+export default MonitorBalcony;

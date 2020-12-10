@@ -13,7 +13,7 @@ import Image from 'react-bootstrap/Image';
 // components
 import PopUpModal from './PopUpModal';
 // services
-import {editPost, getUser} from '../services/api';
+import {editUserPost, getUserPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const UserProfile = props => {
@@ -41,24 +41,34 @@ const UserProfile = props => {
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
         // get user data from db
-        getUser(props.user.id).then(user => {
-            if (user.img) {
-                setState({
-                    ...state,
-                    firstName: user.firstname,
-                    lastName: user.lastname,
-                    userName: user.username,
-                    city: user.city,
-                    userImg: user.img
-                });
-            } else {
-                setState({
-                    ...state,
-                    firstName: user.firstname,
-                    lastName: user.lastname,
-                    userName: user.username,
-                    city: user.city
-                });
+        getUserPost(props.user.id).then(user => {
+            switch (user) {
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('No user found!');
+                    break;
+                default:
+                    if (user.img) {
+                        setState({
+                            ...state,
+                            firstName: user.firstname,
+                            lastName: user.lastname,
+                            userName: user.username,
+                            city: user.city,
+                            userImg: user.img
+                        });
+                    } else {
+                        setState({
+                            ...state,
+                            firstName: user.firstname,
+                            lastName: user.lastname,
+                            userName: user.username,
+                            city: user.city
+                        });
+                    }        
+                    break;
             }
         }).catch(err => {
             console.log(err);
@@ -82,7 +92,7 @@ const UserProfile = props => {
                 showErrorModal: true
             });
         } else {
-            editPost(
+            editUserPost(
                 props.user.id,
                 state.firstName,
                 state.lastName,
@@ -98,7 +108,7 @@ const UserProfile = props => {
                     case 1:
                         badgeClass = 'alert alert-success';
                         badgeMessage = 'Your profile has been changed successfully.';
-                        getUser(props.user.id).then(user => {
+                        getUserPost(props.user.id).then(user => {
                             setState({
                                 ...state,
                                 userImg: user.img,
@@ -198,6 +208,7 @@ const UserProfile = props => {
                     />
                 </Col>
             </Row>
+{/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-5">
                 <div className="col-lg-12 col-md-12">{state.resultElement}</div>
                 <Row xs="1" sm="2">
@@ -290,7 +301,10 @@ const UserProfile = props => {
     );
 };
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {user: state.user};
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setBackgroundColor5Action, setBackgroundColor1Action})(UserProfile);

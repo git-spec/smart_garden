@@ -41,11 +41,11 @@ const {
     verifyUser, 
     confirmVerifiedUser, 
     sendResetLink, 
-    resetPass,
+    resetPassword,
     getAllUsers,
     getUser,
     changeVerification,
-    blockAccount,
+    informBlockedUserByEmail,
     deleteUser,
     changeUserRole,
     sendMessage
@@ -60,8 +60,8 @@ const port = process.env.PORT || 5000;
 // destructering
 const {log} = require("console");
 
-/* ********************************************************* POST ROUTES ********************************************************* */
-// register user
+/* ***************************************************** REGISTRATION ******************************************************* */
+// registers the user
 app.post('/register', (req, res) => {
     // 1 user registered successfully
     // 2 server error
@@ -87,7 +87,23 @@ app.post('/register', (req, res) => {
     };
 });
 
-// login user
+// verifies the user
+app.post('/verifyuser', (req, res) => {
+    // 1 user updated successfully to verified 
+    // 2 server error
+    verifyUser(req.body.email).then(() => {
+        confirmVerifiedUser(req.body.email).then(() => {
+            res.json(1);
+        }).catch(() => {
+            res.json(2);
+        });
+    }).catch(() => {
+        res.json(2);
+    });
+});
+
+/* ***************************************************** LOGIN ******************************************************* */
+// logs the user in
 app.post('/login', (req, res) => {
     // user: user logged in successfully
     // 2 server error
@@ -111,9 +127,9 @@ app.post('/login', (req, res) => {
     };
 });
 
-// check if user is logged in
+// checks if the user is logged in
 app.post('/checklogin', (req, res) => {
-    // // just for development, delete for production!!!
+    // static user: just for development, delete for production!!!
     // req.session.user = {
     //     id: 3,
     //     firstname: 'Felix',
@@ -123,6 +139,7 @@ app.post('/checklogin', (req, res) => {
     //     password: 'sha1$8212f6a2$1$0714d58be01c48e54a40320817e6dfbdf53af8da',
     //     verified: 1
     // };
+
     // 10 session does not exist
     if (req.session.user) {
         const user = req.session.user;
@@ -132,59 +149,25 @@ app.post('/checklogin', (req, res) => {
     }
 });
 
-// verify user
-app.post('/verifyuser', (req, res) => {
-    // 1 user updated successfully to verified 
+/* ***************************************************** USER PROFILE ******************************************************* */
+// gets the user to edit his data
+app.post('/getuser', (req, res) => {
+    // user: get user successfully
     // 2 server error
-    verifyUser(req.body.email).then(() => {
-        confirmVerifiedUser(req.body.email).then(() => {
-            res.json(1);
-        }).catch(() => {
-            res.json(2);
-        });
-    }).catch(() => {
-        res.json(2);
-    });
-});
-
-// change user verification
-app.post('/changeverification', (req, res) => {
-    // 1 email has been sent successfully
-    // 2 server error
-    // 3 email has not been sent
-    if (req.body.verified) {
-        changeVerification(req.body.id).then(() => {
-            // inform the user by email that his account has been blocked
-            blockAccount(req.body.email).then(() => {
-                res.json(1);
-            }).catch(err => {
-                res.json(3);
-            });
-        }).catch(err => {
-            res.json(2)
-        });
-    } else {
-        changeVerification(req.body.id).then(() => {
-           res.json(1)
-        }).catch(err => {
-            res.json(2)
-        });
-    }
-});
-
-// change user role 
-app.post('/changeuserrole', (req, res) => {
-    // 1 user role was changed successfully 
-    // 2 user role was not changed 
-    changeUserRole(req.body.id, req.body.role).then(() => {
-        res.json(1)
+    // 3 no user found
+    getUser(req.body.id).then(user => {
+        res.json(user);
     }).catch(err => {
-        res.json(2)
+        if (err === 3) {
+            res.json(3);
+        } else {
+            res.json(2);
+        }
     });
 });
 
-// edit user
-app.post('/edit', (req, res) => {
+// edits the user
+app.post('/edituser', (req, res) => {
     // 1 user edited successfully
     // 2 server error
     // 3 user already exists
@@ -226,7 +209,8 @@ app.post('/edit', (req, res) => {
     }
 });
 
-// send an email where the user can reset his password
+/* ***************************************************** RESET PASSWORD ******************************************************* */
+// sends an email where the user can reset his password
 app.post('/sendresetlink', (req, res) => {
     // 1 email was sent successfully
     // 2 server error
@@ -242,12 +226,12 @@ app.post('/sendresetlink', (req, res) => {
     });
 });
 
-// reset the password of the user
-app.post('/resetpass', (req, res) => {
+// resets the password of the user
+app.post('/resetpassword', (req, res) => {
     // 1 password reset was successful
     // 2 server error
     // 3 user does not exist
-    resetPass(req.body.email, req.body.id, req.body.pass).then(() => {
+    resetPassword(req.body.email, req.body.id, req.body.pass).then(() => {
         res.json(1);
     }).catch(err => {
         if (err === 3) {
@@ -258,20 +242,10 @@ app.post('/resetpass', (req, res) => {
     });
 });
 
-// delete user account 
-app.post('/deleteuser', (req, res) => {
-    // 1 account was deleted successfully
-    // 2 account was not deleted
-    deleteUser(req.body.id).then(() => {
-        res.json(1);
-    }).catch(() => {
-        res.json(2);
-    });
-});
-
-// get all users
+/* ***************************************************** ADMIN PANEL ******************************************************* */
+// gets all users
 app.post('/getallusers', (req, res) => {
-    // 1 get all users from db successfully
+    // users: gets all users from db successfully
     // 2 server error
     // 3 no users found
     getAllUsers().then((users) => {
@@ -285,26 +259,58 @@ app.post('/getallusers', (req, res) => {
     });
 });
 
-// get user to edit his data
-app.post('/getuser', (req, res) => {
-    // 1 get user successfully
+// changes the user verification
+app.post('/changeverification', (req, res) => {
+    // 1 account has been blocked and email has been sent successfully
     // 2 server error
-    // 3 no user found
-    getUser(req.body.id).then(user => {
-        res.json(user);
-    }).catch(err => {
-        if (err === 3) {
-            res.json(3);
-        } else {
+    // 3 email has not been sent
+    if (req.body.verified) {
+        changeVerification(req.body.id).then(() => {
+            // informs the user by email that his account has been blocked
+            informBlockedUserByEmail(req.body.email).then(() => {
+                res.json(1);
+            }).catch(() => {
+                res.json(3);
+            });
+        }).catch(() => {
             res.json(2);
-        }
+        });
+    } else {
+        changeVerification(req.body.id).then(() => {
+           res.json(1);
+        }).catch(() => {
+            res.json(2);
+        });
+    }
+});
+
+// changes the user role 
+app.post('/changeuserrole', (req, res) => {
+    // 1 user role was changed successfully 
+    // 2 server error 
+    changeUserRole(req.body.id, req.body.role).then(() => {
+        res.json(1);
+    }).catch(() => {
+        res.json(2);
     });
 });
 
-// send message from contact form
+// deletes an user account 
+app.post('/deleteuser', (req, res) => {
+    // 1 account was deleted successfully
+    // 2 server error 
+    deleteUser(req.body.id).then(() => {
+        res.json(1);
+    }).catch(() => {
+        res.json(2);
+    });
+});
+
+/* ***************************************************** CONTACT ******************************************************* */
+// sends message from contact form
 app.post('/sendmessage', (req, res) => {
     // 1 message was sent successfully
-    // 2 message was not sent
+    // 2 server error 
     if (req.body.email.trim() && req.body.message.trim()) {
         sendMessage(req.body.email.trim(), req.body.message).then(() => {
             res.json(1);
@@ -317,6 +323,7 @@ app.post('/sendmessage', (req, res) => {
 });
 
 /* ********************************************************* USE ROUTES ********************************************************* */
+// protected user area
 app.use('/user', userRoutes);
 
 app.use('/', (req, res) => {
@@ -330,14 +337,14 @@ const server = app.listen(port, () => {
 });
 
 /* ********************************************************* SOCKET.IO ********************************************************* */
-// configure the socket
+// configures the socket
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
     log('Hub is connected');
 
     socket.on('user_connect', userID => {
-        // join user
+        // joins the user
         socket.join(userID.toString());
         log(`user ${userID} is connected`);
         socket.broadcast.to(userID).emit('user_connect');
@@ -352,12 +359,12 @@ io.on('connection', socket => {
             socket.broadcast.to(request.userId).emit("stopRealTimeData", request.sn);
         });
 
-        // turn water on off
+        // turns water on or off
         socket.on('waterOnOff', data => {
             socket.broadcast.to(userID).emit("waterOnOff", data);
         })
 
-        // send the new configuration for waterpump
+        // sends the new configuration for the water pump
         socket.on('waterConf', data => {
             socket.broadcast.to(userID).emit("waterConf", data);
         })
@@ -375,20 +382,20 @@ io.on('connection', socket => {
     }); 
 
     socket.on('hub_connect', data => {
-        // check in the database if the hub exists
+        // checks in the db if the hub exists
         SQL.checkExist('iot_hubs', '*', {sn_number: data.sn_number}).then(hubs => {
             if (hubs.length > 0) {
                 if (hubs[0].user_id) {
-                    // join user
+                    // joins the user
                     socket.join(hubs[0].user_id);
 
-                    // change the status from hub to connected in db
+                    // changes the status from hub to connected in db
                     SQL.updateRecord("iot_hubs", {connected: 1}, {sn_number: data.sn_number}).then(() => {
                         socket.broadcast.to(hubs[0].user_id).emit('hub_connect', data.sn_number)
                         log(`Hub ${hubs[0].name} is connected now!`);
-                        // get the devices that belong to this hub
+                        // gets all devices that belong to this hub
                         SQL.checkExist('iot_device', '*', {hub_id: hubs[0].id}).then(devices => {
-                            // send info about connected devices to raspberry
+                            // sends info about the connected devices to raspberry
                             socket.emit('toDevice', devices);
                         }).catch(err => {
                             log(err);
@@ -397,9 +404,9 @@ io.on('connection', socket => {
                         log(err);
                     });
 
-                    // listening to info from raspberry
+                    // listens to info from raspberry
                     socket.on('device_connect', sn_number => {
-                        // change the status from device to connected in DB
+                        // changes the status from device to connected in db
                         SQL.updateRecord('iot_device', {connected: 1}, {sn_number: sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('device_connect', sn_number);
                             log(`Device "${sn_number}" is connected now`);
@@ -408,9 +415,9 @@ io.on('connection', socket => {
                         });
                     });
 
-                    // listening to info from raspberry
+                    // listens to info from raspberry
                     socket.on('device_disconnect', sn_number => {
-                        // change the status from device to disconnected in DB
+                        // changes the status from device to disconnected in db
                         SQL.updateRecord('iot_device', {connected: 0}, {sn_number: sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('device_disconnect', sn_number);
                             log(`Device "${sn_number}" is disconnected now`);
@@ -421,19 +428,19 @@ io.on('connection', socket => {
                     
                     // listener for the incoming data
                     socket.on("realTimeData", info => {
-                        // send the data back to the client
+                        // sends the data back to the client
                         socket.broadcast.to(hubs[0].user_id).emit("realTimeIncomingData", info);
                     });
 
-                    // save data from devices to db
+                    // saves data from devices to db
                     socket.on("deviceDataInterval", info => {
                         SQL.insertMulti("iot_data", ["data", "device_id", "timestamp"], [JSON.stringify(info.data), info.device, 'now()']).then(result => {
                         });
                     });
 
-                    // disconnect hub
+                    // disconnects the hub
                     socket.on('disconnect', () => {
-                        // change the status from hub to disconnected in DB
+                        // changes the status from hub to disconnected in db
                         SQL.updateRecord("iot_hubs", {connected: 0}, {sn_number: data.sn_number}).then(() => {
                             socket.broadcast.to(hubs[0].user_id).emit('hub_disconnect', data.sn_number);
                             log(`Hub "${hubs[0].name}" is disconnected now`);  
@@ -460,7 +467,6 @@ io.on('connection', socket => {
     });
 
     socket.on('disconnect', () => {
-        // log('Hub is disconnected');
         socket.disconnect();
     });
 

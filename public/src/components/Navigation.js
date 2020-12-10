@@ -21,7 +21,7 @@ import {
 // services
 import {logoutPost} from '../services/api';
 // window dimension hook
-import {useWindowDimension} from '../services/useWindowDimension';
+import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
@@ -257,10 +257,13 @@ console.log(openRefACC.current.classList.contains(item => item === 'open'));
     );
 }
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {
         user: state.user,
         socket: state.socket
     };
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);

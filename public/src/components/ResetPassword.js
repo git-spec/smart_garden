@@ -8,7 +8,7 @@ import {useParams, Link} from 'react-router-dom';
 // components
 import PopUpModal from './PopUpModal';
 // services
-import {resetPass} from '../services/api';
+import {resetPasswordPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const ResetPassword = () => {
@@ -45,7 +45,7 @@ const ResetPassword = () => {
                 errorTitle: 'Entry Error'
             });
         } else {
-            resetPass(params.email, params.id, state.password).then(data => {
+            resetPasswordPost(params.email, params.id, state.password).then(data => {
                 switch (data) {
                     case 1:
                         setState({
@@ -146,4 +146,5 @@ const ResetPassword = () => {
     );
 };
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default ResetPassword;

@@ -11,7 +11,7 @@ import {Container, Row, Col, Button, Table, ButtonGroup, Breadcrumb, BreadcrumbI
 import PopUpModal from './PopUpModal';
 import ConfirmModal from './ConfirmModal';
 // services
-import {getAllUsers, changeVerificationPost, deleteUserPost, changeUserRolePost} from '../services/api';
+import {getAllUsersPost, changeVerificationPost, deleteUserPost, changeUserRolePost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Admin = props => {
@@ -22,16 +22,23 @@ const Admin = props => {
         confirmModalContent: null,
         confirmModalDelete: null,
         errorComponent: null,
-        showErrorModal: false,
+        showErrorModal: false
     };
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
-        getAllUsers().then(data => {
-            setState({
-                ...state,
-                users: data
-            });
+        getAllUsersPost().then(data => {
+            switch (data) {
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('No users found!');
+                    break;
+                default:
+                    setState({...state, users: data});
+                    break;
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -41,18 +48,27 @@ const Admin = props => {
 /* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
-        changeVerificationPost(userID, email, verified).then(() => {
-            // change the user array in the state after it has been changed in the database
-            let newUsers = state.users.map(user => {
-                if (user.id === userID) {
-                    user.verified = !user.verified;
-                }
-                return user;
-            });
-            setState({
-                ...state,
-                users: newUsers
-            });
+        changeVerificationPost(userID, email, verified).then(data => {
+            switch (data) {
+                case 1:
+                    // change the user array in the state after it has been changed in the database
+                    let newUsers = state.users.map(user => {
+                        if (user.id === userID) {
+                            user.verified = !user.verified;
+                        }
+                        return user;
+                    });
+                    setState({...state, users: newUsers});
+                    break;
+                case 2:
+                    alert('Server error!');
+                    break;
+                case 3:
+                    alert('Email has not been sent!');
+                    break;
+                default:
+                    break;
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -96,18 +112,19 @@ const Admin = props => {
 /* ********************************************************* CHANGE USER ROLE ********************************************************* */
     const changeUserRole = (e, role, userID) => {
         e.preventDefault();
-        changeUserRolePost(userID, role).then(() => {
-            // change the user array in the state after it has been changed in the database
-            let newUsers = state.users.map(user => {
-                if (user.id === userID) {
-                    user.role = role;
-                }
-                return user;
-            });
-            setState({
-                ...state,
-                users: newUsers
-            });
+        changeUserRolePost(userID, role).then(data => {
+            if (data === 1) {
+                // change the user array in the state after it has been changed in the database
+                let newUsers = state.users.map(user => {
+                    if (user.id === userID) {
+                        user.role = role;
+                    }
+                    return user;
+                });
+                setState({...state, users: newUsers});
+            } else {
+                alert('Server error!');
+            }
         }).catch(err => {
             console.log(err);
         });
@@ -247,7 +264,10 @@ const Admin = props => {
     );
 };
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {user: state.user};
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps)(Admin);

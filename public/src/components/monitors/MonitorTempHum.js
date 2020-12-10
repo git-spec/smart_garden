@@ -4,9 +4,9 @@ import React, {Component, Fragment} from 'react';
 // reactstrap
 import {Table} from 'reactstrap';
 // components
-import LineChartMultiple from './LineChartMultiple';
+import LineChartMultiple from '../LineChartMultiple';
 // services
-import {deviceTempHumDataPost} from '../services/productsApi';
+import {deviceTempHumDataPost} from '../../services/productsApi';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorTempHum extends Component {
@@ -31,6 +31,7 @@ class MonitorTempHum extends Component {
         }
     }
 
+/* ********************************************************* RENDER ********************************************************* */
     render() {
         let chart = null;
         if (this.state.data.length) {
@@ -86,4 +87,5 @@ class MonitorTempHum extends Component {
     }
 };
 
+/* ********************************************************* EXPORT ********************************************************* */
 export default MonitorTempHum;

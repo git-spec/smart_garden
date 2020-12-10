@@ -26,6 +26,7 @@ function Contact() {
     };
     const [state, setState] = useState(initialState);
 
+/* ******************************************************** EVENTS ********************************************************* */
     const onSendBtnClick = e => {
         e.preventDefault();
         if (!validator.isEmail(state.email.trim()) || state.email.trim() === '' || state.message === '') {
@@ -87,6 +88,7 @@ function Contact() {
             entriesError: false
         });
     };
+
 /* *********************************************************** RETURN ********************************************************* */
     return (
         <Fragment>
@@ -167,7 +169,10 @@ function Contact() {
     );
 }
 
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {user: state.user};
 };
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default connect(mapStateToProps)(Contact);
