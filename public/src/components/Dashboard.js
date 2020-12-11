@@ -56,6 +56,7 @@ import {
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Dashboard = props => {
+    
     const history = useHistory();
     const [width] = useWindowDimension();
 
@@ -529,7 +530,7 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* PROFILE ********************************************************* */
-    let img = '/uploads/1.jpg';
+    let img = '/uploads/userDummy.jpg';
     if (props.user.img) {
         img = props.user.img;
     }
