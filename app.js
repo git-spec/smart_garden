@@ -179,9 +179,9 @@ app.post('/edituser', (req, res) => {
     const password = req.body.password;
     if (req.files) {
         const userImg = req.files.userImg;
-        if (id && firstName && lastName && userName) {
-            editUser(id, firstName, lastName, userName, city, password, userImg).then(() => {
-                res.json(1);
+        if (id && firstName && lastName && userName && userImg) {
+            editUser(id, firstName, lastName, userName, city, password, userImg).then(user => {
+                res.json(user);
             }).catch(err => {
                 if (err === "exist") {
                     res.json(3);
@@ -194,8 +194,8 @@ app.post('/edituser', (req, res) => {
         };
     } else {
         if (id && firstName && lastName && userName) {
-            editUser(id, firstName, lastName, userName, city, password).then(() => {
-                res.json(1);
+            editUser(id, firstName, lastName, userName, city, password).then(user => {
+                res.json(user);
             }).catch(err => {
                 if (err === "exist") {
                     res.json(3);
