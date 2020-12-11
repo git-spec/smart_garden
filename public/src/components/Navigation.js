@@ -122,7 +122,7 @@ function Navigation(props) {
 /* ********************************************************* USE EFFECT ********************************************************* */
     // set outside listener
     useEffect(() => {
-console.log(openRefACC.current.classList.contains(item => item === 'open'));
+        // console.log(openRefACC.current.classList.contains(item => item === 'open'));
         document.addEventListener('click', globalClickListener);
         // cleanup 
         return () => {
