@@ -1,8 +1,8 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {useState, useEffect, createRef, Fragment} from 'react';
-// bootstrap
-import Image from 'react-bootstrap/Image';
+// react bootstrap
+// import Image from 'react-bootstrap/Image';
 // router dom
 import {useHistory, Link} from 'react-router-dom';
 // redux
@@ -56,6 +56,7 @@ import {
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Dashboard = props => {
+
     const history = useHistory();
     const [width] = useWindowDimension();
 
@@ -529,10 +530,8 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* PROFILE ********************************************************* */
-    let img = '/uploads/1.jpg';
-    if (props.user.img) {
-        img = props.user.img;
-    }
+    let userImg = '/uploads/userDummy.jpg';
+    if (props.user.img) userImg = props.user.img;
     const o_date = new Intl.DateTimeFormat();
     const f_date = (m_ca, m_it) => Object({...m_ca, [m_it.type]: m_it.value});
     const m_date = o_date.formatToParts().reduce(f_date, {});
@@ -572,7 +571,8 @@ const Dashboard = props => {
                     <Col className="d-flex align-items-center">
                         <div className="mr-2">
                             <span>
-                                <Image src={img} height={'32px'} width={'32px'} roundedCircle />
+                                <img src={userImg} alt="" style={{width: '32px', height: '32px', borderRadius: '50%'}} /> 
+                                {/* <Image src={userImg} height={'32px'} width={'32px'} roundedCircle /> */}
                             </span>
                         </div>
                         <div className="flex-grow-1 p-0 m-0">

@@ -35,6 +35,7 @@ useEffect(() => {
     // set background color of nav
     props.setBackgroundColor5Action(null);
     props.setBackgroundColor1Action('color-1');
+// eslint-disable-next-line
 }, []);
 
 /* ******************************************************** EVENTS ********************************************************* */
