@@ -174,8 +174,8 @@ export const editUserPost = (id, firstName, lastName, userName, city, password, 
             body: fd
         }).then(response => {
             if (response.status === 200) {
-                response.json().then(receivedData => {
-                    resolve(receivedData);
+                response.json().then(data => {
+                    resolve(data);
                 }).catch(err => {
                     reject(err);
                 });

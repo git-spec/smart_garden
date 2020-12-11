@@ -115,71 +115,109 @@ function getUser(id) {
     });
 }
 
+// // edits the user on the profile page
+// function editUser(id, firstName, lastName, userName, city, password, userImg) {
+//     if (password) {
+//         return new Promise((resolve, reject) => {
+//             runQuery(
+//                 `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
+//                 users.city='${city}', users.password='${passwordHash.generate(password)}' WHERE users.id=${id}`
+//             ).then(result => {
+//                 if (userImg) {
+//                     let saveImgsQuery = '';
+//                     // gets file extension
+//                     let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
+//                     // sets new image name
+//                     let newName = userName.trim().replace(/ /g, '_') + ext;
+//                     userImg.mv('./public/uploads/' + newName);
+//                     const imgUrl = '/uploads/' + newName;
+//                     saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
+//                     runQuery(saveImgsQuery).then(() => {
+//                         resolve(result);
+//                     }).catch(err => {
+//                         reject(err);
+//                     });
+//                 } else {
+//                     resolve(result);
+//                 }
+//             }).catch(err => {
+//                 if (err.errno === 1062) {
+//                     reject('exist');
+//                 } else {
+//                     reject(err);
+//                 }
+//             });
+//         });
+//     } else {
+//         return new Promise((resolve, reject) => {
+//             runQuery(
+//                 `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
+//                 users.city='${city}' WHERE users.id=${id}`
+//             ).then(result => {
+//                 if (userImg) {
+//                     let saveImgsQuery = '';
+//                     // gets file extension
+//                     let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
+//                     // sets the new image name
+//                     let newName = userName.trim().replace(/ /g, '_') + ext;
+//                     userImg.mv('./public/uploads/' + newName);
+//                     const imgUrl = '/uploads/' + newName;
+//                     saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
+//                     runQuery(saveImgsQuery).then(() => {
+//                         resolve(result);
+//                     }).catch(err => {
+//                         reject(err);
+//                     });
+//                 } else {
+//                     resolve(result);
+//                 }
+//             }).catch(err => {
+//                 if (err.errno === 1062) {
+//                     reject('exist');
+//                 } else {
+//                     reject(err);
+//                 }
+//             });
+//         });
+//     }
+// }
+
 // edits the user on the profile page
-function editUser(id, firstName, lastName, userName, city, password, userImg) {
-    if (password) {
-        return new Promise((resolve, reject) => {
-            runQuery(
-                `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
-                users.city='${city}', users.password='${passwordHash.generate(password)}' WHERE users.id=${id}`
-            ).then(result => {
-                if (userImg) {
-                    let saveImgsQuery = '';
-                    // gets file extension
-                    let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
-                    // sets new image name
-                    let newName = userName.trim().replace(/ /g, '_') + ext;
-                    userImg.mv('./public/uploads/' + newName);
-                    const imgUrl = '/uploads/' + newName;
-                    saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
-                    runQuery(saveImgsQuery).then(() => {
-                        resolve(result);
-                    }).catch(err => {
-                        reject(err);
-                    });
-                } else {
-                    resolve(result);
-                }
+function editUser(userID, firstName, lastName, userName, city, password, userImg) {
+    return new Promise((resolve, reject) => {
+        let query = `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', users.city='${city}'`;
+        // if the user has also entered a new password
+        if (password) {
+            query += `, users.password='${passwordHash.generate(password)}'`;
+        }
+        // if the user has also uploaded a new image
+        if (userImg) {
+            // gets the file format of the image
+            const ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
+            // sets new image name from the username
+            const newName = userName.trim().replace(/ /g, '_') + ext;
+            // save image in public folder
+            userImg.mv('./public/uploads/' + newName);
+            // url of the image to be stored in the database
+            const imgUrl = '/uploads/' + newName;
+            query += `, users.img='${imgUrl}'`
+        }
+        query += ` WHERE users.id=${userID};`;
+        runQuery(query).then(() => {
+            getUser(userID).then(user => {
+                resolve(user);
             }).catch(err => {
-                if (err.errno === 1062) {
-                    reject('exist');
-                } else {
-                    reject(err);
-                }
+                console.log(err);
+                reject(err);
             });
+        }).catch(err => {
+            if (err.errno === 1062) {
+                reject('exist');
+            } else {
+                reject(err);
+            }
         });
-    } else {
-        return new Promise((resolve, reject) => {
-            runQuery(
-                `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', 
-                users.city='${city}' WHERE users.id=${id}`
-            ).then(result => {
-                if (userImg) {
-                    let saveImgsQuery = '';
-                    // gets file extension
-                    let ext = userImg.name.substr(userImg.name.lastIndexOf('.'));
-                    // sets the new image name
-                    let newName = userName.trim().replace(/ /g, '_') + ext;
-                    userImg.mv('./public/uploads/' + newName);
-                    const imgUrl = '/uploads/' + newName;
-                    saveImgsQuery += `UPDATE users SET users.img='${imgUrl}' WHERE users.id=${id}`;
-                    runQuery(saveImgsQuery).then(() => {
-                        resolve(result);
-                    }).catch(err => {
-                        reject(err);
-                    });
-                } else {
-                    resolve(result);
-                }
-            }).catch(err => {
-                if (err.errno === 1062) {
-                    reject('exist');
-                } else {
-                    reject(err);
-                }
-            });
-        });
-    }
+    });
 }
 
 /* ***************************************************** RESET PASSWORD ******************************************************* */
