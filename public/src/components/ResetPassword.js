@@ -18,9 +18,9 @@ const ResetPassword = () => {
     const initialState = {
         password: '',
         repassword: '',
-        entriesError: false,
-        errorElement: null,
-        errorTitle: ''
+        showModal: false,
+        modalTitle: '',
+        modalContent: null
     };
     const [state, setState] = useState(initialState);
 
@@ -28,21 +28,17 @@ const ResetPassword = () => {
     const onConfirmBtnClick = e => {
         e.preventDefault();
         if (state.password !== state.repassword || state.password.trim() === '') {
-            const errorElement = (
+            const modalContentElement = (
                 <ul>
-                    {state.password.trim() === '' ? (
-                        <li>Please enter a password</li>
-                    ) : null}
-                    {state.password !== state.repassword ? (
-                        <li>Passwords do not match</li>
-                    ) : null}
+                    {state.password.trim() === '' && <li>Please enter a password</li>}
+                    {state.password !== state.repassword && <li>Passwords do not match</li>}
                 </ul>
             );
             setState({
                 ...state,
-                entriesError: true,
-                errorElement,
-                errorTitle: 'Entry Error'
+                showModal: true,
+                modalContent: modalContentElement,
+                modalTitle: 'Entry Error'
             });
         } else {
             resetPasswordPost(params.email, params.id, state.password).then(data => {
@@ -50,30 +46,30 @@ const ResetPassword = () => {
                     case 1:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorElement: (
+                            showModal: true,
+                            modalContent: (
                                 <p> 
                                     We have reset your password.<br/>
                                     Just log in <Link className="pr-1" to="/login">here</Link>!
                                 </p>
                             ),
-                            errorTitle: 'Password Was Successfully Changed'
+                            modalTitle: 'Password Was Successfully Changed'
                         });
                         break;
                     case 2:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorElement: <p>There was a server error</p>,
-                            errorTitle: 'Server Error'
+                            showModal: true,
+                            modalContent: <p>There was a server error</p>,
+                            modalTitle: 'Server Error'
                         });
                         break;
                     case 3:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorElement: <p>The email you have used does not exist</p>,
-                            errorTitle: 'Email Does Not Exist'
+                            showModal: true,
+                            modalContent: <p>The email you have used does not exist</p>,
+                            modalTitle: 'Email Does Not Exist'
                         });
                         break;
                     default:
@@ -82,26 +78,24 @@ const ResetPassword = () => {
             }).catch(() => {
                 setState({
                     ...state,
-                    entriesError: true,
-                    errorElement: <p>Can not send the data</p>,
-                    errorTitle: 'Unknown Error'
+                    showModal: true,
+                    modalContent: <p>Can not send the data</p>,
+                    modalTitle: 'Unknown Error'
                 });
             });
         }
     };
 
-    const closeModal = () => {
-        setState({
-            ...state,
-            entriesError: false
-        });
-    };
-
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal show={state.entriesError} close={closeModal} className="bg-danger" title={state.errorTitle}>
-                {state.errorElement}
+            <PopUpModal 
+                className="bg-danger" 
+                title={state.modalTitle}            
+                show={state.showModal} 
+                close={() => setState({...state, showModal: false})} 
+            >
+                {state.modalContent}
             </PopUpModal>
             <Container>
                 <h1 className="text-trans mb-4">Reset Password</h1><br />

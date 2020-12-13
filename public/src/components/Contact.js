@@ -3,10 +3,7 @@
 import React, {Fragment, useEffect, useState} from 'react';
 // redux
 import {connect} from 'react-redux';
-import {
-    setBackgroundColor1Action,
-    setBackgroundColor5Action
-} from '../actions';
+import {setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
 // router dom
 import {Link} from 'react-router-dom';
 // reactstrap
@@ -23,10 +20,10 @@ function Contact(props) {
     const initialState = {
         email: '',
         message: '',
-        popClassName: '',
-        entriesError: false,
-        errorTitle: '',
-        errorElement: null
+        showModal: false,
+        modalClass: '',
+        modalTitle: '',
+        modalContent: null
     };
     const [state, setState] = useState(initialState);
 
@@ -42,19 +39,19 @@ useEffect(() => {
     const onSendBtnClick = e => {
         e.preventDefault();
         if (!validator.isEmail(state.email.trim()) || state.email.trim() === '' || state.message === '') {
-            const errorElement = (
+            const modalContentElement = (
                 <ul>
-                    {!validator.isEmail(state.email.trim()) ? <li>Please enter a Valid email</li> : null}
+                    {!validator.isEmail(state.email.trim()) ? <li>Please enter a valid email</li> : null}
                     {state.email.trim() === '' ? <li>Please enter your email</li> : null}
                     {state.message === '' ? <li>Please enter your message</li> : null}
                 </ul>
             );
             setState({
                 ...state,
-                popClassName: 'bg-danger',
-                entriesError: true,
-                errorTitle: 'Entry Error',
-                errorElement: errorElement
+                modalClass: 'bg-danger',
+                showModal: true,
+                modalTitle: 'Entry Error',
+                modalContent: modalContentElement
             });
         } else {
             sendMessagePost(state.email, state.message).then(data => {
@@ -62,19 +59,19 @@ useEffect(() => {
                     case 2:
                         setState({
                             ...state,
-                            popClassName: 'bg-danger',
-                            entriesError: true,
-                            errorTitle: 'Server Error',
-                            errorElement: <p>There was a server error</p>
+                            modalClass: 'bg-danger',
+                            showModal: true,
+                            modalTitle: 'Server Error',
+                            modalContent: <p>There was a server error</p>
                         });
                         break;
                     default:
                         setState({
                             ...state,
-                            popClassName: 'bg-success',
-                            entriesError: true,
-                            errorTitle: 'Message sent successfully',
-                            errorElement: (
+                            modalClass: 'bg-success',
+                            showModal: true,
+                            modalTitle: 'Message sent successfully',
+                            modalContent: (
                                 <p>
                                     Your message has been sent.<br /> 
                                     Thank you for your message.
@@ -86,36 +83,32 @@ useEffect(() => {
                 }).catch(() => {
                     setState({
                         ...state,
-                        entriesError: true,
-                        errorTitle: 'Unknown Error',
-                        errorElement: <p>Can not send the data</p>
+                        showModal: true,
+                        modalTitle: 'Unknown Error',
+                        modalContent: <p>Can not send the data</p>
                     });
                 });
         }
     };
 
-    const closeModal = () => {
-        setState({
-            ...state,
-            entriesError: false
-        });
-    };
-
 /* *********************************************************** RETURN ********************************************************* */
     return (
         <Fragment>
+{/* *********************************************************** RETURN ********************************************************* */}
             <PopUpModal
-                show={state.entriesError}
-                close={closeModal}
-                className={state.popClassName}
-                title={state.errorTitle}
+                className={state.modalClass}
+                title={state.modalTitle}         
+                show={state.showModal}
+                close={() => setState({...state, showModal: false})}
             >
-                {state.errorElement}
+                {state.modalContent}
             </PopUpModal>
+{/* *********************************************************** HEADLINE ********************************************************* */}
             <Container className="pt-4 mt-5">
                 <Col sm="12" md={{size: 6, offset: 3}}>
                     <h1 className="text-trans mb-4">Contact Us</h1>
                 </Col>
+{/* *********************************************************** FORM ********************************************************* */}
                 <Row>
                     <Form className="pb-md-0 pb-5">
                         <Row xs="1" sm="1">
@@ -127,12 +120,7 @@ useEffect(() => {
                                         type="email"
                                         placeholder="Enter your email or user name"
                                         required
-                                        onChange={e => {
-                                            setState({
-                                                ...state,
-                                                email: e.target.value
-                                            });
-                                        }}
+                                        onChange={e => setState({...state, email: e.target.value})}
                                         value={state.email}
                                     />
                                 </FormGroup>

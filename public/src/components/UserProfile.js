@@ -8,8 +8,6 @@ import {connect} from 'react-redux';
 import {setBackgroundColor5Action, setBackgroundColor1Action} from '../actions';
 // reactstrap
 import {Container, Row, Col, Button, Input, Form, Label, FormGroup, Breadcrumb, BreadcrumbItem} from 'reactstrap';
-// react bootstrap
-// import Image from 'react-bootstrap/Image';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -28,10 +26,9 @@ const UserProfile = props => {
         userName: '',
         password: '',
         repassword: '',
-        // imageHash: null,
-        errorComponent: null,
-        showErrorModal: false,
-        resultElement: null
+        showModal: false,
+        modalContent: null,
+        badgeContent: null
     };
     const [state, setState] = useState(initialState);
 
@@ -70,15 +67,10 @@ const UserProfile = props => {
     const onEditBtnClick = e => {
         e.preventDefault();
         if (state.password !== state.repassword) {
-            const errorsElement = (
-                <ul>
-                    {state.password !== state.repassword ? <li>Passwords do not match</li> : null}
-                </ul>
-            );
             setState({
                 ...state,
-                errorComponent: errorsElement,
-                showErrorModal: true
+                modalContent: <p>Passwords do not match</p>,
+                showModal: true
             });
         } else {
             editUserPost(
@@ -107,19 +99,19 @@ const UserProfile = props => {
                         badgeMessage = 'Your profile has been changed successfully.';
                         break;
                 }
-                const badge = (
+                const badgeContentElement = (
                     <div className={badgeClass} role="alert">
                         {badgeMessage}
                     </div>
                 );
-                setState({...state, resultElement: badge});        
+                setState({...state, badgeContent: badgeContentElement});        
             }).catch(() => {
-                const badge = (
+                const badgeContentElement = (
                     <div className="alert alert-danger" role="alert">
                         Can not send the data to server.
                     </div>
                 );
-                setState({...state, resultElement: badge});
+                setState({...state, badgeContent: badgeContentElement});
             });
         }
     };
@@ -131,10 +123,10 @@ const UserProfile = props => {
             <PopUpModal 
                 className="bg-danger" 
                 title="Entries Error"            
-                show={state.showErrorModal} 
-                close={() => setState({...state, showErrorModal: false})} 
+                show={state.showModal} 
+                close={() => setState({...state, showModal: false})} 
             >
-                {state.errorComponent}
+                {state.modalContent}
             </PopUpModal>
 {/* ********************************************************* BREADCRUMB ********************************************************* */}
             <Col className="p-0 mb-3">
@@ -159,14 +151,6 @@ const UserProfile = props => {
                     <p className="text-trans mb-4">Here you can edit your personal settings:</p>
                 </Col>
                 <Col className="float-right" xs={6} md={3}>
-                    {/* <Image
-                        // key={state.imageHash}
-                        // src={`${state.userImg}?${state.imageHash}`}
-                        src={state.userImg}
-                        height={'150px'}
-                        width={'150px'}
-                        roundedCircle
-                    /> */}
                     <img 
                         src={state.userImg ? state.userImg : '/uploads/userDummy.jpg'}
                         alt=""
@@ -184,7 +168,7 @@ const UserProfile = props => {
             </Row>
 {/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-5">
-                <div className="col-lg-12 col-md-12">{state.resultElement}</div>
+                <div className="col-lg-12 col-md-12">{state.badgeContent}</div>
                 <Row xs="1" sm="2">
                     <Col>
                         <FormGroup className="mb-md-4 mb-3 text-left">

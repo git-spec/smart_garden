@@ -8,7 +8,6 @@ import {connect} from 'react-redux';
 // reactstrap
 import {Container, Row, Col, Button, Table, Breadcrumb, BreadcrumbItem} from 'reactstrap';
 // components
-import PopUpModal from './PopUpModal';
 import ConfirmModal from './ConfirmModal';
 // services
 import {getAllUsersPost, changeVerificationPost, deleteUserPost} from '../services/api';
@@ -19,10 +18,8 @@ const SubAdmin = props => {
     const initialState = {
         users: [],
         confirmModalShow: false,
-        confirmModalContent: null,
         confirmModalDelete: null,
-        errorComponent: null,
-        showErrorModal: false
+        confirmModalContent: null
     };
     const [state, setState] = useState(initialState);
 
@@ -109,18 +106,10 @@ const SubAdmin = props => {
         });
     };
 
-/* ********************************************************* CLOSE MODAL ********************************************************* */
-    const closeModal = () => {
-        setState({
-            ...state,
-            showErrorModal: false
-        });
-    };
-
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-{/* ********************************************************* MODALS ********************************************************* */}
+{/* ********************************************************* MODAL ********************************************************* */}
             <ConfirmModal
                 className="bg-danger"
                 title="Confirm Deletion"
@@ -130,14 +119,6 @@ const SubAdmin = props => {
             >
                 {state.confirmModalContent}
             </ConfirmModal>
-            <PopUpModal 
-                show={state.showErrorModal} 
-                close={closeModal} 
-                className="bg-danger" 
-                title="Entries Error"
-            >
-                {state.errorComponent}
-            </PopUpModal>
 {/* ********************************************************* BREADCRUMB ********************************************************* */}
             <Container className="pt-4 mt-5">
                 <Col className="p-0 mb-3">
