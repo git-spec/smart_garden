@@ -21,9 +21,9 @@ const Login = props => {
     const initialState = {
         email: '',
         password: '',
-        entriesError: false,
-        errorTitle: '',
-        errorElement: null
+        showModal: false,
+        modalTitle: '',
+        modalContent: null
     };
     const [state, setState] = useState(initialState);
 
@@ -34,11 +34,11 @@ const Login = props => {
     // eslint-disable-next-line
     }, []);
 
-/* ********************************************************* EVENTS ********************************************************* */
+/* ********************************************************* LOGIN BUTTON ********************************************************* */
     const onLoginBtnClick = e => {
         e.preventDefault();
         if (state.email.trim() === '' || state.password === '') {
-            const errorElement = (
+            const modalContentElement = (
                 <ul>
                     {state.email.trim() === '' ? <li>Please enter your email</li> : null}
                     {state.password === '' ? <li>Please enter your password</li> : null}
@@ -46,9 +46,9 @@ const Login = props => {
             );
             setState({
                 ...state,
-                entriesError: true,
-                errorTitle: 'Entry Error',
-                errorElement
+                showModal: true,
+                modalTitle: 'Entry Error',
+                modalContent: modalContentElement
             });
         } else {
             loginPost(state.email, state.password).then(data => {
@@ -56,25 +56,25 @@ const Login = props => {
                     case 2:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorTitle: 'Server Error',
-                            errorElement: <p>There was a server error</p>
+                            showModal: true,
+                            modalTitle: 'Server Error',
+                            modalContent: <p>There was a server error</p>
                         });
                         break;
                     case 3:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorTitle: 'Wrong Password',
-                            errorElement: <p>Your password is wrong</p>
+                            showModal: true,
+                            modalTitle: 'Wrong Password',
+                            modalContent: <p>Your password is wrong</p>
                         });
                         break;
                     case 4:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorTitle: 'Email Does Not Exist',
-                            errorElement: <p>The email you have used does not exist</p>
+                            showModal: true,
+                            modalTitle: 'Email Does Not Exist',
+                            modalContent: <p>The email you have used does not exist</p>
                         });
                         break;
                     default:
@@ -91,26 +91,24 @@ const Login = props => {
             }).catch(() => {
                 setState({
                     ...state,
-                    entriesError: true,
-                    errorTitle: 'Unknown Error',
-                    errorElement: <p>Can not send the data</p>
+                    showModal: true,
+                    modalTitle: 'Unknown Error',
+                    modalContent: <p>Can not send the data</p>
                 });
             });
         }
     };
 
-    const closeModal = () => {
-        setState({
-            ...state,
-            entriesError: false
-        });
-    };
-
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal show={state.entriesError} close={closeModal} className="bg-danger" title={state.errorTitle}>
-                {state.errorElement}
+            <PopUpModal 
+                className="bg-danger" 
+                title={state.modalTitle}
+                show={state.showModal} 
+                close={() => setState({...state, showModal: false})} 
+            >
+                {state.modalContent}
             </PopUpModal>
             <Container className="pt-5 mt-5">
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 mt-5 px-0 px-md-3">Login</h1>
