@@ -530,8 +530,12 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* PROFILE ********************************************************* */
-    let userImg = '/uploads/userDummy.jpg';
-    if (props.user.img) userImg = props.user.img;
+    let userImg;
+    if (props.user.img) {
+        userImg = props.user.img;
+    } else {
+        userImg = '/uploads/userDummy.jpg';
+    }
     const o_date = new Intl.DateTimeFormat();
     const f_date = (m_ca, m_it) => Object({...m_ca, [m_it.type]: m_it.value});
     const m_date = o_date.formatToParts().reduce(f_date, {});
