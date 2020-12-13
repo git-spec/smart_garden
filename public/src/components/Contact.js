@@ -35,9 +35,11 @@ useEffect(() => {
 // eslint-disable-next-line
 }, []);
 
-/* ******************************************************** EVENTS ********************************************************* */
+/* ******************************************************** SEND BUTTON ********************************************************* */
+    // sends a message written in the contact form
     const onSendBtnClick = e => {
         e.preventDefault();
+        // the user receives a message if the fields have not been filled in correctly
         if (!validator.isEmail(state.email.trim()) || state.email.trim() === '' || state.message === '') {
             const modalContentElement = (
                 <ul>
@@ -48,8 +50,8 @@ useEffect(() => {
             );
             setState({
                 ...state,
-                modalClass: 'bg-danger',
                 showModal: true,
+                modalClass: 'bg-danger',
                 modalTitle: 'Entry Error',
                 modalContent: modalContentElement
             });
@@ -94,7 +96,7 @@ useEffect(() => {
 /* *********************************************************** RETURN ********************************************************* */
     return (
         <Fragment>
-{/* *********************************************************** RETURN ********************************************************* */}
+{/* *********************************************************** MODAL ********************************************************* */}
             <PopUpModal
                 className={state.modalClass}
                 title={state.modalTitle}         
