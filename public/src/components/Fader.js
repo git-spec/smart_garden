@@ -2,6 +2,7 @@ import React , {useEffect, useRef} from 'react';
 import {withRouter} from 'react-router-dom'
 
 const Fader = props => {
+
     const fadeDiv = useRef(null);
 
     const fadeAnimation = () => {
@@ -12,7 +13,7 @@ const Fader = props => {
     }
 
     useEffect(() => {
-        let unlisten = props.history.listen((location,action)=>{
+        let unlisten = props.history.listen((location,action) => {
             fadeAnimation();
         })
         return () => {

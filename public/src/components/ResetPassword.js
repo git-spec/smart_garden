@@ -24,7 +24,9 @@ const ResetPassword = () => {
     };
     const [state, setState] = useState(initialState);
 
-/* ********************************************************* EVENTS ********************************************************* */
+/* ********************************************************* SET NEW PASSWORD ********************************************************* */
+    // If the user has indicated on the page that he has forgotten his password, he will receive an email with a link. 
+    // Here he can enter a new password and use his account again.
     const onConfirmBtnClick = e => {
         e.preventDefault();
         if (state.password !== state.repassword || state.password.trim() === '') {

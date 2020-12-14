@@ -8,6 +8,8 @@ Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
 
 /* ******************************************************** COMPONENT ********************************************************* */
+// Generates a line chart, which in our case is used to display the daily average values 
+// of the sensors for soil moisture and light intensity.
 class LineChart extends React.Component {
     
     constructor(props) {

@@ -8,6 +8,8 @@ Chart.defaults.global.legend.display = false;
 Chart.defaults.global.defaultFontColor = 'white';
 
 /* ******************************************************** COMPONENT ********************************************************* */
+// Generates a multiple line chart, which in our case is used to display the daily average values 
+// of the sensors for temperature and humidity at the same time.
 class LineChartMultiple extends React.Component {
 
     constructor(props) {

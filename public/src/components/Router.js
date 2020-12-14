@@ -42,8 +42,10 @@ const Router = props => {
     const {setUserAction} = props;
 
     useEffect(() => {
+        // The system checks whether the user is properly logged in.  
+        // If so, the user data is written to the mainstate of redux.
         checkLoginPost().then(data => {
-            if (data !== 10) { // user is logged in
+            if (data !== 10) {
                 setUserAction(data);
             }
         });

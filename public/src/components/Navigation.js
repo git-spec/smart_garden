@@ -7,17 +7,7 @@ import {setSocketAction, setUserAction} from '../actions';
 // router dom
 import {Link, useHistory, useLocation} from 'react-router-dom';
 // reactstrap
-import {
-    Container,
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    Button
-} from 'reactstrap';
+import {Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Button} from 'reactstrap';
 // services
 import {logoutPost} from '../services/api';
 // window dimension hook
@@ -25,6 +15,8 @@ import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
+
+    // The screen width is determined by this hook and is used to make the component responsive. 
     const [width] = useWindowDimension();
 
 /* *********************************************************** REFERENCE ********************************************************* */
@@ -44,6 +36,7 @@ function Navigation(props) {
 /* *********************************************************** LOGOUT ********************************************************* */
     const history = useHistory();
 
+    // delete the user data stored in the mainstate of redux and redirect the user to the login page
     const logoutBtnClick = e => {
         e.preventDefault();
         logoutPost().then(data => {

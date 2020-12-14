@@ -24,7 +24,7 @@ const Admin = props => {
     const [state, setState] = useState(initialState);
 
 /* ********************************************************* USE EFFECT ********************************************************* */
-    // gets all users from the database on first rendering
+    // gets the data of all users from the database to display them in the admin panel
     useEffect(() => {
         getAllUsersPost().then(data => {
             switch (data) {
@@ -75,6 +75,29 @@ const Admin = props => {
         });
     };
 
+/* ********************************************************* CHANGE USER ROLE ********************************************************* */
+    // changes the role of the user by pressing the button from user to admin or vice versa
+    const changeUserRole = (e, role, userID) => {
+        e.preventDefault();
+        // changes the user role in the database
+        changeUserRolePost(userID, role).then(data => {
+            if (data === 1) {
+                // changes the user array in the state after it has been changed in the database
+                let newUsers = state.users.map(user => {
+                    if (user.id === userID) {
+                        user.role = role;
+                    }
+                    return user;
+                });
+                setState({...state, users: newUsers});
+            } else {
+                alert('Server error!');
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+    };
+
 /* ********************************************************* DELETE USER ********************************************************* */
     // deletes a user by clicking the delete button
     const onDeleteBtnClick = (e, userID, idx) => {
@@ -110,29 +133,6 @@ const Admin = props => {
                 </p>
             ),
             confirmModalDelete: () => deleteUser(userID)
-        });
-    };
-
-/* ********************************************************* CHANGE USER ROLE ********************************************************* */
-    // changes the role of the user by pressing the button from user to admin or vice versa
-    const changeUserRole = (e, role, userID) => {
-        e.preventDefault();
-        // changes the user role in the database
-        changeUserRolePost(userID, role).then(data => {
-            if (data === 1) {
-                // changes the user array in the state after it has been changed in the database
-                let newUsers = state.users.map(user => {
-                    if (user.id === userID) {
-                        user.role = role;
-                    }
-                    return user;
-                });
-                setState({...state, users: newUsers});
-            } else {
-                alert('Server error!');
-            }
-        }).catch(err => {
-            console.log(err);
         });
     };
 

@@ -3,6 +3,9 @@ import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 /* ********************************************************* COMPONENT ********************************************************* */
+// Is used to let the user confirm an action once again in the form of a modal. 
+// For example, if something is to be irrevocably deleted, the user must press the delete button again. 
+// At this point, the user can also cancel the action.
 const ConfirmModal = props => {
     return (
         <Modal isOpen={props.show} toggle={props.close}>
