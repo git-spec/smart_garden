@@ -1,8 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
 import React, {useState, useEffect, createRef, Fragment} from 'react';
-// bootstrap
-import Image from 'react-bootstrap/Image';
 // router dom
 import {useHistory, Link} from 'react-router-dom';
 // redux
@@ -56,6 +54,7 @@ import {
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Dashboard = props => {
+
     const history = useHistory();
     const [width] = useWindowDimension();
 
@@ -97,7 +96,7 @@ const Dashboard = props => {
         props.setBackgroundColor5Action('color-5');
         props.setBackgroundColor1Action(null);
 
-        // get hubs & devices data from db at initial render
+        // get the hubs and devices of the user from the database on first rendering
         getHubsPost().then(hubs => {
             if (hubs === 2) {
                 alert('Server error');
@@ -123,6 +122,8 @@ const Dashboard = props => {
     }, []);
 
 /* ********************************************************* SOCKET.IO ********************************************************* */
+    // Socket.io is used for the real-time exchange of hubs and devices. 
+    // In this way, the data from the sensors is forwarded to the frontend, but also which devices are connected.
     useEffect(() => {
         const socket = io('http://localhost:5000');
 
@@ -207,7 +208,7 @@ const Dashboard = props => {
             socket.disconnect();
         });
 
-        // cleanup if the user leaves the component
+        // cleanup: the user and socket are disconnected when the user leaves the component
         return () => {
             socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
@@ -216,8 +217,8 @@ const Dashboard = props => {
     // eslint-disable-next-line
     }, []);
 
-/* ********************************************************* TOGGLES ********************************************************* */
-    // set card-header shiny
+/* ********************************************************* HIGHLIGHT ********************************************************* */    
+    // highlight selected hub
     const shineHub = (e, idx) => {
         e.preventDefault();
         shineHubRefs.forEach((item, index) => {
@@ -228,6 +229,8 @@ const Dashboard = props => {
             }
         });
     };
+
+    // highlight selected device
     const shineDevice = (e, deviceSN) => {
         e.preventDefault();
         shineDeviceRefs.forEach(item => {
@@ -238,14 +241,16 @@ const Dashboard = props => {
             }
         });
     };
-    // remove shiny hub
+
+    // remove highlighting of the hub
     const toggleHubs = e => {
         e.preventDefault();
         shineHubRefs.forEach(item => {
             item.current.classList.remove('shine');
         });
     };
-    // remove shiny device
+
+    // remove highlighting of the device
     const toggleDevices = e => {
         e.preventDefault();
         shineDeviceRefs.forEach(item => {
@@ -253,8 +258,9 @@ const Dashboard = props => {
         });
     };
 
-    // show first monitor
-    const resetMonitor = e => {
+/* ********************************************************* TOGGLE HUBS ********************************************************* */    
+    // pressing the hubs heading collapses all open hubs and shows the overview monitor
+    const resetHubs = e => {
         e.preventDefault();
         openHubIconRefs.forEach(item => {
             item.current.classList.remove('down');
@@ -266,7 +272,8 @@ const Dashboard = props => {
             collapseHub: null
         });
     };
-
+    
+    // pressing on a hub heading opens a closed section or closes it if it is already open
     const toggleHub = (e, idx) => {
         e.preventDefault();
         // toggle up & down buttons
@@ -287,50 +294,18 @@ const Dashboard = props => {
         });
     };
 
-    const toggleAddHub = e => {
-        e.preventDefault();
-        // toggle plus hidden
-        addHubIconRef.current.classList.add('hidden');
-        setState({
-            ...state,
-            collapseAddHub: !state.collapseAddHub
-        });
-    };
-
+/* ********************************************************* DELETE HUB ********************************************************* */
+    // opens or closes the section to delete a hub
     const toggleDeleteHub = e => {
         e.preventDefault();
         // toggle plus visible
         addHubIconRef.current.classList.toggle('show');
         addHubIconRef.current.classList.toggle('hidden');
-        setState({
-            ...state,
-            collapseAddHub: !state.collapseAddHub
-        });
+        setState({...state, collapseAddHub: !state.collapseAddHub});
     };
-
-    const toggleAddDevice = (e, idx) => {
-        e.preventDefault();
-        // toggle plus hidden
-        addDeviceIconRefs[idx].current.classList.toggle('show');
-        addDeviceIconRefs[idx].current.classList.toggle('hidden');
-        setState({
-            ...state,
-            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
-        });
-    };
-
-    const toggleDeleteDevice = (e, idx) => {
-        e.preventDefault();
-        // toggle plus visible
-        addDeviceIconRefs[idx].current.classList.toggle('show');
-        addDeviceIconRefs[idx].current.classList.toggle('hidden');
-        setState({
-            ...state,
-            collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)
-        });
-    };
-
-/* ********************************************************* DELETE HUB ********************************************************* */
+    
+    // By clicking the delete button, the user can delete one of his hubs. 
+    // He must confirm the deletion before the hub is permanently deleted.
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
         const deleteHub = hubID => {
@@ -363,6 +338,17 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* DELETE DEVICE ********************************************************* */
+    // opens or closes the section to delete a device
+    const toggleDeleteDevice = (e, idx) => {
+        e.preventDefault();
+        // toggle plus visible
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
+        setState({...state, collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)});
+    };
+
+    // By clicking the delete button, the user can delete one of his devices. 
+    // He must confirm the deletion before the device is permanently deleted.
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
         const deleteDevice = deviceID => {
@@ -389,6 +375,16 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* ADD HUB ********************************************************* */
+    // opens or closes the section to add a hub
+    const toggleAddHub = e => {
+        e.preventDefault();
+        // toggle plus hidden
+        addHubIconRef.current.classList.add('hidden');
+        setState({...state, collapseAddHub: !state.collapseAddHub});
+    };
+    
+    // The user can add a new hub in his dashboard, for which he must 
+    // enter a valid serial number and can also assign a name to the it.
     const onAddHubBtnClick = e => {
         e.preventDefault();
         if (state.hubName.trim() && state.hubNum.trim()) {
@@ -435,6 +431,17 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* ADD DEVICE ********************************************************* */
+    // opens or closes the section to add a device
+    const toggleAddDevice = (e, idx) => {
+        e.preventDefault();
+        // toggle plus hidden
+        addDeviceIconRefs[idx].current.classList.toggle('show');
+        addDeviceIconRefs[idx].current.classList.toggle('hidden');
+        setState({...state, collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)});
+    };
+
+    // The user can add a new device in his dashboard, for which he must 
+    // enter a valid serial number and can also assign a name to the it.
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
         if (state.deviceName.trim() && state.deviceNum.trim()) {
@@ -479,8 +486,8 @@ const Dashboard = props => {
             alert('Please fill out all inputs!');
         }
     };
-/* ********************************************************* SHOW DEVICE DATA ********************************************************* */
-    // rerender the data section
+/* ********************************************************* SHOW DEVICES ********************************************************* */
+    // show the real time data of the devices in the monitor
     const onShowDeviceDataClick = (e, hub, device) => {
         e.preventDefault();
         // send order to raspberry to stop the request from previous device
@@ -500,7 +507,7 @@ const Dashboard = props => {
         }
     };
 
-    // water on off switcher
+    // turns the water pump on or off
     const statusChange = () => {
         deviceOnOffPost(state.currentDevice.sn_number, !state.currentDevice.status).then(() => {
             props.socket.emit('waterOnOff', {sn: state.currentDevice.sn_number, status: !state.currentDevice.status});
@@ -510,7 +517,7 @@ const Dashboard = props => {
         });
     };
 
-    // save parameters for watering
+    // saves the parameters for the water pump control: from which soil moisture value watering should start and for how long
     const onSaveBtnClick = (e, inputRangeTime, inputRangeDuration, soilMoistureDevice) => {
         e.preventDefault();
         saveRangesPost(inputRangeTime, inputRangeDuration, state.currentDevice.sn_number, soilMoistureDevice).then(data => {
@@ -529,9 +536,11 @@ const Dashboard = props => {
     };
 
 /* ********************************************************* PROFILE ********************************************************* */
-    let img = '/uploads/1.jpg';
+    let userImg;
     if (props.user.img) {
-        img = props.user.img;
+        userImg = props.user.img;
+    } else {
+        userImg = '/uploads/userDummy.jpg';
     }
     const o_date = new Intl.DateTimeFormat();
     const f_date = (m_ca, m_it) => Object({...m_ca, [m_it.type]: m_it.value});
@@ -572,7 +581,7 @@ const Dashboard = props => {
                     <Col className="d-flex align-items-center">
                         <div className="mr-2">
                             <span>
-                                <Image src={img} height={'32px'} width={'32px'} roundedCircle />
+                                <img src={userImg} alt="" style={{width: '32px', height: '32px', borderRadius: '50%'}} /> 
                             </span>
                         </div>
                         <div className="flex-grow-1 p-0 m-0">
@@ -589,7 +598,7 @@ const Dashboard = props => {
 {/* ********************************************************* HUBS ********************************************************* */}
                             <CardHeader className="p-0 mb-3 d-flex align-items-center">
                                 <CardTitle className="m-0 flex-grow-1">
-                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetMonitor(e);}}>
+                                    <Button className="accordion text-uppercase p-0" onClick={e => {toggleHubs(e); resetHubs(e);}}>
                                         <h5 style={state.currentMonitor === 0 ? {fontWeight: 'bold'} : {fontWeight: 'normal'}}>
                                             hubs
                                         </h5>

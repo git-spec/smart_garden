@@ -2,16 +2,7 @@
 // react
 import React, {Fragment, useState} from 'react';
 // reactstrap
-import {
-    Container,
-    Row,
-    Col,
-    Form,
-    FormGroup,
-    Label,
-    Input,
-    Button
-} from 'reactstrap';
+import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -22,56 +13,53 @@ const ForgotPassword = props => {
 
     const initialState = {
         email: '',
-        entriesError: false,
-        errorElement: null,
-        errorTitle: '',
-        modalClass: ''
+        showModal: false,
+        modalClass: '',
+        modalTitle: '',
+        modalContent: null
     };
     const [state, setState] = useState(initialState);
 
-/* ********************************************************* EVENTS ********************************************************* */
+/* ********************************************************* SEND BUTTON ********************************************************* */
+    // The user can enter his email address in the field and press the send button 
+    // to request an email with a link to reset his password.
     const onSendBtnClick = e => {
         e.preventDefault();
         if (state.email.trim() === '') {
-            const errorElement = (
-                <ul>
-                    {state.email.trim() === '' ? <li>Please enter your email</li> : null}
-                </ul>
-            );
             setState({
                 ...state,
-                entriesError: true,
-                errorTitle: 'Entry Error',
-                errorElement,
+                showModal: true,
+                modalTitle: 'Entry Error',
+                modalContent: <p>Please enter your email</p>,
                 modalClass: 'bg-danger'
             });
         } else {
-            sendResetLinkPost(state.email).then(data => {
+            sendResetLinkPost(state.email.trim()).then(data => {
                 switch (data) {
                     case 1:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorTitle: 'Reset Email Sent',
-                            errorElement: <p>We have sent you a reset email,<br/>please check your emails!</p>,
+                            showModal: true,
+                            modalTitle: 'Reset Email Sent',
+                            modalContent: <p>We have sent you a reset email,<br/>please check your emails!</p>,
                             modalClass: 'bg-success'
                         });
                         break;
                     case 2:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorTitle: 'Server Error',
-                            errorElement: <p>There was a server error</p>,
+                            showModal: true,
+                            modalTitle: 'Server Error',
+                            modalContent: <p>There was a server error</p>,
                             modalClass: 'bg-danger'
                         });
                         break;
                     case 3:
                         setState({
                             ...state,
-                            entriesError: true,
-                            errorTitle: 'Email Does Not Exist',
-                            errorElement: <p>The email you have used does not exist</p>,
+                            showModal: true,
+                            modalTitle: 'Email Does Not Exist',
+                            modalContent: <p>The email you have used does not exist</p>,
                             modalClass: 'bg-danger'
                         });
                         break;
@@ -81,27 +69,25 @@ const ForgotPassword = props => {
             }).catch(() => {
                 setState({
                     ...state,
-                    entriesError: true,
-                    errorTitle: 'Unknown Error',
-                    errorElement: <p>Can not send the data</p>,
+                    showModal: true,
+                    modalTitle: 'Unknown Error',
+                    modalContent: <p>Can not send the data</p>,
                     modalClass: 'bg-danger'
                 });
             });
         }
     };
 
-    const closeModal = () => {
-        setState({
-            ...state,
-            entriesError: false
-        });
-    };
-
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal show={state.entriesError} close={closeModal} className={state.modalClass} title={state.errorTitle}>
-                {state.errorElement}
+            <PopUpModal
+                className={state.modalClass} 
+                title={state.modalTitle}            
+                show={state.showModal} 
+                close={() => setState({...state, showModal: false})} 
+            >
+                {state.modalContent}
             </PopUpModal>
             <Container className="pt-4 mt-5">
                 <Col sm="12" md={{size: 6, offset: 3}}>

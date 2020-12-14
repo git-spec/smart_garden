@@ -179,13 +179,13 @@ app.post('/edituser', (req, res) => {
     const password = req.body.password;
     if (req.files) {
         const userImg = req.files.userImg;
-        if (id && firstName && lastName && userName) {
-            editUser(id, firstName, lastName, userName, city, password, userImg).then(() => {
-                res.json(1);
+        if (id && firstName && lastName && userName && userImg) {
+            editUser(id, firstName, lastName, userName, city, password, userImg).then(user => {
+                res.json(user);
             }).catch(err => {
                 if (err === "exist") {
                     res.json(3);
-                } else{
+                } else {
                     res.json(2);
                 }
             })
@@ -194,8 +194,8 @@ app.post('/edituser', (req, res) => {
         };
     } else {
         if (id && firstName && lastName && userName) {
-            editUser(id, firstName, lastName, userName, city, password).then(() => {
-                res.json(1);
+            editUser(id, firstName, lastName, userName, city, password).then(user => {
+                res.json(user);
             }).catch(err => {
                 if (err === "exist") {
                     res.json(3);
@@ -215,7 +215,8 @@ app.post('/sendresetlink', (req, res) => {
     // 1 email was sent successfully
     // 2 server error
     // 3 user does not exist
-    sendResetLink(req.body.email).then(() => {
+    const email = entities.encode(req.body.email.trim());
+    sendResetLink(email).then(() => {
         res.json(1);
     }).catch(err => {
         if (err === 3) {
@@ -311,8 +312,10 @@ app.post('/deleteuser', (req, res) => {
 app.post('/sendmessage', (req, res) => {
     // 1 message was sent successfully
     // 2 server error 
-    if (req.body.email.trim() && req.body.message.trim()) {
-        sendMessage(req.body.email.trim(), req.body.message).then(() => {
+    const email = entities.encode(req.body.email.trim());
+    const message = entities.encode(req.body.message.trim());
+    if (email && message) {
+        sendMessage(email, message).then(() => {
             res.json(1);
         }).catch(() => {
             res.json(2);

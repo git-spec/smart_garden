@@ -1,14 +1,20 @@
 /* ********************************************************* IMPORT ********************************************************* */
+// react
 import React, {useEffect} from 'react';
+// router dom
 import {useParams, Link, useHistory} from 'react-router-dom';
+// services
 import {verifyUserPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const UserVerification = () => {
 
+    // hooks
     const params = useParams();
     const history = useHistory();
 
+    // Changes the status of the user in the database to verified. 
+    // If everything has worked, the user is taken to the login, otherwise to the register page.
     useEffect(() => {
         verifyUserPost(params.email).then(data => {
             if (data !== 2) {
@@ -22,8 +28,8 @@ const UserVerification = () => {
     // eslint-disable-next-line
     }, []);
 
+/* ********************************************************* RETURN ********************************************************* */
     return (
-        <React.Fragment>
             <div className="breadcrumb">
                 <p>Thanks for registering!</p>
                 <div className="container">
@@ -32,7 +38,6 @@ const UserVerification = () => {
                     </Link>
                 </div>
             </div>
-        </React.Fragment>
     );
 };
 

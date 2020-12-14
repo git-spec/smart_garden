@@ -3,24 +3,11 @@
 import React, {Fragment} from 'react';
 // redux
 import {connect} from 'react-redux';
-import {
-    setBackgroundImageAction,
-    setBackgroundColor1Action,
-    setBackgroundColor5Action
-} from '../actions';
-// reactstrap
-import {
-    Container,
-    Row,
-    Col,
-    Form,
-    FormGroup,
-    Label, 
-    Input,
-    Button
-} from 'reactstrap';
+import {setBackgroundImageAction, setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
 // router dom
 import {Link} from 'react-router-dom';
+// reactstrap
+import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -40,9 +27,9 @@ class Register extends React.Component {
             email: '',
             password: '',
             repassword: '',
-            errorComponent: null,
-            showErrorModal: false,
-            resultElement: null
+            showModal: false,
+            modalContent: null,
+            badgeContent: null
         };
     }
 
@@ -51,7 +38,10 @@ class Register extends React.Component {
         this.props.setBackgroundColor5Action(null);
     }
 
-/* ********************************************************* EVENTS ********************************************************* */
+/* ********************************************************* REGISTRATION ********************************************************* */
+    // The user can register on the site by entering his name, email, a user name of his choice and a password. 
+    // If all fields are filled in correctly, the user will receive an email with a link to verify the email 
+    // and complete the registration.
     onRegisterBtnClick = e => {
         e.preventDefault();
         if (
@@ -74,7 +64,7 @@ class Register extends React.Component {
                     {this.state.password !== this.state.repassword ? <li>Passwords do not match</li> : null}
                 </ul>
             );
-            this.setState({errorComponent: errorsElement, showErrorModal: true});
+            this.setState({modalContent: errorsElement, showModal: true});
         } else {
             registerPost(
                 this.state.firstName,
@@ -102,25 +92,21 @@ class Register extends React.Component {
                     default:
                         break;
                 }
-                const badge = (
+                const badgeElement = (
                     <div className={badgeClass} role="alert">
                         {badgeMessage}
                     </div>
                 );
-                this.setState({resultElement: badge});
-            }).catch(error => {
-                const badge = (
+                this.setState({badgeContent: badgeElement});
+            }).catch(() => {
+                const badgeElement = (
                     <div className="alert alert-danger" role="alert">
                         Can not send the registration data to server!
                     </div>
                 );
-                this.setState({resultElement: badge});
+                this.setState({badgeContent: badgeElement});
             });
         }
-    };
-
-    closeModal = () => {
-        this.setState({showErrorModal: false});
     };
 
 /* ********************************************************* RENDER ********************************************************* */
@@ -128,18 +114,18 @@ class Register extends React.Component {
         return (
             <Fragment>
                 <PopUpModal
-                    show={this.state.showErrorModal}
-                    close={this.closeModal}
                     className="bg-danger"
-                    title="Entry Error"
+                    title="Entry Error"                
+                    show={this.state.showModal}
+                    close={() => this.setState({showModal: false})}
                 >
-                    {this.state.errorComponent}
+                    {this.state.modalContent}
                 </PopUpModal>
                 <Container className="pt-5 mt-5">
                     <h1 className="text-trans mb-4">Registration</h1>
                     <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
                     <Form className="pb-md-0 pb-5">
-                        <div className="col-lg-12 col-md-12">{this.state.resultElement}</div>
+                        <div className="col-lg-12 col-md-12">{this.state.badgeContent}</div>
                         <Row xs="1" sm="2">
                             <Col>
                                 <FormGroup className="mb-md-4 mb-3 text-left">

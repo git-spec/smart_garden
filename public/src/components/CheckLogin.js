@@ -14,6 +14,9 @@ const CheckLogin = props => {
 
     const history = useHistory();
 
+    // Checks if the user is logged in and if there is a session. 
+    // If so, the user is redirected to the secured component.
+    // If not, the user is brought back to the login area.
     useEffect(() => {
         checkLoginPost().then(data => {
             if (data === 10) {

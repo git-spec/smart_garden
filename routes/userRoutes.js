@@ -2,6 +2,9 @@
 // express
 const express = require('express');
 const userRouter = express.Router();
+// packages
+const Entities = require('html-entities').XmlEntities;
+const entities = new Entities();
 // database functions
 const {
     checkHubNum, 
@@ -46,7 +49,7 @@ userRouter.post('/checkhubnum', (req, res) => {
     // 2 server error
     // 3 serialnumber not found
     // 4 serialnumber already registered
-    const hubNum = req.body.hubNum.trim();
+    const hubNum = entities.encode(req.body.hubNum.trim());
     if (hubNum) {
         checkHubNum(hubNum).then(() => {
             res.json(1);
@@ -70,7 +73,7 @@ userRouter.post('/checkdevicenum', (req, res) => {
     // 2 server error
     // 3 serialnumber not found
     // 4 serialnumber already registered
-    const deviceNum = req.body.deviceNum.trim();
+    const deviceNum = entities.encode(req.body.deviceNum.trim());
     if (deviceNum) {
         checkDeviceNum(deviceNum).then(() => {
             res.json(1);
@@ -92,8 +95,8 @@ userRouter.post('/checkdevicenum', (req, res) => {
 userRouter.post('/addhub', (req, res) => {
     // data: updated hubs
     // 2 server error
-    const hubName = req.body.hubName.trim();
-    const hubNum = req.body.hubNum.trim();
+    const hubName = entities.encode(req.body.hubName.trim());
+    const hubNum = entities.encode(req.body.hubNum.trim());
     const userID = req.session.user.id;
     if (hubName && hubNum && userID) {
         addHub(hubName, hubNum, userID).then(data => {
@@ -111,8 +114,8 @@ userRouter.post('/addhub', (req, res) => {
 userRouter.post('/adddevice', (req, res) => {
     // data: updated devices
     // 2 server error
-    const deviceName = req.body.deviceName.trim();
-    const deviceNum = req.body.deviceNum.trim();
+    const deviceName = entities.encode(req.body.deviceName.trim());
+    const deviceNum = entities.encode(req.body.deviceNum.trim());
     const hubID = req.body.hubID;
     const userID = req.session.user.id;
     if (deviceName && deviceNum && hubID && userID) {

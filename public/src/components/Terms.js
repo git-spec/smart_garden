@@ -3,21 +3,19 @@
 import React, {useEffect} from 'react';
 // redux
 import {connect} from 'react-redux';
-import {
-    setBackgroundColor1Action,
-    setBackgroundColor5Action
-} from '../actions';
+import {setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
 // reactstrap
 import {Container} from 'reactstrap';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 function Terms(props) {
 
-/* ******************************************************** USE EFFECT ********************************************************* */
+/* ******************************************************** BACKGROUND COLOR ********************************************************* */
     useEffect(() => {
         // set background color of nav
         props.setBackgroundColor5Action(null);
         props.setBackgroundColor1Action('color-1');
+    // eslint-disable-next-line
     }, []);
 
 /* ******************************************************** RETURN ********************************************************* */

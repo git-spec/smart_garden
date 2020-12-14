@@ -8,8 +8,6 @@ import {connect} from 'react-redux';
 import {setBackgroundColor5Action, setBackgroundColor1Action} from '../actions';
 // reactstrap
 import {Container, Row, Col, Button, Input, Form, Label, FormGroup, Breadcrumb, BreadcrumbItem} from 'reactstrap';
-// react bootstrap
-import Image from 'react-bootstrap/Image';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -21,26 +19,25 @@ const UserProfile = props => {
     const imageInpRef = useRef();
 
     const initialState = {
+        userImg: '',
         firstName: '',
         lastName: '',
-        userName: '',
         city: '',
+        userName: '',
         password: '',
         repassword: '',
-        userImg: '/uploads/1.jpg',
-        imageHash: null,
-        errorComponent: null,
-        showErrorModal: false,
-        resultElement: null
+        showModal: false,
+        modalContent: null,
+        badgeContent: null
     };
     const [state, setState] = useState(initialState);
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
-        // save background color in redux
+        // saves background color in redux
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
-        // get user data from db
+        // gets user data from database
         getUserPost(props.user.id).then(user => {
             switch (user) {
                 case 2:
@@ -50,24 +47,14 @@ const UserProfile = props => {
                     alert('No user found!');
                     break;
                 default:
-                    if (user.img) {
-                        setState({
-                            ...state,
-                            firstName: user.firstname,
-                            lastName: user.lastname,
-                            userName: user.username,
-                            city: user.city,
-                            userImg: user.img
-                        });
-                    } else {
-                        setState({
-                            ...state,
-                            firstName: user.firstname,
-                            lastName: user.lastname,
-                            userName: user.username,
-                            city: user.city
-                        });
-                    }        
+                    setState({
+                        ...state,
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        userName: user.username,
+                        city: user.city,
+                        userImg: user.img
+                    });      
                     break;
             }
         }).catch(err => {
@@ -77,19 +64,15 @@ const UserProfile = props => {
     }, []);
 
 /* ********************************************************* EDIT BUTTON ********************************************************* */
+    // The user can change his or her data in the user profile:
+    // The name, the user name and the personal password can be changed and the place of residence can be added.
     const onEditBtnClick = e => {
         e.preventDefault();
         if (state.password !== state.repassword) {
-            const errorsElement = (
-                <ul>
-                    <br />
-                    {state.password !== state.repassword ? <li>Passwords do not match</li> : null}
-                </ul>
-            );
             setState({
                 ...state,
-                errorComponent: errorsElement,
-                showErrorModal: true
+                modalContent: <p>Passwords do not match</p>,
+                showModal: true
             });
         } else {
             editUserPost(
@@ -105,67 +88,47 @@ const UserProfile = props => {
                 let badgeClass = '';
                 let badgeMessage = '';
                 switch (data) {
-                    case 1:
-                        badgeClass = 'alert alert-success';
-                        badgeMessage = 'Your profile has been changed successfully.';
-                        getUserPost(props.user.id).then(user => {
-                            setState({
-                                ...state,
-                                userImg: user.img,
-                                imageHash: Date.now(),
-                                resultElement: badge
-                            });
-                        });
-                        break;
                     case 2:
                         badgeClass = 'alert alert-danger';
                         badgeMessage = 'There was a server side error, please contact the administrator.';
                         break;
                     case 3:
                         badgeClass = 'alert alert-danger';
-                        badgeMessage =
-                            'There is already a user with the same username, please choose another one.';
+                        badgeMessage = 'There is already a user with the same username, please choose another one.';
                         break;
                     default:
+                        badgeClass = 'alert alert-success';
+                        badgeMessage = 'Your profile has been changed successfully.';
                         break;
                 }
-                const badge = (
+                const badgeContentElement = (
                     <div className={badgeClass} role="alert">
                         {badgeMessage}
                     </div>
                 );
-                setState({
-                    ...state,
-                    resultElement: badge
-                });
+                setState({...state, badgeContent: badgeContentElement});        
             }).catch(() => {
-                const badge = (
+                const badgeContentElement = (
                     <div className="alert alert-danger" role="alert">
                         Can not send the data to server.
                     </div>
                 );
-                setState({
-                    ...state,
-                    resultElement: badge
-                });
+                setState({...state, badgeContent: badgeContentElement});
             });
         }
-    };
-
-/* ********************************************************* CLOSE MODAL ********************************************************* */
-    const closeModal = () => {
-        setState({
-            ...state,
-            showErrorModal: false
-        });
     };
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Container className="pt-4 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
-            <PopUpModal show={state.showErrorModal} close={closeModal} className="bg-danger" title="Entries Error">
-                {state.errorComponent}
+            <PopUpModal 
+                className="bg-danger" 
+                title="Entries Error"            
+                show={state.showModal} 
+                close={() => setState({...state, showModal: false})} 
+            >
+                {state.modalContent}
             </PopUpModal>
 {/* ********************************************************* BREADCRUMB ********************************************************* */}
             <Col className="p-0 mb-3">
@@ -190,27 +153,24 @@ const UserProfile = props => {
                     <p className="text-trans mb-4">Here you can edit your personal settings:</p>
                 </Col>
                 <Col className="float-right" xs={6} md={3}>
-                    <Image
-                        key={state.imageHash}
-                        src={`${state.userImg}?${state.imageHash}`}
-                        height={'150px'}
-                        width={'150px'}
-                        roundedCircle
-                    />
+                    <img 
+                        src={state.userImg ? state.userImg : '/uploads/userDummy.jpg'}
+                        alt=""
+                        style={{width: '150px', height: '150px', borderRadius: '50%'}}
+                    /> 
                     <br />
                     <br />
                     <input
                         ref={imageInpRef}
-                        id="exampleFormControlFile1"
                         type="file"
-                        className="form-control-file"
                         accept="image/x-png,image/gif,image/jpeg"
+                        onChange={e => setState({...state, userImg: URL.createObjectURL(e.target.files[0])})}
                     />
                 </Col>
             </Row>
 {/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-5">
-                <div className="col-lg-12 col-md-12">{state.resultElement}</div>
+                <div className="col-lg-12 col-md-12">{state.badgeContent}</div>
                 <Row xs="1" sm="2">
                     <Col>
                         <FormGroup className="mb-md-4 mb-3 text-left">
