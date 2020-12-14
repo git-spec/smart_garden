@@ -3,17 +3,18 @@
 import React, {Fragment, useEffect} from 'react';
 // redux
 import {connect} from "react-redux";
-import {setBackgroundImageAction} from '../actions';
-import {setBackgroundColor5Action} from '../actions';
-import {setBackgroundColor1Action} from '../actions';
+import {setBackgroundImageAction, setBackgroundColor5Action, setBackgroundColor1Action} from '../actions';
+// router dom
+import {Link} from 'react-router-dom';
+// components
 // import Slider from "./Slider"
 // import Images from "./images"
-import {Link} from 'react-router-dom';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 function Main(props) {
 
     useEffect(() => {
+        // sets background color in redux
         props.setBackgroundImageAction("../imgs/800px_COLOURBOX10774649.jpg");
         props.setBackgroundColor5Action(null);
         props.setBackgroundColor1Action(null);

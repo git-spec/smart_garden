@@ -3,17 +3,13 @@
 import React, {useEffect} from 'react';
 // redux
 import {connect} from 'react-redux';
-import {
-    setBackgroundColor1Action,
-    setBackgroundColor5Action
-} from '../actions';
+import {setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
 // reactstrap
 import {Container} from 'reactstrap';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Protection(props) {
 
-/* ******************************************************** USE EFFECT ********************************************************* */
     useEffect(() => {
         // set background color of nav
         props.setBackgroundColor5Action(null);

@@ -34,10 +34,10 @@ const UserProfile = props => {
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
-        // save background color in redux
+        // saves background color in redux
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
-        // get user data from db
+        // gets user data from database
         getUserPost(props.user.id).then(user => {
             switch (user) {
                 case 2:
@@ -64,6 +64,8 @@ const UserProfile = props => {
     }, []);
 
 /* ********************************************************* EDIT BUTTON ********************************************************* */
+    // The user can change his or her data in the user profile:
+    // The name, the user name and the personal password can be changed and the place of residence can be added.
     const onEditBtnClick = e => {
         e.preventDefault();
         if (state.password !== state.repassword) {

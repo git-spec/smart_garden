@@ -4,10 +4,10 @@ import React, {Fragment} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setBackgroundImageAction, setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
-// reactstrap
-import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 // router dom
 import {Link} from 'react-router-dom';
+// reactstrap
+import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 // components
 import PopUpModal from './PopUpModal';
 // services
@@ -38,7 +38,10 @@ class Register extends React.Component {
         this.props.setBackgroundColor5Action(null);
     }
 
-/* ********************************************************* EVENTS ********************************************************* */
+/* ********************************************************* REGISTRATION ********************************************************* */
+    // The user can register on the site by entering his name, email, a user name of his choice and a password. 
+    // If all fields are filled in correctly, the user will receive an email with a link to verify the email 
+    // and complete the registration.
     onRegisterBtnClick = e => {
         e.preventDefault();
         if (

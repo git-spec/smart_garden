@@ -28,6 +28,7 @@ const Login = props => {
     const [state, setState] = useState(initialState);
 
     useEffect(() => {
+        // deletes user and sets background color in redux
         props.setUserAction(null);
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
@@ -35,6 +36,7 @@ const Login = props => {
     }, []);
 
 /* ********************************************************* LOGIN BUTTON ********************************************************* */
+    // The user can log in and enter the secure user area by entering the email or username and password.
     const onLoginBtnClick = e => {
         e.preventDefault();
         if (state.email.trim() === '' || state.password === '') {

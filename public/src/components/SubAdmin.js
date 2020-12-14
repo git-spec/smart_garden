@@ -23,6 +23,7 @@ const SubAdmin = props => {
     };
     const [state, setState] = useState(initialState);
 
+    // gets the data of all users from the database to display them in the admin panel
     useEffect(() => {
         getAllUsersPost().then(data => {
             switch (data) {
@@ -43,12 +44,14 @@ const SubAdmin = props => {
     }, []);
 
 /* ********************************************************* CHANGE USER VERIFICATION ********************************************************* */
+    // changes the verification of a user by clicking the verified button
     const onVerifiedBtnClick = (e, userID, email, verified) => {
         e.preventDefault();
+        // changes the verification of a user in the database
         changeVerificationPost(userID, email, verified).then(data => {
             switch (data) {
                 case 1:
-                    // change the user array in the state after it has been changed in the database
+                    // changes the user array in the state after it has been changed in the database
                     let newUsers = state.users.map(user => {
                         if (user.id === userID) {
                             user.verified = !user.verified;
@@ -72,13 +75,15 @@ const SubAdmin = props => {
     };
 
 /* ********************************************************* DELETE USER ********************************************************* */
+    // deletes a user by clicking the delete button
     const onDeleteBtnClick = (e, userID, idx) => {
         e.preventDefault();
         const deleteUser = userID => {
+            // deletes a user in the database
             deleteUserPost(userID).then(data => {
                 if (data === 1) {
                     state.users.splice(idx, 1);
-                    // change the user array in the state after it has been changed in the database
+                    // changes the user array in the state after it has been changed in the database
                     setState({
                         ...state,
                         users: state.users,
@@ -92,6 +97,7 @@ const SubAdmin = props => {
                 alert('Server error!');
             });
         };
+        // a modal asks one more time before the user is finally deleted
         setState({
             ...state,
             confirmModalShow: true,

@@ -21,6 +21,8 @@ const ForgotPassword = props => {
     const [state, setState] = useState(initialState);
 
 /* ********************************************************* SEND BUTTON ********************************************************* */
+    // The user can enter his email address in the field and press the send button 
+    // to request an email with a link to reset his password.
     const onSendBtnClick = e => {
         e.preventDefault();
         if (state.email.trim() === '') {

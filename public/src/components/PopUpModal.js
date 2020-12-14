@@ -3,6 +3,7 @@ import React from 'react';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 
 /* ********************************************************* COMPONENT ********************************************************* */
+// Used to give the user hints in the form of a modal. For example, if a required field has not been filled in.
 class PopUpModal extends React.Component {
     render() {
         return (
