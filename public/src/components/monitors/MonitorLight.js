@@ -7,6 +7,9 @@ import {Table} from 'reactstrap';
 import LineChart from '../LineChart';
 // services
 import {deviceLightDataPost} from '../../services/productsApi';
+import {capitalizeName} from '../../services/capitalizeName';
+// icons
+import { ReactComponent as Light } from '../../imgs/light.svg';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorLight extends Component {
@@ -58,7 +61,10 @@ class MonitorLight extends Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">{this.props.device.device_name}</th>
+                            <th scope="row">
+                                {capitalizeName(this.props.device.device_name)}
+                                <Light width='1rem' height='1.2rem' stroke='#241B12' className="light ml-2" />
+                            </th>
                             <td>
                                 {this.props.device.connected
                                     ? this.props.data[0]

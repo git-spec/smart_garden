@@ -169,6 +169,10 @@ body #root .container .col-lg-7 > .col {
   border-radius: 1rem;
 }
 
+body #root .container .humidity {
+  border-color: #241b12;
+}
+
 body #root > div > .container > .container {
   padding-top: 8rem;
 }
@@ -381,11 +385,6 @@ body .breadcrumb-item.active {
 .navbar > .container > button.btn:hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
-}
-
-.navbar > .container > button.btn:active {
-  background-color: #fdd79d !important;
-  color: #241b12 !important;
 }
 
 .navbar li {
@@ -1234,16 +1233,19 @@ input[type='range']::after {
 }
 
 .table thead > tr > th {
+  width: 2rem;
+  font-size: 1.2rem;
   text-align: right;
 }
 
 .table thead > tr > th:first-child {
+  width: 6rem;
   text-align: left;
-  font-size: 1.2rem;
   font-weight: normal;
 }
 
 .table tbody td {
+  width: 3rem;
   text-align: right;
 }
 

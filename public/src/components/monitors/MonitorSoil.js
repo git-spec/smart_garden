@@ -7,6 +7,9 @@ import {Table} from 'reactstrap';
 import LineChart from '../LineChart';
 // services
 import {deviceMoistureDataPost} from '../../services/productsApi';
+import {capitalizeName} from '../../services/capitalizeName';
+// icons
+import { ReactComponent as Moisture } from '../../imgs/soil_moisture.svg';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorSoil extends Component {
@@ -58,7 +61,10 @@ class MonitorSoil extends Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">{this.props.device.device_name}</th>
+                            <th scope="row">
+                                {capitalizeName(this.props.device.device_name)}
+                                <Moisture width='0.8rem' height='1.2rem' stroke='#241B12' className="moisture ml-2" />
+                            </th>
                             <td>
                                 {this.props.device.connected
                                     ? this.props.data[0]

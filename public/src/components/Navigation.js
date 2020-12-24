@@ -4,6 +4,7 @@ import React, {Fragment, useState, useEffect, useRef} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setSocketAction, setUserAction} from '../actions';
+import {useSelector} from 'react-redux';
 // router dom
 import {Link, useHistory, useLocation} from 'react-router-dom';
 // reactstrap
@@ -12,6 +13,9 @@ import {Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, N
 import {logoutPost} from '../services/api';
 // window dimension hook
 import {useWindowDimension} from '../hooks/useWindowDimension';
+// images
+import {ReactComponent as AccountOutlined} from '../imgs/account_outlined.svg';
+import {ReactComponent as AccountFilled} from '../imgs/account_filled.svg';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Navigation(props) {
@@ -23,15 +27,19 @@ function Navigation(props) {
     const openRefNAV = useRef();
     const openRefACC = useRef();
     const activeRef = useRef();
+    const outlinedAccRef = useRef();
+    const filledAccRef = useRef();
 
 /* *********************************************************** STATE ********************************************************* */  
     const initialState = {
         isOpenNAV: true,
         isOpenACC: true,
         account: true,
+        isEnter: true,
         top: 0
     };
     const [state, setState] = useState(initialState);
+    const color5 = useSelector( state => state.backgroundColor5);
 
 /* *********************************************************** LOGOUT ********************************************************* */
     const history = useHistory();
@@ -93,6 +101,12 @@ function Navigation(props) {
         };
     };
 
+    const toggleAccIcon = e => {
+        e.preventDefault();
+        outlinedAccRef.current.style.display = 'none';
+        filledAccRef.current.style.display = 'block';
+    }
+
 /* ********************************************************* FUNCTIONS ********************************************************* */
     let prevScrollpos = window.pageYOffset;
     // set media query
@@ -113,8 +127,21 @@ function Navigation(props) {
     }
 
 /* ********************************************************* USE EFFECT ********************************************************* */
+    // show outlined account-icon
+    useEffect(() => {
+        outlinedAccRef.current.style.display = 'block';
+        filledAccRef.current.style.display = 'none';
+    // eslint-disable-next-line
+    }, []);
     // set outside listener
     useEffect(() => {
+        // toggle account-icon
+        if (filledAccRef.current.style.display === 'block') {
+            setTimeout(() => {
+                outlinedAccRef.current.style.display = 'block';
+                filledAccRef.current.style.display = 'none';
+            }, 100);
+        };
         // console.log(openRefACC.current.classList.contains(item => item === 'open'));
         document.addEventListener('click', globalClickListener);
         // cleanup 
@@ -210,9 +237,10 @@ function Navigation(props) {
                     <NavbarBrand className="m-0" title="home" tag={Link} to="/" />
                 </div>
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <Button title="100" className="p-0" onClick={toggleACC}>
-                    <h4 className="d-flex text-align-center justify-content-center m-0">
-                        <i className="far fa-user-circle account"></i>
+                <Button title="100" className="p-0" onClick={e => {toggleACC(e); toggleAccIcon(e)}}>
+                    <h4 data-attribute='hidden' hidden={true} className="d-flex text-align-center justify-content-center m-0">
+                        <AccountOutlined width="1.5rem" height="1.5rem" stroke={color5 ? "#1C2C22" : "#FDD79D"} ref={outlinedAccRef} />
+                        <AccountFilled width="1.5rem" height="1.5rem" fill={color5 ? "#1C2C22" : "#FDD79D"} ref={filledAccRef} />
                     </h4>
                 </Button>
                 {/* navbar toggle for devices smaller than 576px */}

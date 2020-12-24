@@ -23,9 +23,9 @@
         &:hover {
             transform: scale(1.2);
         }
-        &:active {
-            @include changeButton;
-        }
+        // &:active {
+        //     @include changeButton;
+        // }
     }    
     // menu points
     & li {

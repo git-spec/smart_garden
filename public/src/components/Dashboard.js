@@ -131,6 +131,7 @@ const Dashboard = props => {
             console.log('connected');
             props.setSocketAction(socket);
             socket.emit('user_connect', props.user.id);
+        // eslint-disable-next-line
         });
 
         socket.on('hub_connect', sn => {
@@ -540,7 +541,7 @@ const Dashboard = props => {
     if (props.user.img) {
         userImg = props.user.img;
     } else {
-        userImg = '/uploads/userDummy.jpg';
+        userImg = '/src/imgs/dummy.svg';
     }
     const o_date = new Intl.DateTimeFormat();
     const f_date = (m_ca, m_it) => Object({...m_ca, [m_it.type]: m_it.value});

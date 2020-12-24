@@ -310,6 +310,10 @@ body {
         @include changeBorder;
         border-radius: $font-size-4;
       }
+      // icons
+      & .humidity {
+        border-color: $color-1;
+      }
     }
     // frame border of container outside container
     & > div > .container {

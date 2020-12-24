@@ -10,6 +10,8 @@ import {
     FormGroup,
     CustomInput
 } from 'reactstrap';
+// service
+import {capitalizeName} from '../../services/capitalizeName';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorWater extends Component {
@@ -99,7 +101,7 @@ class MonitorWater extends Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">{this.props.device.device_name}</th>
+                            <th scope="row">{capitalizeName(this.props.device.device_name)}</th>
                         </tr>
                     </tbody>
                 </Table>

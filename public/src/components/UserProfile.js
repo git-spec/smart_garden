@@ -120,7 +120,7 @@ const UserProfile = props => {
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
-        <Container className="pt-4 mt-5">
+        <Container className="p-0 pt-4 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
                 className="bg-danger" 
@@ -154,7 +154,7 @@ const UserProfile = props => {
                 </Col>
                 <Col className="float-right" xs={6} md={3}>
                     <img 
-                        src={state.userImg ? state.userImg : '/uploads/userDummy.jpg'}
+                        src={state.userImg ? state.userImg : '/src/imgs/dummy.svg'}
                         alt=""
                         style={{width: '150px', height: '150px', borderRadius: '50%'}}
                     /> 
