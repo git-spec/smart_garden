@@ -29,13 +29,42 @@ class Register extends React.Component {
             repassword: '',
             showModal: false,
             modalContent: null,
-            badgeContent: null
+            badgeContent: null,
+            touched: {
+                firstName: false,
+                lastName: false,
+                userName: false,
+                email: false,
+                password: false,
+                repassword: false
+            }
         };
     }
 
     componentDidMount() {
         this.props.setBackgroundColor1Action("color-1");
         this.props.setBackgroundColor5Action(null);
+    }
+    
+/* ********************************************************* FUNCTIONS ********************************************************* */    
+    // check exsiting input
+    validate = (firstName, lastName, userName, email, password, repassword) => {
+        return {
+            firstName: firstName.length === 0,
+            lastName: lastName.length === 0,
+            userName: userName.length === 0,
+            email: email.length === 0,
+            password: password.length === 0,
+            repassword: repassword.length === 0
+        };
+    }
+    // check blur of inputs
+    handleBlur = field => e => {
+        e.preventDefault();
+        this.setState({
+            ...this.state,
+            touched: {...this.state.touched, [field]: true}
+        });
     }
 
 /* ********************************************************* REGISTRATION ********************************************************* */
@@ -111,6 +140,26 @@ class Register extends React.Component {
 
 /* ********************************************************* RENDER ********************************************************* */
     render() {
+        // change border-color of inputs to danger
+        const errors = this.validate(
+            this.state.firstName,
+            this.state.lastName,
+            this.state.userName,
+            this.state.email,
+            this.state.password,
+            this.state.repassword
+        );
+        // show error message
+        const touched = this.state.touched
+        function markError(field) {
+            const hasError = errors[field];
+            const showError = touched[field];
+            return hasError ? showError : false;
+        }
+        // enable login-button
+        const isEnabled = !Object.keys(errors).some(x => errors[x]);
+
+/* ********************************************************* RETURN ********************************************************* */
         return (
             <Fragment>
                 <PopUpModal
@@ -128,92 +177,104 @@ class Register extends React.Component {
                         <div className="col-lg-12 col-md-12">{this.state.badgeContent}</div>
                         <Row xs="1" sm="2">
                             <Col>
-                                <FormGroup className="mb-md-4 mb-3 text-left">
+                                <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
                                     <Input
-                                        className="badge-pill text-trans bg-transparent"
+                                        className={"badge-pill bg-transparent " + (markError('firstName') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter your first name"
-                                        required
-                                        onChange={e => this.setState({firstName: e.target.value})}
                                         value={this.state.firstName}
+                                        onChange={e => this.setState({firstName: e.target.value})}
+                                        onBlur={this.handleBlur('firstName')}
+                                        required
                                     />
                                 </FormGroup>
+                                <p className="error mb-1 ml-2">&nbsp;{markError('firstName') ? "Please enter your first name." : ""}</p>
                             </Col>
                             <Col>
-                                <FormGroup className="mb-4 text-left">
+                                <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className={"badge-pill bg-transparent " + (markError('lastName') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter your last name"
-                                        required
-                                        onChange={e => this.setState({lastName: e.target.value})}
                                         value={this.state.lastName}
+                                        onChange={e => this.setState({lastName: e.target.value})}
+                                        onBlur={this.handleBlur('lastName')}
+                                        required
                                     />
                                 </FormGroup>
+                                <p className="error mb-1 ml-2">&nbsp;{markError('lastName') ? "Please enter your last name." : ""}</p>
                             </Col>
                             <Col>
-                                <FormGroup className="mb-4 text-left">
+                                <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Email:</Label>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className={"badge-pill bg-transparent " + (markError('email') ? "error" : "")}
                                         type="email"
                                         placeholder="Enter your email"
-                                        required
-                                        onChange={e => this.setState({email: e.target.value})}
                                         value={this.state.email}
+                                        onChange={e => this.setState({email: e.target.value})}
+                                        onBlur={this.handleBlur('email')}
+                                        required
                                     />
                                 </FormGroup>
+                                <p className="error mb-1 ml-2">&nbsp;{markError('email') ? "Please enter your email." : ""}</p>
                             </Col>
                             <Col>
-                                <FormGroup className="mb-4 text-left">
+                                <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className={"badge-pill bg-transparent " + (markError('userName') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter an user name"
-                                        required
-                                        onChange={e => this.setState({userName: e.target.value})}
                                         value={this.state.userName}
+                                        onChange={e => this.setState({userName: e.target.value})}
+                                        onBlur={this.handleBlur('userName')}
+                                        required
                                     />
                                 </FormGroup>
+                                <p className="error mb-1 ml-2">&nbsp;{markError('userName') ? "Please enter a user name." : ""}</p>
                             </Col>
                             <Col>
-                                <FormGroup className="mb-4 text-left">
+                                <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className={"badge-pill bg-transparent " + (markError('password') ? "error" : "")}
                                         type="password"
                                         placeholder="Enter a password"
-                                        required
-                                        onChange={e => this.setState({password: e.target.value})}
                                         value={this.state.password}
+                                        onChange={e => this.setState({password: e.target.value})}
+                                        onBlur={this.handleBlur('password')}
+                                        required
                                     />
                                 </FormGroup>
+                                <p className="error mb-1 ml-2">&nbsp;{markError('password') ? "Please enter a password." : ""}</p>
                             </Col>
                             <Col>
-                                <FormGroup className="mb-3 text-left">
+                                <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat Password:</Label>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className={"badge-pill bg-transparent " + (markError('repassword') ? "error" : "")}
                                         type="password"
                                         placeholder="Repeat your password"
-                                        required
-                                        onChange={e => this.setState({repassword: e.target.value})}
                                         value={this.state.repassword}
+                                        onChange={e => this.setState({repassword: e.target.value})}
+                                        onBlur={this.handleBlur('repassword')}
+                                        required
                                     />
                                 </FormGroup>
+                                <p className="error mb-1 ml-2">&nbsp;{markError('repassword') ? "Please repeat the password." : ""}</p>
                             </Col>
                             <Col>
-                                <h5 className="text-trans">
+                                <h5 className="text-trans mt-2">
                                     Already registered?&nbsp;
                                     <Link to="/login">Login</Link>
                                 </h5>
                             </Col>
                         </Row>
-                        <Col className=" text-center">
-                            <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={this.onRegisterBtnClick}>
+                        <Col className="text-center">
+                            <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={this.onRegisterBtnClick} disabled={!isEnabled}>
                                 Register
                             </Button>
                         </Col>
@@ -222,7 +283,7 @@ class Register extends React.Component {
             </Fragment>
         );
     }
-}
+};
 
 /* ********************************************************* EXPORT ********************************************************* */
 export default connect(null, {setBackgroundImageAction, setBackgroundColor1Action, setBackgroundColor5Action})(Register);

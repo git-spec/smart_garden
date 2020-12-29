@@ -310,6 +310,10 @@ body {
         @include changeBorder;
         border-radius: $font-size-4;
       }
+      // icons
+      & .humidity {
+        border-color: $color-1;
+      }
     }
     // frame border of container outside container
     & > div > .container {
@@ -383,6 +387,16 @@ body {
   // & .text-transp {
   //   color: $text-transp !important;
   // }
+
+  // errors
+  & .error {
+    font-size: $font-size-4;
+    color: $color-danger;
+  }
+  & input.error {
+    border-color: $color-danger !important;
+    background-color: transparent;
+  }
 
   code {
       font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;

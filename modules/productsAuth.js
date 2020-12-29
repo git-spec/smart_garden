@@ -180,7 +180,7 @@ function saveRanges(inputRangeTime, inputRangeDuration, deviceSN, soilMoistureDe
 // get the average values of the last days of the soil moisture device
 function deviceMoistureData(deviceID) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= curdate() - INTERVAL DAYOFWEEK(curdate()) + 30 DAY GROUP BY DATE(timestamp)`).then(data => {
+        runQuery(`SELECT AVG(CONVERT(REPLACE( REPLACE(data, '"]', ''), '["', ''), signed)) as value, DATE(timestamp) as time FROM iot_data WHERE device_id=${deviceID} AND timestamp >= 20201101 - INTERVAL DAYOFWEEK(curdate()) + 30 DAY GROUP BY DATE(timestamp)`).then(data => {
             resolve(data);
         }).catch(err => {
             console.log(err); 

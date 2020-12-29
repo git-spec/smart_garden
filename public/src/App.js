@@ -4,8 +4,7 @@ import Router from './components/Router';
 function App() {
     return (
         <Fragment>
-            <Router>
-            </Router>
+            <Router />
         </Fragment>
     );
 }

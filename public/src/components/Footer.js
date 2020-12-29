@@ -13,7 +13,7 @@ function Footer({location}) {
     if (location.pathname !== '/') {
         return (
             <Container fluid={true}>
-                <Col className="d-flex justify-content-center mt-5 mb-2">
+                <Col className="d-flex justify-content-center mt-5 mb-3">
                     <a href="https://www.youtube.com" className="mx-2">
                         <i className="fab fa-youtube"></i>
                     </a>
@@ -32,7 +32,7 @@ function Footer({location}) {
                         Contact
                     </Link>
                     <Link to="/terms" className="mx-3">
-                        Terms and Conditions
+                        Terms &amp; Conditions
                     </Link>
                     <Link to="/protection" className="mx-3">
                         Data Protection

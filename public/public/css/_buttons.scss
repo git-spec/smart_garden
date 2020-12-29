@@ -15,6 +15,12 @@ button {
     color: inherit !important;
     @include changeBorder;
   }
+  &:disabled {
+    border-color: $color-3 !important;
+    &:hover {
+      transform: scale(1) !important;
+    }
+  }
   // scales button after hover
   &:hover,
   &:active,

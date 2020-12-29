@@ -493,7 +493,7 @@ const Dashboard = props => {
         // send order to raspberry to stop the request from previous device
         if (state.currentDevice.sn_number && state.currentDevice.connected) {
             props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.currentDevice.sn_number});
-        }
+        };
         // get real time data: socket emit to send the order to raspberry
         setState({
             ...state,
@@ -504,7 +504,7 @@ const Dashboard = props => {
         });
         if (device.type_id !== 2 && device.connected) {
             props.socket.emit('getRealTimeData', {userId: props.user.id, sn: device.sn_number});
-        }
+        };
     };
 
     // turns the water pump on or off
@@ -540,7 +540,7 @@ const Dashboard = props => {
     if (props.user.img) {
         userImg = props.user.img;
     } else {
-        userImg = '/uploads/userDummy.jpg';
+        userImg = '/src/imgs/dummy.svg';
     }
     const o_date = new Intl.DateTimeFormat();
     const f_date = (m_ca, m_it) => Object({...m_ca, [m_it.type]: m_it.value});

@@ -169,6 +169,10 @@ body #root .container .col-lg-7 > .col {
   border-radius: 1rem;
 }
 
+body #root .container .humidity {
+  border-color: #241b12;
+}
+
 body #root > div > .container > .container {
   padding-top: 8rem;
 }
@@ -266,6 +270,16 @@ body input.form-control:focus {
 body p {
   color: inherit;
   font-size: 1.2rem;
+}
+
+body .error {
+  font-size: 1rem;
+  color: red;
+}
+
+body input.error {
+  border-color: red !important;
+  background-color: transparent;
 }
 
 body code {
@@ -381,11 +395,6 @@ body .breadcrumb-item.active {
 .navbar > .container > button.btn:hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
-}
-
-.navbar > .container > button.btn:active {
-  background-color: #fdd79d !important;
-  color: #241b12 !important;
 }
 
 .navbar li {
@@ -614,6 +623,17 @@ button.btn-secondary:not(:disabled):not(.disabled):active {
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
+}
+
+.btn:disabled,
+button:disabled {
+  border-color: #fdd79d !important;
+}
+
+.btn:disabled:hover,
+button:disabled:hover {
+  -webkit-transform: scale(1) !important;
+          transform: scale(1) !important;
 }
 
 .btn:hover, .btn:active, .btn.visited, .btn:focus,
@@ -1234,16 +1254,19 @@ input[type='range']::after {
 }
 
 .table thead > tr > th {
+  width: 2rem;
+  font-size: 1.2rem;
   text-align: right;
 }
 
 .table thead > tr > th:first-child {
+  width: 6rem;
   text-align: left;
-  font-size: 1.2rem;
   font-weight: normal;
 }
 
 .table tbody td {
+  width: 3rem;
   text-align: right;
 }
 
@@ -1445,5 +1468,17 @@ input[type='range']::after {
 #root > .color-5 ~ div > div:nth-child(3) a {
   color: #005018 !important;
   font-size: 1rem;
+}
+
+@media (max-width: 360px) {
+  #root > div:last-child > div:nth-child(3) a {
+    font-size: 0.6rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  #root > div:last-child > div:nth-child(3) a {
+    font-size: 0.8rem;
+  }
 }
 /*# sourceMappingURL=style.css.map */

@@ -7,6 +7,9 @@ import {Table} from 'reactstrap';
 import LineChartMultiple from '../LineChartMultiple';
 // services
 import {deviceTempHumDataPost} from '../../services/productsApi';
+// icons
+import { ReactComponent as Humidity } from '../../imgs/humidity.svg';
+import { ReactComponent as Temperature } from '../../imgs/temperature.svg';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class MonitorTempHum extends Component {
@@ -30,6 +33,9 @@ class MonitorTempHum extends Component {
             })
         }
     }
+    // capitalize name
+    capitalizeTemp() {return this.props.device.device_name.charAt(0).toUpperCase() + this.props.device.device_name.substring(1, this.props.device.device_name.indexOf(' '))};
+    capitalizeHum() {return this.props.device.device_name.charAt(this.props.device.device_name.indexOf('&') + 2).toUpperCase() + this.props.device.device_name.substring(this.props.device.device_name.indexOf('&') + 3)};
 
 /* ********************************************************* RENDER ********************************************************* */
     render() {
@@ -58,7 +64,10 @@ class MonitorTempHum extends Component {
                     </thead>
                     <tbody>
                         <tr>
-                            <th scope="row">temperature</th>
+                            <th scope="row">
+                                {this.capitalizeTemp()}
+                                <Temperature width='1rem' height='1.2rem' stroke='#241B12' className="temperature ml-2" />
+                            </th>
                             <th></th>
                             <td>
                                 {this.props.device.connected
@@ -69,7 +78,10 @@ class MonitorTempHum extends Component {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">humidity</th>
+                            <th scope="row">
+                                {this.capitalizeHum()}
+                                <Humidity width='1.4rem' height='1.1rem' stroke='#241B12' className="humidity ml-2" />
+                                </th>
                             <th></th>
                             <td>
                                 {this.props.device.connected
