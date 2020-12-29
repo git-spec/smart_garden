@@ -131,7 +131,6 @@ const Dashboard = props => {
             console.log('connected');
             props.setSocketAction(socket);
             socket.emit('user_connect', props.user.id);
-        // eslint-disable-next-line
         });
 
         socket.on('hub_connect', sn => {
@@ -494,7 +493,7 @@ const Dashboard = props => {
         // send order to raspberry to stop the request from previous device
         if (state.currentDevice.sn_number && state.currentDevice.connected) {
             props.socket.emit('stopRealTimeData', {userId: props.user.id, sn: state.currentDevice.sn_number});
-        }
+        };
         // get real time data: socket emit to send the order to raspberry
         setState({
             ...state,
@@ -505,7 +504,7 @@ const Dashboard = props => {
         });
         if (device.type_id !== 2 && device.connected) {
             props.socket.emit('getRealTimeData', {userId: props.user.id, sn: device.sn_number});
-        }
+        };
     };
 
     // turns the water pump on or off

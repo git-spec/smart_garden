@@ -388,6 +388,16 @@ body {
   //   color: $text-transp !important;
   // }
 
+  // errors
+  & .error {
+    font-size: $font-size-4;
+    color: $color-danger;
+  }
+  & input.error {
+    border-color: $color-danger !important;
+    background-color: transparent;
+  }
+
   code {
       font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   }

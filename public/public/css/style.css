@@ -272,6 +272,16 @@ body p {
   font-size: 1.2rem;
 }
 
+body .error {
+  font-size: 1rem;
+  color: red;
+}
+
+body input.error {
+  border-color: red !important;
+  background-color: transparent;
+}
+
 body code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
@@ -613,6 +623,17 @@ button.btn-secondary:not(:disabled):not(.disabled):active {
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
+}
+
+.btn:disabled,
+button:disabled {
+  border-color: #fdd79d !important;
+}
+
+.btn:disabled:hover,
+button:disabled:hover {
+  -webkit-transform: scale(1) !important;
+          transform: scale(1) !important;
 }
 
 .btn:hover, .btn:active, .btn.visited, .btn:focus,
@@ -1447,5 +1468,17 @@ input[type='range']::after {
 #root > .color-5 ~ div > div:nth-child(3) a {
   color: #005018 !important;
   font-size: 1rem;
+}
+
+@media (max-width: 360px) {
+  #root > div:last-child > div:nth-child(3) a {
+    font-size: 0.6rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  #root > div:last-child > div:nth-child(3) a {
+    font-size: 0.8rem;
+  }
 }
 /*# sourceMappingURL=style.css.map */
