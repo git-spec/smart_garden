@@ -41,13 +41,11 @@ const Login = props => {
 
 /* ********************************************************* FUNCTIONS ********************************************************* */    
     // check exsiting input
-    const validate = (name, password) => {
+    const validateInp = (name, password) => {
         return {loginName: name.length === 0, password: password.length === 0};
     }
     // change border-color of inputs to danger
-    const errors = validate(state.loginName, state.password);
-    // enable login-button
-    const isEnabled = !Object.keys(errors).some(x => errors[x]);
+    const inpErrs = validateInp(state.loginName, state.password);
     // const isEnabled =  state.loginName.trim().length > 0 &&  state.password.length > 0;
     // check blur of inputs
     const handleBlur = field => e => {
@@ -57,12 +55,25 @@ const Login = props => {
             touched: {...state.touched, [field]: true}
         });
     }
-    // show error message
-    const markError = field => {
-        const hasError = errors[field];
+    // show input error message
+    const markInpError = field => {
+        const hasError = inpErrs[field];
         const showError = state.touched[field];
         return hasError ? showError : false;
     }
+    // check characters
+    const validateChar = (name) => {
+        return {loginName: !name.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g)};
+    }
+    const charErrs = validateChar(state.loginName);
+    // show character error message
+    const markCharError = field => {
+        const hasError = charErrs[field];
+        const showError = state.touched[field];
+        return hasError ? showError : false;
+    }
+    // enable login-button
+    const isEnabled = !Object.keys(inpErrs).some(x => inpErrs[x]) && !Object.keys(charErrs).some(x => charErrs[x]);
   
     // The user can log in and enter the secure user area by entering the email or username and password.
     const onLoginBtnClick = e => {
@@ -151,7 +162,7 @@ const Login = props => {
                             <FormGroup className="mb-1 text-left">
                                 <Label className="w-100 h5 text-trans mb-2 ml-2">Usename / Email:</Label>
                                 <Input
-                                    className={"badge-pill bg-transparent " + (markError('loginName') ? "error" : "")}
+                                    className={"badge-pill bg-transparent " + (markInpError('loginName') ? "error" : "")}
                                     type="text"
                                     placeholder="Enter your username or email"
                                     value={state.loginName}
@@ -160,7 +171,16 @@ const Login = props => {
                                     required
                                 />
                             </FormGroup>
-                            <p className="error mb-1 ml-2">&nbsp;{markError('loginName') ? "Please enter your username or email." : ""}</p>
+                            <p className="error mb-2 ml-2">
+                                &nbsp;
+                                {
+                                    state.loginName.trim() === ''
+                                ?
+                                    markInpError('loginName') ? "Please enter your user name or email." : ""
+                                :
+                                    markCharError('loginName') ? "Please enter a valid user name or email." : ""
+                                }
+                            </p>
                         </Col>
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-1 text-left">
@@ -179,7 +199,7 @@ const Login = props => {
                                     </Col>
                                 </Row>
                                 <Input
-                                    className={"badge-pill bg-transparent " + (markError('password') ? "error" : "")}
+                                    className={"badge-pill bg-transparent " + (markInpError('password') ? "error" : "")}
                                     type="password"
                                     placeholder="Enter your password"
                                     value={state.password}
@@ -188,7 +208,7 @@ const Login = props => {
                                     required
                                 />
                             </FormGroup>
-                            <p className="error mb-1 ml-2">&nbsp;{markError('password') ? "Please enter your password." : ""}</p>
+                            <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter your password." : ""}</p>
                         </Col>
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <h5 className="mt-2">

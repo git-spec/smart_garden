@@ -13,6 +13,7 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const cors = require('cors');
 const session = require('express-session');
+const validator = require('validator');
 
 // app use
 app.use(express.static(__dirname + '/public/build'));
@@ -66,24 +67,34 @@ app.post('/register', (req, res) => {
     // 1 user registered successfully
     // 2 server error
     // 3 user already exists
-    const firstName = entities.encode(req.body.firstName.trim());
-    const lastName = entities.encode(req.body.lastName.trim());
-    const userName = entities.encode(req.body.userName.trim());
-    const email = entities.encode(req.body.email.trim());
-    const password = req.body.password;
-    const repassword = req.body.repassword;
-    if (firstName && lastName && userName && email && password && password === repassword){
-        registerUser(firstName, lastName, userName, email, password).then(() => {
-            res.json(1);
-        }).catch(err => {
-            if (err === "exist") {
-                res.json(3);
-            } else{
-                res.json(2);
-            }
-        })
+    // 4 hack attack
+    if (
+        !req.body.firstName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g) ||
+        !req.body.lastName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g) ||
+        !req.body.userName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g) ||
+        !validator.isEmail(req.body.email)
+    ) {
+        res.json(4);
     } else {
-        res.json(2);
+        const firstName = entities.encode(req.body.firstName.trim());
+        const lastName = entities.encode(req.body.lastName.trim());
+        const userName = entities.encode(req.body.userName.trim());
+        const email = entities.encode(req.body.email.trim());
+        const password = req.body.password;
+        const repassword = req.body.repassword;
+        if (firstName && lastName && userName && email && password && password === repassword){
+            registerUser(firstName, lastName, userName, email, password).then(() => {
+                res.json(1);
+            }).catch(err => {
+                if (err === "exist") {
+                    res.json(3);
+                } else{
+                    res.json(2);
+                }
+            })
+        } else {
+            res.json(2);
+        };
     };
 });
 

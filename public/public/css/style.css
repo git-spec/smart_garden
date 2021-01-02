@@ -274,11 +274,11 @@ body p {
 
 body .error {
   font-size: 1rem;
-  color: red;
+  color: #ff6060;
 }
 
 body input.error {
-  border-color: red !important;
+  border-color: #ff6060 !important;
   background-color: transparent;
 }
 
@@ -395,6 +395,10 @@ body .breadcrumb-item.active {
 .navbar > .container > button.btn:hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
+}
+
+.navbar > .container > button.btn.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: transparent !important;
 }
 
 .navbar li {
@@ -616,9 +620,8 @@ button {
   font-weight: bold;
 }
 
-.btn.btn-secondary, .btn.btn-secondary:not(:disabled):not(.disabled):active,
-button.btn-secondary,
-button.btn-secondary:not(:disabled):not(.disabled):active {
+.btn.btn-secondary,
+button.btn-secondary {
   color: inherit !important;
   border-width: 0.1rem;
   border-style: solid;
@@ -662,17 +665,34 @@ button.btn-outline-light {
   color: #fdd79d !important;
 }
 
-.btn.btn-outline-light:active,
-button.btn-outline-light:active {
+.btn.btn-outline-light:active, .btn.btn-secondary:not(:disabled):not(.disabled):active,
+button.btn-outline-light:active,
+button.btn-secondary:not(:disabled):not(.disabled):active {
+  border-color: #fdd79d;
   background-color: #fdd79d !important;
   color: #241b12 !important;
 }
 
 .btn.btn-outline-light:active.down > span,
-.btn.btn-outline-light:active.up > span,
+.btn.btn-outline-light:active.up > span, .btn.btn-secondary:not(:disabled):not(.disabled):active.down > span,
+.btn.btn-secondary:not(:disabled):not(.disabled):active.up > span,
 button.btn-outline-light:active.down > span,
-button.btn-outline-light:active.up > span {
+button.btn-outline-light:active.up > span,
+button.btn-secondary:not(:disabled):not(.disabled):active.down > span,
+button.btn-secondary:not(:disabled):not(.disabled):active.up > span {
   background-color: none !important;
+}
+
+.btn.btn-outline-light:active.plus, .btn.btn-secondary:not(:disabled):not(.disabled):active.plus,
+button.btn-outline-light:active.plus,
+button.btn-secondary:not(:disabled):not(.disabled):active.plus {
+  background-color: #007aa7 !important;
+}
+
+.btn.btn-outline-light:active.minus, .btn.btn-secondary:not(:disabled):not(.disabled):active.minus,
+button.btn-outline-light:active.minus,
+button.btn-secondary:not(:disabled):not(.disabled):active.minus {
+  background-color: red !important;
 }
 
 .btn.btn-outline-light:focus,
@@ -822,6 +842,17 @@ button:focus.down {
   text-shadow: none !important;
   outline: none;
   opacity: 1;
+}
+
+.modal-footer button.btn.btn-secondary {
+  color: black !important;
+  border-color: black;
+}
+
+.modal-footer button.btn.btn-secondary:hover, .modal-footer button.btn.btn-secondary:active, .modal-footer button.btn.btn-secondary.visited, .modal-footer button.btn.btn-secondary:focus, .modal-footer button.btn.btn-secondary:not(:disabled):not(.disabled):active {
+  color: #ffffff !important;
+  border-color: #5a6268 !important;
+  background-color: #5a6268 !important;
 }
 
 .color-5 ~ div .plus,

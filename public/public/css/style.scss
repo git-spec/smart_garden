@@ -391,10 +391,10 @@ body {
   // errors
   & .error {
     font-size: $font-size-4;
-    color: $color-danger;
+    color: $color-danger-light;
   }
   & input.error {
-    border-color: $color-danger !important;
+    border-color: $color-danger-light !important;
     background-color: transparent;
   }
 
