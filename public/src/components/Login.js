@@ -22,6 +22,7 @@ const Login = props => {
         loginName: '',
         password: '',
         showModal: false,
+        modalClass: '',
         modalTitle: '',
         modalContent: null,
         touched: {
@@ -78,73 +79,70 @@ const Login = props => {
     // The user can log in and enter the secure user area by entering the email or username and password.
     const onLoginBtnClick = e => {
         e.preventDefault();
-        if (state.loginName.trim() === '' || state.password === '') {
-            const modalContentElement = (
-                <ul>
-                    {state.loginName.trim() === '' ? <li>Please enter your username or email</li> : null}
-                    {state.password === '' ? <li>Please enter your password</li> : null}
-                </ul>
-            );
+        loginPost(state.loginName, state.password).then(data => {
+            switch (data) {
+                case 2:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Server Error',
+                        modalContent: <p>The server is not responding.</p>
+                    });
+                    break;
+                case 3:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>The password is wrong.</p>
+                    });
+                    break;
+                case 4:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>The email does not exist.</p>
+                    });
+                case 5:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>Please fill out correctly!</p>
+                    });
+                    break;
+                default:
+                    props.setUserAction(data);
+                    if (data.role === 'admin') {
+                        history.push('/user/admin');
+                    } else if (data.role === 'subadmin') {
+                        history.push('/user/subadmin');
+                    } else {
+                        history.push('/user/dashboard');
+                    }
+                    break;
+            }
+        }).catch(() => {
             setState({
                 ...state,
                 showModal: true,
-                modalTitle: 'Entry Error',
-                modalContent: modalContentElement
+                modalClass: 'danger',
+                modalTitle: 'Unkown Error',
+                modalContent: <p>The data cannot been sent.</p>
             });
-        } else {
-            loginPost(state.loginName, state.password).then(data => {
-                switch (data) {
-                    case 2:
-                        setState({
-                            ...state,
-                            showModal: true,
-                            modalTitle: 'Server Error',
-                            modalContent: <p>There was a server error</p>
-                        });
-                        break;
-                    case 3:
-                        setState({
-                            ...state,
-                            showModal: true,
-                            modalTitle: 'Wrong Password',
-                            modalContent: <p>Your password is wrong</p>
-                        });
-                        break;
-                    case 4:
-                        setState({
-                            ...state,
-                            showModal: true,
-                            modalTitle: 'Email Does Not Exist',
-                            modalContent: <p>The email you have used does not exist</p>
-                        });
-                        break;
-                    default:
-                        props.setUserAction(data);
-                        if (data.role === 'admin') {
-                            history.push('/user/admin');
-                        } else if (data.role === 'subadmin') {
-                            history.push('/user/subadmin');
-                        } else {
-                            history.push('/user/dashboard');
-                        }
-                        break;
-                }
-            }).catch(() => {
-                setState({
-                    ...state,
-                    showModal: true,
-                    modalTitle: 'Unknown Error',
-                    modalContent: <p>Can not send the data</p>
-                });
-            });
-        }
+        });
     };
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal 
-                className="bg-danger" 
+            <PopUpModal
+                className={state.modalClass}
                 title={state.modalTitle}
                 show={state.showModal} 
                 close={() => setState({...state, showModal: false})} 
@@ -154,7 +152,7 @@ const Login = props => {
             <Container className="pt-5 mt-5">
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 mt-5 px-0 px-md-3">Login</h1>
                 <h5 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
-                    Log in to access your device management.
+                    Sign in to access your device management.
                 </h5>
                 <Form className="pb-md-0 pb-5">
                     <Row xs="1" sm="1">

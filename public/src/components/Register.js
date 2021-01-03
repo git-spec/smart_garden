@@ -100,25 +100,25 @@ class Register extends React.Component {
             switch (data) {
                 case 1:
                     this.setState({showModal: true});
-                    modalClass = 'alert alert-success';
-                    modalTitle = 'Gratulation';
-                    modalMessage = 'You registered successfully, please check your mails to verify your account!';
+                    modalClass = 'success';
+                    modalTitle = 'Success';
+                    modalMessage = 'Congratulation, you registered successfully!\nPlease check your mails to verify your account.';
                     break;
                 case 2:
                     this.setState({showModal: true});
-                    modalClass = 'alert alert-danger';
+                    modalClass = 'danger';
                     modalTitle = 'Warning';
                     modalMessage = 'Server error, please contact the administrator!';
                     break;
                 case 3:
                     this.setState({showModal: true});
-                    modalClass = 'alert alert-danger';
+                    modalClass = 'danger';
                     modalTitle = 'Warning';
                     modalMessage = 'There is already a user with this email, please choose another one!';
                     break;
                 case 4:
                     this.setState({showModal: true});
-                    modalClass = 'alert alert-danger';
+                    modalClass = 'danger';
                     modalTitle = 'Warning';
                     modalMessage = 'Please fill out correctly!';
                     break;
@@ -135,7 +135,7 @@ class Register extends React.Component {
         }).catch(() => {
             this.setState({
                 modalContent: {
-                    class: 'alert alert-danger',
+                    class: 'danger',
                     title: 'Warning',
                     message: 'Can not send the registration data to server!'
                 }
