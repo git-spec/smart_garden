@@ -71,6 +71,7 @@ export const loginPost = (loginName, password) => {
         }).then(response => {
             if (response.status === 200) {
                 response.json().then(data => {
+console.log('loginPost_data:', data);
                     resolve(data);
                 }).catch(err => {
                     reject(err);

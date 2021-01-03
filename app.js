@@ -118,29 +118,40 @@ app.post('/verifyuser', (req, res) => {
 app.post('/login', (req, res) => {
     // user: user logged in successfully
     // 2 server error
-    // 3 password is wrong
-    // 4 user does not exist
-    // 5 hack attack
+    // 3 email does not exist
+    // 4 username does not exist
+    // 5 password is wrong
+    // 6 hack attack
     if (validator.isEmail(req.body.loginName) || req.body.loginName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g)) {
         const loginName = entities.encode(req.body.loginName.trim());
         const password = req.body.password;
         if (loginName && password) {
             checkUser(loginName, password).then(user => {
                 req.session.user = user;
-                res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role, img: user.img});
+                res.json({
+                    email: user.email,
+                    id: user.id,
+                    userName: user.username,
+                    firstName: user.firstname,
+                    lastName: user.lastname,
+                    role: user.role,
+                    img: user.img
+                });
             }).catch(err => {
                 if (err === 3) {
                     res.json(3);
-                } else {
+                } else if (err === 4) {
                     res.json(4);
+                } else {
+                    res.json(5);
                 };
-            })
+            });
         } else {
             res.json(2);
         };
     } else {
-        res.json(5);
-    }
+        res.json(6);
+    };
 });
 
 // checks if the user is logged in

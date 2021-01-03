@@ -66,14 +66,14 @@ function checkUser(user, password) {
         if (validator.isEmail(user)) {
             runQuery(`SELECT * FROM users where email LIKE '${user}'`).then(result => {
                 if (result.length === 0) {
-                    reject(4);
+                    reject(3);
                 } else {
                     if (passwordHash.verify(password, result[0].password)) {
                         if (result[0].verified) {
                             resolve(result[0]);
                         }
                     } else {
-                        reject(3);
+                        reject(5);
                     }
                 }
             }).catch(err => {
@@ -89,7 +89,7 @@ function checkUser(user, password) {
                             resolve(result[0]);
                         }
                     } else {
-                        reject(3);
+                        reject(5);
                     }
                 }
             }).catch(err => {

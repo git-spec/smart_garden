@@ -96,7 +96,7 @@ const Login = props => {
                         showModal: true,
                         modalClass: 'danger',
                         modalTitle: 'Warning',
-                        modalContent: <p>The password is wrong.</p>
+                        modalContent: <p>The email does not exist.</p>
                     });
                     break;
                 case 4:
@@ -105,9 +105,19 @@ const Login = props => {
                         showModal: true,
                         modalClass: 'danger',
                         modalTitle: 'Warning',
-                        modalContent: <p>The email does not exist.</p>
+                        modalContent: <p>The username does not exist.</p>
                     });
+                    break;
                 case 5:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>The password is wrong.</p>
+                    });
+                    break;
+                case 6:
                     setState({
                         ...state,
                         showModal: true,
