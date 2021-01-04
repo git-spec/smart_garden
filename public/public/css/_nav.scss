@@ -26,6 +26,9 @@
         // &:active {
         //     @include changeButton;
         // }
+        &.btn-secondary:not(:disabled):not(.disabled):active {
+            background-color: transparent !important;
+        }
     }    
     // menu points
     & li {

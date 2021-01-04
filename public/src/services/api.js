@@ -56,10 +56,10 @@ export const verifyUserPost = email => {
 };
 
 /* ***************************************************** LOGIN ******************************************************* */
-export const loginPost = (email, password) => {
+export const loginPost = (loginName, password) => {
     return new Promise((resolve, reject) => {
         const data = {
-            email,
+            loginName,
             password
         };
         fetch('/login', {

@@ -22,6 +22,7 @@ const Login = props => {
         loginName: '',
         password: '',
         showModal: false,
+        modalClass: '',
         modalTitle: '',
         modalContent: null,
         touched: {
@@ -41,13 +42,11 @@ const Login = props => {
 
 /* ********************************************************* FUNCTIONS ********************************************************* */    
     // check exsiting input
-    const validate = (name, password) => {
+    const validateInp = (name, password) => {
         return {loginName: name.length === 0, password: password.length === 0};
     }
     // change border-color of inputs to danger
-    const errors = validate(state.loginName, state.password);
-    // enable login-button
-    const isEnabled = !Object.keys(errors).some(x => errors[x]);
+    const inpErrs = validateInp(state.loginName, state.password);
     // const isEnabled =  state.loginName.trim().length > 0 &&  state.password.length > 0;
     // check blur of inputs
     const handleBlur = field => e => {
@@ -57,83 +56,104 @@ const Login = props => {
             touched: {...state.touched, [field]: true}
         });
     }
-    // show error message
-    const markError = field => {
-        const hasError = errors[field];
+    // show input error message
+    const markInpError = field => {
+        const hasError = inpErrs[field];
         const showError = state.touched[field];
         return hasError ? showError : false;
     }
+    // check characters
+    const validateChar = (name) => {
+        // eslint-disable-next-line
+        return {loginName: !name.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g)};
+    }
+    const charErrs = validateChar(state.loginName);
+    // show character error message
+    const markCharError = field => {
+        const hasError = charErrs[field];
+        const showError = state.touched[field];
+        return hasError ? showError : false;
+    }
+    // enable login-button
+    const isEnabled = !Object.keys(inpErrs).some(x => inpErrs[x]) && !Object.keys(charErrs).some(x => charErrs[x]);
   
     // The user can log in and enter the secure user area by entering the email or username and password.
     const onLoginBtnClick = e => {
         e.preventDefault();
-        if (state.loginName.trim() === '' || state.password === '') {
-            const modalContentElement = (
-                <ul>
-                    {state.loginName.trim() === '' ? <li>Please enter your username or email</li> : null}
-                    {state.password === '' ? <li>Please enter your password</li> : null}
-                </ul>
-            );
+        loginPost(state.loginName, state.password).then(data => {
+            switch (data) {
+                case 2:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Server Error',
+                        modalContent: <p>The server is not responding.</p>
+                    });
+                    break;
+                case 3:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>The email does not exist.</p>
+                    });
+                    break;
+                case 4:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>The username does not exist.</p>
+                    });
+                    break;
+                case 5:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>The password is wrong.</p>
+                    });
+                    break;
+                case 6:
+                    setState({
+                        ...state,
+                        showModal: true,
+                        modalClass: 'danger',
+                        modalTitle: 'Warning',
+                        modalContent: <p>Please fill out correctly!</p>
+                    });
+                    break;
+                default:
+                    props.setUserAction(data);
+                    if (data.role === 'admin') {
+                        history.push('/user/admin');
+                    } else if (data.role === 'subadmin') {
+                        history.push('/user/subadmin');
+                    } else {
+                        history.push('/user/dashboard');
+                    }
+                    break;
+            }
+        }).catch(() => {
             setState({
                 ...state,
                 showModal: true,
-                modalTitle: 'Entry Error',
-                modalContent: modalContentElement
+                modalClass: 'danger',
+                modalTitle: 'Unkown Error',
+                modalContent: <p>The data cannot been sent.</p>
             });
-        } else {
-            loginPost(state.loginName, state.password).then(data => {
-                switch (data) {
-                    case 2:
-                        setState({
-                            ...state,
-                            showModal: true,
-                            modalTitle: 'Server Error',
-                            modalContent: <p>There was a server error</p>
-                        });
-                        break;
-                    case 3:
-                        setState({
-                            ...state,
-                            showModal: true,
-                            modalTitle: 'Wrong Password',
-                            modalContent: <p>Your password is wrong</p>
-                        });
-                        break;
-                    case 4:
-                        setState({
-                            ...state,
-                            showModal: true,
-                            modalTitle: 'Email Does Not Exist',
-                            modalContent: <p>The email you have used does not exist</p>
-                        });
-                        break;
-                    default:
-                        props.setUserAction(data);
-                        if (data.role === 'admin') {
-                            history.push('/user/admin');
-                        } else if (data.role === 'subadmin') {
-                            history.push('/user/subadmin');
-                        } else {
-                            history.push('/user/dashboard');
-                        }
-                        break;
-                }
-            }).catch(() => {
-                setState({
-                    ...state,
-                    showModal: true,
-                    modalTitle: 'Unknown Error',
-                    modalContent: <p>Can not send the data</p>
-                });
-            });
-        }
+        });
     };
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
         <Fragment>
-            <PopUpModal 
-                className="bg-danger" 
+            <PopUpModal
+                className={state.modalClass}
                 title={state.modalTitle}
                 show={state.showModal} 
                 close={() => setState({...state, showModal: false})} 
@@ -143,15 +163,15 @@ const Login = props => {
             <Container className="pt-5 mt-5">
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 mt-5 px-0 px-md-3">Login</h1>
                 <h5 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
-                    Log in to access your device management.
+                    Sign in to access your device management.
                 </h5>
                 <Form className="pb-md-0 pb-5">
                     <Row xs="1" sm="1">
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-1 text-left">
-                                <Label className="w-100 h5 text-trans mb-2 ml-2">Usename / Email:</Label>
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">Username / Email:</Label>
                                 <Input
-                                    className={"badge-pill bg-transparent " + (markError('loginName') ? "error" : "")}
+                                    className={"badge-pill bg-transparent " + (markInpError('loginName') ? "error" : "")}
                                     type="text"
                                     placeholder="Enter your username or email"
                                     value={state.loginName}
@@ -160,7 +180,16 @@ const Login = props => {
                                     required
                                 />
                             </FormGroup>
-                            <p className="error mb-1 ml-2">&nbsp;{markError('loginName') ? "Please enter your username or email." : ""}</p>
+                            <p className="error mb-2 ml-2">
+                                &nbsp;
+                                {
+                                    state.loginName.trim() === ''
+                                ?
+                                    markInpError('loginName') ? "Please enter your user name or email." : ""
+                                :
+                                    markCharError('loginName') ? "Please enter a valid user name or email." : ""
+                                }
+                            </p>
                         </Col>
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-1 text-left">
@@ -179,7 +208,7 @@ const Login = props => {
                                     </Col>
                                 </Row>
                                 <Input
-                                    className={"badge-pill bg-transparent " + (markError('password') ? "error" : "")}
+                                    className={"badge-pill bg-transparent " + (markInpError('password') ? "error" : "")}
                                     type="password"
                                     placeholder="Enter your password"
                                     value={state.password}
@@ -188,7 +217,7 @@ const Login = props => {
                                     required
                                 />
                             </FormGroup>
-                            <p className="error mb-1 ml-2">&nbsp;{markError('password') ? "Please enter your password." : ""}</p>
+                            <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter your password." : ""}</p>
                         </Col>
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <h5 className="mt-2">

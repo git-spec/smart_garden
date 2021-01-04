@@ -8,27 +8,47 @@ const passwordHash = require('password-hash');
 // registers the user
 function registerUser(firstName, lastName, userName, email, password) {
     return new Promise((resolve, reject) => {
-        runQuery(
-            `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
-            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
-        ).then(() => {
-            // content of email
-            let message = `Hello ${firstName} ${lastName},\n`;
-            message += 'Welcome to our website!\n';
-            message += 'To verify your email address please click on the following link:\n';
-            message += `http://localhost:3000/verify/${email}/`;
-            emailSender.sendEmail(email, 'Verify your email', message).then(() => {
-                resolve();
-            }).catch(err => {
-                reject(err);
-            });
-        }).catch(err => {
-            if (err.errno === 1062) {
-                reject('exist');
+        // validate unique user
+        const queryResult = {
+            email: null,
+            username: null
+        };
+        (async () => { 
+            const emailQuery = await runQuery(`SELECT email FROM users WHERE email='${email}'`);
+            if (emailQuery.length !== 0) {
+                queryResult.email = true;
+            };
+            const userNameQuery = await runQuery(`SELECT username FROM users WHERE username='${userName}'`);
+            if (userNameQuery.length !== 0) {
+                queryResult.username = true;
+            };
+            if (!queryResult.email && !queryResult.username) {
+                // send email to verify user
+                let message = `Hello ${firstName} ${lastName},\n`;
+                message += 'Welcome to our website!\n';
+                message += 'To verify your email address please click on the following link:\n';
+                message += `http://localhost:3000/verify/${email}/`;
+                emailSender.sendEmail(email, 'Verify your email', message).then(() => {
+                    // add user to db
+                    runQuery(
+                        `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
+                        VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
+                    ).then(() => {
+                        resolve();
+                    }).catch(err => {
+                        reject(err);
+                    });
+                }).catch(err => {
+                    reject(err);
+                });
+            } else if (queryResult.email) {
+                resolve(queryResult);
+            } else if (queryResult.username) {
+                resolve(queryResult);
             } else {
-                reject(err);
-            }
-        });
+                resolve(queryResult);
+            };
+        })();
     });
 }
 
@@ -64,23 +84,23 @@ function confirmVerifiedUser(email) {
 function checkUser(user, password) {
     return new Promise((resolve, reject) => {
         if (validator.isEmail(user)) {
-            runQuery(`SELECT * FROM users where email LIKE '${user}'`).then(result => {
+            runQuery(`SELECT * FROM users WHERE email LIKE '${user}'`).then(result => {
                 if (result.length === 0) {
-                    reject(4);
+                    reject(3);
                 } else {
                     if (passwordHash.verify(password, result[0].password)) {
                         if (result[0].verified) {
                             resolve(result[0]);
                         }
                     } else {
-                        reject(3);
+                        reject(5);
                     }
                 }
             }).catch(err => {
                 reject(err);
             });
         } else {
-            runQuery(`SELECT * FROM users where username LIKE '${user}'`).then(result => {
+            runQuery(`SELECT * FROM users WHERE username LIKE '${user}'`).then(result => {
                 if (result.length === 0) {
                     reject(4);
                 } else {
@@ -89,7 +109,7 @@ function checkUser(user, password) {
                             resolve(result[0]);
                         }
                     } else {
-                        reject(3);
+                        reject(5);
                     }
                 }
             }).catch(err => {
@@ -140,7 +160,6 @@ function editUser(userID, firstName, lastName, userName, city, password, userImg
             getUser(userID).then(user => {
                 resolve(user);
             }).catch(err => {
-                console.log(err);
                 reject(err);
             });
         }).catch(err => {

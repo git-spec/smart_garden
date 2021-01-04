@@ -28,8 +28,11 @@ class Register extends React.Component {
             password: '',
             repassword: '',
             showModal: false,
-            modalContent: null,
-            badgeContent: null,
+            modalContent: {
+                class: '',
+                title: '',
+                message: ''
+            },
             touched: {
                 firstName: false,
                 lastName: false,
@@ -48,7 +51,7 @@ class Register extends React.Component {
     
 /* ********************************************************* FUNCTIONS ********************************************************* */    
     // check exsiting input
-    validate = (firstName, lastName, userName, email, password, repassword) => {
+    validateInp = (firstName, lastName, userName, email, password, repassword) => {
         return {
             firstName: firstName.length === 0,
             lastName: lastName.length === 0,
@@ -56,6 +59,19 @@ class Register extends React.Component {
             email: email.length === 0,
             password: password.length === 0,
             repassword: repassword.length === 0
+        };
+    }  
+    // check characters
+    validateChar = (firstName, lastName, userName, email, password) => {
+        return {
+            // eslint-disable-next-line
+            firstName: !firstName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),           // [^0-9!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?]?
+            // eslint-disable-next-line
+            lastName: !lastName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),
+            // eslint-disable-next-line
+            userName: !userName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g),
+            email: !validator.isEmail(email),
+            // password: validator.isStrongPassword(password)
         };
     }
     // check blur of inputs
@@ -73,75 +89,85 @@ class Register extends React.Component {
     // and complete the registration.
     onRegisterBtnClick = e => {
         e.preventDefault();
-        if (
-            this.state.firstName.trim() === '' ||
-            this.state.lastName.trim() === '' ||
-            this.state.userName.trim() === '' ||
-            this.state.email.trim() === '' ||
-            this.state.password === '' ||
-            this.state.password !== this.state.repassword ||
-            !validator.isEmail(this.state.email.trim())
-        ) {
-            const errorsElement = (
-                <ul>
-                    {this.state.firstName.trim() === '' ? <li>Please enter your first name</li> : null}
-                    {this.state.lastName.trim() === '' ? <li>Please enter your last name</li> : null}
-                    {this.state.userName.trim() === '' ? <li>Please enter an user name</li> : null}
-                    {this.state.email.trim() === '' ? <li>Please enter your email</li> : null}
-                    {!validator.isEmail(this.state.email.trim()) ? <li>Please enter a valid email</li> : null}
-                    {this.state.password === '' ? <li>Please enter a password</li> : null}
-                    {this.state.password !== this.state.repassword ? <li>Passwords do not match</li> : null}
-                </ul>
-            );
-            this.setState({modalContent: errorsElement, showModal: true});
-        } else {
-            registerPost(
-                this.state.firstName,
-                this.state.lastName,
-                this.state.userName,
-                this.state.email,
-                this.state.password,
-                this.state.repassword
-            ).then(data => {
-                let badgeClass = '';
-                let badgeMessage = '';
-                switch (data) {
-                    case 1:
-                        badgeClass = 'alert alert-success';
-                        badgeMessage = 'You registered successfully, please check your mails to verify your account!';
-                        break;
-                    case 2:
-                        badgeClass = 'alert alert-danger';
-                        badgeMessage = 'Server error, please contact the administrator!';
-                        break;
-                    case 3:
-                        badgeClass = 'alert alert-danger';
-                        badgeMessage = 'There is already a user with this email, please choose another one!';
-                        break;
-                    default:
-                        break;
+        registerPost(
+            this.state.firstName,
+            this.state.lastName,
+            this.state.userName,
+            this.state.email,
+            this.state.password,
+            this.state.repassword
+        ).then(data => {
+            let modalClass = '';
+            let modalTitle = '';
+            let modalMessage = '';
+            switch (data) {
+                case 1:
+                    this.setState({showModal: true});
+                    modalClass = 'success';
+                    modalTitle = 'Success';
+                    modalMessage = 'Congratulation, you registered successfully!\nPlease check your mails to verify your account.';
+                    break;
+                case 2:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'Server error, please contact the administrator!';
+                    break;
+                case 3:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'There is already a user with this email.\nPlease choose another one.';
+                    break;
+                case 4:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'There is already a user with this username,\nPlease choose another one.';
+                    break;
+                case 5:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'There is already a user with this username and email,\nPlease choose another one.';
+                    break;
+                case 6:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'The email does not answer. Please choose another one.';
+                    break;
+                case 10:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'Please fill out correctly!';
+                    break;
+                default:
+                    break;
+            }
+            this.setState({
+                modalContent: {
+                    class: modalClass,
+                    title: modalTitle,
+                    message: modalMessage
                 }
-                const badgeElement = (
-                    <div className={badgeClass} role="alert">
-                        {badgeMessage}
-                    </div>
-                );
-                this.setState({badgeContent: badgeElement});
-            }).catch(() => {
-                const badgeElement = (
-                    <div className="alert alert-danger" role="alert">
-                        Can not send the registration data to server!
-                    </div>
-                );
-                this.setState({badgeContent: badgeElement});
             });
-        }
+        }).catch(() => {
+            this.setState({
+                modalContent: {
+                    class: 'danger',
+                    title: 'Warning',
+                    message: 'Can not send the registration data to server!'
+                }
+            });
+        });
     };
 
 /* ********************************************************* RENDER ********************************************************* */
     render() {
         // change border-color of inputs to danger
-        const errors = this.validate(
+        const inputErrs = this.validateInp(
             this.state.firstName,
             this.state.lastName,
             this.state.userName,
@@ -149,38 +175,51 @@ class Register extends React.Component {
             this.state.password,
             this.state.repassword
         );
-        // show error message
+        // change border-color of inputs to danger
+        const charErrs = this.validateChar(
+            this.state.firstName,
+            this.state.lastName,
+            this.state.userName,
+            this.state.email,
+            this.state.password
+        );
+        // show error message for input error
         const touched = this.state.touched
-        function markError(field) {
-            const hasError = errors[field];
+        function markInpError(field) {
+            const hasError = inputErrs[field];
+            const showError = touched[field];
+            return hasError ? showError : false;
+        }
+        // show error message for character error
+        function markCharError(field) {
+            const hasError = charErrs[field];
             const showError = touched[field];
             return hasError ? showError : false;
         }
         // enable login-button
-        const isEnabled = !Object.keys(errors).some(x => errors[x]);
+        const isEnabled = !Object.keys(inputErrs).some(x => inputErrs[x]) && !Object.keys(charErrs).some(x => charErrs[x]);
 
 /* ********************************************************* RETURN ********************************************************* */
         return (
             <Fragment>
                 <PopUpModal
-                    className="bg-danger"
-                    title="Entry Error"                
+                    className={this.state.modalContent.class}
+                    title={this.state.modalContent.title}                
                     show={this.state.showModal}
                     close={() => this.setState({showModal: false})}
                 >
-                    {this.state.modalContent}
+                    {this.state.modalContent.message}
                 </PopUpModal>
                 <Container className="pt-5 mt-5">
                     <h1 className="text-trans mb-4">Registration</h1>
-                    <p className="text-trans mb-4">You are still one step away from your smart garden. Register and you can enter it.</p>
+                    <p className="text-trans mb-4">You are only one step away from your smart garden. Register and you can enter it.</p>
                     <Form className="pb-md-0 pb-5">
-                        <div className="col-lg-12 col-md-12">{this.state.badgeContent}</div>
                         <Row xs="1" sm="2">
                             <Col>
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markError('firstName') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('firstName') || markCharError('firstName') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter your first name"
                                         value={this.state.firstName}
@@ -189,13 +228,22 @@ class Register extends React.Component {
                                         required
                                     />
                                 </FormGroup>
-                                <p className="error mb-1 ml-2">&nbsp;{markError('firstName') ? "Please enter your first name." : ""}</p>
+                                <p className="error mb-2 ml-2">
+                                    &nbsp;
+                                    {
+                                        this.state.firstName.trim() === ''
+                                    ?
+                                        markInpError('firstName') ? "Please enter your first name." : ""
+                                    :
+                                        markCharError('firstName') ? "Please use only letters seperated by dot, hyphen or space." : ""
+                                    }
+                                </p>
                             </Col>
                             <Col>
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markError('lastName') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('lastName') || markCharError('lastName') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter your last name"
                                         value={this.state.lastName}
@@ -204,13 +252,22 @@ class Register extends React.Component {
                                         required
                                     />
                                 </FormGroup>
-                                <p className="error mb-1 ml-2">&nbsp;{markError('lastName') ? "Please enter your last name." : ""}</p>
+                                <p className="error mb-2 ml-2">
+                                    &nbsp;
+                                    {
+                                        this.state.lastName.trim() === ''
+                                    ?
+                                        markInpError('lastName') ? "Please enter your last name." : ""
+                                    :
+                                        markCharError('lastName') ? "Please use only letters seperated by dot, hyphen or space." : ""
+                                    }
+                                </p>
                             </Col>
                             <Col>
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Email:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markError('email') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('email') || markCharError('email') ? "error" : "")}
                                         type="email"
                                         placeholder="Enter your email"
                                         value={this.state.email}
@@ -219,13 +276,22 @@ class Register extends React.Component {
                                         required
                                     />
                                 </FormGroup>
-                                <p className="error mb-1 ml-2">&nbsp;{markError('email') ? "Please enter your email." : ""}</p>
+                                <p className="error mb-2 ml-2">
+                                    &nbsp;
+                                    {
+                                        this.state.email === ''
+                                    ?
+                                        markInpError('email') ? "Please enter your email." : ""
+                                    :
+                                        markCharError('email') ? "Please enter a valid email." : ""
+                                    }
+                                </p>
                             </Col>
                             <Col>
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markError('userName') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('userName') || markCharError('userName') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter an user name"
                                         value={this.state.userName}
@@ -234,13 +300,22 @@ class Register extends React.Component {
                                         required
                                     />
                                 </FormGroup>
-                                <p className="error mb-1 ml-2">&nbsp;{markError('userName') ? "Please enter a user name." : ""}</p>
+                                <p className="error mb-2 ml-2">
+                                    &nbsp;
+                                    {
+                                        this.state.userName.trim() === ""
+                                    ?
+                                        markInpError('userName') ? "Please enter a user name." : ""
+                                    :
+                                        markCharError('userName') ? "Please use only letters, numbers and several charachters." : ""
+                                    }
+                                </p>
                             </Col>
                             <Col>
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markError('password') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('password') ? "error" : "")}
                                         type="password"
                                         placeholder="Enter a password"
                                         value={this.state.password}
@@ -249,13 +324,13 @@ class Register extends React.Component {
                                         required
                                     />
                                 </FormGroup>
-                                <p className="error mb-1 ml-2">&nbsp;{markError('password') ? "Please enter a password." : ""}</p>
+                                <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter a password." : ""}</p>
                             </Col>
                             <Col>
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat Password:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markError('repassword') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('repassword') ? "error" : "")}
                                         type="password"
                                         placeholder="Repeat your password"
                                         value={this.state.repassword}
@@ -264,7 +339,7 @@ class Register extends React.Component {
                                         required
                                     />
                                 </FormGroup>
-                                <p className="error mb-1 ml-2">&nbsp;{markError('repassword') ? "Please repeat the password." : ""}</p>
+                                <p className="error mb-2 ml-2">&nbsp;{markInpError('repassword') ? "Please repeat the password." : ""}</p>
                             </Col>
                             <Col>
                                 <h5 className="text-trans mt-2">

@@ -13,6 +13,7 @@ const Entities = require('html-entities').XmlEntities;
 const entities = new Entities();
 const cors = require('cors');
 const session = require('express-session');
+const validator = require('validator');
 
 // app use
 app.use(express.static(__dirname + '/public/build'));
@@ -65,25 +66,46 @@ const {log} = require("console");
 app.post('/register', (req, res) => {
     // 1 user registered successfully
     // 2 server error
-    // 3 user already exists
-    const firstName = entities.encode(req.body.firstName.trim());
-    const lastName = entities.encode(req.body.lastName.trim());
-    const userName = entities.encode(req.body.userName.trim());
-    const email = entities.encode(req.body.email.trim());
-    const password = req.body.password;
-    const repassword = req.body.repassword;
-    if (firstName && lastName && userName && email && password && password === repassword){
-        registerUser(firstName, lastName, userName, email, password).then(() => {
-            res.json(1);
-        }).catch(err => {
-            if (err === "exist") {
-                res.json(3);
-            } else{
-                res.json(2);
-            }
-        })
+    // 3 email already exists
+    // 4 username already exists
+    // 5 email and username already exist
+    // 6 email does not exist
+    // 10 hack attack
+    if (
+        !req.body.firstName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g) ||
+        !req.body.lastName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g) ||
+        !req.body.userName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g) ||
+        !validator.isEmail(req.body.email)
+    ) {
+        res.json(10);
     } else {
-        res.json(2);
+        const firstName = entities.encode(req.body.firstName.trim());
+        const lastName = entities.encode(req.body.lastName.trim());
+        const userName = entities.encode(req.body.userName.trim());
+        const email = entities.encode(req.body.email.trim());
+        const password = req.body.password;
+        const repassword = req.body.repassword;
+        if (firstName && lastName && userName && email && password && password === repassword){
+            registerUser(firstName, lastName, userName, email, password).then(result => {
+                if (result.email && result.username) {
+                    res.json(5);
+                } else if (result.email) {
+                    res.json(3);
+                } else if (result.username) {
+                    res.json(4);
+                } else {
+                    res.json(1);
+                }
+            }).catch(err => {
+                if (err.responseCode === 450) {                 // err.message.includes('failed')
+                    res.json(6);
+                } else {
+                    res.json(2)
+                };
+            });
+        } else {
+            res.json(2);
+        };
     };
 });
 
@@ -107,23 +129,39 @@ app.post('/verifyuser', (req, res) => {
 app.post('/login', (req, res) => {
     // user: user logged in successfully
     // 2 server error
-    // 3 password is wrong
-    // 4 user does not exist
-    const email = entities.encode(req.body.email.trim());
-    const password = req.body.password;
-    if (email && password) {
-        checkUser(email, password).then(user => {
-            req.session.user = user;
-            res.json({email: user.email, id: user.id, userName: user.username, firstName: user.firstname, lastName: user.lastname, role: user.role, img: user.img});
-        }).catch(err => {
-            if (err === 3) {
-                res.json(3);
-            } else {
-                res.json(4);
-            };
-        })
+    // 3 email does not exist
+    // 4 username does not exist
+    // 5 password is wrong
+    // 10 hack attack
+    if (validator.isEmail(req.body.loginName) || req.body.loginName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g)) {
+        const loginName = entities.encode(req.body.loginName.trim());
+        const password = req.body.password;
+        if (loginName && password) {
+            checkUser(loginName, password).then(user => {
+                req.session.user = user;
+                res.json({
+                    email: user.email,
+                    id: user.id,
+                    userName: user.username,
+                    firstName: user.firstname,
+                    lastName: user.lastname,
+                    role: user.role,
+                    img: user.img
+                });
+            }).catch(err => {
+                if (err === 3) {
+                    res.json(3);
+                } else if (err === 4) {
+                    res.json(4);
+                } else {
+                    res.json(5);
+                };
+            });
+        } else {
+            res.json(2);
+        };
     } else {
-        res.json(2);
+        res.json(10);
     };
 });
 

@@ -2,15 +2,24 @@
 const nodemailer = require('nodemailer');
 // creates a delivery box for e-mails
 const transporter = nodemailer.createTransport({
-    host: 'mail.coding-school.org',
+    // host: 'mail.coding-school.org',
+    // port: 465,
+    // auth: {
+    //     user: 'info@coding-school.org',
+    //     pass: '!234qweR'
+    // },
+    // tls: {
+    //     rejectUnauthorized: false
+    // }
+    host: "smtps.udag.de",
     port: 465,
     auth: {
-        user: 'info@coding-school.org',
-        pass: '!234qweR'
+        user: "info@felixwurst.de",
+        pass: 'kx87aLpGGE3NDEa8'
     },
     tls: {
         rejectUnauthorized: false
-    }
+    } 
 });
 
 /* ******************************************************* SEND EMAIL ******************************************************* */
@@ -18,7 +27,7 @@ const transporter = nodemailer.createTransport({
 function sendEmail(email, subject, message) {
     return new Promise((resolve, reject) => {
         const mailOption = {
-            from: 'info@coding-school.org',
+            from: "info@felixwurst.de",
             to: email,
             subject: subject,
             text: message

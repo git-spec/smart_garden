@@ -10,8 +10,7 @@ button {
   background-color: transparent !important;
   color: inherit !important;
   font-weight: bold;
-  &.btn-secondary,
-  &.btn-secondary:not(:disabled):not(.disabled):active {
+  &.btn-secondary {
     color: inherit !important;
     @include changeBorder;
   }
@@ -40,14 +39,21 @@ button {
     @include changeColor;
   }
   // change bg-color & color of buttons up & down
-  &.btn-outline-light:active {
-    // border-color: $color-5 !important;
+  &.btn-outline-light:active,
+  &.btn-secondary:not(:disabled):not(.disabled):active {
+    border-color: $color-3;
     // color: none !important;
     @include changeButton;
     // change bg-color of button icons up & down
     &.down > span,
     &.up > span {
       background-color: none !important;
+    }
+    &.plus {
+      background-color: $color-8 !important;
+    }
+    &.minus {
+      background-color: $color-danger !important;
     }
   }
   // change color of button border
@@ -163,6 +169,21 @@ button {
       opacity: 1;
   }
 }
+// alert
+.modal-footer button.btn.btn-secondary {
+  color: black !important;
+  border-color: black;
+  &:hover,
+  &:active,
+  &.visited,
+  &:focus,
+  &:not(:disabled):not(.disabled):active {
+    color: #ffffff !important;
+    border-color: #5a6268 !important;
+    background-color: #5a6268 !important;
+  }
+}
+
 // color-5
 .color-5 ~ div .plus,
 .color-5 ~ div .plus:active {
@@ -175,7 +196,6 @@ button {
 .color-5 ~ div .plus:active > span {
   background-color: $color-5 !important;
 }
-
 // .color-5 ~ div .btn,
 // .color-5 ~ div button,
 .color-5 ~ div .up,
