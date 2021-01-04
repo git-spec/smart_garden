@@ -64,8 +64,11 @@ class Register extends React.Component {
     // check characters
     validateChar = (firstName, lastName, userName, email, password) => {
         return {
+            // eslint-disable-next-line
             firstName: !firstName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),           // [^0-9!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?]?
+            // eslint-disable-next-line
             lastName: !lastName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),
+            // eslint-disable-next-line
             userName: !userName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g),
             email: !validator.isEmail(email),
             // password: validator.isStrongPassword(password)
@@ -114,9 +117,27 @@ class Register extends React.Component {
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'There is already a user with this email, please choose another one!';
+                    modalMessage = 'There is already a user with this email.\nPlease choose another one.';
                     break;
                 case 4:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'There is already a user with this username,\nPlease choose another one.';
+                    break;
+                case 5:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'There is already a user with this username and email,\nPlease choose another one.';
+                    break;
+                case 6:
+                    this.setState({showModal: true});
+                    modalClass = 'danger';
+                    modalTitle = 'Warning';
+                    modalMessage = 'The email does not answer. Please choose another one.';
+                    break;
+                case 10:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';

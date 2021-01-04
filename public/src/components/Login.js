@@ -64,6 +64,7 @@ const Login = props => {
     }
     // check characters
     const validateChar = (name) => {
+        // eslint-disable-next-line
         return {loginName: !name.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g)};
     }
     const charErrs = validateChar(state.loginName);
@@ -168,7 +169,7 @@ const Login = props => {
                     <Row xs="1" sm="1">
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-1 text-left">
-                                <Label className="w-100 h5 text-trans mb-2 ml-2">Usename / Email:</Label>
+                                <Label className="w-100 h5 text-trans mb-2 ml-2">Username / Email:</Label>
                                 <Input
                                     className={"badge-pill bg-transparent " + (markInpError('loginName') ? "error" : "")}
                                     type="text"
