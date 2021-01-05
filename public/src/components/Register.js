@@ -105,43 +105,43 @@ class Register extends React.Component {
                     this.setState({showModal: true});
                     modalClass = 'success';
                     modalTitle = 'Success';
-                    modalMessage = 'Congratulation, you registered successfully!\nPlease check your mails to verify your account.';
+                    modalMessage = <p>Congratulation, you registered successfully!<br />Please check your mails to verify your account.</p>;
                     break;
                 case 2:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'Server error, please contact the administrator!';
+                    modalMessage = <p>Server error, please contact the administrator!</p>;
                     break;
                 case 3:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'There is already a user with this email.\nPlease choose another one.';
+                    modalMessage = <p>There is already a user with this email.<br />Please choose another one.</p>;
                     break;
                 case 4:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'There is already a user with this username,\nPlease choose another one.';
+                    modalMessage = <p>There is already a user with this username.<br />Please choose another one.</p>;
                     break;
                 case 5:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'There is already a user with this username and email,\nPlease choose another one.';
+                    modalMessage = <p>There is already a user with this username and email.<br />Please choose another one.</p>;
                     break;
                 case 6:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'The email does not answer. Please choose another one.';
+                    modalMessage = <p>The email does not answer.<br />Please choose another one.</p>;
                     break;
                 case 10:
                     this.setState({showModal: true});
                     modalClass = 'danger';
                     modalTitle = 'Warning';
-                    modalMessage = 'Please fill out correctly!';
+                    modalMessage = <p>Please fill out correctly!</p>;
                     break;
                 default:
                     break;
@@ -158,7 +158,7 @@ class Register extends React.Component {
                 modalContent: {
                     class: 'danger',
                     title: 'Warning',
-                    message: 'Can not send the registration data to server!'
+                    message: <p>Can not send the registration data to server!</p>
                 }
             });
         });
