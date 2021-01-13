@@ -128,7 +128,7 @@ const Dashboard = props => {
         const socket = io('http://localhost:5000');
 
         socket.on('connect', () => {
-            console.log('connected');
+            // console.log('connected');
             props.setSocketAction(socket);
             socket.emit('user_connect', props.user.id);
         });
@@ -202,7 +202,7 @@ const Dashboard = props => {
         });
 
         socket.on('disconnect', () => {
-            console.log('disconnected');
+            // console.log('disconnected');
             socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();

@@ -382,7 +382,7 @@ const server = app.listen(port, () => {
 const io = require('socket.io').listen(server);
 
 io.on('connection', socket => {
-    log('Hub is connected');
+    // log('Hub is connected');
 
     socket.on('user_connect', userID => {
         // joins the user
