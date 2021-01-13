@@ -36,7 +36,6 @@ class MonitorSoil extends Component {
 
 /* ********************************************************* RENDER ********************************************************* */
     render() {
-console.log('MonitorSoil:', this.state.data);
         let chart = null;
         if (this.state.data.length) {
             chart = (
