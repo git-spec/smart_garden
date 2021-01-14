@@ -13,45 +13,50 @@ function registerUser(firstName, lastName, userName, email, password) {
             email: null,
             username: null
         };
-        (async () => { 
-            const emailQuery = await runQuery(`SELECT email FROM users WHERE email='${email}'`);
-            if (emailQuery.length !== 0) {
-                queryResult.email = true;
-            };
-            const userNameQuery = await runQuery(`SELECT username FROM users WHERE username='${userName}'`);
-            if (userNameQuery.length !== 0) {
-                queryResult.username = true;
-            };
-            if (!queryResult.email && !queryResult.username) {
-                // send email to verify user
-                let message = `Hello ${firstName} ${lastName},\n`;
-                message += 'Welcome to our website!\n';
-                message += 'To verify your email address please click on the following link:\n';
-                message += `http://localhost:3000/verify/${email}/` + '\n';
-                message += 'After a successful Verifiction you are able to login.\n\n\n';
-                message += 'Best Regards\n';
-                message += 'Your inatu-team';
-                emailSender.sendEmail(email, 'Verify your email', message).then(() => {
-                    // add user to db
-                    runQuery(
-                        `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
-                        VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
-                    ).then(() => {
-                        resolve(queryResult);
+        try {
+            (async () => { 
+                const emailQuery = await runQuery(`SELECT email FROM users WHERE email='${email}'`);
+                if (emailQuery.length !== 0) {
+                    queryResult.email = true;
+                };
+                const userNameQuery = await runQuery(`SELECT username FROM users WHERE username='${userName}'`);
+                if (userNameQuery.length !== 0) {
+                    queryResult.username = true;
+                };
+                if (!queryResult.email && !queryResult.username) {
+                    // send email to verify user
+                    let message = `Hello ${firstName} ${lastName},\n`;
+                    message += 'Welcome to our website!\n';
+                    message += 'To verify your email address please click on the following link:\n';
+                    message += `http://localhost:3000/verify/${email}/` + '\n';
+                    message += 'After a successful Verifiction you are able to login.\n\n';
+                    message += 'Best Regards\n';
+                    message += 'Your inatu-team';
+                    emailSender.sendEmail(email, 'Verify your email', message).then(() => {
+                        // add user to db
+                        runQuery(
+                            `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
+                            VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
+                        ).then(() => {
+                            resolve(queryResult);
+                        }).catch(err => {
+                            reject(err);
+                        });
                     }).catch(err => {
                         reject(err);
                     });
-                }).catch(err => {
-                    reject(err);
-                });
-            } else if (queryResult.email) {
-                resolve(queryResult);
-            } else if (queryResult.username) {
-                resolve(queryResult);
-            } else {
-                resolve(queryResult);
-            };
-        })();
+                } else if (queryResult.email) {
+                    resolve(queryResult);
+                } else if (queryResult.username) {
+                    resolve(queryResult);
+                } else {
+                    resolve(queryResult);
+                };
+            })();
+        }
+        catch (e) {
+            reject(e);
+        }
     });
 }
 
