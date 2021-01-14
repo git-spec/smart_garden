@@ -27,14 +27,17 @@ function registerUser(firstName, lastName, userName, email, password) {
                 let message = `Hello ${firstName} ${lastName},\n`;
                 message += 'Welcome to our website!\n';
                 message += 'To verify your email address please click on the following link:\n';
-                message += `http://localhost:3000/verify/${email}/`;
+                message += `http://localhost:3000/verify/${email}/` + '\n';
+                message += 'After a successful Verifiction you are able to login.\n\n\n';
+                message += 'Best Regards\n';
+                message += 'Your inatu-team';
                 emailSender.sendEmail(email, 'Verify your email', message).then(() => {
                     // add user to db
                     runQuery(
                         `INSERT INTO users (firstname, lastname, username, email, password, verified, role) 
                         VALUES ('${firstName}','${lastName}','${userName}','${email}', '${passwordHash.generate(password)}', 0, 'user')`
                     ).then(() => {
-                        resolve();
+                        resolve(queryResult);
                     }).catch(err => {
                         reject(err);
                     });
