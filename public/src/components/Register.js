@@ -212,7 +212,7 @@ class Register extends React.Component {
                 </PopUpModal>
                 <Container className="pt-5 mt-5">
                     <h1 className="text-trans mb-4">Registration</h1>
-                    <p className="text-trans mb-4">You are only one step away from your smart garden. Register and you can enter it.</p>
+                    <p className="text-trans mb-4">You are only one step away from your smart garden.</p>
                     <Form className="pb-md-0 pb-5">
                         <Row xs="1" sm="2">
                             <Col>
