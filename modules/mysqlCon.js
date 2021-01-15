@@ -1,5 +1,6 @@
 /* ******************************************************* SETUP ******************************************************* */
 const mySql = require('mysql');
+const {passwordDB} = require('./passwords');
 let con = null;
 
 /* ******************************************************* FUNCTIONS ******************************************************* */
@@ -24,7 +25,7 @@ function connect() {
                 host: 'localhost',
                 port: 3306,
                 user: 'root',
-                password: '12345678',
+                password: passwordDB(),
                 database: 'smart_garden'
             });
             con.connect(err => {
