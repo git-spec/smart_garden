@@ -1558,16 +1558,4 @@ input[type='range']::after {
   color: #005018 !important;
   font-size: 1rem;
 }
-
-@media (max-width: 360px) {
-  #root > div:last-child > div:nth-child(3) a {
-    font-size: 0.6rem !important;
-  }
-}
-
-@media (max-width: 576px) {
-  #root > div:last-child > div:nth-child(3) a {
-    font-size: 0.8rem;
-  }
-}
 /*# sourceMappingURL=style.css.map */

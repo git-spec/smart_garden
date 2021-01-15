@@ -65,7 +65,7 @@ const Router = props => {
 /* ******************************************************** RETURN ********************************************************* */
 return (
         <BrowserRouter>
-            <div className={`${props.backgroundColor1} ${props.backgroundColor5}`} ref={divRef}></div>
+            <div className={`${props.backgroundColor1} ${props.backgroundColor5}`} style={{top: props.nav}} ref={divRef}></div>
             <Fader>
                 <Navigation />
                 <Switch>
@@ -96,7 +96,8 @@ const mapStateToProps = state => {
     return {
         backgroundUrl: state.backgroundUrl,
         backgroundColor1: state.backgroundColor1,
-        backgroundColor5: state.backgroundColor5
+        backgroundColor5: state.backgroundColor5,
+        nav: state.nav
     };
 };
 
