@@ -36,11 +36,19 @@ const backgroundColor1Reducer = (backgroundColor1 = null, action) => {
     return backgroundColor1;
 };
 
+const navReducer = (nav = null, action) => {
+    if (action.type === 'CHANGE_NAV') {
+        return action.payload;
+    }
+    return nav;
+};
+
 // take in actions and update part of applications state
 export default combineReducers({
     user: userReducer,
     socket: socketReducer,
     backgroundUrl: backgroundImageReducer,
     backgroundColor5: backgroundColor5Reducer,
-    backgroundColor1: backgroundColor1Reducer
+    backgroundColor1: backgroundColor1Reducer,
+    nav: navReducer
 });

@@ -13,7 +13,7 @@ function Footer({location}) {
     if (location.pathname !== '/') {
         return (
             <Container fluid={true}>
-                <Col className="d-flex justify-content-center mt-5 mb-3">
+                <Col className="d-flex justify-content-center mt-5 mb-3 px-0">
                     <a href="https://www.youtube.com" className="mx-2">
                         <i className="fab fa-youtube"></i>
                     </a>
@@ -24,7 +24,7 @@ function Footer({location}) {
                         <i className="fab fa-facebook"></i>
                     </a>
                 </Col>
-                <Col className="d-flex justify-content-center pb-4">
+                <Col className="d-flex justify-content-center pb-4 px-0">
                     <Link to="/about" className="mx-3">
                         About
                     </Link>

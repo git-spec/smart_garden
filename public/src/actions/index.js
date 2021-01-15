@@ -31,3 +31,10 @@ export const setBackgroundColor1Action = backgroundColor1 => {
         payload: backgroundColor1
     };
 }
+
+export const setNavAction = nav => {
+    return {
+        type: 'CHANGE_NAV',
+        payload: nav
+    };
+}

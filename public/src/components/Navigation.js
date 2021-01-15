@@ -3,7 +3,7 @@
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 // redux
 import {connect} from 'react-redux';
-import {setSocketAction, setUserAction} from '../actions';
+import {setSocketAction, setUserAction, setNavAction} from '../actions';
 import {useSelector} from 'react-redux';
 // router dom
 import {Link, useHistory, useLocation} from 'react-router-dom';
@@ -35,8 +35,7 @@ function Navigation(props) {
         isOpenNAV: true,
         isOpenACC: true,
         account: true,
-        isEnter: true,
-        top: 0
+        isEnter: true
     };
     const [state, setState] = useState(initialState);
     const color5 = useSelector( state => state.backgroundColor5);
@@ -108,17 +107,17 @@ function Navigation(props) {
     }
 
 /* ********************************************************* FUNCTIONS ********************************************************* */
-    let prevScrollpos = window.pageYOffset;
+    let prevScrollpos = Math.abs(window.pageYOffset);
     // set media query
     if (width <= 576) {
         window.onscroll = function() {
-            let currentScrollPos = window.pageYOffset;
+            let currentScrollPos = Math.abs(window.pageYOffset);
             if (prevScrollpos > currentScrollPos) {
                 // show menubar while scroll up
-                setState({...state, top: 0});
+                props.setNavAction(null);
             } else {
                 // hide menubar while scroll down
-                setState({...state, top: '-50px'});
+                props.setNavAction('-50px');
             }
             prevScrollpos = currentScrollPos;
         }
@@ -230,7 +229,7 @@ function Navigation(props) {
 
 /* *********************************************************** RETURN ********************************************************* */
     return (
-        <Navbar fixed="top" className="p-0 justify-content-center" style={{top: state.top}}>
+        <Navbar fixed="top" className="p-0 justify-content-center" style={{top: props.nav}}>
             <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 pt-1 mt-2 mt-sm-0">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
@@ -282,9 +281,10 @@ function Navigation(props) {
 const mapStateToProps = state => {
     return {
         user: state.user,
-        socket: state.socket
+        socket: state.socket,
+        nav: state.nav
     };
 };
 
 /* ********************************************************* EXPORT ********************************************************* */
-export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);
+export default connect(mapStateToProps, {setUserAction, setSocketAction, setNavAction})(Navigation);
