@@ -1547,15 +1547,22 @@ input[type='range']::after {
           animation: fadeIn 0.5s;
 }
 
-#root > div:last-child > div:last-child a,
-#root > div:last-child > div:nth-child(3) a {
+#root > div:last-child > div:last-child a {
   color: #fdd79d !important;
   font-size: 1rem;
 }
 
-#root > .color-5 ~ div > div:last-child a,
-#root > .color-5 ~ div > div:nth-child(3) a {
+#root > .color-5 ~ div > div:last-child a {
   color: #005018 !important;
-  font-size: 1rem;
+}
+
+#root > div:last-child > div:last-child > div:first-child a {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 576px) {
+  #root > div:last-child > div:last-child > div:first-child a {
+    font-size: 1.4rem;
+  }
 }
 /*# sourceMappingURL=style.css.map */

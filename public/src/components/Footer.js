@@ -14,27 +14,27 @@ function Footer({location}) {
         return (
             <Container fluid={true}>
                 <Col className="d-flex justify-content-center mt-5 mb-3 px-0">
-                    <a href="https://www.youtube.com" className="mx-2">
+                    <a href="https://www.youtube.com" className="mx-3">
                         <i className="fab fa-youtube"></i>
                     </a>
-                    <a href="https://www.instagram.com" className="mx-2">
+                    <a href="https://www.instagram.com" className="mx-3">
                         <i className="fab fa-instagram"></i>
                     </a>
-                    <a href="https://www.facebook.com" className="mx-2">
+                    <a href="https://www.facebook.com" className="mx-3">
                         <i className="fab fa-facebook"></i>
                     </a>
                 </Col>
-                <Col className="d-flex justify-content-center pb-4 px-0">
-                    <Link to="/about" className="mx-3">
+                <Col className="d-flex justify-content-center text-center pb-4 px-0">
+                    <Link to="/about" className="mx-2 mx-md-3">
                         About
                     </Link>
-                    <Link to="/contact" className="mx-3">
+                    <Link to="/contact" className="mx-2 mx-md-3">
                         Contact
                     </Link>
-                    <Link to="/terms" className="mx-3">
+                    <Link to="/terms" className="mx-2 mx-md-3">
                         Terms &amp; Conditions
                     </Link>
-                    <Link to="/protection" className="mx-3">
+                    <Link to="/protection" className="mx-2 mx-md-3">
                         Data Protection
                     </Link>
                 </Col>
