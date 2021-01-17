@@ -23,16 +23,16 @@ useEffect(() => {
 
 /* ******************************************************** RETURN ********************************************************* */
 return (
-        <Container className="p-0 pt-4 mt-5">
+        <Container className="px-4 px-md-0 pb-0 pt-5 mt-5">
             <h1 className="adsimple-321232425">Impressum</h1>
             <p className="adsimple-321232425">Informationspflicht laut § 5 TMG.</p>
-            <p className="adsimple-321232425">
+            <p className="adsimple-321232425"><strong>
                 MusterFirma
                 <br />
                 Musterstrasse 1, Stiege 1 Tür 1, <br />
                 12345 Musterhausen, <br />
                 Deutschland
-            </p>
+            </strong></p>
             <p className="adsimple-321232425">
                 <strong>UID-Nummer:</strong> DE12345678
                 <br />
@@ -162,6 +162,8 @@ return (
             <ul className="adsimple-321232425 ml-4">
                 <li className="adsimple-321232425">Fotograf Mustermann</li>
             </ul>
+            <br />
+            <br />
         </Container>
     );
 }

@@ -4,10 +4,8 @@ import React, {Fragment, useEffect, useState} from 'react';
 // redux
 import {connect} from 'react-redux';
 import {setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
-// router dom
-import {Link} from 'react-router-dom';
 // reactstrap
-import {Container, Col, Row, Form, FormGroup, Label, Input, Button} from 'reactstrap';
+import {Container, Col, Form, FormGroup, Label, Input, Button} from 'reactstrap';
 import PopUpModal from './PopUpModal';
 // services
 import {sendMessagePost} from '../services/api';
@@ -106,66 +104,49 @@ useEffect(() => {
                 {state.modalContent}
             </PopUpModal>
 {/* *********************************************************** HEADLINE ********************************************************* */}
-            <Container className="pt-4 mt-5">
-                <Col sm="12" md={{size: 6, offset: 3}}>
+            <Container className="px-4 px-md-0 pb-0 pt-5 mt-5">
+                <Col sm="12" md={{size: 6, offset: 3}} className="p-0">
                     <h1 className="text-trans mb-4">Contact Us</h1>
                 </Col>
 {/* *********************************************************** FORM ********************************************************* */}
-                <Row>
-                    <Form className="pb-md-0 pb-5">
-                        <Row xs="1" sm="1">
-                            <Col sm="12" md={{size: 6, offset: 3}}>
-                                <FormGroup className="mb-md-4 mb-3 text-left">
-                                    <Label className="w-100 h5 text-trans mb-2 ml-2">Email / User Name:</Label>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="email"
-                                        placeholder="Enter your email or user name"
-                                        required
-                                        onChange={e => setState({...state, email: e.target.value})}
-                                        value={state.email}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col sm="12" md={{size: 6, offset: 3}}>
-                                <FormGroup className="mb-4 text-left">
-                                    <Row>
-                                        <Col xs="6" lg="6">
-                                            <Label className="w-100 h5 text-trans mb-2 ml-2">
-                                                Message:
-                                            </Label>
-                                        </Col>
-                                        <Col xs="8" lg="6" className="text-right"></Col>
-                                    </Row>
-                                    <textarea
-                                        className="badge-pill rounded bg-transparent "
-                                        type="text"
-                                        placeholder="Write your message"
-                                        required
-                                        cols="72"
-                                        rows="10"
-                                        onChange={e => setState({...state, message: e.target.value})}
-                                        value={state.message}
-                                    />
-                                </FormGroup>
-                            </Col>
-                            <Col sm="12" className="text-center text-trans">
-                                <Button
-                                    className="badge-pill btn-outline-light bg-transparent my-4"
-                                    onClick={onSendBtnClick}
-                                >
-                                    Send
-                                </Button>
-                            </Col>
-                            <Col sm="12" md={{size: 6, offset: 3}}>
-                                <h5>
-                                    Not registered?&nbsp;
-                                    <Link to="/register">Register</Link>
-                                </h5>
-                            </Col>
-                        </Row>
+                <Col sm="12" md={{size: 6, offset: 3}} className="p-0">
+                    <Form>
+                        <FormGroup className="mb-md-4 mb-3 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Email / User Name:</Label>
+                            <Input
+                                className="badge-pill bg-transparent"
+                                type="email"
+                                placeholder="Enter your email or user name"
+                                required
+                                onChange={e => setState({...state, email: e.target.value})}
+                                value={state.email}
+                            />
+                        </FormGroup>
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">
+                                Message:
+                            </Label>
+                            <textarea
+                                className="bg-transparent p-2"
+                                type="text"
+                                placeholder="Write your message"
+                                required
+                                cols="72"
+                                rows="10"
+                                onChange={e => setState({...state, message: e.target.value})}
+                                value={state.message}
+                            />
+                        </FormGroup>
+                        <Col  sm="12" md={{size: 6, offset: 3}} className="p-0 text-center">
+                            <Button
+                                className="badge-pill btn-outline-light bg-transparent my-4"
+                                onClick={onSendBtnClick}
+                            >
+                                Send
+                            </Button>
+                        </Col>
                     </Form>
-                </Row>
+                </Col>
             </Container>
         </Fragment>
     );

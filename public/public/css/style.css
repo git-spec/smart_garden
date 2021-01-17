@@ -267,6 +267,43 @@ body input.form-control:focus {
   border-color: #9ac992 !important;
 }
 
+body textarea {
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #fdd79d;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 0.8rem;
+  color: #9ac992 !important;
+}
+
+body textarea::-webkit-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+body textarea:-ms-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+body textarea::-ms-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+body textarea::placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+body textarea:focus {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  outline: none;
+  border-color: #9ac992 !important;
+}
+
 body p {
   color: inherit;
   font-size: 1.2rem;

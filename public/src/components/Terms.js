@@ -6,9 +6,13 @@ import {connect} from 'react-redux';
 import {setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
 // reactstrap
 import {Container} from 'reactstrap';
+// window dimension hook
+import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 function Terms(props) {
+    // width of window
+    const [width] = useWindowDimension();
 
 /* ******************************************************** BACKGROUND COLOR ********************************************************* */
     useEffect(() => {
@@ -20,9 +24,12 @@ function Terms(props) {
 
 /* ******************************************************** RETURN ********************************************************* */
     return (
-        <Container className="p-0 pt-4 mt-5">
-            <h1>Allgemeine Geschäftsbedingungen</h1>
-            <br />
+        <Container className="p-4 px-md-0 pt-5 mt-5">
+            {width < 360 ? (
+                <h1>Allgemeine Geschäfts-{'\n'}bedingungen</h1>
+            ) : (
+                <h1>Allgemeine Geschäftsbedingungen</h1>
+            )}
             <br />
             <p>§1 Geltung gegenüber Unternehmern und Begriffsdefinitionen</p>
             (1) Die nachfolgenden Allgemeinen Geschäftbedingungen gelten für alle Lieferungen zwischen uns und einem
@@ -130,7 +137,6 @@ function Terms(props) {
             <p>§5 Eigentumsvorbehalt</p>
             Wir behalten uns das Eigentum an der Ware bis zur vollständigen Bezahlung des Kaufpreises vor. <br />
             <br />
-            ****************************************************************************************************
             <br />
             <p>§6 Widerrufsrecht des Kunden als Verbraucher:</p>
             <b>Widerrufsrecht für Verbraucher</b>
@@ -203,66 +209,10 @@ function Terms(props) {
             <b>Ende der Widerrufsbelehrung</b>
             <br />
             <br />
-            ****************************************************************************************************
-            <br />
             <p>§7 Widerrufsformular</p>
             <p>Muster-Widerrufsformular</p>
             (Wenn Sie den Vertrag widerrufen wollen, dann füllen Sie bitte dieses Formular aus und senden Sie es
             zurück.)
-            <br />
-            <div>
-                An :<br />
-                BeispielShop Online
-                <br />
-                Klaus Muster
-                <br />
-                Beispielstraße 42
-                <br />
-                D-98765 Musterstadt
-                <br />
-                E-Mail shop@beispielshop.com
-                <br />
-                <br />
-                Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über den Kauf der
-                folgenden Waren (*)/die Erbringung der folgenden Dienstleistung (*)
-                <br />
-                <br />
-                _____________________________________________________
-                <br />
-                <br />
-                Bestellt am (*)/erhalten am (*)
-                <br />
-                <br />
-                __________________
-                <br />
-                <br />
-                Name des/der Verbraucher(s)
-                <br />
-                <br />
-                _____________________________________________________
-                <br />
-                <br />
-                Anschrift des/der Verbraucher(s)
-                <br />
-                <br />
-                <br />
-                _____________________________________________________
-                <br />
-                <br />
-                Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier)
-                <br />
-                <br />
-                __________________
-                <br />
-                <br />
-                Datum
-                <br />
-                <br />
-                __________________
-                <br />
-                <br />
-            </div>
-            (*) Unzutreffendes streichen.
             <br />
             <br />
             <p>§8 Gewährleistung</p>
@@ -306,8 +256,6 @@ function Terms(props) {
             Als Vertragssprache steht ausschließlich Deutsch zur Verfügung.
             <br />
             <br />
-            ****************************************************************************************************
-            <br />
             <p>§11 Kundendienst</p>
             <b>
                 Unser Kundendienst für Fragen, Reklamationen und Beanstandungen steht Ihnen werktags von 9:00 Uhr
@@ -326,15 +274,14 @@ function Terms(props) {
             </b>
             <br />
             <br />
-            ****************************************************************************************************
-            <br />
-            <br />
             <p>Stand der AGB Nov.2020</p>
             <p>
                 <i>
                     <a href="http://www.agb.de">Gratis AGB</a> erstellt von agb.de
                 </i>
             </p>
+            <br />
+            <br />
         </Container>
     );
 }

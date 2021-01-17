@@ -338,7 +338,7 @@ body {
               color: $color-8-opac !important;
             }
             &:focus {
-              @include killShadow();
+              @include killShadow;
               border-color: $color-8 !important;
             }
           }
@@ -373,9 +373,26 @@ body {
         color: $color-5-opac !important;
       }
       &:focus {
-        @include killShadow();
+        @include killShadow;
         border-color: $color-5 !important;
       }
+    }
+  }
+  & textarea {
+    @include changeBorder;
+    box-sizing: border-box;
+    width: 100%;
+    font-weight: bold;
+    font-size: $font-size-4;
+    border-radius: $font-size-5;
+    color: $color-5 !important;
+    &::placeholder {
+      color: $color-5-opac !important;
+    }
+    &:focus {
+      @include killShadow;
+      outline:none;
+      border-color: $color-5 !important;
     }
   }
   // paragraph text
