@@ -6,9 +6,13 @@ import {connect} from 'react-redux';
 import {setBackgroundColor1Action, setBackgroundColor5Action} from '../actions';
 // reactstrap
 import {Container} from 'reactstrap';
+// window dimension hook
+import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ******************************************************** COMPONENT ********************************************************* */
 function Protection(props) {
+    // width of window
+    const [width] = useWindowDimension();
 
     useEffect(() => {
         // set background color of nav
@@ -19,8 +23,13 @@ function Protection(props) {
 
 /* ******************************************************** RETURN ********************************************************* */
     return (
-        <Container className="p-0 pt-4 mt-5">
-            <h1 class="adsimple-311242123">Datenschutzerklärung</h1>
+        <Container className="px-4 px-md-0 pb-0 pt-5 mt-5">
+            {width < 360 ? (
+                <h1 class="adsimple-311242123">Datenschutz-{'\n'}erklärung</h1>
+            ) : (
+                <h1 class="adsimple-311242123">Datenschutzerklärung</h1>
+            )}
+            <br />
             <h2 class="adsimple-311242123">Datenschutz</h2>
             <p>Wir haben diese Datenschutzerklärung (Fassung 17.12.2020-311242123) verfasst, um Ihnen gemäß der Vorgaben der <a class="adsimple-311242123" href="https://eur-lex.europa.eu/legal-content/DE/ALL/?uri=celex%3A32016R0679&amp;tid=311242123" target="_blank" rel="noopener noreferrer">Datenschutz-Grundverordnung (EU) 2016/679</a> zu erklären, welche Informationen wir sammeln, wie wir Daten verwenden und welche Entscheidungsmöglichkeiten Sie als Besucher dieser Webseite haben.</p>
             <p>Leider liegt es in der Natur der Sache, dass diese Erklärungen sehr technisch klingen, wir haben uns bei der Erstellung jedoch bemüht die wichtigsten Dinge so einfach und klar wie möglich zu beschreiben.</p>
