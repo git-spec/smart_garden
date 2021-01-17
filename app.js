@@ -153,8 +153,10 @@ app.post('/login', (req, res) => {
                     res.json(3);
                 } else if (err === 4) {
                     res.json(4);
-                } else {
+                } else if (err === 5) {
                     res.json(5);
+                } else {
+                    res.json(2);
                 };
             });
         } else {
