@@ -115,6 +115,8 @@ function Navigation(props) {
             if (prevScrollpos > currentScrollPos) {
                 // show menubar while scroll up
                 props.setNavAction(null);
+            } else if (prevScrollpos === 0) {
+                props.setNavAction(null);
             } else {
                 // hide menubar while scroll down
                 props.setNavAction('-50px');
