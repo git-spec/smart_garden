@@ -10,7 +10,8 @@ import {checkLoginPost} from '../services/api';
 // components
 import Navigation from './Navigation';
 import Footer from './Footer';
-import Fader from './Fader'
+import Fader from './Fader';
+import ScrollTop from './ScrollTop';
 
 import Main from './Main';
 
@@ -65,6 +66,7 @@ const Router = props => {
 /* ******************************************************** RETURN ********************************************************* */
 return (
         <BrowserRouter>
+            <ScrollTop />
             <div className={`${props.backgroundColor1} ${props.backgroundColor5}`} style={{top: props.nav}} ref={divRef}></div>
             <Fader>
                 <Navigation />

@@ -131,8 +131,7 @@ useEffect(() => {
                                 type="text"
                                 placeholder="Write your message"
                                 required
-                                cols="72"
-                                rows="10"
+                                rows="7"
                                 onChange={e => setState({...state, message: e.target.value})}
                                 value={state.message}
                             />
