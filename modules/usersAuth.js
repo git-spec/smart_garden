@@ -97,9 +97,7 @@ function checkUser(user, password) {
                     reject(3);
                 } else {
                     if (passwordHash.verify(password, result[0].password)) {
-                        if (result[0].verified) {
-                            resolve(result[0]);
-                        }
+                        resolve(result[0]);
                     } else {
                         reject(5);
                     }
@@ -113,9 +111,7 @@ function checkUser(user, password) {
                     reject(4);
                 } else {
                     if (passwordHash.verify(password, result[0].password)) {
-                        if (result[0].verified) {
-                            resolve(result[0]);
-                        }
+                        resolve(result[0]);
                     } else {
                         reject(5);
                     }
