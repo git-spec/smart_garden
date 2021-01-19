@@ -12,11 +12,13 @@ import {Container, Row, Col, Button, Input, Form, Label, FormGroup, Breadcrumb, 
 import PopUpModal from './PopUpModal';
 // services
 import {editUserPost, getUserPost} from '../services/api';
+import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const UserProfile = props => {
 
     const imageInpRef = useRef();
+    const [width] = useWindowDimension();
 
     const initialState = {
         userImg: '',
@@ -120,7 +122,7 @@ const UserProfile = props => {
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
-        <Container className="p-0 pt-4 mt-5">
+        <Container className="p-4 p-md-0 pt-md-4 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
                 className="bg-danger" 
@@ -146,17 +148,14 @@ const UserProfile = props => {
             </Col>
 {/* ********************************************************* HEADLINE ********************************************************* */}
             <Row>
-                <Col xs={6} md={9}>
-                    <h1 className="text-trans mb-4">Hello {props.user.firstName} {props.user.lastName},</h1>
-                    <h3 className="text-trans mb-4">welcome to your profile page.</h3>
-                    <br />
-                    <p className="text-trans mb-4">Here you can edit your personal settings:</p>
+                <Col xs={8}>
+                    <h3 className="text-trans mb-4">Hello {props.user.firstName} {props.user.lastName},</h3>
                 </Col>
-                <Col className="float-right" xs={6} md={3}>
+                <Col className="avatar" xs={4}>
                     <img 
                         src={state.userImg ? state.userImg : '/src/imgs/dummy.svg'}
                         alt=""
-                        style={{width: '150px', height: '150px', borderRadius: '50%'}}
+                        style={width < 560 ?{width: '70px', height: '70px', borderRadius: '50%'}:{width: '150px', height: '150px', borderRadius: '50%'}}
                     /> 
                     <br />
                     <br />

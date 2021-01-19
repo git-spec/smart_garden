@@ -91,6 +91,12 @@ body #root {
   height: 100vh;
 }
 
+body #root > div {
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
 body #root > div.color-5 {
   background-color: #9ac992 !important;
   color: #1d2c22 !important;
@@ -309,14 +315,6 @@ a {
 
 a:hover, a:active {
   color: #00a8e6 !important;
-}
-
-.color-5 ~ div {
-  background-color: #9ac992 !important;
-}
-
-.color-5 ~ div a:hover, .color-5 ~ div a:active {
-  color: #007aa7 !important;
 }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */

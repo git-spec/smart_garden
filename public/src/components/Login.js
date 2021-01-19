@@ -161,11 +161,11 @@ const Login = props => {
                 {state.modalContent}
             </PopUpModal>
             <Container className="pt-5 mt-5">
-                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 mt-5 px-0 px-md-3">Login</h1>
+                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Login</h1>
                 <h5 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
                     Sign in to access your device management.
                 </h5>
-                <Form className="pb-md-0 pb-5">
+                <Form className="pb-md-0 pb-3">
                     <Row xs="1" sm="1">
                         <Col sm="12" md={{size: 6, offset: 3}}>
                             <FormGroup className="mb-1 text-left">
