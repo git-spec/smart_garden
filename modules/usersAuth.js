@@ -29,7 +29,8 @@ function registerUser(firstName, lastName, userName, email, password) {
                     message += 'Welcome to our website!\n';
                     message += 'To verify your email address please click on the following link:\n';
                     message += `http://localhost:3000/verify/${email}/` + '\n';
-                    message += 'After a successful Verifiction you are able to login.\n\n';
+                    // message += `https://garden.felixwurst.de/verify/${email}/` + '\n';
+                    message += 'After a successful Verification you are able to login.\n\n';
                     message += 'Best Regards\n';
                     message += 'Your inatu-team';
                     emailSender.sendEmail(email, 'Verify your email', message).then(() => {
@@ -78,6 +79,7 @@ function confirmVerifiedUser(email) {
         let message = 'Thanks for verifying your email!\n';
         message += 'You can now log in on our site:\n';
         message += 'http://localhost:3000/login\n';
+        // message += 'https://garden.felixwurst.de/login\n';
         message += 'Have fun!';
         emailSender.sendEmail(email, 'Email verification confirmed', message).then(() => {
             resolve();
@@ -185,6 +187,7 @@ function sendResetLink(email) {
                 // content of email
                 let message = 'Please click here to reset your password:\n';
                 message += `http://localhost:3000/reset/${result[0].id * 135531}/${email}`;
+                // message += `https://garden.felixwurst.de/reset/${result[0].id * 135531}/${email}`;
                 emailSender.sendEmail(email, 'Reset account password', message).then(() => {
                     resolve();
                 }).catch(err => {
@@ -211,6 +214,7 @@ function resetPassword(email, id, pass) {
                 let message = 'You have successfully changed your password!\n';
                 message += 'Log in now with your new password:\n';
                 message += 'http://localhost:3000/login';
+                // message += 'https://garden.felixwurst.de/login';
                 emailSender.sendEmail(email, 'Password changed', message).then(() => {
                     resolve();
                 }).catch(err => {

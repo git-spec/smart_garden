@@ -97,6 +97,7 @@ const Dashboard = props => {
         props.setBackgroundColor1Action(null);
 
         // get the hubs and devices of the user from the database on first rendering
+        let mounted = true;
         getHubsPost().then(hubs => {
             if (hubs === 2) {
                 alert('Server error');
@@ -108,8 +109,8 @@ const Dashboard = props => {
                         alert('Server error');
                     } else if (devices === 10) {
                         history.push('/login');
-                    } else {
-                        setState({...state, hubs, devices});
+                    } else if (mounted) {
+                        setState(state => ({...state, hubs, devices}));
                     }
                 }).catch(err => {
                     alert(err);
@@ -118,17 +119,13 @@ const Dashboard = props => {
         }).catch(err => {
             alert(err);
         });
-    // eslint-disable-next-line
-    }, []);
 
-/* ********************************************************* SOCKET.IO ********************************************************* */
-    // Socket.io is used for the real-time exchange of hubs and devices. 
-    // In this way, the data from the sensors is forwarded to the frontend, but also which devices are connected.
-    useEffect(() => {
+        // Socket.io is used for the real-time exchange of hubs and devices.
+        // In this way, the data from the sensors is forwarded to the frontend, but also which devices are connected.
         const socket = io('http://localhost:5000');
 
         socket.on('connect', () => {
-            console.log('connected');
+            // console.log('connected');
             props.setSocketAction(socket);
             socket.emit('user_connect', props.user.id);
         });
@@ -202,7 +199,7 @@ const Dashboard = props => {
         });
 
         socket.on('disconnect', () => {
-            console.log('disconnected');
+            // console.log('disconnected');
             socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
@@ -210,6 +207,7 @@ const Dashboard = props => {
 
         // cleanup: the user and socket are disconnected when the user leaves the component
         return () => {
+            mounted = false;
             socket.emit('user_disconnect', props.user.id);
             props.setSocketAction(null);
             socket.disconnect();
@@ -217,7 +215,7 @@ const Dashboard = props => {
     // eslint-disable-next-line
     }, []);
 
-/* ********************************************************* HIGHLIGHT ********************************************************* */    
+/* ********************************************************* HIGHLIGHT ********************************************************* */
     // highlight selected hub
     const shineHub = (e, idx) => {
         e.preventDefault();
@@ -258,7 +256,7 @@ const Dashboard = props => {
         });
     };
 
-/* ********************************************************* TOGGLE HUBS ********************************************************* */    
+/* ********************************************************* TOGGLE HUBS ********************************************************* */
     // pressing the hubs heading collapses all open hubs and shows the overview monitor
     const resetHubs = e => {
         e.preventDefault();
@@ -272,7 +270,7 @@ const Dashboard = props => {
             collapseHub: null
         });
     };
-    
+
     // pressing on a hub heading opens a closed section or closes it if it is already open
     const toggleHub = (e, idx) => {
         e.preventDefault();
@@ -303,8 +301,8 @@ const Dashboard = props => {
         addHubIconRef.current.classList.toggle('hidden');
         setState({...state, collapseAddHub: !state.collapseAddHub});
     };
-    
-    // By clicking the delete button, the user can delete one of his hubs. 
+
+    // By clicking the delete button, the user can delete one of his hubs.
     // He must confirm the deletion before the hub is permanently deleted.
     const onDeleteHubBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -347,7 +345,7 @@ const Dashboard = props => {
         setState({...state, collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)});
     };
 
-    // By clicking the delete button, the user can delete one of his devices. 
+    // By clicking the delete button, the user can delete one of his devices.
     // He must confirm the deletion before the device is permanently deleted.
     const onDeleteDeviceBtnClick = (e, deviceID) => {
         e.preventDefault();
@@ -382,8 +380,8 @@ const Dashboard = props => {
         addHubIconRef.current.classList.add('hidden');
         setState({...state, collapseAddHub: !state.collapseAddHub});
     };
-    
-    // The user can add a new hub in his dashboard, for which he must 
+
+    // The user can add a new hub in his dashboard, for which he must
     // enter a valid serial number and can also assign a name to the it.
     const onAddHubBtnClick = e => {
         e.preventDefault();
@@ -440,7 +438,7 @@ const Dashboard = props => {
         setState({...state, collapseAddDevice: state.collapseAddDevice === Number(idx) ? null : Number(idx)});
     };
 
-    // The user can add a new device in his dashboard, for which he must 
+    // The user can add a new device in his dashboard, for which he must
     // enter a valid serial number and can also assign a name to the it.
     const onAddDeviceBtnClick = (e, hubID) => {
         e.preventDefault();
@@ -581,7 +579,7 @@ const Dashboard = props => {
                     <Col className="d-flex align-items-center">
                         <div className="mr-2">
                             <span>
-                                <img src={userImg} alt="" style={{width: '32px', height: '32px', borderRadius: '50%'}} /> 
+                                <img src={userImg} alt="" style={{width: '32px', height: '32px', borderRadius: '50%'}} />
                             </span>
                         </div>
                         <div className="flex-grow-1 p-0 m-0">
@@ -784,8 +782,8 @@ const Dashboard = props => {
                                                                                             devices={state.devices}
                                                                                             hub={state.currentHub}
                                                                                             device={state.currentDevice}
-                                                                                            statusChange={statusChange} 
-                                                                                            save={onSaveBtnClick} 
+                                                                                            statusChange={statusChange}
+                                                                                            save={onSaveBtnClick}
                                                                                         />
                                                                                     </Col>
                                                                                 </Col>

@@ -38,7 +38,7 @@ function Navigation(props) {
         scrollUp: null,
     };
     const [state, setState] = useState(initialState);
-    const color5 = useSelector( state => state.backgroundColor5);
+    const color5 = useSelector(state => state.backgroundColor5);
 
 /* *********************************************************** LOGOUT ********************************************************* */
     const history = useHistory();
