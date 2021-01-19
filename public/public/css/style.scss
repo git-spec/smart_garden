@@ -222,7 +222,9 @@ body {
       // opacity: 1;
       // @include transitionOpacity();
       // }
+    // fader
     & > div {
+      height: fit-content;
       // change color green
       &.color-5 {
         @include changeBGColor($color-5);
@@ -439,15 +441,15 @@ a {
   }
 }
 // color-5
-.color-5 ~ div {
-  background-color: $color-5 !important;
-  & a {
-    &:hover,
-    &:active {
-      color: $color-8 !important;
-    }
-  }
-}
+// .color-5 ~ div {
+//   background-color: $color-5 !important;
+//   & a {
+//     &:hover,
+//     &:active {
+//       color: $color-8 !important;
+//     }
+//   }
+// }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 // Extra small devices (portrait phones, less than 576px)
