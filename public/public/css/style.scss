@@ -177,7 +177,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $color-3 !important;
-  background-color: black !important;
   // app container
   #root {
     font-family: Ubuntu;
@@ -223,7 +222,70 @@ body {
       // opacity: 1;
       // @include transitionOpacity();
       // }
-    
+    & > div {
+      // change color green
+      &.color-5 {
+        @include changeBGColor($color-5);
+        @include changeColor($color-5);
+        // inputs
+        & input {
+          @include changeInput($color-5);
+          &.form-control {
+            font-weight: bold;
+            &::placeholder {
+              color: $color-8-opac !important;
+            }
+            &:focus {
+              @include killShadow;
+              border-color: $color-8 !important;
+            }
+          }
+        }
+        // color of frameborder
+        & .container .col-lg-7 > .col {
+          @include changeBorder($color-5);
+        }
+        & .container h3 {
+          color: $color-8;
+        }
+      }
+      // change color brown
+      &.color-1 {
+        @include changeBGColor;
+        @include changeColor;
+      }
+      // article
+      & > article {
+        width: 42rem;
+        position: fixed;
+        top: 12rem;
+        right: 8rem;
+        background-color: $color-3;
+        color: $color-1;
+        padding: 2rem;
+        border-radius: $font-size-4;
+        & p {
+          font-size: $font-size-3;
+        }
+        & a {
+          text-align: right;
+        } 
+      }
+      // container
+      & .container {
+        position: relative;
+        // hint
+        & > form > .row .row > .col-6.text-right {
+          padding-left: 0;
+          & > span {
+            font-size: $font-size-4;
+          }
+        }
+        // profile
+        & > .container > div:nth-child(2) {
+          font-size: $font-size-5;
+        }
+      }
     // background image
     & .bg-image {
       position: fixed;
@@ -252,59 +314,28 @@ body {
     // }
     
     // fader
-    & > div:first-child {
-      height: $nav-height;
-      width: 100vw;
-      position: fixed;
-      z-index: 1000;
-      &.color-1 {
-        @include changeBGColor($color-1);
-        @include changeShadow($color-1);
-      }
-      &.color-5 {
-        @include changeBGColor($color-5);
-        @include changeShadow($color-5);
-      }
-    }
+    // & > div:first-child {
+    //   height: $nav-height;
+    //   width: 100vw;
+    //   position: fixed;
+    //   z-index: 1000;
+    //   &.color-1 {
+    //     @include changeBGColor($color-1);
+    //     @include changeShadow($color-1);
+    //   }
+    //   &.color-5 {
+    //     @include changeBGColor($color-5);
+    //     @include changeShadow($color-5);
+    //   }
+    // }
     // container-wrap
-    & > div:last-child {
-      min-height: 100vh;
-      @include changeBGColor($color-1);
-      // & > .container {
-      //   min-height: 100vh;
-      // }
-      // article
-      & > article {
-        width: 42rem;
-        position: fixed;
-        top: 12rem;
-        right: 8rem;
-        background-color: $color-3;
-        color: $color-1;
-        padding: 2rem;
-        border-radius: $font-size-4;
-        & p {
-          font-size: $font-size-3;
-        }
-        & a {
-          text-align: right;
-        } 
-      }
-      // profile
-      & > .container > div:nth-child(2) {
-        font-size: $font-size-5;
-      }
-    }
-    // container
-    & .container {
-      position: relative;
-      // hint
-      & > form > .row .row > .col-6.text-right {
-        padding-left: 0;
-        & > span {
-          font-size: $font-size-4;
-        }
-      }
+    // & > div:last-child {
+    //   min-height: 100vh;
+    //   @include changeBGColor($color-1);
+    //   & > .container {
+    //     min-height: 100vh;
+    //   }
+    // }
       // frame border
       & .col-lg-7 > .col {
         @include changeBorder;
@@ -323,35 +354,14 @@ body {
         padding-top: 8rem;
       }
     }
-    // change color green
-    & .color-5 {
-      // @include changeBGColor($color-5);
-      & ~ div {
-        @include changeColor($color-5);
-        @include changeBGColor($color-5);
-        // inputs
-        & input {
-          @include changeInput($color-5);
-          &.form-control {
-            font-weight: bold;
-            &::placeholder {
-              color: $color-8-opac !important;
-            }
-            &:focus {
-              @include killShadow;
-              border-color: $color-8 !important;
-            }
-          }
-        }
-        // color of frameborder
-        & .container .col-lg-7 > .col {
-          @include changeBorder($color-5);
-        }
-        & .container h3 {
-          color: $color-8;
-        }
-      }
-    }
+    // // change color green
+    // & .color-5 {
+    //   // @include changeBGColor($color-5);
+    //   & ~ div {
+    //     @include changeColor($color-5);
+    //     @include changeBGColor($color-5);
+    //   }
+    // }
   }
   // headlines
   & h1,
@@ -378,6 +388,7 @@ body {
       }
     }
   }
+  // textarea
   & textarea {
     @include changeBorder;
     box-sizing: border-box;
@@ -451,18 +462,6 @@ a {
     & > .container {
       padding-top: 6rem;
     }
-    // expand monitor
-    // & .card-body + div > div:first-child {
-    //   left: -.6rem;
-    //   & > div > div > div {
-    //     // width: calc(100% + 1rem);
-    //     transform: scaleX(1.05);
-    //   }
-    // }
-  }
-  // hide frame of dashboard
-  .color-5 ~ div > .container .col-lg-7 > .col {
-    border-color: rgba(255, 255, 255, 0) !important;
   }
   // article
   body #root > div:last-child > article {

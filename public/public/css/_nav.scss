@@ -11,6 +11,135 @@
     top: 0;
     background-color: rgba(255, 255, 255, 0) !important;
     transition: top 0.3s; // transition effect when sliding down (and up)
+    // color of links
+    a.nav-link {
+        display:inline-block;
+        font-size: $font-size-3;
+        @include changeColor;
+        @include killShadow;
+        background-color: none;
+        &::before {
+            content: attr(title);
+            content: attr(title) / "";
+            display: block;
+            height: 0;
+            visibility: hidden;
+            overflow: hidden;
+            user-select: none;
+            pointer-events: none;
+            font-weight: bold;
+            // transform: scale(1.2);
+        }
+        // set link bold after hover
+        &:hover {
+            @include boldLink;
+        }
+    }
+    // menu-icon
+    .navbar-toggler {
+        padding-right: 0 !important;
+        @include killBorder;
+        & .menu-icon {
+            width: 2rem;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            // dots
+            & > span {
+                height: ($font-size-5 / 2);
+                width: ($font-size-5 / 2);
+                border-radius: 50%;
+                // second dot
+                &:nth-child(2) {
+                    position: relative;
+                    // lines
+                    &::before,
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        @include changeBGColor($color-3);
+                        height: $border * 1.2;
+                        width: 0;
+                        transition: width 0.3s;
+                    }
+                    &::before {
+                        top: 50%;
+                        transform: translateY(-50%);
+                        right: ($font-size-5 / 4);
+                    }
+                    &::after {
+                        top: 50%;
+                        transform: translateY(-50%);
+                        left: ($font-size-5 / 4);
+                    }
+                }
+                // third dot
+                &:nth-child(3) {
+                    left: 26px;
+                }
+            }
+            &.active > span:nth-child(2)::before,
+            &.active > span:nth-child(2)::after {
+                width: ($font-size-5 / 2 + $border);
+            }
+        }
+    
+    }
+    // mobile sidebar
+    .sidebar {
+        width: 100vw;
+        position: fixed;
+        top:  0;
+        left: -101vw;
+        height: 100vh;
+        @include changeBGColor();
+        transition: all 0.5s;
+        z-index: -1;
+        padding-top: 8rem;
+    }
+    // set link bold
+    .nav-item {
+        font-size: $font-size-3;
+        &:focus {
+            @include killShadow();
+            @include killBorder();
+        }
+        &.active {
+            @include boldLink();
+        }
+    }
+    // BG-color
+    // change color to brown
+    &.color-1 {
+        @include changeBGColor;
+        @include changeShadow;
+    }
+    // change color to green
+    &.color-5 {
+        @include changeBGColor($color-5);
+        @include changeShadow($color-5);
+        & .navbar-brand {
+            background-image: url('../imgs/inuta_logo_dark.svg');
+        }
+        & li {
+            @include changeColor($color-5);
+        }
+        & span,
+        & .btn {
+            @include changeBorder($color-5);
+        }
+        & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+        & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+            @include changeBGColor($color-2);
+        }
+        & a.nav-link {
+            @include changeColor($color-5);
+        }
+        & .sidebar {
+            @include changeBGColor($color-5);
+        }
+    }
     // logo
     & .navbar-brand {
         width: 7.5rem;
@@ -42,136 +171,6 @@
         @include changeBorder;
     }
 }
-// color of links
-a.nav-link {
-    display:inline-block;
-    font-size: $font-size-3;
-    @include changeColor;
-    @include killShadow;
-    background-color: none;
-    &::before {
-        content: attr(title);
-        content: attr(title) / "";
-        display: block;
-        height: 0;
-        visibility: hidden;
-        overflow: hidden;
-        user-select: none;
-        pointer-events: none;
-        font-weight: bold;
-        // transform: scale(1.2);
-    }
-    // set link bold after hover
-    &:hover {
-        @include boldLink;
-    }
-
-}
-// menu-icon
-.navbar-toggler {
-    padding-right: 0 !important;
-    @include killBorder;
-    & .menu-icon {
-        width: 2rem;
-        position: relative;
-        display: flex;
-        justify-content: space-between;
-        cursor: pointer;
-        // dots
-        & > span {
-            height: ($font-size-5 / 2);
-            width: ($font-size-5 / 2);
-            border-radius: 50%;
-            // second dot
-            &:nth-child(2) {
-                position: relative;
-                // lines
-                &::before,
-                &::after {
-                    content: '';
-                    position: absolute;
-                    @include changeBGColor($color-3);
-                    height: $border * 1.2;
-                    width: 0;
-                    transition: width 0.3s;
-                }
-                &::before {
-                    top: 50%;
-                    transform: translateY(-50%);
-                    right: ($font-size-5 / 4);
-                }
-                &::after {
-                    top: 50%;
-                    transform: translateY(-50%);
-                    left: ($font-size-5 / 4);
-                }
-            }
-            // third dot
-            &:nth-child(3) {
-                left: 26px;
-            }
-        }
-        &.active > span:nth-child(2)::before,
-        &.active > span:nth-child(2)::after {
-            width: ($font-size-5 / 2 + $border);
-        }
-    }
-
-}
-// mobile sidebar
-.sidebar {
-    width: 100vw;
-    position: fixed;
-    top:  0;
-    left: -101vw;
-    height: 100vh;
-    @include changeBGColor();
-    transition: all 0.5s;
-    z-index: -1;
-    padding-top: 8rem;
-}
-// change color to green
-.color-5 + div .navbar {
-    @include changeBGColor($color-5);
-    @include changeShadow($color-5);
-    & .navbar-brand {
-        background-image: url('../imgs/inuta_logo_dark.svg');
-    }
-    & li {
-        @include changeColor($color-5);
-    }
-    & span,
-    & .btn {
-        @include changeBorder($color-5);
-    }
-    & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
-    & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
-        @include changeBGColor($color-2);
-    }
-    & a.nav-link {
-        @include changeColor($color-5);
-    }
-    & .sidebar {
-        @include changeBGColor($color-5);
-    }
-}
-// change color to brown
-.color-1 + .navbar {
-    @include changeBGColor();
-    @include changeShadow();
-}
-// set link bold
-.nav-item {
-    font-size: $font-size-3;
-    &:focus {
-        @include killShadow();
-        @include killBorder();
-    }
-    &.active {
-        @include boldLink();
-    }
-}
-
 
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
@@ -181,7 +180,7 @@ a.nav-link {
         height: 2.6rem;
         background-image: url('../imgs/inuta_icon_light.svg');
     }
-    .color-5 + div .navbar .navbar-brand {
+    .navbar.color-5 .navbar-brand {
         width: 2.6rem;
         height: 2.6rem;
         background-image: url('../imgs/inuta_icon_dark.svg');
@@ -196,7 +195,7 @@ a.nav-link {
     }
     // rise font size
     a.nav-link {
-        font-size: $font-size-2;
+        font-size: $font-size-1;
     }
 }
 

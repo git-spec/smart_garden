@@ -2,9 +2,8 @@
 // react
 import React, {Fragment, useState, useEffect, useRef} from 'react';
 // redux
-import {connect} from 'react-redux';
-import {setSocketAction, setUserAction, setNavAction} from '../actions';
-import {useSelector} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
+import {setSocketAction, setUserAction} from '../actions';
 // router dom
 import {Link, useHistory, useLocation} from 'react-router-dom';
 // reactstrap
@@ -35,7 +34,8 @@ function Navigation(props) {
         isOpenNAV: true,
         isOpenACC: true,
         account: true,
-        isEnter: true
+        isEnter: true,
+        scrollUp: null,
     };
     const [state, setState] = useState(initialState);
     const color5 = useSelector(state => state.backgroundColor5);
@@ -107,19 +107,22 @@ function Navigation(props) {
     }
 
 /* ********************************************************* FUNCTIONS ********************************************************* */
-    let prevScrollpos = Math.abs(window.pageYOffset);
+// change colour of background
+
+// hide menubar at viewpoint <= 576px    
+let prevScrollpos = Math.abs(window.pageYOffset);
     // set media query
     if (width <= 576) {
         window.onscroll = function() {
             let currentScrollPos = Math.abs(window.pageYOffset);
             if (prevScrollpos > currentScrollPos) {
                 // show menubar while scroll up
-                props.setNavAction(null);
+                setState({...state, scrollUp: 0});
             } else if (prevScrollpos === 0) {
-                props.setNavAction(null);
+                setState({...state, scrollUp: 0});
             } else {
                 // hide menubar while scroll down
-                props.setNavAction('-50px');
+                setState({...state, scrollUp: '-50px'});
             }
             prevScrollpos = currentScrollPos;
         }
@@ -231,7 +234,7 @@ function Navigation(props) {
 
 /* *********************************************************** RETURN ********************************************************* */
     return (
-        <Navbar fixed="top" className="p-0 justify-content-center" style={{top: props.nav}}>
+        <Navbar fixed="top" className={`p-0 justify-content-center ${props.backgroundColor5} ${props.backgroundColor1}`} style={{top: state.scrollUp}}>
             <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 pt-1 mt-2 mt-sm-0">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
@@ -284,9 +287,11 @@ const mapStateToProps = state => {
     return {
         user: state.user,
         socket: state.socket,
+        backgroundColor1: state.backgroundColor1,
+        backgroundColor5: state.backgroundColor5,
         nav: state.nav
     };
 };
 
 /* ********************************************************* EXPORT ********************************************************* */
-export default connect(mapStateToProps, {setUserAction, setSocketAction, setNavAction})(Navigation);
+export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);

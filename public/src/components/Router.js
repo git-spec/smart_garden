@@ -1,6 +1,6 @@
 /* ********************************************************* IMPORT ********************************************************* */
 // react
-import React, {useEffect,useRef} from 'react';
+import React, {useEffect} from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 // redux
 import {connect} from 'react-redux';
@@ -39,7 +39,6 @@ import ErrorPage from './ErrorPage';
 /* ******************************************************** COMPONENT ********************************************************* */
 const Router = props => {
 
-    const divRef = useRef();
     const {setUserAction} = props;
 
     useEffect(() => {
@@ -50,16 +49,6 @@ const Router = props => {
                 setUserAction(data);
             }
         });
-        // hide navbar background
-        divRef.current.style.visibility = 'hidden';
-        // show navbar background
-        window.addEventListener('scroll', e => {
-            if(window.scrollY > 40) {
-                divRef.current.style.visibility = 'visible';
-            } else {
-                divRef.current.style.visibility = 'hidden';
-            };
-        });
     // eslint-disable-next-line
     }, []);
 
@@ -67,7 +56,6 @@ const Router = props => {
 return (
         <BrowserRouter>
             <ScrollTop />
-            <div className={`${props.backgroundColor1} ${props.backgroundColor5}`} style={{top: props.nav}} ref={divRef}></div>
             <Fader>
                 <Navigation />
                 <Switch>
