@@ -37,7 +37,9 @@ const UserProfile = props => {
         // saves background color in redux
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
+
         // gets user data from database
+        let mounted = true;
         getUserPost(props.user.id).then(user => {
             switch (user) {
                 case 2:
@@ -47,19 +49,26 @@ const UserProfile = props => {
                     alert('No user found!');
                     break;
                 default:
-                    setState({
-                        ...state,
-                        firstName: user.firstname,
-                        lastName: user.lastname,
-                        userName: user.username,
-                        city: user.city,
-                        userImg: user.img
-                    });      
+                    if (mounted) {
+                        setState({
+                            ...state,
+                            firstName: user.firstname,
+                            lastName: user.lastname,
+                            userName: user.username,
+                            city: user.city,
+                            userImg: user.img
+                        });      
+                    }
                     break;
             }
         }).catch(err => {
             console.log(err);
-        });
+        });    
+
+        // cleanup
+        return () => {
+            mounted = false;
+        };
     // eslint-disable-next-line
     }, []);
 
