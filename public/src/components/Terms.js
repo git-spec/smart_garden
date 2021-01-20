@@ -24,7 +24,7 @@ function Terms(props) {
 
 /* ******************************************************** RETURN ********************************************************* */
     return (
-        <Container className="p-4 px-md-0 pt-5 mt-5">
+        <Container fluid={true} className="px-5 pt-5 pb-0 mt-5">
             {width < 360 ? (
                 <h1>Allgemeine Geschäfts-{'\n'}bedingungen</h1>
             ) : (

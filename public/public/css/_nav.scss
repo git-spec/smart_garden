@@ -12,9 +12,9 @@
     background-color: rgba(255, 255, 255, 0) !important;
     transition: top 0.3s; // transition effect when sliding down (and up)
     // color of links
-    a.nav-link {
+    & a.nav-link {
         display:inline-block;
-        font-size: $font-size-3;
+        font-size: $font-size-2;
         @include changeColor;
         @include killShadow;
         background-color: none;
@@ -150,7 +150,7 @@
         background-position: center;
     }
     // profile
-    & > .container > button.btn {
+    & > .container-fluid > button.btn {
         @include killBorder;
         &:hover {
             transform: scale(1.2);
@@ -170,6 +170,10 @@
     & span {
         @include changeBorder;
     }
+}
+// navbar container
+body #root > div > .navbar > .container {
+    background-color: rgba(255, 255, 255, 0) !important;
 }
 
 // Extra small devices (portrait phones, less than 576px)
@@ -195,6 +199,14 @@
     }
     // rise font size
     a.nav-link {
+        font-size: $font-size-1;
+    }
+}
+
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 576px) {
+    .navbar a.nav-link {
+        padding-bottom: 1rem;
         font-size: $font-size-1;
     }
 }

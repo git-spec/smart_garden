@@ -235,7 +235,7 @@ let prevScrollpos = Math.abs(window.pageYOffset);
 /* *********************************************************** RETURN ********************************************************* */
     return (
         <Navbar fixed="top" className={`p-0 justify-content-center ${props.backgroundColor5} ${props.backgroundColor1}`} style={{top: state.scrollUp}}>
-            <Container className="mx-sm-5 mx-lg-0 px-md-5 px-lg-0 pt-1 mt-2 mt-sm-0">
+            <Container fluid={true} className="px-4 px-sm-5 pt-1 mt-2 mt-sm-0">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
                     <NavbarBrand className="m-0" title="home" tag={Link} to="/" />

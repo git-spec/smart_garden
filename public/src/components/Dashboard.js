@@ -548,7 +548,7 @@ const Dashboard = props => {
 /* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
         return (
-            <Container className="pt-4 mt-5 mx-sm-5 mx-lg-auto px-sm-5 px-lg-0">
+            <Container fluid={true} className="pt-5 px-5 mt-5">
 
 {/* ********************************************************* MODAL ********************************************************* */}
                 <ConfirmModal

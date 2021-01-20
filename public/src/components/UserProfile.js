@@ -122,7 +122,7 @@ const UserProfile = props => {
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
-        <Container className="p-4 p-md-0 pt-md-4 mt-5">
+        <Container fluid={true} className="px-5 pt-sm-4 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
                 className="bg-danger" 
@@ -159,11 +159,16 @@ const UserProfile = props => {
                     /> 
                     <br />
                     <br />
+                    <Label for="upload">
+                        <Button>Upload</Button>
+                    </Label>
                     <input
+                        id="upload"
                         ref={imageInpRef}
                         type="file"
                         accept="image/x-png,image/gif,image/jpeg"
                         onChange={e => setState({...state, userImg: URL.createObjectURL(e.target.files[0])})}
+                        style={{visibility: "hidden"}}
                     />
                 </Col>
             </Row>
