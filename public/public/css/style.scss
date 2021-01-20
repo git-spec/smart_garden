@@ -180,7 +180,6 @@ body {
   // app container
   #root {
     font-family: Ubuntu;
-    height: 100vh;
     // background-repeat: no-repeat;
     // background-attachment: fixed;
     // background-size: cover;
@@ -224,11 +223,30 @@ body {
       // }
     // fader
     & > div {
-      height: fit-content;
+      height: 100vh;
+      // wrap of nav
+      & .container-fluid {
+        width: 100%;
+        height: max-content;
+      }
       // change color green
       &.color-5 {
         @include changeBGColor($color-5);
         @include changeColor($color-5);
+        & > div {
+          @include changeBGColor($color-5);
+          @include changeColor($color-5);
+        }
+        // wrap of root
+        & > .container-fluid {
+          @include changeBGColor;
+        }
+        // wrap of nav
+        & .container-fluid {
+          @include changeBGColor($color-5);
+          width: 100%;
+          height: max-content;
+        }
         // inputs
         & input {
           @include changeInput($color-5);
@@ -243,11 +261,8 @@ body {
             }
           }
         }
-        // color of frameborder
-        & .container .col-lg-7 > .col {
-          @include changeBorder($color-5);
-        }
-        & .container h3 {
+        // wrap of root
+        & .container-fluid h3 {
           color: $color-8;
         }
       }
@@ -255,6 +270,19 @@ body {
       &.color-1 {
         @include changeBGColor;
         @include changeColor;
+        & > div {
+          @include changeBGColor;
+          @include changeColor;
+        }
+        & > .container-fluid {
+          @include changeBGColor;
+        }
+        // wrap
+        & .container-fluid {
+          @include changeBGColor;
+          width: 100%;
+          height: max-content;
+        }
       }
       // article
       & > article {
@@ -274,7 +302,7 @@ body {
         } 
       }
       // container
-      & .container {
+      & .container-fluid {
         position: relative;
         // hint
         & > form > .row .row > .col-6.text-right {
@@ -284,9 +312,18 @@ body {
           }
         }
         // profile
-        & > .container > div:nth-child(2) {
+        & > .container-fluid > div:nth-child(2) {
           font-size: $font-size-5;
         }
+      }
+      // color and frame of border
+      & .col-lg-7 > .col {
+        @include changeBorder($color-5);
+        border-radius: $font-size-4;
+      }
+      // icons
+      & .humidity {
+        border-color: $color-1;
       }
     // background image
     & .bg-image {
@@ -338,21 +375,12 @@ body {
     //     min-height: 100vh;
     //   }
     // }
-      // frame border
-      & .col-lg-7 > .col {
-        @include changeBorder;
-        border-radius: $font-size-4;
-      }
-      // icons
-      & .humidity {
-        border-color: $color-1;
-      }
     }
     // frame border of container outside container
-    & > div > .container {
+    & > div > .container-fluid {
       // padding-top: 5.2rem;
       // frame border of container inside container
-      & > .container {
+      & > .container-fluid {
         padding-top: 8rem;
       }
     }
@@ -458,13 +486,13 @@ a {
     font-size: 12px;
   }
   // frame border of container outside container
-  body #root > div:last-child > .container {
-    padding-top: 6rem;
-    // frame border of container inside container
-    & > .container {
-      padding-top: 6rem;
-    }
-  }
+  // body #root > div:last-child > .container-fluid {
+  //   padding-top: 6rem;
+  //   // frame border of container inside container
+  //   & > .container {
+  //     padding-top: 6rem;
+  //   }
+  // }
   // article
   body #root > div:last-child > article {
     width: 28rem;
@@ -478,6 +506,10 @@ a {
     & p {
       font-size: $font-size-2;
     }  
+  }
+  // frame of border
+  body #root > div .col-lg-7 > .col {
+    border: none;
   }
 }
 
@@ -495,7 +527,7 @@ a {
 // Large devices (desktops, 992px and up)
 @media (min-width: 992px) {
   // show frame of dashboard
-  #root > .container .col-lg-8 {
+  #root > .container-fluid .col-lg-8 {
     // @include makeOutline();
     border-radius: $font-size-3;
   }
@@ -507,7 +539,7 @@ a {
     font-size: 18px;
   }
   // bigger container
-  .container {
+  .container-fluid {
     min-width: 1800px;
   }
 }

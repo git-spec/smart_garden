@@ -23,7 +23,7 @@ function Protection(props) {
 
 /* ******************************************************** RETURN ********************************************************* */
     return (
-        <Container className="px-4 px-md-0 pb-0 pt-5 mt-5">
+        <Container fluid={true} className="px-5 pb-0 pt-5 mt-5">
             {width < 360 ? (
                 <h1 className="adsimple-311242123">Datenschutz-{'\n'}erklärung</h1>
             ) : (

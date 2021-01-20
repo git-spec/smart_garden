@@ -210,7 +210,7 @@ class Register extends React.Component {
                 >
                     {this.state.modalContent.message}
                 </PopUpModal>
-                <Container className="pt-5 mt-5">
+                <Container fluid={true} className="pt-5 mt-5">
                     <h1 className="text-trans mb-4">Registration</h1>
                     <p className="text-trans mb-4">You are only one step away from your smart garden.</p>
                     <Form className="pb-md-0 pb-5">

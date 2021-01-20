@@ -160,72 +160,70 @@ const Login = props => {
             >
                 {state.modalContent}
             </PopUpModal>
-            <Container className="pt-5 mt-5">
+            <Container fluid={true} className="px-4 px-sm-0 pt-5 pb-0 mt-5">
                 <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Login</h1>
                 <h5 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
                     Sign in to access your device management.
                 </h5>
                 <Form className="pb-md-0 pb-3">
-                    <Row xs="1" sm="1">
-                        <Col sm="12" md={{size: 6, offset: 3}}>
-                            <FormGroup className="mb-1 text-left">
-                                <Label className="w-100 h5 text-trans mb-2 ml-2">Username / Email:</Label>
-                                <Input
-                                    className={"badge-pill bg-transparent " + (markInpError('loginName') ? "error" : "")}
-                                    type="text"
-                                    placeholder="Enter your username or email"
-                                    value={state.loginName}
-                                    onChange={e => setState({...state, loginName: e.target.value})}
-                                    onBlur={handleBlur('loginName')}
-                                    required
-                                />
-                            </FormGroup>
-                            <p className="error mb-2 ml-2">
-                                &nbsp;
-                                {
-                                    state.loginName.trim() === ''
-                                ?
-                                    markInpError('loginName') ? "Please enter your user name or email." : ""
-                                :
-                                    markCharError('loginName') ? "Please enter a valid user name or email." : ""
-                                }
-                            </p>
-                        </Col>
-                        <Col sm="12" md={{size: 6, offset: 3}}>
-                            <FormGroup className="mb-1 text-left">
-                                <Row>
-                                    <Col xs="4" lg="6">
-                                        <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
-                                    </Col>
-                                    <Col xs="8" lg="6" className="text-right">
-                                        <span className="pr-2">
-                                            Forgot your{' '}
-                                            <Link to="/password" className="pr-1">
-                                                Password
-                                            </Link>
-                                            ?
-                                        </span>
-                                    </Col>
-                                </Row>
-                                <Input
-                                    className={"badge-pill bg-transparent " + (markInpError('password') ? "error" : "")}
-                                    type="password"
-                                    placeholder="Enter your password"
-                                    value={state.password}
-                                    onChange={e => setState({...state, password: e.target.value})}
-                                    onBlur={handleBlur('password')}
-                                    required
-                                />
-                            </FormGroup>
-                            <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter your password." : ""}</p>
-                        </Col>
-                        <Col sm="12" md={{size: 6, offset: 3}}>
-                            <h5 className="mt-2">
-                                Not registered?&nbsp;
-                                <Link to="/register">Register</Link>
-                            </h5>
-                        </Col>
-                    </Row>
+                    <Col sm="12" md={{size: 6, offset: 3}}>
+                        <FormGroup className="mb-1 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Username / Email:</Label>
+                            <Input
+                                className={"badge-pill bg-transparent " + (markInpError('loginName') ? "error" : "")}
+                                type="text"
+                                placeholder="Enter your username or email"
+                                value={state.loginName}
+                                onChange={e => setState({...state, loginName: e.target.value})}
+                                onBlur={handleBlur('loginName')}
+                                required
+                            />
+                        </FormGroup>
+                        <p className="error mb-2 ml-2">
+                            &nbsp;
+                            {
+                                state.loginName.trim() === ''
+                            ?
+                                markInpError('loginName') ? "Please enter your user name or email." : ""
+                            :
+                                markCharError('loginName') ? "Please enter a valid user name or email." : ""
+                            }
+                        </p>
+                    </Col>
+                    <Col sm="12" md={{size: 6, offset: 3}}>
+                        <FormGroup className="mb-1 text-left">
+                            <Row>
+                                <Col xs="4" lg="6">
+                                    <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
+                                </Col>
+                                <Col xs="8" lg="6" className="text-right">
+                                    <span className="pr-2">
+                                        Forgot your{' '}
+                                        <Link to="/password" className="pr-1">
+                                            Password
+                                        </Link>
+                                        ?
+                                    </span>
+                                </Col>
+                            </Row>
+                            <Input
+                                className={"badge-pill bg-transparent " + (markInpError('password') ? "error" : "")}
+                                type="password"
+                                placeholder="Enter your password"
+                                value={state.password}
+                                onChange={e => setState({...state, password: e.target.value})}
+                                onBlur={handleBlur('password')}
+                                required
+                            />
+                        </FormGroup>
+                        <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter your password." : ""}</p>
+                    </Col>
+                    <Col sm="12" md={{size: 6, offset: 3}}>
+                        <h5 className="mt-2">
+                            Not registered?&nbsp;
+                            <Link to="/register">Register</Link>
+                        </h5>
+                    </Col>
                 </Form>
                 <Col sm="12" className="text-center text-trans">
                     <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={onLoginBtnClick} disabled={!isEnabled}>

@@ -88,18 +88,39 @@ body {
 
 body #root {
   font-family: Ubuntu;
-  height: 100vh;
 }
 
 body #root > div {
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
+  height: 100vh;
+}
+
+body #root > div .container-fluid {
+  width: 100%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
 
 body #root > div.color-5 {
   background-color: #9ac992 !important;
   color: #1d2c22 !important;
+}
+
+body #root > div.color-5 > div {
+  background-color: #9ac992 !important;
+  color: #1d2c22 !important;
+}
+
+body #root > div.color-5 > .container-fluid {
+  background-color: #241b12 !important;
+}
+
+body #root > div.color-5 .container-fluid {
+  background-color: #9ac992 !important;
+  width: 100%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
 
 body #root > div.color-5 input {
@@ -134,19 +155,30 @@ body #root > div.color-5 input.form-control:focus {
   border-color: #007aa7 !important;
 }
 
-body #root > div.color-5 .container .col-lg-7 > .col {
-  border-width: 0.1rem;
-  border-style: solid;
-  border-color: #1d2c22;
-}
-
-body #root > div.color-5 .container h3 {
+body #root > div.color-5 .container-fluid h3 {
   color: #007aa7;
 }
 
 body #root > div.color-1 {
   background-color: #241b12 !important;
   color: #fdd79d !important;
+}
+
+body #root > div.color-1 > div {
+  background-color: #241b12 !important;
+  color: #fdd79d !important;
+}
+
+body #root > div.color-1 > .container-fluid {
+  background-color: #241b12 !important;
+}
+
+body #root > div.color-1 .container-fluid {
+  background-color: #241b12 !important;
+  width: 100%;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
 
 body #root > div > article {
@@ -168,20 +200,31 @@ body #root > div > article a {
   text-align: right;
 }
 
-body #root > div .container {
+body #root > div .container-fluid {
   position: relative;
 }
 
-body #root > div .container > form > .row .row > .col-6.text-right {
+body #root > div .container-fluid > form > .row .row > .col-6.text-right {
   padding-left: 0;
 }
 
-body #root > div .container > form > .row .row > .col-6.text-right > span {
+body #root > div .container-fluid > form > .row .row > .col-6.text-right > span {
   font-size: 1rem;
 }
 
-body #root > div .container > .container > div:nth-child(2) {
+body #root > div .container-fluid > .container-fluid > div:nth-child(2) {
   font-size: 0.8rem;
+}
+
+body #root > div .col-lg-7 > .col {
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #1d2c22;
+  border-radius: 1rem;
+}
+
+body #root > div .humidity {
+  border-color: #241b12;
 }
 
 body #root > div .bg-image {
@@ -195,18 +238,7 @@ body #root > div .bg-image {
   background-position: 20% 40%;
 }
 
-body #root > div .col-lg-7 > .col {
-  border-width: 0.1rem;
-  border-style: solid;
-  border-color: #fdd79d;
-  border-radius: 1rem;
-}
-
-body #root > div .humidity {
-  border-color: #241b12;
-}
-
-body #root > div > .container > .container {
+body #root > div > .container-fluid > .container-fluid {
   padding-top: 8rem;
 }
 
@@ -322,12 +354,6 @@ a:hover, a:active {
   html {
     font-size: 12px;
   }
-  body #root > div:last-child > .container {
-    padding-top: 6rem;
-  }
-  body #root > div:last-child > .container > .container {
-    padding-top: 6rem;
-  }
   body #root > div:last-child > article {
     width: 28rem;
     position: fixed;
@@ -341,6 +367,9 @@ a:hover, a:active {
   body #root > div:last-child > article p {
     font-size: 1.4rem;
   }
+  body #root > div .col-lg-7 > .col {
+    border: none;
+  }
 }
 
 @media (min-width: 576px) {
@@ -350,7 +379,7 @@ a:hover, a:active {
 }
 
 @media (min-width: 992px) {
-  #root > .container .col-lg-8 {
+  #root > .container-fluid .col-lg-8 {
     border-radius: 1.2rem;
   }
 }
@@ -359,7 +388,7 @@ a:hover, a:active {
   html {
     font-size: 18px;
   }
-  .container {
+  .container-fluid {
     min-width: 1800px;
   }
 }
@@ -453,7 +482,7 @@ body .breadcrumb-item.active {
 
 .navbar a.nav-link {
   display: inline-block;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   color: #fdd79d !important;
   -webkit-box-shadow: none !important;
           box-shadow: none !important;
@@ -629,17 +658,17 @@ body .breadcrumb-item.active {
   background-position: center;
 }
 
-.navbar > .container > button.btn {
+.navbar > .container-fluid > button.btn {
   border: none !important;
   outline: none !important;
 }
 
-.navbar > .container > button.btn:hover {
+.navbar > .container-fluid > button.btn:hover {
   -webkit-transform: scale(1.2);
           transform: scale(1.2);
 }
 
-.navbar > .container > button.btn.btn-secondary:not(:disabled):not(.disabled):active {
+.navbar > .container-fluid > button.btn.btn-secondary:not(:disabled):not(.disabled):active {
   background-color: transparent !important;
 }
 
@@ -651,6 +680,10 @@ body .breadcrumb-item.active {
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
+}
+
+body #root > div > .navbar > .container {
+  background-color: rgba(255, 255, 255, 0) !important;
 }
 
 @media (max-width: 576px) {
@@ -671,6 +704,13 @@ body .breadcrumb-item.active {
     display: none;
   }
   a.nav-link {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar a.nav-link {
+    padding-bottom: 1rem;
     font-size: 1.8rem;
   }
 }
@@ -1193,11 +1233,11 @@ input[type='range']::after {
 }
 
 .accordion button.accordion:hover, .accordion button.accordion:active, .accordion button.accordion:focus, .accordion button.accordion.btn-secondary:not(:disabled):not(.disabled):active {
-  background-color: transparent;
-  border-color: transparent;
-  -webkit-box-shadow: none;
-          box-shadow: none;
-  color: inherit;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  color: inherit !important;
 }
 
 .accordion.btn.accordion {
@@ -1233,7 +1273,6 @@ input[type='range']::after {
   font-size: 1.4rem;
   color: #007aa7;
   margin-bottom: 0;
-  line-height: 1.2rem;
 }
 
 .accordion.btn.accordion > h5:hover, .accordion.btn.accordion > h5:active {
@@ -1350,7 +1389,7 @@ input[type='range']::after {
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 @media (max-width: 576px) {
-  .color-5 > .container .col-lg-7 > .col {
+  .shine > div:last-child > .col {
     border-color: rgba(255, 255, 255, 0) !important;
   }
 }

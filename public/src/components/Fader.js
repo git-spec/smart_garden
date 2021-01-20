@@ -24,7 +24,7 @@ const Fader = props => {
     });
 
     return (
-        <div ref={fadeDiv} className={`d-flex align-content-between flex-wrap justify-content-center ${props.backgroundColor5} ${props.backgroundColor1}`}>
+        <div ref={fadeDiv} className={`d-flex flex-column align-items-end ${props.backgroundColor5} ${props.backgroundColor1}`}>
             {props.children}
         </div>
     );
