@@ -23,7 +23,7 @@ useEffect(() => {
 
 /* ******************************************************** RETURN ********************************************************* */
 return (
-        <Container className="px-4 px-md-0 pb-0 pt-5 mt-5">
+        <Container fluid={true} className="px-5 pb-0 pt-5 mt-5">
             <h1 className="adsimple-321232425">Impressum</h1>
             <p className="adsimple-321232425">Informationspflicht laut § 5 TMG.</p>
             <p className="adsimple-321232425"><strong>
