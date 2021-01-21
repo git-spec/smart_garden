@@ -131,7 +131,7 @@ const UserProfile = props => {
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
-        <Container fluid={true} className="px-5 pt-sm-4 mt-5">
+        <Container fluid={true} className="px-4 px-sm-5 pt-5 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
                 className="bg-danger" 
@@ -156,88 +156,230 @@ const UserProfile = props => {
                 </Breadcrumb>
             </Col>
 {/* ********************************************************* HEADLINE ********************************************************* */}
-            <Row>
-                <Col xs={8}>
-                    <h3 className="text-trans mb-4">Hello {props.user.firstName} {props.user.lastName},</h3>
+                <Col className="text-center">
+                    <h3 className="text-trans mb-4">Your Profile</h3>
                 </Col>
-                <Col className="avatar" xs={4}>
+                <Col className="avatar text-center">
                     <img 
                         src={state.userImg ? state.userImg : '/src/imgs/dummy.svg'}
                         alt=""
-                        style={width < 560 ?{width: '70px', height: '70px', borderRadius: '50%'}:{width: '150px', height: '150px', borderRadius: '50%'}}
+                        style={{width: '150px', height: '150px', borderRadius: '50%'}}
                     /> 
-                    <br />
-                    <br />
-                    <Label for="upload">
-                        <Button>Upload</Button>
-                    </Label>
+                </Col>
+                <Col className="d-flex justify-content-center mb-3">
+                    <Label for="upload" className="badge-pill btn-outline-light bg-transparent my-4 btn btn-secondary">Upload</Label>
                     <input
                         id="upload"
                         ref={imageInpRef}
                         type="file"
                         accept="image/x-png,image/gif,image/jpeg"
                         onChange={e => setState({...state, userImg: URL.createObjectURL(e.target.files[0])})}
-                        style={{visibility: "hidden"}}
+                        style={{visibility: "hidden", width: 0}}
                     />
                 </Col>
-            </Row>
 {/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-5">
                 <div className="col-lg-12 col-md-12">{state.badgeContent}</div>
-                <Row xs="1" sm="2">
-                    <Col>
+                <Row>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-md-4 mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
-                            <Input
-                                className="badge-pill text-trans bg-transparent"
-                                type="text"
-                                placeholder={state.firstName}
-                                required
-                                onChange={e => setState({...state, firstName: e.target.value})}
-                                value={state.firstName}
-                            />
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill text-trans bg-transparent"
+                                        type="text"
+                                        placeholder={state.firstName}
+                                        required
+                                        onChange={e => setState({...state, firstName: e.target.value})}
+                                        value={state.firstName}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
                         </FormGroup>
                     </Col>
-                    <Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
-                            <Input
-                                className="badge-pill bg-transparent"
-                                type="text"
-                                placeholder={state.lastName}
-                                required
-                                onChange={e => setState({...state, lastName: e.target.value})}
-                                value={state.lastName}
-                            />
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.lastName}
+                                        required
+                                        onChange={e => setState({...state, lastName: e.target.value})}
+                                        value={state.lastName}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
                         </FormGroup>
                     </Col>
-                    <Col>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2 ml-2">City:</Label>
-                            <Input
-                                className="badge-pill bg-transparent"
-                                type="text"
-                                placeholder={state.city ? state.city : 'Enter your location'}
-                                required
-                                onChange={e => setState({...state, city: e.target.value})}
-                                value={state.city}
-                            />
-                        </FormGroup>
-                    </Col>
-                    <Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
-                            <Input
-                                className="badge-pill bg-transparent"
-                                type="text"
-                                placeholder={state.userName}
-                                required
-                                onChange={e => setState({...state, userName: e.target.value})}
-                                value={state.userName}
-                            />
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.userName}
+                                        required
+                                        onChange={e => setState({...state, userName: e.target.value})}
+                                        value={state.userName}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
                         </FormGroup>
                     </Col>
-                    <Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Email:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.email}
+                                        required
+                                        onChange={e => setState({...state, email: e.target.value})}
+                                        value={state.email}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.password}
+                                        required
+                                        onChange={e => setState({...state, password: e.target.value})}
+                                        value={state.password}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Birthday:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.Birthday}
+                                        required
+                                        onChange={e => setState({...state, birthday: e.target.value})}
+                                        value={state.birthday}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">City:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.city}
+                                        required
+                                        onChange={e => setState({...state, city: e.target.value})}
+                                        value={state.city}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Zip Code:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.zipCode}
+                                        required
+                                        onChange={e => setState({...state, zipCode: e.target.value})}
+                                        value={state.zipCode}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Country:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.country}
+                                        required
+                                        onChange={e => setState({...state, country: e.target.value})}
+                                        value={state.country}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">New Password:</Label>
                             <Input
@@ -250,7 +392,7 @@ const UserProfile = props => {
                             />
                         </FormGroup>
                     </Col>
-                    <Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
                         <FormGroup className="mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat New Password:</Label>
                             <Input
