@@ -1,0 +1,232 @@
+$thumb-size: $font-size-4;
+// $thumb-scale: 10rem / 100;
+$thumb-input: 0;
+$track-h: $border * 2;
+$track-w: 100%;
+$track-shadow-base: $font-size-4 / 4;
+$input-pad: 2em;
+$input-w: 15rem;
+$input-h: 2rem;
+
+@mixin thumb() {
+  border: none;
+  width: $thumb-size;
+  height: $thumb-size;
+  border-radius: 50%;
+  // box-shadow:
+  //   0 0 $track-shadow-base $color-light,
+  //   0 0 $track-shadow-base $color-light,
+  //   0 1px $track-shadow-base 2 * $color-light,
+  //   0 1px $track-shadow-base 4 * $color-light,
+  //   0 $track-shadow-base $track-shadow-base $color-light;
+  background: $color-2;
+}
+
+@mixin track() {
+  height: $track-h;
+  border-radius: $track-h;
+  // box-shadow: inset 0 0 0 .25em $input-c;
+  // background: linear-gradient(90deg, $color-6, $color-danger);
+  background-color: transparent;
+}
+// range
+#rangeIput {
+  color: $color-danger;
+}
+
+.range {
+  width: max-content;
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: $input-w auto auto;
+  column-gap: $font-size-7;
+  grid-template-areas:  "output-thumb . ." 
+                        "range output-right label"
+  ;
+  // label
+  & > label {
+    grid-area: label;
+    justify-self: start;
+    margin: 0 0 0 $font-size-5;
+  }
+  // output above thumb
+  & > output:first-of-type {
+    --track-w: #{$input-w};
+    --thumb-size: #{$thumb-size};
+    --thumb-input: 0;
+    grid-area: output-thumb;
+    display: inline;
+    width: max-content;
+    position: relative;
+    line-height: 1.2;
+    // move to right
+    transform: translate(calc(((var(--thumb-size) / 2 * ((100 - var(--thumb-input))) / 100) - 50%) + var(--thumb-input) * (var(--track-w) / 100) - (var(--thumb-size) / 2 * ((var(--thumb-input))) / 100)));
+  }
+  // gradient track
+  & > div {
+    grid-area: range;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 $input-pad;
+    width: calc(#{$input-w} - #{$thumb-size} / 2);
+    height: $border * 4;
+    background: linear-gradient(90deg, $color-6, $color-danger-light);
+    border: $border * 2.5 solid $color-2;
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 0 $input-pad;
+      width: calc(#{$input-w} - #{$thumb-size});
+      height: $border * 4;
+      background: linear-gradient(90deg, $color-6, $color-danger-light);
+      border: $border * 2.5 solid $color-2;
+    }
+    // left point
+    &::after {
+      content: "";
+      width: $thumb-size;
+      height: $thumb-size;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      background-color: $color-6;
+      border: $border * 2.5 solid $color-2;
+      // padding: 0 $input-pad;
+      border-radius: $thumb-size;
+      transform: translate(-50%, -50%);
+      // background: transparent;
+    }
+  }
+  // right output
+  & > output:last-of-type {
+    grid-area: output-right;
+    justify-self: start;
+  }
+}
+// range wrap
+.range {
+  position: relative;
+  // &::before {
+  //   content: "";
+  //   position: absolute;
+  //   top: 50%; left: 50%;
+  //   transform: translate(-50%, -50%);
+  //   padding: 0 $input-pad;
+  //   width: $input-w - $thumb-size;
+  //   height: $border * 4;
+  //   background: linear-gradient(90deg, $color-6, $color-danger);
+  //   border: $border * 2.5 solid $color-light;
+  // }
+  // &::after {
+  //   content: '';
+  //   position: absolute;
+  //   top: 50%; left: 50%;
+  //   transform: translate(-50%, -50%);
+  //   padding: 0 $input-pad;
+  //   width: $input-w - $thumb-size;
+  //   height: $border * 2;
+  //   background: linear-gradient(90deg, $color-6, $color-danger);
+  // // }
+  // &::after {
+  //   content: '';
+  //   display: inline-block;
+  //   width: $thumb-size;
+  //   height: $thumb-size;
+  //   background-color: $color-6;
+  //   border-radius: $thumb-size;
+  //   border: $border * 2.5 solid $color-light;
+  //   position: absolute;
+  //   top: $input-h / 2 - $thumb-size / 2;
+  //   left: 0;
+  // }
+}
+// input
+input[type='range'] {
+  -webkit-appearance: none;
+  z-index: 1;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: none;
+  padding: 0 $input-pad;
+  width: $input-w;
+  height: $input-h;
+  border-radius: .25em;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  font: $font-size-4 "Ubuntu";
+  cursor: pointer;
+  &.form-control-range {
+    padding: 0;
+  }
+  // no focus
+  &:focus,
+  &:focus-within {
+    outline: none;
+  }
+  // thumb
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    margin-top: ($track-h - $thumb-size)/2;
+    @include thumb();
+  }
+
+  &::-moz-range-thumb {
+    @include thumb();
+    cursor: ew-resize;
+  }
+
+  &::-ms-thumb {
+    @include thumb();
+  }
+  // track
+  &::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    position: relative;
+    @include track();
+  }
+  &::-moz-range-track {
+    @include track();
+  }
+  &::-ms-track {
+    border: none;
+    @include track();
+    color: transparent;
+  }
+  &::-ms-fill-lower {
+    @include track();
+  }
+  &::-ms-fill-upper {
+    background: transparent;
+  }
+  // &::-ms-fill-lower, &::-ms-tooltip {
+  //   display: none;
+  // }
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0 $input-pad;
+    width: calc(#{$input-w} - #{$thumb-size});
+    height: $border * 2;
+    background: linear-gradient(90deg, $color-6, $color-danger-light);
+  }
+  &::after {
+    content: '';
+    display: inline-block;
+    width: $thumb-size;
+    height: $thumb-size;
+    background-color: $color-danger-light;
+    border-radius: $thumb-size;
+    border: $border * 2.5 solid $color-2;
+    position: absolute;
+    top: $input-h / 2 - $thumb-size / 2;
+    right: 0;
+    z-index: -1;
+  }
+}
