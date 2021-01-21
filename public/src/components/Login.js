@@ -160,13 +160,15 @@ const Login = props => {
             >
                 {state.modalContent}
             </PopUpModal>
-            <Container fluid={true} className="px-4 px-sm-0 pt-5 pb-0 mt-5">
-                <h1 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">Login</h1>
-                <h5 className="col-sm-12 col-md-6 offset-md-3 text-trans mb-4 px-0 px-md-3">
-                    Sign in to access your device management.
-                </h5>
+            <Container fluid={true} className="px-4 px-sm-5 px-md-0 pt-5 pb-0 mt-5">
+                <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="px-0 px-md-auto">
+                    <h1 className="text-trans mb-4 px-0">Login</h1>
+                    <h5 className="text-trans mb-4 px-0">
+                        Sign in to access your device management.
+                    </h5>
+                </Col>
                 <Form className="pb-md-0 pb-3">
-                    <Col sm="12" md={{size: 6, offset: 3}}>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="px-0 px-md-auto">
                         <FormGroup className="mb-1 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">Username / Email:</Label>
                             <Input
@@ -190,7 +192,7 @@ const Login = props => {
                             }
                         </p>
                     </Col>
-                    <Col sm="12" md={{size: 6, offset: 3}}>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="px-0 px-md-auto">
                         <FormGroup className="mb-1 text-left">
                             <Row>
                                 <Col xs="4" lg="6">
@@ -218,14 +220,14 @@ const Login = props => {
                         </FormGroup>
                         <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter your password." : ""}</p>
                     </Col>
-                    <Col sm="12" md={{size: 6, offset: 3}}>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="px-0 px-md-auto">
                         <h5 className="mt-2">
                             Not registered?&nbsp;
                             <Link to="/register">Register</Link>
                         </h5>
                     </Col>
                 </Form>
-                <Col sm="12" className="text-center text-trans">
+                <Col xs="12" className="text-center text-trans">
                     <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={onLoginBtnClick} disabled={!isEnabled}>
                         Login
                     </Button>

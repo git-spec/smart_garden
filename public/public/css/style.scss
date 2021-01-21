@@ -408,7 +408,11 @@ body {
   & input {
     @include changeInput;
     &.form-control {
+      height: auto;
       font-weight: bold;
+      font-size: $font-size-3;
+      padding-top: .2rem !important;
+      padding-bottom: .2rem !important;
       &::placeholder {
         color: $color-5-opac !important;
       }
@@ -534,7 +538,7 @@ a {
 }
 
 // Extra large devices (large desktops, 1200px and up)
-@media (min-width: 2200px) {
+@media (min-width: 2000px) {
   html {
     font-size: 18px;
   }
