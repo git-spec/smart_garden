@@ -1,0 +1,23 @@
+#root > div {
+    & > div:last-child {
+        & a {
+            color: $color-3 !important;
+            font-size: $font-size-4;
+        }
+        & > div:first-child a {
+            font-size: $font-size-3;
+        }
+    }
+    &.color-5 {
+        & > div:last-child a {
+            color: $color-4 !important;
+        }
+    }
+}
+
+// Small devices (576px and down)
+@media (max-width: 576px) {
+    #root > div > div:last-child > div:first-child a {
+        font-size: $font-size-2;
+    }
+}

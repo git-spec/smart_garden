@@ -24,7 +24,7 @@ function connect() {
                 multipleStatements: false,
                 host: 'localhost',
                 port: 3306,
-                user: 'root',
+                user: 'admin',
                 password: passwordDB(),
                 database: 'smart_garden'
             });

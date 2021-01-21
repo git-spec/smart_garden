@@ -12,13 +12,13 @@ import {Container, Row, Col, Button, Input, Form, Label, FormGroup, Breadcrumb, 
 import PopUpModal from './PopUpModal';
 // services
 import {editUserPost, getUserPost} from '../services/api';
-import {useWindowDimension} from '../hooks/useWindowDimension';
+// import {useWindowDimension} from '../hooks/useWindowDimension';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const UserProfile = props => {
 
     const imageInpRef = useRef();
-    const [width] = useWindowDimension();
+    // const [width] = useWindowDimension();
 
     const initialState = {
         userImg: '',
