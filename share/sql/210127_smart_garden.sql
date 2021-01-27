@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Dec 01, 2020 at 05:40 PM
+-- Generation Time: Jan 27, 2021 at 09:54 AM
 -- Server version: 10.3.25-MariaDB-0ubuntu0.20.04.1
 -- PHP Version: 7.4.3
 
@@ -3644,15 +3644,15 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `email`, `password`, `verified`, `city`, `role`, `img`) VALUES
-(1, 'Hamoud', 'Shwiri', 'Hamoud', 'hamoudshwiri@gmail.com', 'sha1$44001610$1$e84ff68627ec36febcc8d0337bf62c0f289d0a35', 1, 'hamburg', 'admin', '/uploads/Hamoud.jpg'),
-(3, 'Felix', 'Wurst', 'Felix', 'felix.wurst@gmail.com', 'sha1$ad613917$1$5719c207d9beb3eb6c1e18ad41550bf10696acc6', 1, 'Hamburg', 'user', NULL),
-(13, 'Ingo', 'Fischer', 'Ingo', 'Ingo.Fischer@gmail.com', 'sha1$71414975$1$a6cd918634d88cac237b74b0aaa9d64ced2544c8', 1, NULL, 'user', ''),
-(21, 'aa', 'a', 'a', 'a@gmail.com', 'sha1$efcfe301$1$c4efcb628731700a17873a10040402fd14dd6ce8', 1, 'a', 'subadmin', ''),
-(23, 'c', 'c', 'c', 'c@gmail.com', 'sha1$a325109a$1$72833f5b4b1eee251a485341cc6559cd8b6e2f22', 1, NULL, 'user', ''),
-(24, 'e', 'e', 'e', 'e@gmail.com', 'sha1$6a2b08db$1$af06bedd260496b2995e01046849a18851c7c0cd', 1, NULL, 'user', ''),
-(25, 'f', 'f', 'f', 'f@gmail.com', 'sha1$37d8ab9a$1$365715ad3e3fe08d582979a84a5219c3431abe09', 1, NULL, 'user', ''),
-(26, 'asd', 'asd', 'asd', 'asd@asd.com', 'sha1$60a998d1$1$7d6cbdac52f9e67f02ccf650292cb5b35e0dd703', 0, NULL, 'user', ''),
-(35, 'Ahmad', 'shaoish', 'Ahmad', 'hshwairi@gmail.com', 'sha1$dec7d8da$1$b04e603df09f6973bcdd7a8d2dc1865a26373abe', 1, NULL, 'user', '');
+(1, 'Hamoud', 'Shwiri', 'Hamoud', 'hamoudshwiri@gmail.com', 'sha1$44001610$1$e84ff68627ec36febcc8d0337bf62c0f289d0a35', 1, 'Hamburg', 'admin', NULL),
+(3, 'Felix', 'Wurst', 'felix', 'felix.wurst@gmail.com', 'sha1$d11f956e$1$dcec60de6ebff21e2941bcd6787c03287d5f5f13', 1, NULL, 'user', '/uploads/felix.jpg'),
+(13, 'Ingo', 'Fischer', 'Ingo', 'ingo.fischer@gmail.com', 'sha1$71414975$1$a6cd918634d88cac237b74b0aaa9d64ced2544c8', 1, NULL, 'user', NULL),
+(21, 'Franz', 'Beckenbauer', 'Kaiser', 'der_kaiser@bavaria.de', 'sha1$efcfe301$1$c4efcb628731700a17873a10040402fd14dd6ce8', 1, NULL, 'user', NULL),
+(23, 'Uwe', 'Seeler', 'Uwe', 'uns_uwe@hsv.de', 'sha1$a325109a$1$72833f5b4b1eee251a485341cc6559cd8b6e2f22', 1, NULL, 'user', NULL),
+(24, 'Diego', 'Maradona', 'hand_gottes', 'd10s@gmail.com', 'sha1$6a2b08db$1$af06bedd260496b2995e01046849a18851c7c0cd', 1, NULL, 'user', NULL),
+(25, 'Lionel', 'Messi', 'Lionel', 'lionel@barca.sp', 'sha1$37d8ab9a$1$365715ad3e3fe08d582979a84a5219c3431abe09', 1, NULL, 'user', NULL),
+(26, 'Christiano', 'Ronaldo', 'cr7', 'cr7@juve.it', 'sha1$60a998d1$1$7d6cbdac52f9e67f02ccf650292cb5b35e0dd703', 1, NULL, 'user', NULL),
+(35, 'Mohamed', 'Salah', 'Mou', 'mou@ynwa.co.uk', 'sha1$dec7d8da$1$b04e603df09f6973bcdd7a8d2dc1865a26373abe', 1, NULL, 'user', NULL);
 
 --
 -- Indexes for dumped tables
@@ -3729,7 +3729,7 @@ ALTER TABLE `iot_hubs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- Constraints for dumped tables
