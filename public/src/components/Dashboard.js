@@ -261,8 +261,8 @@ const Dashboard = props => {
     const resetHubs = e => {
         e.preventDefault();
         openHubIconRefs.forEach(item => {
-            item.current.classList.remove('down');
-            item.current.classList.add('up');
+            item.current.classList.remove('up');
+            item.current.classList.add('down');
         });
         setState({
             ...state,
@@ -277,11 +277,11 @@ const Dashboard = props => {
         // toggle up & down buttons
         openHubIconRefs.forEach((item, index) => {
             if (idx !== index) {
-                item.current.classList.remove('down');
-                item.current.classList.add('up');
+                item.current.classList.remove('up');
+                item.current.classList.add('down');
             } else {
-                item.current.classList.toggle('up');
                 item.current.classList.toggle('down');
+                item.current.classList.toggle('up');
             }
         });
         // collapse hub and change monitor
@@ -567,10 +567,10 @@ const Dashboard = props => {
                             <Link to="/">Home</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem className="bg-transparent">
-                            <Link to="/user/profile">UserProfile</Link>
+                            <Link to="/user/profile">Profile</Link>
                         </BreadcrumbItem>
                         <BreadcrumbItem className="bg-transparent" active>
-                            DashBoard
+                            Dashboard
                         </BreadcrumbItem>
                     </Breadcrumb>
                 </Col>
@@ -606,7 +606,7 @@ const Dashboard = props => {
                                     <Button innerRef={addHubIconRef} className="badge-pill btn-outline-light bg-transparent ml-3 my-auto p-0 plus" onClick={toggleAddHub}>
                                         <span></span><span></span>
                                     </Button>
-                                    <Button className="badge-pill btn-outline-light bg-transparent ml-3 my-auto up">
+                                    <Button className="badge-pill btn-outline-light bg-transparent ml-3 my-auto down">
                                         <span></span><span></span>
                                     </Button>
                                 </CardSubtitle>
@@ -677,7 +677,7 @@ const Dashboard = props => {
                                                             <span></span><span></span>
                                                         </Button>
                                                         <Button
-                                                            className="badge-pill btn-outline-light bg-transparent ml-3 up"
+                                                            className="badge-pill btn-outline-light bg-transparent ml-3 down"
                                                             innerRef={openHubIconRef}
                                                             onClick={e => {toggleHub(e, idx); shineHub(e, idx);}}
                                                         >
@@ -734,7 +734,7 @@ const Dashboard = props => {
                                                                         <Button className="accordion p-0 flex-grow-1">
                                                                             <CardTitle
                                                                                 className="m-0 text-left d-flex align-items-center"
-                                                                                onClick={e => {onShowDeviceDataClick(e, hub, device); shineDevice(e, device.sn_number); toggleHubs(e);}}
+                                                                                onClick={e => {onShowDeviceDataClick(e, hub, device); shineDevice(e, device.sn_number); toggleHubs(e)}}
                                                                             >
                                                                                 {device.name}
                                                                                 <span className={device.connected ? 'active-lcd mx-2' : 'inactive-lcd mx-2'}></span>
@@ -750,7 +750,7 @@ const Dashboard = props => {
                                                                             <Button className="badge-pill btn-outline-light bg-transparent ml-3 p-0 plus">
                                                                                 <span></span><span></span>
                                                                             </Button>
-                                                                            <Button className="badge-pill btn-outline-light bg-transparent ml-3 up">
+                                                                            <Button className="badge-pill btn-outline-light bg-transparent ml-3 down">
                                                                                 <span></span><span></span>
                                                                             </Button>
                                                                         </CardSubtitle>

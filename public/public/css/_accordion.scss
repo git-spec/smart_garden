@@ -108,13 +108,13 @@
             border-bottom: 0 solid rgba(0, 0, 0, 0);
             color: inherit;
         }
-        // placeholder for button up
-        & > .card-header .up {
+        // placeholder for button down
+        & > .card-header .down {
             visibility: hidden;
             margin-right: $border;
         }
-        // placeholder for button up and plus
-        & > .card-body > .collapse > div > .card-body .card-header .up,
+        // placeholder for button down and plus
+        & > .card-body > .collapse > div > .card-body .card-header .down,
             & > .card-body > .collapse > div > div:last-child.card-body .card-header .plus {
             visibility: hidden;
             margin-right: $border;

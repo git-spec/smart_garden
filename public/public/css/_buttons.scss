@@ -106,7 +106,8 @@ button {
     @include changeBGColor;
   }
   // button down
-  &.down {
+  &.down,
+  & .down {
     @include roundBtn;
     padding: .3rem;
     // bars
@@ -127,7 +128,8 @@ button {
     }
   }
   // button up
-  &.up {
+  &.up,
+  & .up {
     @include roundBtn;
     padding: 0 .3rem .12rem .3rem;
     // bars
