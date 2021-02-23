@@ -120,7 +120,7 @@
         @include changeBGColor($color-5);
         @include changeShadow($color-5);
         & .navbar-brand {
-            background-image: url('../imgs/inuta_logo_dark.svg');
+            background-image: url('../imgs/inuta_logo_d.svg');
         }
         & li {
             @include changeColor($color-5);
@@ -129,8 +129,8 @@
         & .btn {
             @include changeBorder($color-5);
         }
-        & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
-        & > .container:first-child > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+        & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+        & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
             @include changeBGColor($color-2);
         }
         & a.nav-link {
@@ -142,15 +142,15 @@
     }
     // logo
     & .navbar-brand {
-        width: 7.5rem;
-        height: 3rem;
-        background-image: url('../imgs/inuta_logo_light.svg');
+        width: 7rem;
+        height: 2.8rem;
+        background-image: url('../imgs/inuta_logo_h.svg');
         background-repeat: no-repeat;
         background-size: contain;
-        background-position: center;
+        // background-position: center;
     }
     // profile
-    & > .container-fluid > button.btn {
+    & > .container > button.btn {
         @include killBorder;
         &:hover {
             transform: scale(1.2);
@@ -175,6 +175,29 @@
 body #root > div > .navbar > .container {
     background-color: rgba(255, 255, 255, 0) !important;
 }
+//
+.color-8 {
+    // & .navbar-brand {
+    //     background-image: url('../imgs/inuta_logo_d.svg');
+    // }
+    // & li {
+    //     @include changeColor($color-5);
+    // }
+    // & span,
+    // & .btn {
+    //     @include changeBorder($color-5);
+    // }
+    // & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+    // & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+    //     @include changeBGColor($color-2);
+    // }
+    // & a.nav-link {
+    //     @include changeColor($color-5);
+    // }
+    // & .sidebar {
+    //     @include changeBGColor($color-5);
+    // }
+}
 
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
@@ -188,6 +211,11 @@ body #root > div > .navbar > .container {
         width: 2.6rem;
         height: 2.6rem;
         background-image: url('../imgs/inuta_icon_dark.svg');
+    }
+    .color-8 .navbar-brand {
+        width: 2.6rem;
+        height: 2.6rem;
+        background-image: url('../imgs/inuta_icon_middle.svg');
     }
     // show sidebar
     .sidebar.open {
