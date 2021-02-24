@@ -1,0 +1,257 @@
+@mixin boldLink {
+    font-weight: bold;
+    @include killShadow();
+    outline: none;
+    color: inherit;
+}
+// navbar
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: rgba(255, 255, 255, 0) !important;
+    transition: top 0.3s; // transition effect when sliding down (and up)
+    // color of links
+    & a.nav-link {
+        display:inline-block;
+        font-size: $font-size-2;
+        @include changeColor;
+        @include killShadow;
+        background-color: none;
+        &::before {
+            content: attr(title);
+            content: attr(title) / "";
+            display: block;
+            height: 0;
+            visibility: hidden;
+            overflow: hidden;
+            user-select: none;
+            pointer-events: none;
+            font-weight: bold;
+            // transform: scale(1.2);
+        }
+        // set link bold after hover
+        &:hover {
+            @include boldLink;
+        }
+    }
+    // menu-icon
+    .navbar-toggler {
+        padding-right: 0 !important;
+        @include killBorder;
+        & .menu-icon {
+            width: 2rem;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            // dots
+            & > span {
+                height: ($font-size-5 / 2);
+                width: ($font-size-5 / 2);
+                border-radius: 50%;
+                // second dot
+                &:nth-child(2) {
+                    position: relative;
+                    // lines
+                    &::before,
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        @include changeBGColor($color-3);
+                        height: $border * 1.2;
+                        width: 0;
+                        transition: width 0.3s;
+                    }
+                    &::before {
+                        top: 50%;
+                        transform: translateY(-50%);
+                        right: ($font-size-5 / 4);
+                    }
+                    &::after {
+                        top: 50%;
+                        transform: translateY(-50%);
+                        left: ($font-size-5 / 4);
+                    }
+                }
+                // third dot
+                &:nth-child(3) {
+                    left: 26px;
+                }
+            }
+            &.active > span:nth-child(2)::before,
+            &.active > span:nth-child(2)::after {
+                width: ($font-size-5 / 2 + $border);
+            }
+        }
+    
+    }
+    // mobile sidebar
+    .sidebar {
+        width: 100vw;
+        position: fixed;
+        top:  0;
+        left: -101vw;
+        height: 100vh;
+        @include changeBGColor();
+        transition: all 0.5s;
+        z-index: -1;
+        padding-top: 8rem;
+    }
+    // set link bold
+    .nav-item {
+        font-size: $font-size-3;
+        &:focus {
+            @include killShadow();
+            @include killBorder();
+        }
+        &.active {
+            @include boldLink();
+        }
+    }
+    // BG-color
+    // change color to brown
+    &.color-1 {
+        @include changeBGColor;
+        @include changeShadow;
+    }
+    // change color to green
+    &.color-5 {
+        @include changeBGColor($color-5);
+        @include changeShadow($color-5);
+        & .navbar-brand {
+            background-image: url('../imgs/inuta_logo_d.svg');
+        }
+        & li {
+            @include changeColor($color-5);
+        }
+        & span,
+        & .btn {
+            @include changeBorder($color-5);
+        }
+        & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+        & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+            @include changeBGColor($color-2);
+        }
+        & a.nav-link {
+            @include changeColor($color-5);
+        }
+        & .sidebar {
+            @include changeBGColor($color-5);
+        }
+    }
+    // logo
+    & .navbar-brand {
+        width: 7rem;
+        height: 2.8rem;
+        background-image: url('../imgs/inuta_logo_h.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        // background-position: center;
+    }
+    // profile
+    & > .container > button.btn {
+        @include killBorder;
+        &:hover {
+            transform: scale(1.2);
+        }
+        // &:active {
+        //     @include changeButton;
+        // }
+        &.btn-secondary:not(:disabled):not(.disabled):active {
+            background-color: transparent !important;
+        }
+    }    
+    // menu points
+    & li {
+        @include changeColor;
+    }
+    // menu icon color
+    & span {
+        @include changeBorder;
+    }
+}
+// navbar container
+body #root > div > .navbar > .container {
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+//
+// .color-8 {
+//     & .navbar-brand {
+//         background-image: url('../imgs/inuta_logo_d.svg');
+//     }
+//     & li {
+//         @include changeColor($color-5);
+//     }
+//     & span,
+//     & .btn {
+//         @include changeBorder($color-5);
+//     }
+//     & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+//     & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+//         @include changeBGColor($color-2);
+//     }
+//     & a.nav-link {
+//         @include changeColor($color-5);
+//     }
+//     & .sidebar {
+//         @include changeBGColor($color-5);
+//     }
+// }
+
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 576px) {
+    // logo
+    .navbar .navbar-brand {
+        width: 2.6rem;
+        height: 2.6rem;
+        background-image: url('../imgs/inuta_icon_light.svg');
+    }
+    .navbar.color-5 .navbar-brand {
+        width: 2.6rem;
+        height: 2.6rem;
+        background-image: url('../imgs/inuta_icon_dark.svg');
+    }
+    .color-8 .navbar-brand {
+        width: 2.6rem;
+        height: 2.6rem;
+        background-image: url('../imgs/inuta_icon_middle.svg');
+    }
+    // show sidebar
+    .sidebar.open {
+        left: 0;
+    }
+    // hide topbar
+    .topbar {
+        display: none;
+    }
+    // rise font size
+    a.nav-link {
+        font-size: $font-size-1;
+    }
+}
+
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 576px) {
+    .navbar a.nav-link {
+        padding-bottom: 1rem;
+        font-size: $font-size-1;
+    }
+}
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+    a.nav-link {
+        padding-top: 0;
+        padding-bottom: 0;
+        font-size: $font-size-2;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+}

@@ -1,43 +1,48 @@
+/* ******************************************************* SETUP ******************************************************* */
 const nodemailer = require('nodemailer');
-// create delivery box for email
+const {passwordEmail} = require('./passwords');
+
+// creates a delivery box for e-mails
 const transporter = nodemailer.createTransport({
-    host: "mail.coding-school.org",
+    // host: 'mail.coding-school.org',
+    // port: 465,
+    // auth: {
+    //     user: 'info@coding-school.org',
+    //     pass: ''
+    // },
+    // tls: {
+    //     rejectUnauthorized: false
+    // }
+    host: "smtps.udag.de",
     port: 465,
     auth: {
-        user: "info@coding-school.org",
-        pass: '!234qweR'
+        user: "info@felixwurst.de",
+        pass: passwordEmail()
     },
     tls: {
         rejectUnauthorized: false
-    }
+    } 
 });
 
-// Configuration with out hosting
-// const transporter = nodemailer.createTransport({
-//     service: 'gmail',
-//     auth: {
-//         user: 'ali.asra.bina@gmail.com',
-//         pass: '123456789kabul'
-//     }
-// })
-
-// sending email to client
+/* ******************************************************* SEND EMAIL ******************************************************* */
+// sends an email to a client
 function sendEmail(email, subject, message) {
     return new Promise((resolve, reject) => {
         const mailOption = {
-            from: 'info@coding-school.org',
+            from: "info@felixwurst.de",
             to: email,
             subject: subject,
             text: message
         };
         transporter.sendMail(mailOption, function (error, info) {
-            if(error){
+            if (error) {
                 reject(error);
             } else {
                 resolve(info.response);
-            };
+            }
         });
     });
-};
+}
 
+/* ******************************************************* EXPORT ******************************************************* */
 module.exports = {sendEmail};

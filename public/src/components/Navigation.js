@@ -1,70 +1,297 @@
-import React, {useState} from 'react'
-import {Container,
-        Collapse,
-        Navbar,
-        NavbarToggler,
-        NavbarBrand,
-        Nav,
-        NavItem,
-        NavLink
-} from 'reactstrap';
+/* ********************************************************* IMPORT ********************************************************* */
+// react
+import React, {Fragment, useState, useEffect, useRef} from 'react';
+// redux
+import {connect, useSelector} from 'react-redux';
+import {setSocketAction, setUserAction} from '../actions';
+// router dom
+import {Link, useHistory, useLocation} from 'react-router-dom';
+// reactstrap
+import {Container, Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, Button} from 'reactstrap';
+// services
+import {logoutPost} from '../services/api';
+// window dimension hook
+import {useWindowDimension} from '../hooks/useWindowDimension';
+// images
+import {ReactComponent as AccountOutlined} from '../imgs/account_outlined.svg';
+import {ReactComponent as AccountFilled} from '../imgs/account_filled.svg';
 
-function Navigation() {
-    // flag for open menu
-    const [collapsed, setCollapsed] = useState(true);
-    // opens menu
-    const toggleNavbar = () => setCollapsed(!collapsed);
-  
-    return(
-        <Navbar light expand="md" fixed="top">
-            <Container>
-                <NavbarBrand href="/">
-                    <svg version="1.1" className="logo"
-                        xmlns="http://www.w3.org/2000/svg"
-                        x="0px" y="0px" width="461px" height="223px" viewBox="0 0 461 223" enableBackground="new 0 0 461 223">
-                        <defs>
-                        </defs>
-                        <path d="M266.942,89.79c-9.375-8.973-22.405-13.522-38.729-13.522h-25.461c-6.627,0-12,5.373-12,12s5.373,12,12,12h25.461
-                            c19.84,0,29.08,8.68,29.08,27.316v0.725h-24.972c-0.03,0-0.059,0.004-0.089,0.005c-0.03-0.001-0.059-0.005-0.089-0.005
-                            c-30.207,0-48.972,18.157-48.972,47.385s18.765,47.385,48.972,47.385h37.149c6.627,0,12-5.373,12-12v-78.633v-4.861
-                            C281.293,111.845,276.331,98.776,266.942,89.79z M207.172,175.693c0-15.954,7.935-23.385,24.972-23.385
-                            c0.03,0,0.059-0.004,0.089-0.005c0.03,0.001,0.059,0.005,0.089,0.005h24.972v46.77h-25.149
-                            C215.107,199.078,207.172,191.647,207.172,175.693z"/>
-                        <path d="M20,43.998c-11.046,0-20,8.953-20,20c0,6.537,3.15,12.323,8,15.973v11.171v119.937c0,6.627,5.373,12,12,12s12-5.373,12-12
-                            V91.142V79.971c4.85-3.649,8-9.436,8-15.973C40,52.951,31.046,43.998,20,43.998z M20,72.755c-4.836,0-8.757-3.922-8.757-8.757
-                            c0-4.837,3.92-8.757,8.757-8.757c4.836,0,8.757,3.92,8.757,8.757C28.757,68.833,24.836,72.755,20,72.755z"/>
-                        <path d="M148.942,89.79c-9.371-8.969-22.394-13.518-38.707-13.522c-0.002,0-0.005,0-0.007,0l-39.207-0.047
-                            c-6.547,0-12.014,5.463-12.014,12v122.857c0,6.627,5.373,12,12,12s12-5.373,12-12V100.235l27.193,0.033c0.005,0,0.009,0,0.014,0
-                            c19.84,0,29.08,8.68,29.08,27.316v4.861v78.633c0,6.627,5.373,12,12,12s12-5.373,12-12v-78.633v-4.861
-                            C163.293,111.845,158.331,98.776,148.942,89.79C139.571,80.821,158.331,98.776,148.942,89.79z"/>
-                        <path d="M461.482,88.26c0-6.627-5.373-12-12-12s-12,5.373-12,12v110.843l-27.192-0.032c-0.006,0-0.01,0-0.015,0
-                            c-19.84,0-29.08-8.68-29.08-27.316v-4.861V88.26c0-6.627-5.373-12-12-12s-12,5.373-12,12v78.633v4.861
-                            c0,15.739,4.963,28.809,14.352,37.794c9.371,8.969,22.394,13.518,38.706,13.522c0.003,0,0.005,0,0.008,0l39.207,0.047
-                            c6.536,0,12.015-5.459,12.015-12V88.26C461.482,81.632,461.482,88.26,461.482,88.26z"/>
-                        <path d="M369.997,0c-6.564,0-13.451,3.164-17.957,8.05c-20.334,0.755-34.938,10.34-41.275,26.263
-                            c-8.126-5.146-18.285-7.915-30.314-8.264c-4.506-4.882-11.389-8.043-17.951-8.043c-11.047,0-37,8.955-37,20
-                            c0,11.047,25.954,20,37,20c6.521,0,13.357-3.122,17.865-7.952c24.029,0.892,26.885,14.56,26.885,24.927v6v142.098h24V80.98v-12
-                            V54.006c0-14.404,6.481-21.245,20.903-21.938C356.66,36.887,363.485,40,369.997,40c11.047,0,37-8.953,37-20
-                            C406.997,8.955,381.043,0,369.997,0z M260.468,46.763c-4.837,0-20.827-3.92-20.827-8.757c0-4.835,15.99-8.756,20.827-8.756
-                            c4.835,0,10.886,3.92,10.886,8.756C271.354,42.843,265.303,46.763,260.468,46.763z M372.027,28.757
-                            c-4.836,0-10.886-3.92-10.886-8.757c0-4.835,6.05-8.756,10.886-8.756c4.837,0,20.827,3.92,20.827,8.756
-                            C392.854,24.837,376.864,28.757,372.027,28.757z"/>
-                    </svg>
-                </NavbarBrand>
-                <NavbarToggler onClick={toggleNavbar} />
-                <Collapse isOpen={!collapsed} navbar>
-                <Nav className="ml-auto" navbar>
-                    <NavItem>
-                    <NavLink className="text-white" href="/components/">Components</NavLink>
+/* ******************************************************** COMPONENT ********************************************************* */
+function Navigation(props) {
+
+    // The screen width is determined by this hook and is used to make the component responsive. 
+    const [width] = useWindowDimension();
+
+/* *********************************************************** REFERENCE ********************************************************* */
+    const openRefNAV = useRef();
+    const openRefACC = useRef();
+    const activeRef = useRef();
+    const outlinedAccRef = useRef();
+    const filledAccRef = useRef();
+
+/* *********************************************************** STATE ********************************************************* */  
+    const initialState = {
+        isOpenNAV: true,
+        isOpenACC: true,
+        account: true,
+        isEnter: true,
+        scrollUp: null,
+    };
+    const [state, setState] = useState(initialState);
+    const color5 = useSelector(state => state.backgroundColor5);
+
+/* *********************************************************** LOGOUT ********************************************************* */
+    const history = useHistory();
+
+    // delete the user data stored in the mainstate of redux and redirect the user to the login page
+    const logoutBtnClick = e => {
+        e.preventDefault();
+        logoutPost().then(data => {
+            if (data === 10) {
+                props.setUserAction(null);
+                history.push('/login');
+            }
+        }).catch(err => {
+            console.log(err);
+        });
+        toggleACC();
+    };
+
+/* *********************************************************** TOGGLES ********************************************************* */
+    const toggleNAV = () => {
+        if (!state.isOpenACC) {
+            // close sidebar of acc
+            openRefACC.current.classList.remove('open');
+            setTimeout(() => {
+                // toggle menu icon
+                activeRef.current.classList.toggle('active');
+                // toggle topbar of nav
+                setState({...state, isOpenNAV: !state.isOpenNAV, account: false, isOpenACC: true});
+                // toggle sidebar of nav
+                openRefNAV.current.classList.toggle('open');
+            }, 300);
+        } else {
+            // toggle menu icon
+            activeRef.current.classList.toggle('active');
+            // toggle topbar of nav
+            setState({...state, isOpenNAV: !state.isOpenNAV, account: false, isOpenACC: true});
+            // toggle sidebar of nav
+            openRefNAV.current.classList.toggle('open');
+        };
+    };
+
+    const toggleACC = () => {
+        if (!state.isOpenNAV) {
+            // close sidebar of nav
+            openRefNAV.current.classList.remove('open');
+            // deactivate menu icon
+            activeRef.current.classList.remove('active');
+            setTimeout(() => {
+                // toggle topbar of acc
+                setState({...state, isOpenNAV: true, account: true, isOpenACC: !state.isOpenACC});
+                // toggle sidebar of acc
+                openRefACC.current.classList.toggle('open');
+            }, 300);
+        } else {
+            // toggle topbar of acc
+            setState({...state, isOpenNAV: true, account: true, isOpenACC: !state.isOpenACC});
+            // toggle sidebar of acc
+            openRefACC.current.classList.toggle('open');
+        };
+    };
+
+    const toggleAccIcon = e => {
+        e.preventDefault();
+        outlinedAccRef.current.style.display = 'none';
+        filledAccRef.current.style.display = 'block';
+    }
+
+/* ********************************************************* FUNCTIONS ********************************************************* */
+// change colour of background
+
+// hide menubar at viewpoint <= 576px    
+let prevScrollpos = Math.abs(window.pageYOffset);
+    // set media query
+    if (width <= 576) {
+        window.onscroll = function() {
+            let currentScrollPos = Math.abs(window.pageYOffset);
+            if (prevScrollpos > currentScrollPos) {
+                // show menubar while scroll up
+                setState({...state, scrollUp: 0});
+            } else if (prevScrollpos === 0) {
+                setState({...state, scrollUp: 0});
+            } else {
+                // hide menubar while scroll down
+                setState({...state, scrollUp: '-50px'});
+            }
+            prevScrollpos = currentScrollPos;
+        }
+    } else {
+        window.onscroll = false;
+    }
+
+/* ********************************************************* USE EFFECT ********************************************************* */
+    // show outlined account-icon
+    useEffect(() => {
+        outlinedAccRef.current.style.display = 'block';
+        filledAccRef.current.style.display = 'none';
+    // eslint-disable-next-line
+    }, []);
+    // set outside listener
+    useEffect(() => {
+        // toggle account-icon
+        if (filledAccRef.current.style.display === 'block') {
+            setTimeout(() => {
+                outlinedAccRef.current.style.display = 'block';
+                filledAccRef.current.style.display = 'none';
+            }, 100);
+        };
+        // console.log(openRefACC.current.classList.contains(item => item === 'open'));
+        document.addEventListener('click', globalClickListener);
+        // cleanup 
+        return () => {
+            document.removeEventListener('click', globalClickListener);
+        };
+    // eslint-disable-next-line
+    });
+    // close menubar
+    const globalClickListener = () => {
+        if (activeRef.current) activeRef.current.classList.remove('active');
+        if (openRefNAV.current) openRefNAV.current.classList.remove('open');
+        if (openRefACC.current) openRefACC.current.classList.remove('open');
+        // cleanup
+        document.removeEventListener('click', globalClickListener);
+        setState({...state, isOpenNAV: true, isOpenACC: true});
+    }
+
+/* *********************************************************** NAV ITEMS ********************************************************* */
+    let location = useLocation();
+    // navigation menu
+    const menuNAV = (
+        <Fragment>
+            <NavItem active={location.pathname === '/' ? true : false}>
+                <NavLink onClick={toggleNAV} title="home" tag={Link} to="/">
+                    Home
+                </NavLink>
+            </NavItem>
+            {props.user && (
+                <Fragment>
+                    <NavItem active={location.pathname === '/user/dashboard' ? true : false}>
+                        <NavLink title="dashboard" onClick={toggleNAV} tag={Link} to="/user/dashboard">
+                            Dashboard
+                        </NavLink>
+                    </NavItem>
+                    {props.user.role === 'admin' && (
+                        <NavItem active={location.pathname === '/user/admin' ? true : false}>
+                            <NavLink onClick={toggleNAV} tag={Link} to="/user/admin">
+                                Panel
+                            </NavLink>
+                        </NavItem>
+                    )}
+                    {props.user.role === 'subadmin' && (
+                        <NavItem active={location.pathname === '/user/subadmin' ? true : false}>
+                            <NavLink onClick={toggleNAV} tag={Link} to="/user/subadmin">
+                                Panel
+                            </NavLink>
+                        </NavItem>
+                    )}
+                </Fragment>
+            )}
+        </Fragment>
+    );
+    // account menu
+    const menuACC = (
+        <Fragment>
+            {props.user ? (
+                <Fragment>
+                    <NavItem active={location.pathname === '/user/profile' ? true : false}>
+                        <NavLink title="profile" onClick={toggleACC} tag={Link} to="/user/profile">
+                            Profile
+                        </NavLink>
                     </NavItem>
                     <NavItem>
-                    <NavLink className="text-white" href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
+                        <NavLink title="logout" href="#" onClick={logoutBtnClick}>
+                            Logout
+                        </NavLink>
                     </NavItem>
-                </Nav>
+                </Fragment>
+            ) : (
+                <Fragment>
+                    <NavItem active={location.pathname === '/login' ? true : false}>
+                        <NavLink onClick={toggleACC} title="login" tag={Link} to="/login">
+                            Login
+                        </NavLink>
+                    </NavItem>
+                    <NavItem active={location.pathname === '/register' ? true : false}>
+                        <NavLink onClick={toggleACC} title="register" tag={Link} to="/register">
+                            Register
+                        </NavLink>
+                    </NavItem>
+                </Fragment>
+            )}
+        </Fragment>
+    );
+
+/* *********************************************************** RETURN ********************************************************* */
+    return (
+        <Navbar fixed="top" className={`p-0 m-0 justify-content-center ${props.backgroundColor5} ${props.backgroundColor1}`} style={{top: state.scrollUp}}>
+            <Container className="px-4 px-sm-5 pt-1 mt-3 mt-sm-2">
+{/* *********************************************************** LOGO ********************************************************* */}
+                <div className="flex-grow-1">
+                    <NavbarBrand className="m-0" title="home" tag={Link} to="/" />
+                </div>
+{/* *********************************************************** ACCOUNT ********************************************************* */}
+                <Button title="Account" className="p-0" onClick={e => {toggleACC(e); toggleAccIcon(e)}}>
+                    <h4 data-attribute='hidden' hidden={true} className="d-flex text-align-center justify-content-center m-0">
+                        <AccountOutlined width="1.5rem" height="1.5rem" stroke={color5 ? "#1C2C22" : "#FDD79D"} ref={outlinedAccRef} />
+                        <AccountFilled width="1.5rem" height="1.5rem" fill={color5 ? "#1C2C22" : "#FDD79D"} ref={filledAccRef} />
+                    </h4>
+                </Button>
+                {/* navbar toggle for devices smaller than 576px */}
+                <NavbarToggler title="Menu" className="d-block p-0 py-3 ml-4" onClick={toggleNAV}>
+                    <div ref={activeRef} className="menu-icon">
+                        <span></span><span></span><span></span>
+                    </div>
+                </NavbarToggler>
+{/* *********************************************************** SIDEBAR ********************************************************* */}
+                <div ref={openRefNAV} className="sidebar text-center">
+                    <Nav vertical className="mx-3">
+                        {menuNAV}
+                    </Nav>
+                </div>
+{/* *********************************************************** SIDEBAR ********************************************************* */}
+                <div ref={openRefACC} className="sidebar text-center">
+                    <Nav vertical className="mx-3">
+                        {menuACC}
+                    </Nav>
+                </div>
+{/* *********************************************************** TOPBAR ********************************************************* */}
+                <Collapse className="topbar" isOpen={!state.isOpenNAV} navbar>
+                    <Nav horizontal="center" vertical="align-items-end">
+                        {menuNAV}
+                    </Nav>
+                </Collapse>
+{/* *********************************************************** ACCOUNTBAR ********************************************************* */}
+                <Collapse className="topbar" isOpen={!state.isOpenACC} navbar>
+                    <Nav horizontal="center" vertical="align-items-end">
+                        {menuACC}
+                    </Nav>
                 </Collapse>
             </Container>
         </Navbar>
-    )
+    );
 }
 
-export default Navigation
+/* ********************************************************* MAP STATE TO PROPS ********************************************************* */
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        socket: state.socket,
+        backgroundColor1: state.backgroundColor1,
+        backgroundColor5: state.backgroundColor5,
+        nav: state.nav
+    };
+};
+
+/* ********************************************************* EXPORT ********************************************************* */
+export default connect(mapStateToProps, {setUserAction, setSocketAction})(Navigation);

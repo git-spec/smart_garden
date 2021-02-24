@@ -1,0 +1,80 @@
+.switch {
+    position: relative;
+    display: inline-block;
+    width: $font-size-4 * 2.5;
+    height: ($font-size-4 / 2);
+    margin: .5rem 0;        
+    // hides checkbox of switch
+    & > input[type=checkbox] {
+      display: none;
+    }
+    // moves switch
+    & > input[type=checkbox]:checked + .slider::before {
+      -webkit-transform: translateX($font-size-4 * 1.5);
+      -ms-transform: translateX($font-size-4 * 1.5);
+      transform: translateX($font-size-4 * 1.5);
+    }
+    // makes slider round
+    & .slider.round {
+      border-radius: $font-size-4;
+      height: $font-size-6;
+      // makes switch round
+      &::before {
+        border-radius: 50%;
+      }
+    }
+    // switch label off
+    &::before {
+      position: absolute;
+      cursor: pointer;
+      content: "";
+      height: $font-size-4;
+      width: $font-size-4;
+      top: ($font-size-4 / -4);
+      background-color: $color-6;
+      border: .25rem solid $color-2;
+      border-radius: 50%;
+      -webkit-transition: .4s;
+      transition: .4s;
+      z-index: 1;
+    }
+    // switch label on
+    &::after {
+      position: absolute;
+      cursor: pointer;
+      content: "";
+      height: $font-size-4;
+      width: $font-size-4;
+      top: ($font-size-4 / -4);
+      right: 0;
+      background-color: $color-danger-light;
+      border: .25rem solid $color-2;
+      border-radius: 50%;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    // slider of switch
+    & .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: $color-2;
+      -webkit-transition: .4s;
+      transition: .4s;
+    }
+    // switch
+    & .slider:before {
+      position: absolute;
+      content: "";
+      height: $font-size-4;
+      width: $font-size-4;
+      top: ($font-size-4 / -4);
+      background-color: $color-2;
+      -webkit-transition: .4s;
+      transition: .4s;
+      z-index: 1;
+    }
+}
