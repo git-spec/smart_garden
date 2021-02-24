@@ -548,7 +548,7 @@ const Dashboard = props => {
 /* ********************************************************* RETURN ********************************************************* */
     if (state.hubs && state.devices && props.user) {
         return (
-            <Container fluid={true} className="pt-5 px-4 px-sm-5 mt-5">
+            <Container className="pt-5 px-4 px-sm-5 mt-5">
 
 {/* ********************************************************* MODAL ********************************************************* */}
                 <ConfirmModal
@@ -613,7 +613,7 @@ const Dashboard = props => {
                             </CardHeader>
 {/* ********************************************************* ADD HUB ********************************************************* */}
                             <Collapse isOpen={state.collapseAddHub}>
-                                <CardHeader className="p-0 mb-3 d-flex align-items-center justify-align-space-between">
+                                <CardHeader className="p-0 px-sm-5 mb-3 d-flex align-items-center justify-align-space-between">
                                     <CardSubtitle>
                                         <Button className="badge-pill btn-outline-light bg-transparent mr-3 p-0 minus" onClick={toggleDeleteHub}>
                                             <span></span><span></span>

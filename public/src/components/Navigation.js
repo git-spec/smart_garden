@@ -234,21 +234,21 @@ let prevScrollpos = Math.abs(window.pageYOffset);
 
 /* *********************************************************** RETURN ********************************************************* */
     return (
-        <Navbar fixed="top" className={`p-0 justify-content-center ${props.backgroundColor5} ${props.backgroundColor1}`} style={{top: state.scrollUp}}>
-            <Container fluid={true} className="px-4 px-sm-5 pt-1 mt-2 mt-sm-0">
+        <Navbar fixed="top" className={`p-0 m-0 justify-content-center ${props.backgroundColor5} ${props.backgroundColor1}`} style={{top: state.scrollUp}}>
+            <Container className="px-4 px-sm-5 pt-1 mt-3 mt-sm-2">
 {/* *********************************************************** LOGO ********************************************************* */}
                 <div className="flex-grow-1">
                     <NavbarBrand className="m-0" title="home" tag={Link} to="/" />
                 </div>
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <Button title="100" className="p-0" onClick={e => {toggleACC(e); toggleAccIcon(e)}}>
+                <Button title="Account" className="p-0" onClick={e => {toggleACC(e); toggleAccIcon(e)}}>
                     <h4 data-attribute='hidden' hidden={true} className="d-flex text-align-center justify-content-center m-0">
                         <AccountOutlined width="1.5rem" height="1.5rem" stroke={color5 ? "#1C2C22" : "#FDD79D"} ref={outlinedAccRef} />
                         <AccountFilled width="1.5rem" height="1.5rem" fill={color5 ? "#1C2C22" : "#FDD79D"} ref={filledAccRef} />
                     </h4>
                 </Button>
                 {/* navbar toggle for devices smaller than 576px */}
-                <NavbarToggler className="d-block p-0 py-3 ml-3" onClick={toggleNAV}>
+                <NavbarToggler title="Menu" className="d-block p-0 py-3 ml-4" onClick={toggleNAV}>
                     <div ref={activeRef} className="menu-icon">
                         <span></span><span></span><span></span>
                     </div>

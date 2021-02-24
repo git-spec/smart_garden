@@ -22,18 +22,18 @@ const backgroundImageReducer = (backgroundUrl = null, action) => {
     return backgroundUrl;
 };
 
-const backgroundColor5Reducer = (backgroundColor5 = null, action) => {
-    if (action.type === 'CHANGE_BGCOLOR_5') {
-        return action.payload;
-    }
-    return backgroundColor5;
-};
-
 const backgroundColor1Reducer = (backgroundColor1 = null, action) => {
     if (action.type === 'CHANGE_BGCOLOR_1') {
         return action.payload;
     }
     return backgroundColor1;
+};
+
+const backgroundColor5Reducer = (backgroundColor5 = null, action) => {
+    if (action.type === 'CHANGE_BGCOLOR_5') {
+        return action.payload;
+    }
+    return backgroundColor5;
 };
 
 const navReducer = (nav = null, action) => {
@@ -48,7 +48,7 @@ export default combineReducers({
     user: userReducer,
     socket: socketReducer,
     backgroundUrl: backgroundImageReducer,
-    backgroundColor5: backgroundColor5Reducer,
     backgroundColor1: backgroundColor1Reducer,
+    backgroundColor5: backgroundColor5Reducer,
     nav: navReducer
 });

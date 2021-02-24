@@ -210,16 +210,17 @@ class Register extends React.Component {
                 >
                     {this.state.modalContent.message}
                 </PopUpModal>
-                <Container fluid={true} className="px-4 px-sm-5 pt-5 mt-5">
+                <Container className="px-4 px-sm-5 pt-5 mt-5">
                     <Row>
-                        <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                        {/* <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}> */}
+                        <Col>
                             <h1 className="text-trans mb-4">Registration</h1>
                             <p className="text-trans mb-4">You are only one step away from your smart garden.</p>
                         </Col>
                     </Row>
                     <Form className="pb-md-0 pb-5">
-                        <Row>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                        <Row sm="2">
+                            <Col xs="12" sm="6">
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
                                     <Input
@@ -243,7 +244,7 @@ class Register extends React.Component {
                                     }
                                 </p>
                             </Col>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                            <Col xs="12" sm="6">
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
                                     <Input
@@ -267,7 +268,7 @@ class Register extends React.Component {
                                     }
                                 </p>
                             </Col>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                            <Col xs="12" sm="6">
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Email:</Label>
                                     <Input
@@ -291,7 +292,7 @@ class Register extends React.Component {
                                     }
                                 </p>
                             </Col>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                            <Col xs="12" sm="6">
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
                                     <Input
@@ -315,7 +316,7 @@ class Register extends React.Component {
                                     }
                                 </p>
                             </Col>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                            <Col xs="12" sm="6">
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                                     <Input
@@ -330,7 +331,7 @@ class Register extends React.Component {
                                 </FormGroup>
                                 <p className="error mb-2 ml-2">&nbsp;{markInpError('password') ? "Please enter a password." : ""}</p>
                             </Col>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                            <Col xs="12" sm="6">
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat Password:</Label>
                                     <Input
@@ -345,7 +346,7 @@ class Register extends React.Component {
                                 </FormGroup>
                                 <p className="error mb-2 ml-2">&nbsp;{markInpError('repassword') ? "Please repeat the password." : ""}</p>
                             </Col>
-                            <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                            <Col xs="12" sm="6">
                                 <h5 className="text-trans mt-2">
                                     Already registered?&nbsp;
                                     <Link to="/login">Login</Link>

@@ -176,28 +176,28 @@ body #root > div > .navbar > .container {
     background-color: rgba(255, 255, 255, 0) !important;
 }
 //
-.color-8 {
-    // & .navbar-brand {
-    //     background-image: url('../imgs/inuta_logo_d.svg');
-    // }
-    // & li {
-    //     @include changeColor($color-5);
-    // }
-    // & span,
-    // & .btn {
-    //     @include changeBorder($color-5);
-    // }
-    // & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
-    // & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
-    //     @include changeBGColor($color-2);
-    // }
-    // & a.nav-link {
-    //     @include changeColor($color-5);
-    // }
-    // & .sidebar {
-    //     @include changeBGColor($color-5);
-    // }
-}
+// .color-8 {
+//     & .navbar-brand {
+//         background-image: url('../imgs/inuta_logo_d.svg');
+//     }
+//     & li {
+//         @include changeColor($color-5);
+//     }
+//     & span,
+//     & .btn {
+//         @include changeBorder($color-5);
+//     }
+//     & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::before,
+//     & > div > button.navbar-toggler > .menu-icon > span:nth-child(2)::after {
+//         @include changeBGColor($color-2);
+//     }
+//     & a.nav-link {
+//         @include changeColor($color-5);
+//     }
+//     & .sidebar {
+//         @include changeBGColor($color-5);
+//     }
+// }
 
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {

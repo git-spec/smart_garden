@@ -51,6 +51,17 @@ const Router = props => {
         });
     // eslint-disable-next-line
     }, []);
+    // change background-color of body
+    if (props.backgroundColor1) {
+        document.body.classList.remove('color-5')
+        document.body.classList.add(props.backgroundColor1)
+    } else if (props.backgroundColor5) {
+        document.body.classList.remove('color-1')
+        document.body.classList.add(props.backgroundColor5)
+    } else {
+        document.body.classList.remove('color-1')
+        document.body.classList.remove('color-5')
+    };
 
 /* ******************************************************** RETURN ********************************************************* */
 return (

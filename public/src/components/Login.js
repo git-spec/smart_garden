@@ -160,7 +160,7 @@ const Login = props => {
             >
                 {state.modalContent}
             </PopUpModal>
-            <Container fluid={true} className="px-4 px-sm-5 px-md-0 pt-5 pb-0 mt-5">
+            <Container className="px-4 px-sm-5 px-md-0 pt-5 pb-0 mt-5">
                 <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="px-0 px-md-auto">
                     <h1 className="text-trans mb-4 px-0">Login</h1>
                     <h5 className="text-trans mb-4 px-0">

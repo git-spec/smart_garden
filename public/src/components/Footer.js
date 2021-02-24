@@ -28,14 +28,14 @@ function Footer({location}) {
                     <Link to="/about" className="mx-2 mx-md-3">
                         About
                     </Link>
-                    <Link to="/contact" className="mx-2 mx-md-3">
-                        Contact
-                    </Link>
                     <Link to="/terms" className="mx-2 mx-md-3">
                         Terms &amp; Conditions
                     </Link>
                     <Link to="/protection" className="mx-2 mx-md-3">
                         Data Protection
+                    </Link>
+                    <Link to="/contact" className="mx-2 mx-md-3">
+                        Contact
                     </Link>
                 </Col>
             </Container>

@@ -23,8 +23,8 @@ class LineChartMultiple extends React.Component {
         // set gradient line
         let gradientLine = myChartRef.createLinearGradient(0, 0, 0, 100);
         gradientLine.addColorStop(0, "rgb(255, 0, 0)");
-        gradientLine.addColorStop(.2, "rgb(0, 168, 230)");
-        gradientLine.addColorStop(.8, "rgb(0, 168, 230)");
+        gradientLine.addColorStop(.2, "rgb(0, 122, 167)");
+        gradientLine.addColorStop(.8, "rgb(0, 122, 167)");
         gradientLine.addColorStop(1, "rgb(255, 0, 0)");
         const hData = this.props.data[0].map(d => d.value);
         const tData = this.props.data[1].map(d => d.value);

@@ -177,6 +177,21 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: $color-3 !important;
+  &.color-1 {
+    @include changeBGColor;
+  }
+  &.color-4 {
+    background-color: $color-4;
+  }
+  &.color-5 {
+    @include changeBGColor($color-5);
+  }
+  &.color-6 {
+    background-color: $color-6;
+  }
+  &.color-8 {
+    background-color: $color-8;
+  }
   // app container
   #root {
     font-family: Ubuntu;
@@ -262,7 +277,7 @@ body {
           }
         }
         // wrap of root
-        & .container-fluid h3 {
+        & .container h3 {
           color: $color-8;
         }
       }
@@ -274,15 +289,18 @@ body {
           @include changeBGColor;
           @include changeColor;
         }
-        & > .container-fluid {
+        & > .container {
           @include changeBGColor;
         }
         // wrap
-        & .container-fluid {
+        & .container {
           @include changeBGColor;
           width: 100%;
           height: max-content;
         }
+      }
+      & .color-3 {
+        @include changeBGColor($color-3);
       }
       // article
       & > article {
@@ -420,6 +438,11 @@ body {
         @include killShadow;
         border-color: $color-5 !important;
       }
+    }
+    &#upload {
+      // visibility: hidden;
+      overflow: hidden;
+      width: 0;
     }
   }
   // textarea
