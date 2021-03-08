@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   x="0px"
+   y="0px"
+   width="106px"
+   height="179px"
+   viewBox="0 0 106 179"
+   enableBackground="new 0 0 106 179"
+   id="svg8"
+   sodipodi:docname="moisture_light.svg"
+   inkscape:version="1.0.1 (0767f8302a, 2020-10-17)">
+  <metadata
+     id="metadata12">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="914"
+     inkscape:window-height="480"
+     id="namedview10"
+     showgrid="false"
+     inkscape:zoom="3.1731844"
+     inkscape:cx="53"
+     inkscape:cy="26.471831"
+     inkscape:window-x="70"
+     inkscape:window-y="27"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg8" />
+  <defs
+     id="defs2" />
+  <path
+     fill="none"
+     stroke="current"
+     strokeWidth="10"
+     strokeLinecap="round"
+     strokeLinejoin="round"
+     stroke-miterlimit="10"
+     d="  M95.615,104.155L53,5h-0.136L9.66,105.58h0.004C6.676,111.837,5,118.841,5,126.237c0,26.509,21.491,48,48,48c26.51,0,48-21.49,48-48  C101,118.272,99.049,110.768,95.615,104.155z"
+     id="path4"
+     style="stroke-width:10;stroke-miterlimit:4;stroke-dasharray:none;stroke:#fdd79d;stroke-opacity:1;stroke-linecap:round;stroke-linejoin:round" />
+  <path
+     fill="none"
+     stroke="current"
+     strokeWidth="14"
+     strokeLinecap="round"
+     stroke-miterlimit="10"
+     d="M54,149.944  c-11.246,0-25.188-13.944-25.188-25.188"
+     id="path6"
+     style="stroke-width:12;stroke-miterlimit:4;stroke-dasharray:none;stroke:#fdd79d;stroke-opacity:1;stroke-linecap:round" />
+</svg>

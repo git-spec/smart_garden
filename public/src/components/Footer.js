@@ -12,8 +12,8 @@ import {Col, Container} from 'reactstrap';
 function Footer({location}) {
     if (location.pathname !== '/') {
         return (
-            <Container fluid={true} className="px-4 px-sm-5 mt-auto">
-                <Col className="d-flex justify-content-center mt-4 mb-3 px-0">
+            <Container fluid={true} className="footer px-4 px-sm-5 mt-auto">
+                <Col className="d-flex justify-content-center mt-5 mb-3 px-0">
                     <a href="https://www.youtube.com" className="mx-3">
                         <i className="fab fa-youtube"></i>
                     </a>

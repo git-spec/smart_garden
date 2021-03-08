@@ -15,103 +15,276 @@
   height: 100vh;
 }
 
+// .slider-wrapper {
+// }
+
 .slider-feature {
-  width: 28rem;
-  text-align: center;
-  top: 35%;
-  left:20%;
-  // &.slider1 {
-  //   overflow: hidden;
-  //   animation-name: slide-open;
-  //   animation-duration: 2s;
-  //   animation-timing-function: ease-in;
-  // }
+  width: 100%;
   & > .feature-title {
-    left: 0;
-    animation-name: slide-right;
-    animation-duration: 1s;
-    animation-timing-function: ease-out;
-    & > img {
-      max-width: 60%;
-      position: relative;
-      text-shadow: 4px 2px 6px $color-8;
-      bottom: 6rem;
-      left: -6rem;
-    }
+    font-size: 2.5rem;
+    // text-transform: uppercase;
+    font-weight: 700;
+    position: relative;
     & > h1 {
       font-weight: bold;
     }
   }
   & > .feature-text {
-    right: 0;
-    animation-name: slide-left;
-    animation-duration: 1.6s;
-    animation-timing-function: ease-out;
+    font-size: 1rem;
+    margin: 1rem 0;
+    & > h1 {
+      font-weight: bold;
+    }
+    & > p {
+      position: relative;
+      // right: 0;
+      // text-shadow: 0 0 4px $color-1;
+    }
   }
-  & > button {
-    transform-origin: center;
-    animation: slide-scale 2.5s ease-in;
+  &.slide-1 {
+    width: 28rem;
+    text-align: center;
+    top: 40%;
+    right: 40%;
+    position: relative;
+    // & > .feature-title {
+    //   left: 0;
+    // }
+    & > .feature-text > p {
+      text-shadow: 0 0 4px $color-1;
+    }
+  }
+  &.slide-ani-1 {
+    & > .feature-title {
+      animation-name: slide-right;
+      animation-duration: 1s;
+      animation-timing-function: ease-out;
+    }
+    & > .feature-text > p {
+      animation-name: slide-left;
+      animation-duration: 1.6s;
+      animation-timing-function: ease-out;
+    }
+    // scale feature-button
+    & > .feature-btn-wrapper {
+      transform-origin: center;
+      animation: slide-scale 2.5s ease-in;
+    }
+  }
+  &.slide-2 {
+    margin-top: auto;
+    // padding-top: 5rem;
+    // align-self: center;
+    display: flex;
+    flex-direction: column;
+    // grid-template-columns: auto;
+    // grid-template-rows: 1fr auto;
+    // grid-template-areas: "hdl txt";
+    & > .feature-title {
+      margin-top: 5rem;
+      // margin-bottom: 1rem;
+      // display: flex;
+      // flex-flow: column;
+      // justify-content: space-around;
+      // grid-area: hdl;
+      // margin-right: 1.5rem;
+      & > h1 {
+        position: relative;
+      }
+    }
+    & > .feature-text {
+      // grid-area: txt;
+      margin: 0;
+      & > div {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0;
+        & > img {
+          min-width: 3rem;
+          height: 3rem;
+          @include changeBorder;
+          border-width: .2rem;
+          border-radius: 50%;
+          color: $color-3;
+          padding: .3rem;
+          opacity: 0;
+          margin-right: 2rem;
+          // transform: scaley(.65);
+          // transform: scalex(.3);
+          // transform-origin: left;
+          // position: relative;
+          text-shadow: 4px 2px 6px $color-1;
+          // bottom: 6rem;
+          // left: -6rem;
+          // &:first-of-type {
+          //   margin-top: .3rem;
+          // }
+        }
+        & > p {
+          transform: scaleY(0);
+          overflow: hidden;
+          margin-bottom: 0;
+          // right: -120rem;
+        }
+      }
+    }
+    & > .feature-btn-wrapper {
+      padding-top: 1rem;
+      grid-area: btn;
+      display: flex;
+      justify-content: center;
+      & > .feature-btn {
+        color: $color-9 !important;
+        border-color: $color-9 !important;
+      }
+    }
+  }
+  &.slide-ani-2 {
+    & > .feature-title > h1 {
+      animation: slide-right 1s ease-out;
+    }
+    & > .feature-text > div {
+      &:nth-of-type(1) img {
+        animation: fadeIn .5s ease-in 1s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(2) img {
+        animation: fadeIn .5s ease-in 3s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(3) img {
+        animation: fadeIn .5s ease-in 5.5s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(4) img {
+        animation: fadeIn .3s ease-in 8s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(1) p  {
+        animation: slide-height .3s ease-in 2s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(2) p  {
+        animation: slide-height .3s ease-in 4s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(3) p  {
+        animation: slide-height .3s ease-in 6s;
+        animation-fill-mode: forwards;
+      }
+      &:nth-of-type(4) p  {
+        animation: slide-height .3s ease-in 8.5s;
+        animation-fill-mode: forwards;
+      }
+    }
+  }
+  &.slide-3 {
+    margin-top: auto;
+    padding-top: 5rem;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 32rem auto;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:  "img txt"
+                          "img btn"
+                          "img .";
+    & > .feature-title {
+      width: max-content;
+      grid-area: img;
+      & > img {
+        max-width: 65%;
+        // transform: scale(.65);
+        // transform-origin: left;
+        // position: relative;
+        text-shadow: 4px 2px 6px $color-8;
+        // bottom: 6rem;
+        // left: -6rem;
+      }
+    }
+    & > .feature-text {
+      grid-area: txt;
+      padding-top: 2rem;
+      & > h1, p {
+        margin-top: 1rem;
+        position: relative;
+      }
+    }
+    & > .feature-btn-wrapper {
+      grid-area: btn;
+      display: flex;
+      justify-content: center;
+      & > .feature-btn {
+        // color: $color-7 !important;
+        // border-color: $color-7 !important;
+        color: $color-9 !important;
+        border-color: $color-9 !important;
+      }
+    }
+  }
+  &.slide-ani-3 {
+    & > .feature-title {
+      animation: fadeIn .5s ease-in;
+    }
+    & > .feature-text {
+      & > h1 {
+        animation: slide-left 1s ease-out;
+      }
+      & > p {
+        animation: slide-left-3-p 2s ease-out;
+      }
+    }
+    // scale feature-button
+    & > .feature-btn-wrapper > .feature-btn {
+      transform-origin: center;
+      animation: slide-scale 3s ease-in;
+    }
+  }
+  // feature-button
+  & > .feature-btn-wrapper {
+    // &.slider2 {
+    //   display: none;
+    // }
+    & > .feature-btn {
+      color: $color-6 !important;
+      text-transform: uppercase;
+      border: 1px solid $color-6;
+      outline: none;
+      font-weight: 700;
+      padding: 0.6rem 0.3rem;
+      text-shadow: -2px -2px 16px $color-1 !important;
+      display: inline-block;
+      cursor: pointer;
+      &:focus,
+      &:hover {
+        border: 1px solid $color-6;
+        outline: none;
+        text-shadow: -2px -2px 16px $color-1 !important;
+        text-decoration: none;
+        transform: scale(1.2);
+      }
+    }
   }
 }
-@keyframes slide-open {
-  0% {
-    height: 0;
-  }
-  50% {
-    height: 0;
-  }
-  100% {
-    height: 60%;
-  }
-}
-@keyframes slide-left {
-  0% {
-    right: -120rem;
-  }
-  70% {
-    right: -120rem;
-  }
-  100% {
-    right: 0;
+// page-buttons
+.slider-btn-wrapper {
+  align-self: flex-end;
+  & > .slider-btn {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid $color-3;
+    border-radius: 1rem;
+    &:focus {
+      outline: none;
+    }
   }
 }
-@keyframes slide-right {
-  0% {
-    left: -60rem;
-  }
-  70% {
-    left: -60rem;
-  }
-  100% {
-    left: 0;
-  }
+// fill page-button
+.shown {
+  background-color: $color-3 !important;
 }
-@keyframes slide-scale{
-  0% {
-    transform: scale(0);
-  }
-  95% {
-    transform: scale(0);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.feature-title {
-  font-size: 2.5rem;
-  // text-transform: uppercase;
-  font-weight: 700;
-}
-
-.feature-text {
-  font-size: 1rem;
-  margin: 1rem 0;
-  text-shadow: 0 0 4px $color-1;
-}
-
-.slider-btn-right,
-.slider-btn-left {
+// button left and button right
+.slider-btn-left,
+.slider-btn-right {
   background: transparent;
   border: none;
   outline: none;
@@ -119,43 +292,6 @@
   padding: 0 1rem;
   cursor: pointer;
   transition: transform 0.1s ease-in-out;
-}
-
-.feature-btn {
-  color: $color-6 !important;
-  background: #fff;
-  text-transform: uppercase;
-  border: 1px solid $color-6;
-  outline: none;
-  font-weight: 700;
-  padding: 0.8rem 2rem;
-  text-shadow: -2px -2px 16px $color-1 !important;
-  cursor: pointer;
-  &:focus,
-  &:active,
-  &:hover {
-    border: 1px solid $color-6;
-    outline: none;
-    text-shadow: -2px -2px 16px $color-1 !important;
-  }
-}
-
-.slider-btn {
-  width: 1rem;
-  height: 1rem;
-  border: 1px solid $color-3;
-  border-radius: 1rem;
-  &:focus {
-    outline: none;
-  }
-}
-
-.slider-btn:focus {
-  outline: none;
-}
-
-.slider-btn-left,
-.slider-btn-right {
   &:focus {
     outline: none;
   }
@@ -167,7 +303,7 @@
     border-radius: $border;
   }
 }
-
+// button left
 .slider-btn-left {
   & span {
     &:first-child {
@@ -178,7 +314,7 @@
     }
   }
 }
-
+// button right
 .slider-btn-right {
   & span {
     &:first-child {
@@ -189,11 +325,7 @@
     }
   }
 }
-
-.shown {
-  background-color: $color-3 !important;
-}
-
+// change color
 .color-8 {
   & .feature-btn {
     color: $color-danger !important;
@@ -211,7 +343,60 @@
     text-shadow: 0 0 4px $color-8 !important;
   }
 }
+// transition opacity
+.fadeIn {
+  animation: fadeIn 0.5s;
+}
 
+/* *********************************************************** KEYFRAMES ********************************************************* */
+// comes from right
+@keyframes slide-left {
+  0% {
+    right: -120rem;
+  }
+  70% {
+    right: -120rem;
+  }
+  100% {
+    right: 0;
+  }
+}
+@keyframes slide-left-3-p {
+  0% {
+    right: -120rem;
+  }
+  80% {
+    right: -120rem;
+  }
+  100% {
+    right: 0;
+  }
+}
+// comes from left
+@keyframes slide-right {
+  0% {
+    left: -70rem;
+  }
+  70% {
+    left: -70rem;
+  }
+  100% {
+    left: 0;
+  }
+}
+// changes size
+@keyframes slide-scale{
+  0% {
+    transform: scale(0);
+  }
+  95% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+// changes opacity
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -220,19 +405,93 @@
     opacity: 1;
   }
 }
-.fadeIn {
-  animation: fadeIn 0.5s;
+// changes height
+@keyframes slide-height {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  // 40% {
+  //   height: 50%;
+  // }
+  // 60% {
+  //   height: 50%;
+  // }
+  100% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
 }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 // Extra small devices (portrait phones, less than 576px)
+@media (max-width: 398px) {
+  .slider-feature {
+    &.slide-2 {
+      & > .feature-title {
+        text-align: center;
+        font-size: 1.8rem;
+      }
+      & > .feature-text {
+        font-size: .8rem;
+        & > div {
+          flex-wrap: wrap;
+          justify-content: center;
+          & img {
+            margin-bottom: 1rem;
+          }
+          & p {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-height: 570px) {
+  .slider-feature {
+    &.slide-3 {
+      & > .feature-text > p {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
 @media (max-width: 576px) {
   .slider-feature {
-    width: 20rem;
-    top: 35%;
-    left:12%;
-    & .feature-title {
-      font-size: 1.8rem;
+    overflow: scroll;
+    &.slide-1 {
+      width: 20rem;
+      top: 35%;
+      right: 0 !important;
+      & .feature-title {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
+@media (max-width: 992px) {
+  .slider-feature {
+    &.slide-1 {
+      right: 10%;
+    }
+    &.slide-3 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      & > .feature-title {
+        width: 60vw;
+        & > img {
+          max-width: 100%;
+        }
+      }
+      & > .feature-text {
+        padding-top: .5rem;
+      }
+      & .feature-btn-wrapper {
+        width: 100%;
+        justify-content: center;
+      }
     }
   }
 }
