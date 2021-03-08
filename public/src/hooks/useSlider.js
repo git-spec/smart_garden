@@ -1,34 +1,96 @@
 // import e from 'cors';
 import {useEffect} from 'react';
 
-const useSlider = (slideImage, slideTitle, slideText, slideClass, slideBtn, slideIdx, images) => {
+const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, slideBtn, slideIdx, images) => {
     let slideCounter = 0;
 
     useEffect(() => startSlider());
 
     const startSlider =() => {
         slideImage.current.style.backgroundImage = `linear-gradient(
-                                                    to right,
-                                                    rgba(34, 34, 34, 0.4),
-                                                    rgba(68, 68, 68, 0.4)
+                                                        to right,
+                                                        rgba(34, 34, 34, 0.4),
+                                                        rgba(68, 68, 68, 0.4)
                                                     ), url(${images[0].src})`;
+        slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+        slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
         slideTitle.current.innerHTML = images[0].title;
         slideText.current.innerHTML = images[0].text;
         slideBtn.current.innerHTML = images[0].button;
+        slideBtn.current.href = '/register';
+        animateSlide(0);
         handleClass(0);
         slideIdx(0);
     }
 
     const handleSlide = slide => {
-        slideImage.current.style.backgroundImage = `url(${images[slide - 1].src})`;
+        slideImage.current.style.backgroundImage = `linear-gradient(
+                                                        to right,
+                                                        rgba(34, 34, 34, 0.4),
+                                                        rgba(68, 68, 68, 0.4)
+                                                    ), url(${images[slide - 1].src})`;
         slideTitle.current.innerHTML = images[slide - 1].title;
         slideText.current.innerHTML = images[slide - 1].text;
-        slideBtn.current.innerHTML = images[slide - 1].button;
-        animateSlide(slideImage);
-        handleClass(slide - 1);
-        slideIdx(slide - 1);
+        // if (slide - 1 == 1) {
+        //     slideBtn.current.classList.add('slider2');
+        // } else {
+        //     slideBtn.current.classList.remove('slider2');
+        //     slideBtn.current.innerHTML = images[slide - 1].button;
+        // }
+        switch (slide - 1) {
+            case 0:
+                if (!slideFeat.current.classList.contains('slide-1')) {
+                    slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+                };
+                slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+                slideBtn.current.href = '/register';
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slide - 1].button;
+                animateSlide(slideImage);
+                handleClass(slide - 1);
+                slideIdx(slide - 1);
+                break;
+            case 1:
+                if (!slideFeat.current.classList.contains('slide-2')) {
+                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-5');
+                };
+                slideFeat.current.classList.remove('slide-1', 'slide-3');
+                slideBtn.current.style.display = 'none';
+                animateSlide(slideImage);
+                handleClass(slide - 1);
+                slideIdx(slide - 1);
+                break;
+            case 2:
+                if (!slideFeat.current.classList.contains('slide-3')) {
+                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-5');
+                };
+                slideFeat.current.classList.remove('slide-1', 'slide-2');
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slide - 1].button;
+                animateSlide(slideImage);
+                handleClass(slide - 1);
+                slideIdx(slide - 1);
+                break;
+            default:
+                slideFeat.current.classList.remove('container', 'px-5');
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slide - 1].button;
+                animateSlide(slideImage);
+                handleClass(slide - 1);
+                slideIdx(slide - 1);
+                break;
+        }
+        // if (slide - 1 === 1) {
+        //     slideBtn.current.style.display = 'none';
+        // } else {
+        //     slideBtn.current.style.display = 'inline-block';
+        //     slideBtn.current.innerHTML = images[slide - 1].button;
+        // }
+        // animateSlide(slideImage);
+        // handleClass(slide - 1);
+        // slideIdx(slide - 1);
     }
-        
+
     const animateSlide = () => {
         slideImage.current.classList.add("fadeIn")
         setTimeout(() => {
@@ -37,32 +99,118 @@ const useSlider = (slideImage, slideTitle, slideText, slideClass, slideBtn, slid
     }
 
     const handleClass = idx => {
+        if (idx === 0) {
+            slideClass.current.childNodes.forEach(item => item.classList.remove('shown'));
+            slideClass.current.childNodes[idx].classList.add('shown');
+        }
+        // slideFeat.current.classList.remove('slider1');
         slideClass.current.childNodes.forEach(item => item.classList.remove('shown'));
         slideClass.current.childNodes[idx].classList.add('shown');
     }
-    
+
     const goToPreviousSlide = () => {
+        // switch (slideCounter) {
+        //     case 0:
+        //         if (!slideFeat.current.classList.contains('slide-ani-1')) {
+        //             slideFeat.current.classList.add('slide-ani-1');
+        //         };
+        //         handleSlide(images.length);
+        //         slideCounter = images.length;
+        //         break;
+        //     case 1:
+        //         if (!slideFeat.current.classList.contains('slide-ani-2')) {
+        //             slideFeat.current.classList.add('slide-ani-2');
+        //         };
+        //         handleSlide(slideCounter);
+        //         slideCounter--;
+        //         break;
+        //     case 2:
+        //         if (!slideFeat.current.classList.contains('slide-ani-3')) {
+        //             slideFeat.current.classList.add('slide-ani-3');
+        //         };
+        //         handleSlide(slideCounter);
+        //         slideCounter--;
+        //         break;
+        //     default:
+        //         handleSlide(slideCounter);
+        //         slideCounter--;
+        //         break;
+        // }
         if (slideCounter === 0) {
-            handleSlide(images.length);
+            startSlider();
             slideCounter = images.length;
         }
         handleSlide(slideCounter);
         slideCounter--;
     }
-    
+
     const goToSlide = (slide) => {
         slideImage.current.style.backgroundImage = `linear-gradient(
                                                     to right,
                                                     rgba(34, 34, 34, 0.4),
                                                     rgba(68, 68, 68, 0.4)
                                                     ),url(${images[slide].src})`;
-        slideTitle.current.innerHTML = images[slide].title;
+        // slideTitle.current.innerHTML = images[slide].title;
         slideText.current.innerHTML = images[slide].text;
-        slideBtn.current.innerHTML = images[slide].button;
-        slideCounter = slide;
-        animateSlide(slideImage);
-        handleClass(slide);
-        slideIdx(slide);
+        switch (slide) {
+            case 0:
+                if (!slideFeat.current.classList.contains('slide-1')) {
+                    slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+                };
+                slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+                slideBtn.current.href = '/register';
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slide].button;
+                slideCounter = slide;
+                animateSlide(slideImage);
+                handleClass(slide);
+                slideIdx(slide);
+                break;
+            case 1:
+                if (!slideFeat.current.classList.contains('slide-2')) {
+                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-5');
+                };
+                slideFeat.current.classList.remove('slide-1', 'slide-3');
+                slideBtn.current.style.display = 'none';
+                slideCounter = slide;
+                animateSlide(slideImage);
+                handleClass(slide);
+                slideIdx(slide);
+                break;
+            case 2:
+                if (!slideFeat.current.classList.contains('slide-3')) {
+                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-5');
+                };
+                slideFeat.current.classList.remove('slide-1', 'slide-2');
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slide].button;
+                slideCounter = slide;
+                animateSlide(slideImage);
+                handleClass(slide);
+                slideIdx(slide);
+                break;
+            default:
+                slideFeat.current.classList.remove('container', 'px-5');
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slide].button;
+                slideCounter = slide;
+                animateSlide(slideImage);
+                handleClass(slide);
+                slideIdx(slide);
+                break;
+        }
+        // if (slide === 1) {
+        //     slideFeat.current.classList.add('slider2');
+        //     slideBtn.current.style.display = 'none';
+        // } else {
+        //     slideFeat.current.classList.remove('slider2');
+        //     slideBtn.current.style.display = 'inline-block';
+        //     slideBtn.current.innerHTML = images[slide].button;
+        // }
+        // slideCounter = slide;
+        // animateSlide(slideImage);
+        // handleClass(slide);
+        // slideIdx(slide);
     }
 
     const goToNextSlide = () => {
@@ -71,7 +219,7 @@ const useSlider = (slideImage, slideTitle, slideText, slideClass, slideBtn, slid
             slideCounter = -1;
             animateSlide(slideImage);
         }
-        
+
         slideImage.current.style.backgroundImage = `linear-gradient(
                                                     to right,
                                                     rgba(34, 34, 34, 0.4),
@@ -79,14 +227,67 @@ const useSlider = (slideImage, slideTitle, slideText, slideClass, slideBtn, slid
                                                     ),url(${images[slideCounter + 1].src})`;
         slideTitle.current.innerHTML = images[slideCounter + 1].title;
         slideText.current.innerHTML = images[slideCounter + 1].text;
-        slideBtn.current.innerHTML = images[slideCounter + 1].button;
-        handleClass(slideCounter + 1);
-        slideIdx(slideCounter + 1);
-        slideCounter++;
-        animateSlide(slideImage);
+        switch (slideCounter + 1) {
+            case 0:
+                if (!slideFeat.current.classList.contains('slide-1')) {
+                    slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+                };
+                slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+                slideBtn.current.href = '/register';
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slideCounter + 1].button;
+                handleClass(slideCounter + 1);
+                slideIdx(slideCounter + 1);
+                slideCounter++;
+                animateSlide(slideImage);
+                break;
+            case 1:
+                if (!slideFeat.current.classList.contains('slide-2')) {
+                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-5');
+                };
+                slideFeat.current.classList.remove('slide-1', 'slide-3');
+                slideBtn.current.style.display = 'none';
+                handleClass(slideCounter + 1);
+                slideIdx(slideCounter + 1);
+                slideCounter++;
+                animateSlide(slideImage);
+                break;
+            case 2:
+                if (!slideFeat.current.classList.contains('slide-3')) {
+                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-5');
+                };
+                slideFeat.current.classList.remove('slide-1', 'slide-2');
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slideCounter + 1].button;
+                handleClass(slideCounter + 1);
+                slideIdx(slideCounter + 1);
+                slideCounter++;
+                animateSlide(slideImage);
+                break;
+            default:
+                slideFeat.current.classList.remove('container', 'px-5');
+                slideBtn.current.style.display = 'inline-block';
+                slideBtn.current.innerHTML = images[slideCounter + 1].button;
+                handleClass(slideCounter + 1);
+                slideIdx(slideCounter + 1);
+                slideCounter++;
+                animateSlide(slideImage);
+                break;
+        }
+        // if (slideCounter + 1 === 1) {
+        //     slideBtn.current.style.display = 'none';
+        // } else {
+        //     slideBtn.current.style.display = 'inline-block';
+        //     slideBtn.current.innerHTML = images[slideCounter + 1].button;
+        // }
+        // handleClass(slideCounter + 1);
+        // slideIdx(slideCounter + 1);
+        // slideCounter++;
+        // animateSlide(slideImage);
     }
-    
-    return {goToPreviousSlide, goToNextSlide, goToSlide};
+
+    return {goToPreviousSlide, goToNextSlide, goToSlide, slideCounter};
 }
-  
+
+/* ********************************************************* EXPORT ********************************************************* */
 export default useSlider;

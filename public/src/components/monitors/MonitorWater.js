@@ -84,7 +84,7 @@ class MonitorWater extends Component {
         let options = null;
         if(this.props.devices){
             const soilMoistureDevices = this.props.devices.filter(device => device.hub_id === this.props.device.hub_id && device.type_id === 1)
-             options = soilMoistureDevices.map(device => {
+            options = soilMoistureDevices.map(device => {
                 return (
                     <option value={device.id} key={device.id}>{device.name}</option>
                 )

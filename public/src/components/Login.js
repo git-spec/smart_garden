@@ -162,7 +162,7 @@ const Login = props => {
             </PopUpModal>
             <Container className="px-4 px-sm-5 px-md-0 pt-5 pb-0 mt-5">
                 <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="px-0 px-md-auto">
-                    <h1 className="text-trans mb-4 px-0">Login</h1>
+                    <h1 className="text-trans mb-4 px-0 mt-2 mt-sm-0">Login</h1>
                     <h5 className="text-trans mb-4 px-0">
                         Sign in to access your device management.
                     </h5>
@@ -228,7 +228,7 @@ const Login = props => {
                     </Col>
                 </Form>
                 <Col xs="12" className="text-center text-trans">
-                    <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={onLoginBtnClick} disabled={!isEnabled}>
+                    <Button className="badge-pill btn-outline-light bg-transparent mt-4 mb-3" onClick={onLoginBtnClick} disabled={!isEnabled}>
                         Login
                     </Button>
                 </Col>
