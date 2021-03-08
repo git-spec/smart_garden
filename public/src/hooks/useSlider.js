@@ -150,7 +150,7 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                                                     rgba(34, 34, 34, 0.4),
                                                     rgba(68, 68, 68, 0.4)
                                                     ),url(${images[slide].src})`;
-        // slideTitle.current.innerHTML = images[slide].title;
+        slideTitle.current.innerHTML = images[slide].title;
         slideText.current.innerHTML = images[slide].text;
         switch (slide) {
             case 0:
