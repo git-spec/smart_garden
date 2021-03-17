@@ -567,8 +567,8 @@ a {
     font-size: 18px;
   }
   // bigger container
-  .container-fluid {
-    min-width: 1800px;
+  .container {
+    max-width: 1600px !important;
   }
 }
 

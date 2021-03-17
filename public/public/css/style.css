@@ -421,8 +421,8 @@ a:hover, a:active {
   html {
     font-size: 18px;
   }
-  .container-fluid {
-    min-width: 1800px;
+  .container {
+    max-width: 1600px !important;
   }
 }
 
@@ -1687,15 +1687,11 @@ input[type='range']::after {
   border-radius: 50%;
   color: #fdd79d;
   padding: .3rem;
-  opacity: 0;
   margin-right: 2rem;
   text-shadow: 4px 2px 6px #241b12;
 }
 
 .slider-feature.slide-2 > .feature-text > div > p {
-  -webkit-transform: scaleY(0);
-          transform: scaleY(0);
-  overflow: hidden;
   margin-bottom: 0;
 }
 
@@ -1723,6 +1719,7 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(1) img {
+  opacity: 0;
   -webkit-animation: fadeIn .5s ease-in 1s;
           animation: fadeIn .5s ease-in 1s;
   -webkit-animation-fill-mode: forwards;
@@ -1730,6 +1727,7 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(2) img {
+  opacity: 0;
   -webkit-animation: fadeIn .5s ease-in 3s;
           animation: fadeIn .5s ease-in 3s;
   -webkit-animation-fill-mode: forwards;
@@ -1737,6 +1735,7 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(3) img {
+  opacity: 0;
   -webkit-animation: fadeIn .5s ease-in 5.5s;
           animation: fadeIn .5s ease-in 5.5s;
   -webkit-animation-fill-mode: forwards;
@@ -1744,6 +1743,7 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(4) img {
+  opacity: 0;
   -webkit-animation: fadeIn .3s ease-in 8s;
           animation: fadeIn .3s ease-in 8s;
   -webkit-animation-fill-mode: forwards;
@@ -1751,6 +1751,9 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(1) p {
+  -webkit-transform: scaleY(0);
+          transform: scaleY(0);
+  overflow: hidden;
   -webkit-animation: slide-height .3s ease-in 2s;
           animation: slide-height .3s ease-in 2s;
   -webkit-animation-fill-mode: forwards;
@@ -1758,6 +1761,9 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(2) p {
+  -webkit-transform: scaleY(0);
+          transform: scaleY(0);
+  overflow: hidden;
   -webkit-animation: slide-height .3s ease-in 4s;
           animation: slide-height .3s ease-in 4s;
   -webkit-animation-fill-mode: forwards;
@@ -1765,6 +1771,9 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(3) p {
+  -webkit-transform: scaleY(0);
+          transform: scaleY(0);
+  overflow: hidden;
   -webkit-animation: slide-height .3s ease-in 6s;
           animation: slide-height .3s ease-in 6s;
   -webkit-animation-fill-mode: forwards;
@@ -1772,6 +1781,9 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-2 > .feature-text > div:nth-of-type(4) p {
+  -webkit-transform: scaleY(0);
+          transform: scaleY(0);
+  overflow: hidden;
   -webkit-animation: slide-height .3s ease-in 8.5s;
           animation: slide-height .3s ease-in 8.5s;
   -webkit-animation-fill-mode: forwards;
@@ -1816,7 +1828,6 @@ input[type='range']::after {
 
 .slider-feature.slide-3 > .feature-text > h1, .slider-feature.slide-3 > .feature-text p {
   margin-top: 1rem;
-  position: relative;
 }
 
 .slider-feature.slide-3 > .feature-btn-wrapper {
@@ -1842,11 +1853,13 @@ input[type='range']::after {
 }
 
 .slider-feature.slide-ani-3 > .feature-text > h1 {
+  position: relative;
   -webkit-animation: slide-left 1s ease-out;
           animation: slide-left 1s ease-out;
 }
 
 .slider-feature.slide-ani-3 > .feature-text > p {
+  position: relative;
   -webkit-animation: slide-left-3-p 2s ease-out;
           animation: slide-left-3-p 2s ease-out;
 }

@@ -19,9 +19,6 @@ import {
     Breadcrumb,
     BreadcrumbItem
 } from 'reactstrap';
-// datepicker
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 // components
 import PopUpModal from './PopUpModal';
 import Select from './Select';
@@ -46,7 +43,6 @@ const UserProfile = props => {
         showModal: false,
         modalContent: null,
         badgeContent: null,
-        startDate: new Date(),
         sex: [
             {
                 id: 0,
@@ -69,26 +65,6 @@ const UserProfile = props => {
         ]
     };
     const [state, setState] = useState(initialState);
-    // datepicker
-    // const years = range(1990, new Date().getFullYear() + 1, 1);
-    const year = new Date().getFullYear();
-    const years = (i) => {
-        return i <= year ? years(i + 1).concat(i) : [];
-    };
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ];
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
@@ -198,8 +174,7 @@ const UserProfile = props => {
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
-        // <Container fluid={true} className="px-4 px-sm-5 pt-5 mt-5">
-        <Container className="px-4 px-sm-5 pt-5 mt-5">
+        <Container fluid={true} className="px-4 px-sm-5 pt-5 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
                 className="bg-danger" 
@@ -248,79 +223,23 @@ const UserProfile = props => {
 {/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-5">
                 <div className="col-lg-12 col-md-12">{state.badgeContent}</div>
-                <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-4">
-                        <h4>Personal</h4>
-                        <Col className="p-0 d-flex justify-content-between">
-                            <FormGroup>
-                                <Label className="w-100 h5 text-trans mb-2">Sex:</Label>
-                                    <Select
-                                        title="undefined"
-                                        list={state.sex}
-                                        resetThenSet={resetThenSet}
-                                        className="p-0"
-                                    />
-                            </FormGroup>
-                        <FormGroup>
-                                <Label className="w-100 h5 text-trans mb-2">Birthday:</Label>
-                                    <DatePicker
-                                    renderCustomHeader={({
-                                        date,
-                                        changeYear,
-                                        changeMonth,
-                                        decreaseMonth,
-                                        increaseMonth,
-                                        prevMonthButtonDisabled,
-                                        nextMonthButtonDisabled
-                                    }) => (
-                                        <div
-                                        style={{
-                                            margin: 10,
-                                            display: "flex",
-                                            justifyContent: "center"
-                                        }}
-                                        >
-                                        <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                                            {"<"}
-                                        </button>
-                                        <select
-                                            value={date.getFullYear()}
-                                            onChange={({ target: { value } }) => changeYear(value)}
-                                        >
-                                            {years(1900).map(option => (
-                                            <option key={option} value={option}>
-                                                {option}
-                                            </option>
-                                            ))}
-                                        </select>
-                                
-                                        <select
-                                            value={months[date.getMonth()]}
-                                            onChange={({ target: { value } }) =>
-                                            changeMonth(months.indexOf(value))
-                                            }
-                                        >
-                                            {months.map(option => (
-                                            <option key={option} value={option}>
-                                                {option}
-                                            </option>
-                                            ))}
-                                        </select>
-                                
-                                        <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                                            {">"}
-                                        </button>
-                                        </div>
-                                    )}
-                                    selected={state.startDate}
-                                    onChange={date => setState({...state, startDate: date})}
-                                    />
-                            </FormGroup>
-                        </Col>
+                <Row className="m-0">
+                    <Col xs="12" sm={{size: 8, offset: 2}} className="d-flex justify-items-end p-0">
+                            <h4 className="d-inline">Name and Age</h4>
+                            <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                Edit
+                            </Button>
+                    </Col>
+                    <Select
+                        title="Sex"
+                        list={state.sex}
+                        resetThenSet={resetThenSet}
+                        className="p-0"
+                    />
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-md-4 mb-3 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">First Name:</Label>
-                            <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
+                                <Col xs="10">
                                     <Input
                                         className="badge-pill text-trans bg-transparent"
                                         type="text"
@@ -330,17 +249,13 @@ const UserProfile = props => {
                                         value={state.firstName}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
-                                    </Button>
-                                </Col>
-                            </Row>
                         </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Last Name:</Label>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col xs="10">
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
@@ -348,6 +263,14 @@ const UserProfile = props => {
                                         required
                                         onChange={e => setState({...state, lastName: e.target.value})}
                                         value={state.lastName}
+                                    />
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.userName}
+                                        required
+                                        onChange={e => setState({...state, userName: e.target.value})}
+                                        value={state.userName}
                                     />
                                 </Col>
                                 <Col className="d-flex justify-content-end">
@@ -357,10 +280,12 @@ const UserProfile = props => {
                                 </Col>
                             </Row>
                         </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Email:</Label>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Email:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col xs="10">
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
@@ -378,16 +303,60 @@ const UserProfile = props => {
                             </Row>
                         </FormGroup>
                     </Col>
-                    <Col className="p-0 pl-md-4">
-                        <h4>Addresses</h4>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Street:</Label>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Password:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.password}
+                                        required
+                                        onChange={e => setState({...state, password: e.target.value})}
+                                        value={state.password}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Birthday:</Label>
+                            <Row>
+                                <Col xs="10">
+                                    <Input
+                                        className="badge-pill bg-transparent"
+                                        type="text"
+                                        placeholder={state.Birthday}
+                                        required
+                                        onChange={e => setState({...state, birthday: e.target.value})}
+                                        value={state.birthday}
+                                    />
+                                </Col>
+                                <Col className="d-flex justify-content-end">
+                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
+                                        Edit
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
+                        <FormGroup className="mb-4 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">City:</Label>
+                            <Row>
+                                <Col xs="10">
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.city}
+                                        required
                                         onChange={e => setState({...state, city: e.target.value})}
                                         value={state.city}
                                     />
@@ -399,52 +368,17 @@ const UserProfile = props => {
                                 </Col>
                             </Row>
                         </FormGroup>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">City:</Label>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Zip Code:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={state.city}
-                                        onChange={e => setState({...state, city: e.target.value})}
-                                        value={state.city}
-                                    />
-                                </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Country:</Label>
-                            <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={state.country}
-                                        onChange={e => setState({...state, country: e.target.value})}
-                                        value={state.country}
-                                    />
-                                </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Zip Code:</Label>
-                            <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col xs="10">
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.zipCode}
+                                        required
                                         onChange={e => setState({...state, zipCode: e.target.value})}
                                         value={state.zipCode}
                                     />
@@ -457,42 +391,18 @@ const UserProfile = props => {
                             </Row>
                         </FormGroup>
                     </Col>
-                    {/* <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0"> */}
-                </Row>
-                <h4>Password</h4>
-                <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-4">
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0">
                         <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Password:</Label>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Country:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col xs="10">
                                     <Input
                                         className="badge-pill bg-transparent"
                                         type="text"
-                                        placeholder={state.password}
+                                        placeholder={state.country}
                                         required
-                                        onChange={e => setState({...state, password: e.target.value})}
-                                        value={state.password}
-                                    />
-                                </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Old Password:</Label>
-                            <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={state.password}
-                                        required
-                                        onChange={e => setState({...state, password: e.target.value})}
-                                        value={state.password}
+                                        onChange={e => setState({...state, country: e.target.value})}
+                                        value={state.country}
                                     />
                                 </Col>
                                 <Col className="d-flex justify-content-end">
@@ -503,49 +413,38 @@ const UserProfile = props => {
                             </Row>
                         </FormGroup>
                     </Col>
-                    <Col className="p-0 pl-md-4">
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
                         <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">New Password:</Label>
-                            <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={state.password}
-                                        required
-                                        onChange={e => setState({...state, password: e.target.value})}
-                                        value={state.password}
-                                    />
-                                </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
-                                    </Button>
-                                </Col>
-                            </Row>
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">New Password:</Label>
+                            <Input
+                                className="badge-pill bg-transparent"
+                                type="password"
+                                placeholder="Choose a new password"
+                                required
+                                onChange={e => setState({...state, password: e.target.value})}
+                                value={state.password}
+                            />
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Repeat Password:</Label>
-                            <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className="badge-pill bg-transparent"
-                                        type="text"
-                                        placeholder={state.password}
-                                        required
-                                        onChange={e => setState({...state, password: e.target.value})}
-                                        value={state.password}
-                                    />
-                                </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
-                                    </Button>
-                                </Col>
-                            </Row>
+                    </Col>
+                    <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}}>
+                        <FormGroup className="mb-3 text-left">
+                            <Label className="w-100 h5 text-trans mb-2 ml-2">Repeat New Password:</Label>
+                            <Input
+                                className="badge-pill bg-transparent"
+                                type="password"
+                                placeholder="Repeat your new password"
+                                required
+                                onChange={e => setState({...state, repassword: e.target.value})}
+                                value={state.repassword}
+                            />
                         </FormGroup>
                     </Col>
                 </Row>
+                <Col className=" text-center">
+                    <Button className="badge-pill btn-outline-light bg-transparent my-4" onClick={onEditBtnClick}>
+                        Edit
+                    </Button>
+                </Col>
             </Form>
         </Container>
     );
