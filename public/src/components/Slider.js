@@ -89,9 +89,9 @@ console.log(props);
 /* ********************************************************* MAP STATE TO PROPS ********************************************************* */
 const mapStateToProps = state => {
     return {
-        // slideAni1: state.slideAni1,
-        // slideAni2: state.slideAni2,
-        // slideAni3: state.slideAni3
+        slideAni1: state.slideAni1,
+        slideAni2: state.slideAni2,
+        slideAni3: state.slideAni3
     };
 };
 

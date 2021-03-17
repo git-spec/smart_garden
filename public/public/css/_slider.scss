@@ -107,7 +107,6 @@
           border-radius: 50%;
           color: $color-3;
           padding: .3rem;
-          opacity: 0;
           margin-right: 2rem;
           // transform: scaley(.65);
           // transform: scalex(.3);
@@ -121,8 +120,6 @@
           // }
         }
         & > p {
-          transform: scaleY(0);
-          overflow: hidden;
           margin-bottom: 0;
           // right: -120rem;
         }
@@ -145,34 +142,46 @@
     }
     & > .feature-text > div {
       &:nth-of-type(1) img {
+        opacity: 0;
         animation: fadeIn .5s ease-in 1s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(2) img {
+        opacity: 0;
         animation: fadeIn .5s ease-in 3s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(3) img {
+        opacity: 0;
         animation: fadeIn .5s ease-in 5.5s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(4) img {
+        opacity: 0;
         animation: fadeIn .3s ease-in 8s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(1) p  {
+        transform: scaleY(0);
+        overflow: hidden;
         animation: slide-height .3s ease-in 2s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(2) p  {
+        transform: scaleY(0);
+        overflow: hidden;
         animation: slide-height .3s ease-in 4s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(3) p  {
+        transform: scaleY(0);
+        overflow: hidden;
         animation: slide-height .3s ease-in 6s;
         animation-fill-mode: forwards;
       }
       &:nth-of-type(4) p  {
+        transform: scaleY(0);
+        overflow: hidden;
         animation: slide-height .3s ease-in 8.5s;
         animation-fill-mode: forwards;
       }
@@ -206,7 +215,6 @@
       padding-top: 2rem;
       & > h1, p {
         margin-top: 1rem;
-        position: relative;
       }
     }
     & > .feature-btn-wrapper {
@@ -227,9 +235,11 @@
     }
     & > .feature-text {
       & > h1 {
+        position: relative;
         animation: slide-left 1s ease-out;
       }
       & > p {
+        position: relative;
         animation: slide-left-3-p 2s ease-out;
       }
     }
