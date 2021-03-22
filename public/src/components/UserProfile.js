@@ -199,7 +199,7 @@ const UserProfile = props => {
 /* ********************************************************* RETURN ********************************************************* */
     return (
         // <Container fluid={true} className="px-4 px-sm-5 pt-5 mt-5">
-        <Container className="px-4 px-sm-5 pt-5 mt-5">
+        <Container className="user-profile px-4 px-sm-5 pt-5 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
                 className="bg-danger" 
@@ -246,10 +246,10 @@ const UserProfile = props => {
                 />
             </Col>
 {/* ********************************************************* FORM ********************************************************* */}
-            <Form className="pb-md-0 pb-5">
+            <Form className="pb-md-0 pb-sm-5">
                 <div className="col-lg-12 col-md-12">{state.badgeContent}</div>
                 <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-4">
+                    <Col className="p-0 pr-md-5">
                         <h4>Personal</h4>
                         <Col className="p-0 d-flex justify-content-between">
                             <FormGroup>
@@ -261,7 +261,7 @@ const UserProfile = props => {
                                         className="p-0"
                                     />
                             </FormGroup>
-                        <FormGroup>
+                            <FormGroup>
                                 <Label className="w-100 h5 text-trans mb-2">Birthday:</Label>
                                     <DatePicker
                                     renderCustomHeader={({
@@ -322,7 +322,7 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill text-trans bg-transparent"
+                                        className="profile badge-pill text-trans bg-transparent"
                                         type="text"
                                         placeholder={state.firstName}
                                         required
@@ -330,9 +330,12 @@ const UserProfile = props => {
                                         value={state.firstName}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -342,7 +345,7 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.lastName}
                                         required
@@ -350,9 +353,12 @@ const UserProfile = props => {
                                         value={state.lastName}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -362,7 +368,7 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.email}
                                         required
@@ -370,31 +376,37 @@ const UserProfile = props => {
                                         value={state.email}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
-                    <Col className="p-0 pl-md-4">
-                        <h4>Addresses</h4>
+                    <Col className="p-0 pl-md-5">
+                        <h4>Address</h4>
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Street:</Label>
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.city}
                                         onChange={e => setState({...state, city: e.target.value})}
                                         value={state.city}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -404,16 +416,19 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.city}
                                         onChange={e => setState({...state, city: e.target.value})}
                                         value={state.city}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -423,16 +438,19 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.country}
                                         onChange={e => setState({...state, country: e.target.value})}
                                         value={state.country}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -442,16 +460,19 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.zipCode}
                                         onChange={e => setState({...state, zipCode: e.target.value})}
                                         value={state.zipCode}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -461,13 +482,13 @@ const UserProfile = props => {
                 </Row>
                 <h4>Password</h4>
                 <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-4">
+                    <Col className="p-0 pr-md-5">
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Password:</Label>
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.password}
                                         required
@@ -475,9 +496,12 @@ const UserProfile = props => {
                                         value={state.password}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -487,7 +511,7 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.password}
                                         required
@@ -495,21 +519,24 @@ const UserProfile = props => {
                                         value={state.password}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
-                    <Col className="p-0 pl-md-4">
+                    <Col className="p-0 pl-md-5">
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2">New Password:</Label>
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.password}
                                         required
@@ -517,9 +544,12 @@ const UserProfile = props => {
                                         value={state.password}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>
@@ -529,7 +559,7 @@ const UserProfile = props => {
                             <Row>
                                 <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="badge-pill bg-transparent"
+                                        className="profile badge-pill bg-transparent"
                                         type="text"
                                         placeholder={state.password}
                                         required
@@ -537,9 +567,12 @@ const UserProfile = props => {
                                         value={state.password}
                                     />
                                 </Col>
-                                <Col className="d-flex justify-content-end">
-                                    <Button className="badge-pill btn-outline-light bg-transparent" onClick={onEditBtnClick}>
-                                        Edit
+                                <Col className="d-flex justify-content-end align-self-center">
+                                    <Button
+                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
+                                        // onClick={e => x(e, y)}
+                                    >
+                                        <span></span><span></span>
                                     </Button>
                                 </Col>
                             </Row>

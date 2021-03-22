@@ -507,6 +507,13 @@ a {
 //   }
 // }
 
+// user profile
+.user-profile {
+  & h4 {
+    font-weight: bold;
+  }
+}
+
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 // Extra small devices (portrait phones, less than 576px)
 @media (max-width: 576px) {
@@ -577,6 +584,7 @@ a {
 @import 'modal';
 @import 'nav';
 @import 'buttons';
+@import 'inputs';
 @import 'range';
 @import 'accordion';
 @import 'table';

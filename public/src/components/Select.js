@@ -80,11 +80,11 @@ class Select extends Component {
       <div className="select-wrapper">
         <button
           type="button"
-          className="select-header btn"
+          className="select-header btn p-0"
           onClick={this.toggleList}
         >
-          <div className="select-header-title d-flex align-items-center">
-            {headerTitle}
+          <div className="select-header-title d-flex align-items-center justify-content-between">
+            <div>{headerTitle}</div>
             <div className={"d-inline ml-2 " + (isListOpen ? "up" : "down")}>
               <span className="color-3"></span><span className="color-3"></span>
             </div>

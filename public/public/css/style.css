@@ -382,6 +382,10 @@ a:hover, a:active {
   color: #00a8e6 !important;
 }
 
+.user-profile h4 {
+  font-weight: bold;
+}
+
 /* *********************************************************** MEDIA QUERY ********************************************************* */
 @media (max-width: 576px) {
   html {
@@ -1061,6 +1065,10 @@ button:focus.down {
 .color-5 ~ div .btn.btn-outline-light.down:active,
 .color-5 ~ div button.btn-outline-light.down:active {
   background-color: #1d2c22 !important;
+}
+
+input.profile {
+  border-color: rgba(255, 255, 255, 0) !important;
 }
 
 #rangeIput {
