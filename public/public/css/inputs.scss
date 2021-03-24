@@ -1,5 +1,44 @@
 input {
-    &.profile {
-        border-color: rgba(255, 255, 255, 0) !important;
+  @include changeInput;
+  &.form-control {
+    height: auto;
+    font-weight: bold;
+    font-size: $font-size-3;
+    padding-top: .2rem !important;
+    padding-bottom: .2rem !important;
+    &::placeholder {
+      color: $color-5-opac !important;
     }
+    &:focus {
+      @include killShadow;
+      border-color: $color-5 !important;
+    }
+  }
+  // user profile
+  &.profile {
+      border-color: rgba(255, 255, 255, 0) !important;
+  }
+  &#upload {
+    // visibility: hidden;
+    overflow: hidden;
+    width: 0;
+  }
+}
+// textarea
+textarea {
+  @include changeBorder;
+  box-sizing: border-box;
+  width: 100%;
+  font-weight: bold;
+  font-size: $font-size-4;
+  border-radius: $font-size-5;
+  color: $color-5 !important;
+  &::placeholder {
+    color: $color-5-opac !important;
+  }
+  &:focus {
+    @include killShadow;
+    outline:none;
+    border-color: $color-5 !important;
+  }
 }

@@ -196,47 +196,6 @@ body {
   // app container
   #root {
     font-family: Ubuntu;
-    // background-repeat: no-repeat;
-    // background-attachment: fixed;
-    // background-size: cover;
-    // background-position: top right;
-    // background-position: 20% 40%;
-    // background image
-    // & > div:first-child {
-      // width: 100%;
-      // height: 100%;
-      // position: fixed;
-      // background-color: $color-1;
-      // background-image: url(../imgs/800px_COLOURBOX10774649.jpg);
-      // background-repeat: no-repeat;
-      // background-attachment: fixed;
-      // background-size: cover;
-      // background-position: top right;
-      // background-position: 20% 40%;
-      // background layer
-      // & + div {
-      //   width: 100%;
-      //   height: 100%;
-      //   background-color: $color-1;
-      //   position: fixed;
-      //   opacity: 0;
-      //   @include transitionOpacity();
-      // layer with full color
-      // & .color100 {
-      // opacity: 1;
-      // @include transitionOpacity();
-      // }
-      // layer with 70% color
-      // & .color70 {
-      // opacity: .9;
-      // @include transitionOpacity();
-      // }
-      // fade in container
-      // & .color100 ~ .container,
-      // & .color70 ~ .container {
-      // opacity: 1;
-      // @include transitionOpacity();
-      // }
     // fader
     & > div {
       height: 100vh;
@@ -403,14 +362,6 @@ body {
         padding-top: 8rem;
       }
     }
-    // // change color green
-    // & .color-5 {
-    //   // @include changeBGColor($color-5);
-    //   & ~ div {
-    //     @include changeColor($color-5);
-    //     @include changeBGColor($color-5);
-    //   }
-    // }
   }
   // headlines
   & h1,
@@ -423,57 +374,11 @@ body {
     color: inherit;
     padding-left: .02rem;
   }
-  // inputs
-  & input {
-    @include changeInput;
-    &.form-control {
-      height: auto;
-      font-weight: bold;
-      font-size: $font-size-3;
-      padding-top: .2rem !important;
-      padding-bottom: .2rem !important;
-      &::placeholder {
-        color: $color-5-opac !important;
-      }
-      &:focus {
-        @include killShadow;
-        border-color: $color-5 !important;
-      }
-    }
-    &#upload {
-      // visibility: hidden;
-      overflow: hidden;
-      width: 0;
-    }
-  }
-  // textarea
-  & textarea {
-    @include changeBorder;
-    box-sizing: border-box;
-    width: 100%;
-    font-weight: bold;
-    font-size: $font-size-4;
-    border-radius: $font-size-5;
-    color: $color-5 !important;
-    &::placeholder {
-      color: $color-5-opac !important;
-    }
-    &:focus {
-      @include killShadow;
-      outline:none;
-      border-color: $color-5 !important;
-    }
-  }
   // paragraph text
   & p {
     color: inherit;
     font-size: $font-size-3;
   }
-  // // opac text
-  // & .text-transp {
-  //   color: $text-transp !important;
-  // }
-
   // errors
   & .error {
     font-size: $font-size-4;
@@ -496,21 +401,20 @@ a {
     color: $color-6 !important;
   }
 }
-// color-5
-// .color-5 ~ div {
-//   background-color: $color-5 !important;
-//   & a {
-//     &:hover,
-//     &:active {
-//       color: $color-8 !important;
-//     }
-//   }
-// }
 
 // user profile
 .user-profile {
   & h4 {
     font-weight: bold;
+  }
+  & .hidden {
+    display: none;
+  }
+  & .edit {
+    border: none !important;
+    & img {
+      width: 1.2rem;
+    }
   }
 }
 
@@ -583,8 +487,8 @@ a {
 @import 'breadcrumb';
 @import 'modal';
 @import 'nav';
-@import 'buttons';
 @import 'inputs';
+@import 'buttons';
 @import 'range';
 @import 'accordion';
 @import 'table';

@@ -277,84 +277,6 @@ body h5 {
   padding-left: .02rem;
 }
 
-body input {
-  border-color: #fdd79d !important;
-  color: #9ac992 !important;
-}
-
-body input.form-control {
-  height: auto;
-  font-weight: bold;
-  font-size: 1.2rem;
-  padding-top: .2rem !important;
-  padding-bottom: .2rem !important;
-}
-
-body input.form-control::-webkit-input-placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body input.form-control:-ms-input-placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body input.form-control::-ms-input-placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body input.form-control::placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body input.form-control:focus {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-  text-shadow: none !important;
-  border-color: #9ac992 !important;
-}
-
-body input#upload {
-  overflow: hidden;
-  width: 0;
-}
-
-body textarea {
-  border-width: 0.1rem;
-  border-style: solid;
-  border-color: #fdd79d;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-  width: 100%;
-  font-weight: bold;
-  font-size: 1rem;
-  border-radius: 0.8rem;
-  color: #9ac992 !important;
-}
-
-body textarea::-webkit-input-placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body textarea:-ms-input-placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body textarea::-ms-input-placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body textarea::placeholder {
-  color: rgba(154, 201, 146, 0.6) !important;
-}
-
-body textarea:focus {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-  text-shadow: none !important;
-  outline: none;
-  border-color: #9ac992 !important;
-}
-
 body p {
   color: inherit;
   font-size: 1.2rem;
@@ -384,6 +306,18 @@ a:hover, a:active {
 
 .user-profile h4 {
   font-weight: bold;
+}
+
+.user-profile .hidden {
+  display: none;
+}
+
+.user-profile .edit {
+  border: none !important;
+}
+
+.user-profile .edit img {
+  width: 1.2rem;
 }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
@@ -764,6 +698,88 @@ body #root > div > .navbar > .container {
   }
 }
 
+input {
+  border-color: #fdd79d !important;
+  color: #9ac992 !important;
+}
+
+input.form-control {
+  height: auto;
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-top: .2rem !important;
+  padding-bottom: .2rem !important;
+}
+
+input.form-control::-webkit-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+input.form-control:-ms-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+input.form-control::-ms-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+input.form-control::placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+input.form-control:focus {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  border-color: #9ac992 !important;
+}
+
+input.profile {
+  border-color: rgba(255, 255, 255, 0) !important;
+}
+
+input#upload {
+  overflow: hidden;
+  width: 0;
+}
+
+textarea {
+  border-width: 0.1rem;
+  border-style: solid;
+  border-color: #fdd79d;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 100%;
+  font-weight: bold;
+  font-size: 1rem;
+  border-radius: 0.8rem;
+  color: #9ac992 !important;
+}
+
+textarea::-webkit-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+textarea:-ms-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+textarea::-ms-input-placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+textarea::placeholder {
+  color: rgba(154, 201, 146, 0.6) !important;
+}
+
+textarea:focus {
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+  text-shadow: none !important;
+  outline: none;
+  border-color: #9ac992 !important;
+}
+
 .btn,
 button {
   -webkit-box-shadow: none !important;
@@ -827,6 +843,12 @@ button.btn-secondary:not(:disabled):not(.disabled):active {
   color: #241b12 !important;
 }
 
+.btn.btn-outline-light:active.big, .btn.btn-secondary:not(:disabled):not(.disabled):active.big,
+button.btn-outline-light:active.big,
+button.btn-secondary:not(:disabled):not(.disabled):active.big {
+  border-color: #30a256;
+}
+
 .btn.btn-outline-light:active.down > span,
 .btn.btn-outline-light:active.up > span, .btn.btn-secondary:not(:disabled):not(.disabled):active.down > span,
 .btn.btn-secondary:not(:disabled):not(.disabled):active.up > span,
@@ -841,6 +863,12 @@ button.btn-secondary:not(:disabled):not(.disabled):active.up > span {
 button.btn-outline-light:active.plus,
 button.btn-secondary:not(:disabled):not(.disabled):active.plus {
   background-color: #007aa7 !important;
+}
+
+.btn.btn-outline-light:active.plus.big, .btn.btn-secondary:not(:disabled):not(.disabled):active.plus.big,
+button.btn-outline-light:active.plus.big,
+button.btn-secondary:not(:disabled):not(.disabled):active.plus.big {
+  background-color: #30a256 !important;
 }
 
 .btn.btn-outline-light:active.minus, .btn.btn-secondary:not(:disabled):not(.disabled):active.minus,
@@ -876,6 +904,23 @@ button.minus > span {
   border-radius: 0.1rem;
 }
 
+.btn.plus.big, .btn.minus.big,
+button.plus.big,
+button.minus.big {
+  width: 1.8rem;
+  height: 1.8rem;
+  border-color: #30a256;
+}
+
+.btn.plus.big > span, .btn.minus.big > span,
+button.plus.big > span,
+button.minus.big > span {
+  width: 1.2rem;
+  background-color: #30a256;
+  left: 0.2rem;
+  top: 0.75rem;
+}
+
 .btn.minus,
 button.minus {
   border-color: red !important;
@@ -905,6 +950,14 @@ button.plus > span:last-child {
   top: 0.2rem;
   left: 0.45rem;
   border-radius: 0.1rem;
+}
+
+.btn.plus.big > span:last-child,
+button.plus.big > span:last-child {
+  width: 0.1rem;
+  height: 1.2rem;
+  top: 0.2rem;
+  left: 0.75rem;
 }
 
 .btn.plus:active > span,
@@ -1065,10 +1118,6 @@ button:focus.down {
 .color-5 ~ div .btn.btn-outline-light.down:active,
 .color-5 ~ div button.btn-outline-light.down:active {
   background-color: #1d2c22 !important;
-}
-
-input.profile {
-  border-color: rgba(255, 255, 255, 0) !important;
 }
 
 #rangeIput {

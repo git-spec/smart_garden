@@ -45,12 +45,20 @@ button {
     // color: none !important;
     @include changeButton;
     // change bg-color of button icons up & down
+    &.big {
+      border-color: $color-success;
+    }
     &.down > span,
     &.up > span {
       background-color: none !important;
     }
+    // bg-color of button plus & minus
     &.plus {
       background-color: $color-8 !important;
+      // bg-color of big button plus
+      &.big {
+        background-color: $color-success !important;
+      }
     }
     &.minus {
       background-color: $color-danger !important;
@@ -74,6 +82,17 @@ button {
       background-color: $color-3;
       border-radius: $border;
     }
+    &.big{
+      width: $font-size-1;
+      height: $font-size-1;
+      border-color: $color-success;
+      & > span {
+        width: $font-size-3;
+        background-color: $color-success;
+        left: (($font-size-1 - $font-size-3) / 2 - $border);
+        top: ($font-size-1 / 2 - $border - $border / 2);
+      }
+    }
   }
   // change color of buttons plus & minus
   &.minus {
@@ -90,15 +109,22 @@ button {
     }
   }
   // plus bar
-  &.plus > span:last-child {
-    width: $border;
-    height: $font-size-6;
-    position: absolute;
-    top: (($font-size-3 - $font-size-6) / 2 - $border);
-    left: ($font-size-3 / 2 - ($border / 2 + $border));
-    // background-color: $color-light;
-    border-radius: $border;
-
+  &.plus{
+    & > span:last-child {
+      width: $border;
+      height: $font-size-6;
+      position: absolute;
+      top: (($font-size-3 - $font-size-6) / 2 - $border);
+      left: ($font-size-3 / 2 - ($border / 2 + $border));
+      // background-color: $color-light;
+      border-radius: $border;
+    }
+    &.big > span:last-child {
+      width: $border;
+      height: $font-size-3;
+      top: (($font-size-1 - $font-size-3) / 2 - $border);
+      left: ($font-size-1 / 2 - ($border / 2 + $border));
+    }
   }
   // inverts button after click
   &.plus:active > span,

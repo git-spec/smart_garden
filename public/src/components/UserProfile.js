@@ -36,6 +36,7 @@ const UserProfile = props => {
     // const [width] = useWindowDimension();
 
     const initialState = {
+        disabled: true,
         userImg: '',
         firstName: '',
         lastName: '',
@@ -69,6 +70,7 @@ const UserProfile = props => {
         ]
     };
     const [state, setState] = useState(initialState);
+console.log(state.disabled);
     // datepicker
     // const years = range(1990, new Date().getFullYear() + 1, 1);
     const year = new Date().getFullYear();
@@ -225,7 +227,10 @@ const UserProfile = props => {
             </Col>
 {/* ********************************************************* HEADLINE ********************************************************* */}
             <Col className="text-center">
-                <h3 className="text-trans mb-4">Your Profile</h3>
+                <h1 className="text-trans mb-4 mr-3 d-inline-block">Your Profile</h1>
+                <Button className="edit mb-4" onClick={() => setState({...state, disabled: !state.disabled})}>
+                    <img src="/public/imgs/pen_light.svg" />
+                </Button>
             </Col>
             <Col className="avatar text-center">
                 <img 
@@ -235,7 +240,6 @@ const UserProfile = props => {
                 /> 
             </Col>
             <Col className="d-flex justify-content-center mb-3">
-                <Label for="upload" className="badge-pill btn-outline-light bg-transparent my-4 btn btn-secondary">Upload</Label>
                 <input
                     id="upload"
                     ref={imageInpRef}
@@ -244,6 +248,9 @@ const UserProfile = props => {
                     onChange={e => setState({...state, userImg: URL.createObjectURL(e.target.files[0])})}
                     style={{left: 0, right: 0, top: 0, bottom: 0}}
                 />
+                <Label for="upload" className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus">
+                    <span></span><span></span>
+                </Label>
             </Col>
 {/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-sm-5">
@@ -320,160 +327,111 @@ const UserProfile = props => {
                         <FormGroup className="mb-md-4 mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2">First Name:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill text-trans bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.firstName}
                                         required
                                         onChange={e => setState({...state, firstName: e.target.value})}
                                         value={state.firstName}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className="mb-md-4 mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Last Name:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.lastName}
                                         required
                                         onChange={e => setState({...state, lastName: e.target.value})}
                                         value={state.lastName}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Email:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.email}
                                         required
                                         onChange={e => setState({...state, email: e.target.value})}
                                         value={state.email}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
                     <Col className="p-0 pl-md-5">
                         <h4>Address</h4>
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className="mb-md-4 mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Street:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.city}
                                         onChange={e => setState({...state, city: e.target.value})}
                                         value={state.city}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className="mb-md-4 mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2">City:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.city}
                                         onChange={e => setState({...state, city: e.target.value})}
                                         value={state.city}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className="mb-md-4 mb-3 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Country:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.country}
                                         onChange={e => setState({...state, country: e.target.value})}
                                         value={state.country}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                         <FormGroup className="mb-4 text-left">
                             <Label className="w-100 h5 text-trans mb-2">Zip Code:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.zipCode}
                                         onChange={e => setState({...state, zipCode: e.target.value})}
                                         value={state.zipCode}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
@@ -483,102 +441,76 @@ const UserProfile = props => {
                 <h4>Password</h4>
                 <Row xs="1" md="2" className="m-auto">
                     <Col className="p-0 pr-md-5">
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Password:</Label>
+                        <FormGroup className="mb-md-4 mb-3 text-left">
+                            <Label className="w-100 h5 text-trans mb-2">Current Password:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
                                         onChange={e => setState({...state, password: e.target.value})}
                                         value={state.password}
+                                        disabled={state.disabled}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Old Password:</Label>
+                        <FormGroup className={"mb-md-4 mb-3 text-left" + (state.disabled ? " hidden" : "")}>
+                            <Label className="w-100 h5 text-trans mb-2">Repeat Current Password:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
                                         onChange={e => setState({...state, password: e.target.value})}
                                         value={state.password}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
                     <Col className="p-0 pl-md-5">
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className={"mb-md-4 mb-3 text-left" + (state.disabled ? " hidden" : "")}>
                             <Label className="w-100 h5 text-trans mb-2">New Password:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
                                         onChange={e => setState({...state, password: e.target.value})}
                                         value={state.password}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Repeat Password:</Label>
+                        <FormGroup className={"mb-4 text-left" + (state.disabled ? " hidden" : "")}>
+                            <Label className="w-100 h5 text-trans mb-2">Repeat New Password:</Label>
                             <Row>
-                                <Col xs="9" lg="10" style={{left: -0.3 + "rem"}}>
+                                <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className="profile badge-pill bg-transparent"
+                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
                                         onChange={e => setState({...state, password: e.target.value})}
                                         value={state.password}
                                     />
-                                </Col>
-                                <Col className="d-flex justify-content-end align-self-center">
-                                    <Button
-                                        className="badge-pill btn-outline-light bg-transparent ml-3 p-0 minus"
-                                        // onClick={e => x(e, y)}
-                                    >
-                                        <span></span><span></span>
-                                    </Button>
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
                 </Row>
+                <Col xs="12" className={"text-center text-trans" + (state.disabled ? " hidden" : "")}>
+                    <Button className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus">
+                        <span></span><span></span>
+                    </Button>
+                </Col>
             </Form>
         </Container>
     );
