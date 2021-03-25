@@ -44,10 +44,10 @@ button {
     border-color: $color-3;
     // color: none !important;
     @include changeButton;
-    // change bg-color of button icons up & down
     &.big {
       border-color: $color-success;
     }
+    // change bg-color of button icons up & down
     &.down > span,
     &.up > span {
       background-color: none !important;
@@ -82,16 +82,29 @@ button {
       background-color: $color-3;
       border-radius: $border;
     }
-    &.big{
-      width: $font-size-1;
-      height: $font-size-1;
+  }
+  &.big{
+    width: $font-size-1;
+    height: $font-size-1;
+    border-color: $color-success;
+    &.plus > span {
+      width: $font-size-3;
+      background-color: $color-success;
+      left: (($font-size-1 - $font-size-3) / 2 - $border);
+      top: ($font-size-1 / 2 - $border - $border / 2);
+    }
+    &.plus:hover,
+    &.plus:focus {
       border-color: $color-success;
-      & > span {
-        width: $font-size-3;
-        background-color: $color-success;
-        left: (($font-size-1 - $font-size-3) / 2 - $border);
-        top: ($font-size-1 / 2 - $border - $border / 2);
-      }
+    }
+    &.minus > span {
+      width: $font-size-3;
+      background-color: $color-danger;
+      left: (($font-size-1 - $font-size-3) / 2 - $border);
+      top: ($font-size-1 / 2 - $border - $border / 2);
+    }
+    &.minus:focus {
+      border-color: $color-danger;
     }
   }
   // change color of buttons plus & minus

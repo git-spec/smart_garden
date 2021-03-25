@@ -33,17 +33,24 @@ import {editUserPost, getUserPost} from '../services/api';
 const UserProfile = props => {
 
     const imageInpRef = useRef();
+    // const imgUploadRef = useRef();
     // const [width] = useWindowDimension();
 
     const initialState = {
         disabled: true,
+        minus: false,
         userImg: '',
         firstName: '',
         lastName: '',
+        street: '',
         city: '',
+        zipCode: '',
+        country: '',
         userName: '',
         password: '',
         repassword: '',
+        newPassword: '',
+        renewPassword: '',
         showModal: false,
         modalContent: null,
         badgeContent: null,
@@ -245,91 +252,108 @@ console.log(state.disabled);
                     ref={imageInpRef}
                     type="file"
                     accept="image/x-png,image/gif,image/jpeg"
-                    onChange={e => setState({...state, userImg: URL.createObjectURL(e.target.files[0])})}
+                    onChange={e => setState({...state, userImg: URL.createObjectURL(e.target.files[0]), minus: true})}
                     style={{left: 0, right: 0, top: 0, bottom: 0}}
                 />
-                <Label for="upload" className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus">
-                    <span></span><span></span>
-                </Label>
+                {!state.minus ?
+                    <Label
+                        for="upload"
+                        className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus"
+                    >
+                        <span></span><span></span>
+                    </Label>
+                :
+                    <Button
+                        className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 minus"
+                        // ref={imgUploadRef}
+                        onClick={() => setState({...state, userImg: '', minus: false})}
+                    >
+                        <span></span><span></span>
+                    </Button>
+                }
             </Col>
 {/* ********************************************************* FORM ********************************************************* */}
             <Form className="pb-md-0 pb-sm-5">
                 <div className="col-lg-12 col-md-12">{state.badgeContent}</div>
                 <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-5">
+                    <Col className="p-0 pr-md-5 text-center text-md-left">
                         <h4>Personal</h4>
-                        <Col className="p-0 d-flex justify-content-between">
-                            <FormGroup>
-                                <Label className="w-100 h5 text-trans mb-2">Sex:</Label>
-                                    <Select
-                                        title="undefined"
-                                        list={state.sex}
-                                        resetThenSet={resetThenSet}
-                                        className="p-0"
-                                    />
-                            </FormGroup>
-                            <FormGroup>
-                                <Label className="w-100 h5 text-trans mb-2">Birthday:</Label>
-                                    <DatePicker
-                                    renderCustomHeader={({
-                                        date,
-                                        changeYear,
-                                        changeMonth,
-                                        decreaseMonth,
-                                        increaseMonth,
-                                        prevMonthButtonDisabled,
-                                        nextMonthButtonDisabled
-                                    }) => (
-                                        <div
-                                        style={{
-                                            margin: 10,
-                                            display: "flex",
-                                            justifyContent: "center"
-                                        }}
-                                        >
-                                        <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                                            {"<"}
-                                        </button>
-                                        <select
-                                            value={date.getFullYear()}
-                                            onChange={({ target: { value } }) => changeYear(value)}
-                                        >
-                                            {years(1900).map(option => (
-                                            <option key={option} value={option}>
-                                                {option}
-                                            </option>
-                                            ))}
-                                        </select>
-                                
-                                        <select
-                                            value={months[date.getMonth()]}
-                                            onChange={({ target: { value } }) =>
-                                            changeMonth(months.indexOf(value))
-                                            }
-                                        >
-                                            {months.map(option => (
-                                            <option key={option} value={option}>
-                                                {option}
-                                            </option>
-                                            ))}
-                                        </select>
-                                
-                                        <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                                            {">"}
-                                        </button>
-                                        </div>
-                                    )}
-                                    selected={state.startDate}
-                                    onChange={date => setState({...state, startDate: date})}
-                                    />
-                            </FormGroup>
-                        </Col>
-                        <FormGroup className="mb-md-4 mb-3 text-left">
+                        <Row xs="1" md="2" className="m-auto">
+                            <Col className="p-0">
+                                <FormGroup>
+                                    <Label className="w-100 h5 text-trans mb-2">Sex:</Label>
+                                        <Select
+                                            title="undefined"
+                                            list={state.sex}
+                                            resetThenSet={resetThenSet}
+                                            className="p-0"
+                                        />
+                                </FormGroup>
+                            </Col>
+                            <Col className="p-0">
+                                <FormGroup>
+                                    <Label className="w-100 h5 text-trans mb-2">Birthday:</Label>
+                                        <DatePicker
+                                        renderCustomHeader={({
+                                            date,
+                                            changeYear,
+                                            changeMonth,
+                                            decreaseMonth,
+                                            increaseMonth,
+                                            prevMonthButtonDisabled,
+                                            nextMonthButtonDisabled
+                                        }) => (
+                                            <div
+                                            style={{
+                                                margin: 10,
+                                                display: "flex",
+                                                justifyContent: "center"
+                                            }}
+                                            >
+                                            <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                                                {"<"}
+                                            </button>
+                                            <select
+                                                value={date.getFullYear()}
+                                                onChange={({ target: { value } }) => changeYear(value)}
+                                            >
+                                                {years(1900).map(option => (
+                                                <option key={option} value={option}>
+                                                    {option}
+                                                </option>
+                                                ))}
+                                            </select>
+                                    
+                                            <select
+                                                value={months[date.getMonth()]}
+                                                onChange={({ target: { value } }) =>
+                                                changeMonth(months.indexOf(value))
+                                                }
+                                            >
+                                                {months.map(option => (
+                                                <option key={option} value={option}>
+                                                    {option}
+                                                </option>
+                                                ))}
+                                            </select>
+                                    
+                                            <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                                                {">"}
+                                            </button>
+                                            </div>
+                                        )}
+                                        selected={state.startDate}
+                                        onChange={date => setState({...state, startDate: date})}
+                                        />
+                                </FormGroup>
+                            </Col>
+                        </Row>
+                        <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">First Name:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.firstName}
                                         required
@@ -340,12 +364,12 @@ console.log(state.disabled);
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-md-4 mb-3 text-left">
+                        <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">Last Name:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.lastName}
                                         required
@@ -356,12 +380,12 @@ console.log(state.disabled);
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className="mb-4">
                             <Label className="w-100 h5 text-trans mb-2">Email:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.email}
                                         required
@@ -373,29 +397,29 @@ console.log(state.disabled);
                             </Row>
                         </FormGroup>
                     </Col>
-                    <Col className="p-0 pl-md-5">
+                    <Col className="p-0 pl-md-5 text-center text-md-left">
                         <h4>Address</h4>
-                        <FormGroup className="mb-md-4 mb-3 text-left">
+                        <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">Street:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.city}
-                                        onChange={e => setState({...state, city: e.target.value})}
+                                        onChange={e => setState({...state, street: e.target.value})}
                                         value={state.city}
                                         disabled={state.disabled}
                                     />
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-md-4 mb-3 text-left">
+                        <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">City:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.city}
                                         onChange={e => setState({...state, city: e.target.value})}
@@ -405,27 +429,12 @@ console.log(state.disabled);
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-md-4 mb-3 text-left">
-                            <Label className="w-100 h5 text-trans mb-2">Country:</Label>
-                            <Row>
-                                <Col style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.country}
-                                        onChange={e => setState({...state, country: e.target.value})}
-                                        value={state.country}
-                                        disabled={state.disabled}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup className="mb-4 text-left">
+                        <FormGroup className="mb-4">
                             <Label className="w-100 h5 text-trans mb-2">Zip Code:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.zipCode}
                                         onChange={e => setState({...state, zipCode: e.target.value})}
@@ -435,18 +444,33 @@ console.log(state.disabled);
                                 </Col>
                             </Row>
                         </FormGroup>
+                        <FormGroup className="mb-md-4 mb-3">
+                            <Label className="w-100 h5 text-trans mb-2">Country:</Label>
+                            <Row>
+                                <Col style={{left: -0.3 + "rem"}}>
+                                    <Input
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
+                                        type="text"
+                                        placeholder={state.country}
+                                        onChange={e => setState({...state, country: e.target.value})}
+                                        value={state.country}
+                                        disabled={state.disabled}
+                                    />
+                                </Col>
+                            </Row>
+                        </FormGroup>
                     </Col>
                     {/* <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0"> */}
                 </Row>
-                <h4>Password</h4>
                 <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-5">
-                        <FormGroup className="mb-md-4 mb-3 text-left">
+                    <Col className="p-0 pr-md-5 text-center text-md-left">
+                        <h4>Password</h4>
+                        <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">Current Password:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
@@ -457,48 +481,47 @@ console.log(state.disabled);
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className={"mb-md-4 mb-3 text-left" + (state.disabled ? " hidden" : "")}>
+                        <FormGroup className={"mb-md-4 mb-3" + (state.disabled ? " hidden" : "")}>
                             <Label className="w-100 h5 text-trans mb-2">Repeat Current Password:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
-                                        placeholder={state.password}
                                         required
-                                        onChange={e => setState({...state, password: e.target.value})}
+                                        onChange={e => setState({...state, repassword: e.target.value})}
                                         value={state.password}
                                     />
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
-                    <Col className="p-0 pl-md-5">
-                        <FormGroup className={"mb-md-4 mb-3 text-left" + (state.disabled ? " hidden" : "")}>
+                    <Col className="p-0 pl-md-5 text-center text-md-left">
+                        <FormGroup className={"mb-md-4 mb-3" + (state.disabled ? " hidden" : "")}>
                             <Label className="w-100 h5 text-trans mb-2">New Password:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
-                                        onChange={e => setState({...state, password: e.target.value})}
+                                        onChange={e => setState({...state, newPassword: e.target.value})}
                                         value={state.password}
                                     />
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className={"mb-4 text-left" + (state.disabled ? " hidden" : "")}>
+                        <FormGroup className={"mb-4" + (state.disabled ? " hidden" : "")}>
                             <Label className="w-100 h5 text-trans mb-2">Repeat New Password:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent" + (state.disabled ? " profile" : "")}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
                                         placeholder={state.password}
                                         required
-                                        onChange={e => setState({...state, password: e.target.value})}
+                                        onChange={e => setState({...state, renewPassword: e.target.value})}
                                         value={state.password}
                                     />
                                 </Col>
