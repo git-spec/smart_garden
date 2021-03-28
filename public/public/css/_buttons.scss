@@ -20,6 +20,13 @@ button {
       transform: scale(1) !important;
     }
   }
+  // user profile
+  &.profile {
+      border-color: rgba(255, 255, 255, 0) !important;
+      & .down {
+        display: none !important;
+      }
+  }
   // scales button after hover
   &:hover,
   &:active,
@@ -170,7 +177,7 @@ button {
   &.up,
   & .up {
     @include roundBtn;
-    padding: 0 .3rem .12rem .3rem;
+    padding: .3rem;
     // bars
     & > span {
       width: $border;

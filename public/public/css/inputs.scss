@@ -1,3 +1,15 @@
+// change color of input
+@mixin changeInput($color: $color-1) {
+  @if $color == $color-1 {
+    border-color: $color-3 !important;
+    color: $color-5 !important;
+  }
+  @if $color == $color-5 {
+    border-color: $color-2 !important;
+    color: $color-8 !important;
+  }
+}
+
 input {
   @include changeInput;
   &.form-control {
@@ -40,5 +52,53 @@ textarea {
     @include killShadow;
     outline:none;
     border-color: $color-5 !important;
+  }
+}
+// select
+.select-wrapper {
+  height: 2.4rem;
+  color: $color-5;
+  & > .select-header {
+    position: absolute;
+    z-index: 1000;
+    opacity: 1 !important;
+    @include changeBGColor;
+    border-color: $color-3;
+    padding: .2rem .3rem .2rem .8rem;
+    border-radius: 1.2rem;
+    & > .select-header-title {
+      width: 6rem;
+      & > div {
+        // color: $color-5;
+        font-size: $font-size-3;
+        font-weight: bold;
+        // select sex and title
+        &:last-child {
+          padding: .4rem;
+        }
+      }
+    }
+    & > .select-list {
+      & > .select-list-item {
+        font-size: $font-size-3;
+        font-weight: bold;
+      }
+    }
+  }
+}
+// select sex
+.select-wrapper > .select-header {
+  left: -0.3rem;
+}
+
+/* *********************************************************** MEDIA QUERY ********************************************************* */
+// Extra small devices (portrait phones, less than 576px)
+@media (max-width: 576px) {
+  .select-wrapper > .select-header {
+    left: 42%;
+  }
+  // select sex
+  label[name=sex] + .select-wrapper > .select-header {
+    z-index: 1001;
   }
 }

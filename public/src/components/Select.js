@@ -80,8 +80,9 @@ class Select extends Component {
       <div className="select-wrapper">
         <button
           type="button"
-          className="select-header btn p-0"
+          className={"select-header btn " + this.props.className}
           onClick={this.toggleList}
+          disabled={this.props.disabled}
         >
           <div className="select-header-title d-flex align-items-center justify-content-between">
             <div>{headerTitle}</div>
@@ -89,21 +90,21 @@ class Select extends Component {
               <span className="color-3"></span><span className="color-3"></span>
             </div>
           </div>
+          {isListOpen && (
+            <div role="list" className="select-list d-flex flex-column">
+              {list.map((item) => (
+                <button
+                  type="button"
+                  className="select-list-item btn text-left px-0"
+                  key={item.id}
+                  onClick={() => this.selectItem(item)}
+                >
+                  {item.title}
+                </button>
+              ))}
+            </div>
+          )}
         </button>
-        {isListOpen && (
-          <div role="list" className="select-list">
-            {list.map((item) => (
-              <button
-                type="button"
-                className="select-list-item btn"
-                key={item.id}
-                onClick={() => this.selectItem(item)}
-              >
-                {item.title}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     );
   }

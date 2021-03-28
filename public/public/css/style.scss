@@ -140,17 +140,6 @@ $nav-height: 4rem;
     color: $color-5 !important;
   }
 }
-// change color of input
-@mixin changeInput($color: $color-1) {
-  @if $color == $color-1 {
-    border-color: $color-3 !important;
-    color: $color-5 !important;
-  }
-  @if $color == $color-5 {
-    border-color: $color-2 !important;
-    color: $color-8 !important;
-  }
-}
 // remove shadows
 @mixin killShadow {
   box-shadow: none !important;
@@ -212,30 +201,30 @@ body {
           @include changeBGColor($color-5);
           @include changeColor($color-5);
         }
-        // wrap of root
-        & > .container-fluid {
-          @include changeBGColor;
-        }
-        // wrap of nav
-        & .container-fluid {
-          @include changeBGColor($color-5);
-          width: 100%;
-          height: max-content;
-        }
-        // inputs
-        & input {
-          @include changeInput($color-5);
-          &.form-control {
-            font-weight: bold;
-            &::placeholder {
-              color: $color-8-opac !important;
-            }
-            &:focus {
-              @include killShadow;
-              border-color: $color-8 !important;
-            }
-          }
-        }
+        // // wrap of root
+        // & > .container-fluid {
+        //   @include changeBGColor;
+        // }
+        // // wrap of nav
+        // & .container-fluid {
+        //   @include changeBGColor($color-5);
+        //   width: 100%;
+        //   height: max-content;
+        // }
+        // // inputs
+        // & input {
+        //   @include changeInput($color-5);
+        //   &.form-control {
+        //     font-weight: bold;
+        //     &::placeholder {
+        //       color: $color-8-opac !important;
+        //     }
+        //     &:focus {
+        //       @include killShadow;
+        //       border-color: $color-8 !important;
+        //     }
+        //   }
+        // }
         // wrap of root
         & .container h3 {
           color: $color-8;

@@ -42,10 +42,10 @@ const UserProfile = props => {
         userImg: '',
         firstName: '',
         lastName: '',
-        street: '',
-        city: '',
-        zipCode: '',
-        country: '',
+        street: '–  –  –',
+        city: '–  –  –',
+        zipCode: '–  –  –',
+        country: '–  –  –',
         userName: '',
         password: '',
         repassword: '',
@@ -73,6 +73,20 @@ const UserProfile = props => {
                 title: 'divers',
                 selected: false,
                 key: 'sex'
+            }
+        ],
+        title: [
+            {
+                id: 0,
+                title: 'Prof.',
+                selected: false,
+                key: 'title'
+            },
+            {
+                id: 1,
+                title: 'Dr.',
+                selected: false,
+                key: 'title'
             }
         ]
     };
@@ -199,10 +213,10 @@ console.log(state.disabled);
     const resetThenSet = (id, key) => {
         const temp = [...state[key]];
       
-        temp.forEach((item) => item.selected = false);
+        temp.forEach(item => item.selected = false);
         temp[id].selected = true;
       
-        setState({[key]: temp});
+        setState({...state, [key]: temp});
     }
 
 /* ********************************************************* RETURN ********************************************************* */
@@ -236,13 +250,13 @@ console.log(state.disabled);
             <Col className="text-center">
                 <h1 className="text-trans mb-4 mr-3 d-inline-block">Your Profile</h1>
                 <Button className="edit mb-4" onClick={() => setState({...state, disabled: !state.disabled})}>
-                    <img src="/public/imgs/pen_light.svg" />
+                    <img alt="pen" src="/public/imgs/pen_light.svg" />
                 </Button>
             </Col>
             <Col className="avatar text-center">
                 <img 
                     src={state.userImg ? state.userImg : '/src/imgs/dummy.svg'}
-                    alt=""
+                    alt="avatar"
                     style={{width: '150px', height: '150px', borderRadius: '50%'}}
                 /> 
             </Col>
@@ -278,21 +292,34 @@ console.log(state.disabled);
                 <Row xs="1" md="2" className="m-auto">
                     <Col className="p-0 pr-md-5 text-center text-md-left">
                         <h4>Personal</h4>
-                        <Row xs="1" md="2" className="m-auto">
-                            <Col className="p-0">
+                        <Row xs="1" md="3" className="m-auto">
+                            <Col className="p-0 mb-sm-2">
                                 <FormGroup>
-                                    <Label className="w-100 h5 text-trans mb-2">Sex:</Label>
+                                    <Label name="sex" className="w-100 h5 text-trans mb-2">Sex:</Label>
                                         <Select
-                                            title="undefined"
+                                            title="–&ensp;–&ensp;–"
                                             list={state.sex}
                                             resetThenSet={resetThenSet}
-                                            className="p-0"
+                                            className={state.disabled ? " profile" : ""}
+                                            disabled={state.disabled}
                                         />
                                 </FormGroup>
                             </Col>
                             <Col className="p-0">
                                 <FormGroup>
-                                    <Label className="w-100 h5 text-trans mb-2">Birthday:</Label>
+                                    <Label name="title" className="w-100 h5 text-trans mb-2">Title:</Label>
+                                        <Select
+                                            title="–&ensp;–&ensp;–"
+                                            list={state.title}
+                                            resetThenSet={resetThenSet}
+                                            className={state.disabled ? " profile" : ""}
+                                            disabled={state.disabled}
+                                        />
+                                </FormGroup>
+                            </Col>
+                            <Col className="p-0">
+                                <FormGroup>
+                                    <Label name="birthday" className="w-100 h5 text-trans mb-2">Birthday:</Label>
                                         <DatePicker
                                         renderCustomHeader={({
                                             date,
@@ -406,9 +433,9 @@ console.log(state.disabled);
                                     <Input
                                         className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
-                                        placeholder={state.city}
+                                        placeholder={state.street}
                                         onChange={e => setState({...state, street: e.target.value})}
-                                        value={state.city}
+                                        value={state.street}
                                         disabled={state.disabled}
                                     />
                                 </Col>
@@ -462,9 +489,11 @@ console.log(state.disabled);
                     </Col>
                     {/* <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0"> */}
                 </Row>
+                <Col className="p-0 pr-md-5 text-center text-md-left">
+                    <h4>Password</h4>
+                </Col>
                 <Row xs="1" md="2" className="m-auto">
                     <Col className="p-0 pr-md-5 text-center text-md-left">
-                        <h4>Password</h4>
                         <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">Current Password:</Label>
                             <Row>

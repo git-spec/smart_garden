@@ -131,50 +131,6 @@ body #root > div.color-5 > div {
   color: #1d2c22 !important;
 }
 
-body #root > div.color-5 > .container-fluid {
-  background-color: #241b12 !important;
-}
-
-body #root > div.color-5 .container-fluid {
-  background-color: #9ac992 !important;
-  width: 100%;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-}
-
-body #root > div.color-5 input {
-  border-color: #1d2c22 !important;
-  color: #007aa7 !important;
-}
-
-body #root > div.color-5 input.form-control {
-  font-weight: bold;
-}
-
-body #root > div.color-5 input.form-control::-webkit-input-placeholder {
-  color: rgba(0, 122, 167, 0.6) !important;
-}
-
-body #root > div.color-5 input.form-control:-ms-input-placeholder {
-  color: rgba(0, 122, 167, 0.6) !important;
-}
-
-body #root > div.color-5 input.form-control::-ms-input-placeholder {
-  color: rgba(0, 122, 167, 0.6) !important;
-}
-
-body #root > div.color-5 input.form-control::placeholder {
-  color: rgba(0, 122, 167, 0.6) !important;
-}
-
-body #root > div.color-5 input.form-control:focus {
-  -webkit-box-shadow: none !important;
-          box-shadow: none !important;
-  text-shadow: none !important;
-  border-color: #007aa7 !important;
-}
-
 body #root > div.color-5 .container h3 {
   color: #007aa7;
 }
@@ -780,6 +736,53 @@ textarea:focus {
   border-color: #9ac992 !important;
 }
 
+.select-wrapper {
+  height: 2.4rem;
+  color: #9ac992;
+}
+
+.select-wrapper > .select-header {
+  position: absolute;
+  z-index: 1000;
+  opacity: 1 !important;
+  background-color: #241b12 !important;
+  border-color: #fdd79d;
+  padding: .2rem .3rem .2rem .8rem;
+  border-radius: 1.2rem;
+}
+
+.select-wrapper > .select-header > .select-header-title {
+  width: 6rem;
+}
+
+.select-wrapper > .select-header > .select-header-title > div {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.select-wrapper > .select-header > .select-header-title > div:last-child {
+  padding: .4rem;
+}
+
+.select-wrapper > .select-header > .select-list > .select-list-item {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.select-wrapper > .select-header {
+  left: -0.3rem;
+}
+
+/* *********************************************************** MEDIA QUERY ********************************************************* */
+@media (max-width: 576px) {
+  .select-wrapper > .select-header {
+    left: 42%;
+  }
+  label[name=sex] + .select-wrapper > .select-header {
+    z-index: 1001;
+  }
+}
+
 .btn,
 button {
   -webkit-box-shadow: none !important;
@@ -807,6 +810,16 @@ button:disabled {
 button:disabled:hover {
   -webkit-transform: scale(1) !important;
           transform: scale(1) !important;
+}
+
+.btn.profile,
+button.profile {
+  border-color: rgba(255, 255, 255, 0) !important;
+}
+
+.btn.profile .down,
+button.profile .down {
+  display: none !important;
 }
 
 .btn:hover, .btn:active, .btn.visited, .btn:focus,
@@ -1028,7 +1041,7 @@ button.up,
 button .up {
   width: 1.2rem;
   height: 1.2rem;
-  padding: 0 .3rem .12rem .3rem;
+  padding: .3rem;
 }
 
 .btn.up > span,
