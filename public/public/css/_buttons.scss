@@ -54,6 +54,10 @@ button {
     &.big {
       border-color: $color-success;
     }
+    // edit button
+    &.edit {
+      background-color: rgba(0, 0, 0, 0) !important;
+    }
     // change bg-color of button icons up & down
     &.down > span,
     &.up > span {
@@ -88,6 +92,37 @@ button {
       top: ($font-size-3 / 2 - $border - $border / 2);
       background-color: $color-3;
       border-radius: $border;
+    }
+  }
+  // close button
+  &.btn-close {
+    width: 2.5rem;
+    height: 2.5rem;
+    position: relative;
+    // border-color: $color-3;
+    // margin: 0;
+    & > span {
+      width: $font-size-1;
+      height: $border;
+      position: absolute;
+      left: .2rem;
+      top: 1.1rem;
+      transform: rotate(45deg);
+      background-color: $color-3;
+      border-radius: $border;
+      &:last-child {
+        width: $font-size-1;
+        height: $border;
+        position: absolute;
+        left: .2rem;
+        top: 1.1rem;
+        transform: rotate(-45deg);
+        background-color: $color-3;
+        border-radius: $border;
+      }
+    }
+    &:active > span {
+      background-color: $color-1 !important;
     }
   }
   &.big{

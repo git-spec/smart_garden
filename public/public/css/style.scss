@@ -401,8 +401,12 @@ a {
   }
   & .edit {
     border: none !important;
+    padding: 0;
+    & + button {
+      display: none;
+    }
     & img {
-      width: 1.2rem;
+      width: 2.5rem;
     }
   }
 }

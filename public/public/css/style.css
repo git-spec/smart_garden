@@ -270,10 +270,15 @@ a:hover, a:active {
 
 .user-profile .edit {
   border: none !important;
+  padding: 0;
+}
+
+.user-profile .edit + button {
+  display: none;
 }
 
 .user-profile .edit img {
-  width: 1.2rem;
+  width: 2.5rem;
 }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
@@ -862,6 +867,12 @@ button.btn-secondary:not(:disabled):not(.disabled):active.big {
   border-color: #30a256;
 }
 
+.btn.btn-outline-light:active.edit, .btn.btn-secondary:not(:disabled):not(.disabled):active.edit,
+button.btn-outline-light:active.edit,
+button.btn-secondary:not(:disabled):not(.disabled):active.edit {
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+
 .btn.btn-outline-light:active.down > span,
 .btn.btn-outline-light:active.up > span, .btn.btn-secondary:not(:disabled):not(.disabled):active.down > span,
 .btn.btn-secondary:not(:disabled):not(.disabled):active.up > span,
@@ -915,6 +926,44 @@ button.minus > span {
   top: 0.45rem;
   background-color: #fdd79d;
   border-radius: 0.1rem;
+}
+
+.btn.btn-close,
+button.btn-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  position: relative;
+}
+
+.btn.btn-close > span,
+button.btn-close > span {
+  width: 1.8rem;
+  height: 0.1rem;
+  position: absolute;
+  left: .2rem;
+  top: 1.1rem;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #fdd79d;
+  border-radius: 0.1rem;
+}
+
+.btn.btn-close > span:last-child,
+button.btn-close > span:last-child {
+  width: 1.8rem;
+  height: 0.1rem;
+  position: absolute;
+  left: .2rem;
+  top: 1.1rem;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  background-color: #fdd79d;
+  border-radius: 0.1rem;
+}
+
+.btn.btn-close:active > span,
+button.btn-close:active > span {
+  background-color: #241b12 !important;
 }
 
 .btn.big,

@@ -28,17 +28,23 @@ import Select from './Select';
 // services
 import {editUserPost, getUserPost} from '../services/api';
 // import {useWindowDimension} from '../hooks/useWindowDimension';
+// images
+import {ReactComponent as EditOutlined} from '../imgs/pen_outlined.svg';
+import {ReactComponent as EditFilled} from '../imgs/pen_filled.svg';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const UserProfile = props => {
 
     const imageInpRef = useRef();
+    const outlinedEditRef = useRef();
+    const filledEditRef = useRef();
     // const imgUploadRef = useRef();
     // const [width] = useWindowDimension();
 
     const initialState = {
         disabled: true,
         minus: false,
+        close: false,
         userImg: '',
         firstName: '',
         lastName: '',
@@ -91,7 +97,6 @@ const UserProfile = props => {
         ]
     };
     const [state, setState] = useState(initialState);
-console.log(state.disabled);
     // datepicker
     // const years = range(1990, new Date().getFullYear() + 1, 1);
     const year = new Date().getFullYear();
@@ -118,6 +123,9 @@ console.log(state.disabled);
         // saves background color in redux
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
+        // show outlined account-icon
+        outlinedEditRef.current.style.display = 'block';
+        filledEditRef.current.style.display = 'none';
 
         // gets user data from database
         let mounted = true;
@@ -152,6 +160,25 @@ console.log(state.disabled);
         };
     // eslint-disable-next-line
     }, []);
+    // edit-icon
+    useEffect(() => {
+        // toggle edit-icon
+        if (filledEditRef.current.style.display === 'block') {
+            setTimeout(() => {
+                outlinedEditRef.current.style.display = 'block';
+                filledEditRef.current.style.display = 'none';
+            }, 100);
+        };
+        // if (!state.close) {
+        //     closeRef.current.style.display = 'block';
+        //     outlinedEditRef.current.style.display = 'none';
+        //     filledEditRef.current.style.display = 'none';
+        // } else {
+        //     closeRef.current.style.display = 'none';
+        //     outlinedEditRef.current.style.display = 'block';
+        //     filledEditRef.current.style.display = 'none';
+        // };
+    });
 
 /* ********************************************************* EDIT BUTTON ********************************************************* */
     // The user can change his or her data in the user profile:
@@ -218,6 +245,29 @@ console.log(state.disabled);
       
         setState({...state, [key]: temp});
     }
+    // toggle edit and close button
+    const toggleEditDown = e => {
+        e.preventDefault();
+        if (!state.close) {
+            outlinedEditRef.current.style.display = 'none';
+            filledEditRef.current.style.display = 'block';
+        } else {
+            outlinedEditRef.current.style.display = 'none';
+            filledEditRef.current.style.display = 'none';
+        };
+    }
+    const toggleEditUp = () => {
+        // e.preventDefault();
+        // outlinedEditRef.current.style.display = 'block';
+        // filledEditRef.current.style.display = 'noe';
+        if (!state.close) {
+            filledEditRef.current.parentNode.style.display = 'none';
+            filledEditRef.current.parentNode.nextElementSibling.style.display = 'inline-block';
+        } else {
+            filledEditRef.current.parentNode.nextElementSibling.style.display = 'none';
+            filledEditRef.current.parentNode.style.display = 'inline-block';
+        };
+    }
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
@@ -249,8 +299,31 @@ console.log(state.disabled);
 {/* ********************************************************* HEADLINE ********************************************************* */}
             <Col className="text-center">
                 <h1 className="text-trans mb-4 mr-3 d-inline-block">Your Profile</h1>
-                <Button className="edit mb-4" onClick={() => setState({...state, disabled: !state.disabled})}>
-                    <img alt="pen" src="/public/imgs/pen_light.svg" />
+                <Button className="edit mb-4 btn-outline-light"
+                        onClick={e => setState({...state, disabled: !state.disabled, close: true})}
+                        onMouseDown={e => toggleEditDown(e)}
+                        onMouseUp={e => toggleEditUp(e)}
+                >
+                    {/* <img alt="pen" src="/public/imgs/pen_light_outlined.svg" /> */}
+                    <EditOutlined width="2.5rem" height="2.5rem" stroke="#FDD79D" ref={outlinedEditRef} />
+                    <EditFilled width="2.5rem" height="2.5rem" fill="#FDD79D" ref={filledEditRef} />
+                </Button>
+                {/* <Button
+                    className="badge-pill bg-transparent mb-4 btn btn-secondary btn-outline-light p-0 close"
+                    ref={closeRef}
+                    onClick={() => setState({...state, disabled: !state.disabled, close: false})}
+                    onMouseUp={e => toggleEditUp(e)}
+                >
+                    <span></span><span></span>
+                </Button> */}
+                <Button
+                    type="button"
+                    className="btn-close badge-pill bg-transparent mb-4 btn btn-secondary btn-outline-light p-0"
+                    aria-label="Close"
+                    onClick={() => setState({...state, disabled: !state.disabled, close: false})}
+                    onMouseUp={toggleEditUp}
+                >
+                    <span></span><span></span>
                 </Button>
             </Col>
             <Col className="avatar text-center">

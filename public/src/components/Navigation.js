@@ -241,7 +241,7 @@ let prevScrollpos = Math.abs(window.pageYOffset);
                     <NavbarBrand className="m-0" title="home" tag={Link} to="/" />
                 </div>
 {/* *********************************************************** ACCOUNT ********************************************************* */}
-                <Button title="Account" className="p-0" onClick={e => {toggleACC(e); toggleAccIcon(e)}}>
+                <Button title="Account" className="p-0" onClick={e => toggleACC(e)} onMouseDown={e => toggleAccIcon(e)}>
                     <h4 data-attribute='hidden' hidden={true} className="d-flex text-align-center justify-content-center m-0">
                         <AccountOutlined width="1.5rem" height="1.5rem" stroke={color5 ? "#1C2C22" : "#FDD79D"} ref={outlinedAccRef} />
                         <AccountFilled width="1.5rem" height="1.5rem" fill={color5 ? "#1C2C22" : "#FDD79D"} ref={filledAccRef} />
