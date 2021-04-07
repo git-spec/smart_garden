@@ -45,6 +45,7 @@ const {
     resetPassword,
     getAllUsers,
     getUser,
+    getUserName,
     changeVerification,
     informBlockedUserByEmail,
     deleteUser,
@@ -206,6 +207,22 @@ app.post('/getuser', (req, res) => {
     });
 });
 
+// gets the userName to compare
+app.post('/getuserName', (req, res) => {
+    // user: get username successfully
+    // 2 server error
+    // 3 user found
+    getUserName(req.body.userName).then(user => {
+        res.json(user);
+    }).catch(err => {
+        if (err === 3) {
+            res.json(3);
+        } else {
+            res.json(2);
+        }
+    });
+});
+
 // edits the user
 app.post('/edituser', (req, res) => {
     // 1 user edited successfully
@@ -215,12 +232,16 @@ app.post('/edituser', (req, res) => {
     const firstName = entities.encode(req.body.firstName.trim());
     const lastName = entities.encode(req.body.lastName.trim());
     const userName = entities.encode(req.body.userName.trim());
-    const city = entities.encode(req.body.city);
+    const street = entities.encode(req.body.street.trim());
+    const city = entities.encode(req.body.city.trim());
+    const zip = entities.encode(req.body.zip.trim());
+    const country = entities.encode(req.body.country.trim());
     const password = req.body.password;
+    const changes = req.body.map(value => {return getUser(id).forEach(element => value === !element)});
     if (req.files) {
         const userImg = req.files.userImg;
-        if (id && firstName && lastName && userName && userImg) {
-            editUser(id, firstName, lastName, userName, city, password, userImg).then(user => {
+        if (changes.length) {
+            editUser(id, firstName, lastName, userName, street, city, zip, country, password, userImg).then(user => {
                 res.json(user);
             }).catch(err => {
                 if (err === "exist") {
@@ -233,8 +254,8 @@ app.post('/edituser', (req, res) => {
             res.json(2);
         };
     } else {
-        if (id && firstName && lastName && userName) {
-            editUser(id, firstName, lastName, userName, city, password).then(user => {
+        if (changes.length) {
+            editUser(id, firstName, lastName, userName, street, city, country, password).then(user => {
                 res.json(user);
             }).catch(err => {
                 if (err === "exist") {

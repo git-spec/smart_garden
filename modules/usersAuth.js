@@ -141,10 +141,25 @@ function getUser(id) {
     });
 }
 
-// edits the user on the profile page
-function editUser(userID, firstName, lastName, userName, city, password, userImg) {
+// gets the username of all
+function getUserName(userName) {
     return new Promise((resolve, reject) => {
-        let query = `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', users.city='${city}'`;
+        runQuery(`SELECT username FROM users WHERE username LIKE '${userName}'`).then(users => {
+            if (users.length === 0) {
+                reject(3);
+            } else {
+                resolve(users[0]);
+            }
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
+// edits the user on the profile page
+function editUser(userID, firstName, lastName, userName, street, city, zip, country, password, userImg) {
+    return new Promise((resolve, reject) => {
+        let query = `UPDATE users SET users.firstname='${firstName}', users.lastname='${lastName}', users.username='${userName}', users.street='${street}', users.city='${city}', users.zip='${zip}', users.country='${country}'`;
         // if the user has also entered a new password
         if (password) {
             query += `, users.password='${passwordHash.generate(password)}'`;
@@ -320,6 +335,7 @@ module.exports = {
     resetPassword,
     getAllUsers,
     getUser,
+    getUserName,
     changeVerification,
     informBlockedUserByEmail,
     deleteUser,

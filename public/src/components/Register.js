@@ -11,7 +11,7 @@ import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reacts
 // components
 import PopUpModal from './PopUpModal';
 // services
-import {registerPost} from '../services/api';
+import {getUserNamePost, registerPost} from '../services/api';
 // validator
 import validator from 'validator';
 
@@ -28,6 +28,7 @@ class Register extends React.Component {
             password: '',
             repassword: '',
             showModal: false,
+            existUserName: false,
             modalContent: {
                 class: '',
                 title: '',
@@ -74,6 +75,16 @@ class Register extends React.Component {
             // password: validator.isStrongPassword(password)
         };
     }
+    // check username
+    checkExistence = userName => {
+            getUserNamePost(userName).then(result => {
+                if (result.username) {
+                    this.setState({...this.state, existUserName: true});
+                } else {
+                    this.setState({...this.state, existUserName: false});
+                }
+            }).catch(err => err);
+    };
     // check blur of inputs
     handleBlur = field => e => {
         e.preventDefault();
@@ -296,11 +307,11 @@ class Register extends React.Component {
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markInpError('userName') || markCharError('userName') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('userName') || markCharError('userName') ? "error" : this.state.existUserName ? "error" : "")}
                                         type="text"
                                         placeholder="Enter an user name"
                                         value={this.state.userName}
-                                        onChange={e => this.setState({userName: e.target.value})}
+                                        onChange={e => this.setState({userName: e.target.value}, this.checkExistence(e.target.value))}
                                         onBlur={this.handleBlur('userName')}
                                         required
                                     />
@@ -312,7 +323,7 @@ class Register extends React.Component {
                                     ?
                                         markInpError('userName') ? "Please enter a user name." : ""
                                     :
-                                        markCharError('userName') ? "Please use only letters, numbers and several charachters." : ""
+                                        markCharError('userName') ? "Please use only letters, numbers and several charachters." : this.state.existUserName ? "The name already exists. Please choose another one." : ""
                                     }
                                 </p>
                             </Col>

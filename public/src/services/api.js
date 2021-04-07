@@ -156,7 +156,31 @@ export const getUserPost = id => {
     });
 };
 
-export const editUserPost = (id, firstName, lastName, userName, city, password, repassword, userImg) => {
+export const getUserNamePost = userName => {
+    return new Promise((resolve, reject) => {
+        fetch('/getuserName', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({userName})
+        }).then(response => {
+            if (response.status === 200) {
+                response.json().then(data => {
+                    resolve(data);
+                }).catch(err => {
+                    reject(err);
+                });
+            } else {
+                reject(new Error('Can not send data to server. Response number: ' + response.status));
+            }
+        }).catch(err => {
+            reject(err);
+        });
+    });
+};
+
+export const editUserPost = (id, firstName, lastName, userName, city, zip, country, userImg, newPassword) => {
     return new Promise((resolve, reject) => {
         const fd = new FormData();
         if (userImg) {
@@ -167,8 +191,9 @@ export const editUserPost = (id, firstName, lastName, userName, city, password, 
         fd.append('lastName', lastName);
         fd.append('userName', userName);
         fd.append('city', city);
-        fd.append('password', password);
-        fd.append('repassword', repassword);
+        fd.append('city', zip);
+        fd.append('country', country);
+        fd.append('password', newPassword);
         fetch('/edituser', {
             method: 'POST',
             body: fd
