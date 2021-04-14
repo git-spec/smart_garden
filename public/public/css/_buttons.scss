@@ -27,6 +27,17 @@ button {
         display: none !important;
       }
   }
+  &.edit {
+    border: none !important;
+    padding: 0;
+    margin-right: -3.25rem;
+    & + button {
+      display: none;
+    }
+    & img {
+      width: 2.5rem;
+    }
+  }
   // scales button after hover
   &:hover,
   &:active,
@@ -51,7 +62,7 @@ button {
     border-color: $color-3;
     // color: none !important;
     @include changeButton;
-    &.big {
+    &.big-1 {
       border-color: $color-success;
     }
     // edit button
@@ -67,7 +78,7 @@ button {
     &.plus {
       background-color: $color-8 !important;
       // bg-color of big button plus
-      &.big {
+      &.big-1 {
         background-color: $color-success !important;
       }
     }
@@ -99,6 +110,7 @@ button {
     width: 2.5rem;
     height: 2.5rem;
     position: relative;
+    margin-right: -3.25rem;
     // border-color: $color-3;
     // margin: 0;
     & > span {
@@ -125,7 +137,36 @@ button {
       background-color: $color-1 !important;
     }
   }
-  &.big{
+  &.btn-close-pass {
+    width: $font-size-2;
+    height: $font-size-2;
+    position: relative;
+    margin-right: -3rem;
+    & > span {
+      width: $font-size-4;
+      height: $border;
+      position: absolute;
+      left: .08rem;
+      top: .55rem;
+      transform: rotate(45deg);
+      background-color: $color-3;
+      border-radius: $border;
+      &:last-child {
+        width: $font-size-4;
+        height: $border;
+        position: absolute;
+        left: .08rem;
+        top: .55rem;
+        transform: rotate(-45deg);
+        background-color: $color-3;
+        border-radius: $border;
+      }
+    }
+    &:active > span {
+      background-color: $color-1 !important;
+    }
+  }
+  &.big-1 {
     width: $font-size-1;
     height: $font-size-1;
     border-color: $color-success;
@@ -144,6 +185,36 @@ button {
       background-color: $color-danger;
       left: (($font-size-1 - $font-size-3) / 2 - $border);
       top: ($font-size-1 / 2 - $border - $border / 2);
+    }
+    &.minus:focus {
+      border-color: $color-danger;
+    }
+  }
+  &.big-2 {
+    width: $font-size-2;
+    height: $font-size-2;
+    border-color: $color-success;
+    margin-right: -3rem;
+    &.plus > span {
+      width: $font-size-5;
+      background-color: $color-success;
+      left: (($font-size-2 - $font-size-5) / 2 - $border);
+      top: ($font-size-2 / 2 - $border - $border / 2);
+      &:last-child {
+        height: $font-size-5;
+        left: ($font-size-4 / 2 + $border / 2);
+        top: ($border * 2);
+      }
+    }
+    &.plus:hover,
+    &.plus:focus {
+      border-color: $color-success;
+    }
+    &.minus > span {
+      width: $font-size-5;
+      background-color: $color-danger;
+      left: (($font-size-2 - $font-size-5) / 2 - $border);
+      top: ($font-size-2 / 2 - $border - $border / 2);
     }
     &.minus:focus {
       border-color: $color-danger;
@@ -174,7 +245,7 @@ button {
       // background-color: $color-light;
       border-radius: $border;
     }
-    &.big > span:last-child {
+    &.big-1 > span:last-child {
       width: $border;
       height: $font-size-3;
       top: (($font-size-1 - $font-size-3) / 2 - $border);

@@ -62,6 +62,16 @@ const port = process.env.PORT || 5000;
 // destructering
 const {log} = require("console");
 
+// get user ip and set to session
+// app.use(function (req, res, next) {
+//     let forwarded = req.headers['x-forwarded-for']
+//     let ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress;
+//     req.session.ip = ip;
+//     res.writeHead(200);
+//     res.end(ip);
+//     next();
+// });
+
 /* ***************************************************** REGISTRATION ******************************************************* */
 // registers the user
 app.post('/register', (req, res) => {

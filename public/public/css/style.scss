@@ -393,22 +393,23 @@ a {
 
 // user profile
 .user-profile {
+  // & h1 {
+  //   margin-left: 2.5rem;
+  // }
   & h4 {
     font-weight: bold;
   }
   & .hidden {
     display: none;
   }
-  & .edit {
-    border: none !important;
-    padding: 0;
-    & + button {
-      display: none;
-    }
-    & img {
-      width: 2.5rem;
-    }
-  }
+  // & .minus {
+  //   margin-right: -3rem;
+  // }
+}
+// datepicker
+.react-datepicker-wrapper:focus,
+.react-datepicker__input-container:focus {
+  outline: none;
 }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */

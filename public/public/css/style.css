@@ -268,17 +268,9 @@ a:hover, a:active {
   display: none;
 }
 
-.user-profile .edit {
-  border: none !important;
-  padding: 0;
-}
-
-.user-profile .edit + button {
-  display: none;
-}
-
-.user-profile .edit img {
-  width: 2.5rem;
+.react-datepicker-wrapper:focus,
+.react-datepicker__input-container:focus {
+  outline: none;
 }
 
 /* *********************************************************** MEDIA QUERY ********************************************************* */
@@ -704,6 +696,25 @@ input#upload {
   width: 0;
 }
 
+input.birthday {
+  width: 8.3rem;
+  background-color: rgba(255, 255, 255, 0);
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-style: solid;
+  border-width: thin;
+  padding-top: .2rem;
+  padding-bottom: .2rem;
+}
+
+input.birthday:focus {
+  outline: none;
+}
+
+input.birthday:focus-within {
+  border-color: #9ac992 !important;
+}
+
 textarea {
   border-width: 0.1rem;
   border-style: solid;
@@ -827,6 +838,23 @@ button.profile .down {
   display: none !important;
 }
 
+.btn.edit,
+button.edit {
+  border: none !important;
+  padding: 0;
+  margin-right: -3.25rem;
+}
+
+.btn.edit + button,
+button.edit + button {
+  display: none;
+}
+
+.btn.edit img,
+button.edit img {
+  width: 2.5rem;
+}
+
 .btn:hover, .btn:active, .btn.visited, .btn:focus,
 button:hover,
 button:active,
@@ -861,9 +889,9 @@ button.btn-secondary:not(:disabled):not(.disabled):active {
   color: #241b12 !important;
 }
 
-.btn.btn-outline-light:active.big, .btn.btn-secondary:not(:disabled):not(.disabled):active.big,
-button.btn-outline-light:active.big,
-button.btn-secondary:not(:disabled):not(.disabled):active.big {
+.btn.btn-outline-light:active.big-1, .btn.btn-secondary:not(:disabled):not(.disabled):active.big-1,
+button.btn-outline-light:active.big-1,
+button.btn-secondary:not(:disabled):not(.disabled):active.big-1 {
   border-color: #30a256;
 }
 
@@ -889,9 +917,9 @@ button.btn-secondary:not(:disabled):not(.disabled):active.plus {
   background-color: #007aa7 !important;
 }
 
-.btn.btn-outline-light:active.plus.big, .btn.btn-secondary:not(:disabled):not(.disabled):active.plus.big,
-button.btn-outline-light:active.plus.big,
-button.btn-secondary:not(:disabled):not(.disabled):active.plus.big {
+.btn.btn-outline-light:active.plus.big-1, .btn.btn-secondary:not(:disabled):not(.disabled):active.plus.big-1,
+button.btn-outline-light:active.plus.big-1,
+button.btn-secondary:not(:disabled):not(.disabled):active.plus.big-1 {
   background-color: #30a256 !important;
 }
 
@@ -933,6 +961,7 @@ button.btn-close {
   width: 2.5rem;
   height: 2.5rem;
   position: relative;
+  margin-right: -3.25rem;
 }
 
 .btn.btn-close > span,
@@ -966,37 +995,118 @@ button.btn-close:active > span {
   background-color: #241b12 !important;
 }
 
-.btn.big,
-button.big {
+.btn.btn-close-pass,
+button.btn-close-pass {
+  width: 1.4rem;
+  height: 1.4rem;
+  position: relative;
+  margin-right: -3rem;
+}
+
+.btn.btn-close-pass > span,
+button.btn-close-pass > span {
+  width: 1rem;
+  height: 0.1rem;
+  position: absolute;
+  left: .08rem;
+  top: .55rem;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  background-color: #fdd79d;
+  border-radius: 0.1rem;
+}
+
+.btn.btn-close-pass > span:last-child,
+button.btn-close-pass > span:last-child {
+  width: 1rem;
+  height: 0.1rem;
+  position: absolute;
+  left: .08rem;
+  top: .55rem;
+  -webkit-transform: rotate(-45deg);
+          transform: rotate(-45deg);
+  background-color: #fdd79d;
+  border-radius: 0.1rem;
+}
+
+.btn.btn-close-pass:active > span,
+button.btn-close-pass:active > span {
+  background-color: #241b12 !important;
+}
+
+.btn.big-1,
+button.big-1 {
   width: 1.8rem;
   height: 1.8rem;
   border-color: #30a256;
 }
 
-.btn.big.plus > span,
-button.big.plus > span {
+.btn.big-1.plus > span,
+button.big-1.plus > span {
   width: 1.2rem;
   background-color: #30a256;
   left: 0.2rem;
   top: 0.75rem;
 }
 
-.btn.big.plus:hover, .btn.big.plus:focus,
-button.big.plus:hover,
-button.big.plus:focus {
+.btn.big-1.plus:hover, .btn.big-1.plus:focus,
+button.big-1.plus:hover,
+button.big-1.plus:focus {
   border-color: #30a256;
 }
 
-.btn.big.minus > span,
-button.big.minus > span {
+.btn.big-1.minus > span,
+button.big-1.minus > span {
   width: 1.2rem;
   background-color: red;
   left: 0.2rem;
   top: 0.75rem;
 }
 
-.btn.big.minus:focus,
-button.big.minus:focus {
+.btn.big-1.minus:focus,
+button.big-1.minus:focus {
+  border-color: red;
+}
+
+.btn.big-2,
+button.big-2 {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-color: #30a256;
+  margin-right: -3rem;
+}
+
+.btn.big-2.plus > span,
+button.big-2.plus > span {
+  width: 0.8rem;
+  background-color: #30a256;
+  left: 0.2rem;
+  top: 0.55rem;
+}
+
+.btn.big-2.plus > span:last-child,
+button.big-2.plus > span:last-child {
+  height: 0.8rem;
+  left: 0.55rem;
+  top: 0.2rem;
+}
+
+.btn.big-2.plus:hover, .btn.big-2.plus:focus,
+button.big-2.plus:hover,
+button.big-2.plus:focus {
+  border-color: #30a256;
+}
+
+.btn.big-2.minus > span,
+button.big-2.minus > span {
+  width: 0.8rem;
+  background-color: red;
+  left: 0.2rem;
+  top: 0.55rem;
+}
+
+.btn.big-2.minus:focus,
+button.big-2.minus:focus {
   border-color: red;
 }
 
@@ -1031,8 +1141,8 @@ button.plus > span:last-child {
   border-radius: 0.1rem;
 }
 
-.btn.plus.big > span:last-child,
-button.plus.big > span:last-child {
+.btn.plus.big-1 > span:last-child,
+button.plus.big-1 > span:last-child {
   width: 0.1rem;
   height: 1.2rem;
   top: 0.2rem;
@@ -1815,11 +1925,12 @@ input[type='range']::after {
 
 .slider-feature.slide-2 > .feature-text > div > img {
   min-width: 3rem;
+  width: 3rem;
   height: 3rem;
   border-width: 0.1rem;
   border-style: solid;
   border-color: #fdd79d;
-  border-width: .2rem;
+  border-width: .16rem;
   border-radius: 50%;
   color: #fdd79d;
   padding: .3rem;
@@ -1928,7 +2039,7 @@ input[type='range']::after {
 
 .slider-feature.slide-3 {
   margin-top: auto;
-  padding-top: 5rem;
+  padding-top: 6rem;
   -ms-grid-row-align: center;
       align-self: center;
   display: -ms-grid;
@@ -2167,10 +2278,10 @@ input[type='range']::after {
 
 @-webkit-keyframes slide-right {
   0% {
-    left: -70rem;
+    left: -80rem;
   }
   70% {
-    left: -70rem;
+    left: -80rem;
   }
   100% {
     left: 0;
@@ -2179,10 +2290,10 @@ input[type='range']::after {
 
 @keyframes slide-right {
   0% {
-    left: -70rem;
+    left: -80rem;
   }
   70% {
-    left: -70rem;
+    left: -80rem;
   }
   100% {
     left: 0;
@@ -2273,6 +2384,9 @@ input[type='range']::after {
     text-align: center;
     font-size: 1.8rem;
   }
+  .slider-feature.slide-2 > .feature-title h1 {
+    font-size: 2rem;
+  }
   .slider-feature.slide-2 > .feature-text {
     font-size: .8rem;
   }
@@ -2288,6 +2402,9 @@ input[type='range']::after {
   }
   .slider-feature.slide-2 > .feature-text > div p {
     text-align: center;
+  }
+  .slider-feature.slide-2 > .feature-text > div h1 {
+    font-size: 2rem;
   }
 }
 
@@ -2306,8 +2423,20 @@ input[type='range']::after {
     top: 35%;
     right: 0 !important;
   }
-  .slider-feature.slide-1 .feature-title {
+  .slider-feature .feature-title {
     font-size: 1.8rem;
+  }
+  .slider-feature .feature-title h1 {
+    font-size: inherit;
+  }
+  .slider-feature > .feature-text {
+    font-size: .8rem;
+  }
+  .slider-feature > .feature-text h1 {
+    font-size: 1.8rem;
+  }
+  .slider-feature > .feature-text p {
+    font-size: inherit;
   }
 }
 

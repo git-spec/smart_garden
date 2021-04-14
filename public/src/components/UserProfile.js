@@ -38,19 +38,29 @@ const UserProfile = props => {
     const imageInpRef = useRef();
     const outlinedEditRef = useRef();
     const filledEditRef = useRef();
+    const minusPassRef = useRef();
+    const closePassRef = useRef();
+    const plusEmailRef = useRef();
+    const closeEmailRef = useRef();
+    // const minusUsrRef = useRef();
+    // const closeUsrRef = useRef();
     // const imgUploadRef = useRef();
     // const [width] = useWindowDimension();
 
     const initialState = {
         disabled: true,
+        disabledPass: true,
+        disabledEmail: true,
+        // disabledUsr: true,
         minus: false,
-        close: false,
+        closeEdit: false,
+        closePass: false,
         userImg: '',
         firstName: '',
         lastName: '',
         street: '–  –  –',
         city: '–  –  –',
-        zipCode: '–  –  –',
+        zip: '–  –  –',
         country: '–  –  –',
         userName: '',
         password: '',
@@ -123,10 +133,18 @@ const UserProfile = props => {
         // saves background color in redux
         props.setBackgroundColor1Action('color-1');
         props.setBackgroundColor5Action(null);
-        // show outlined account-icon
+        // show outlined icon of edit
         outlinedEditRef.current.style.display = 'block';
         filledEditRef.current.style.display = 'none';
-
+        // show minus icon of password-edit
+        minusPassRef.current.style.display = 'none';
+        closePassRef.current.style.display = 'none';
+        // show plus icon of email-edit
+        plusEmailRef.current.style.display = 'none';
+        closeEmailRef.current.style.display = 'none';
+        // show minus icon of username-edit
+        // minusUsrRef.current.style.display = 'none';
+        // closeUsrRef.current.style.display = 'none';
         // gets user data from database
         let mounted = true;
         getUserPost(props.user.id).then(user => {
@@ -144,7 +162,12 @@ const UserProfile = props => {
                             firstName: user.firstname,
                             lastName: user.lastname,
                             userName: user.username,
+                            email: user.email,
+                            street: user.street,
                             city: user.city,
+                            zip: user.zip,
+                            country: user.country,
+                            password: user.password,
                             userImg: user.img
                         });      
                     }
@@ -169,15 +192,6 @@ const UserProfile = props => {
                 filledEditRef.current.style.display = 'none';
             }, 100);
         };
-        // if (!state.close) {
-        //     closeRef.current.style.display = 'block';
-        //     outlinedEditRef.current.style.display = 'none';
-        //     filledEditRef.current.style.display = 'none';
-        // } else {
-        //     closeRef.current.style.display = 'none';
-        //     outlinedEditRef.current.style.display = 'block';
-        //     filledEditRef.current.style.display = 'none';
-        // };
     });
 
 /* ********************************************************* EDIT BUTTON ********************************************************* */
@@ -185,10 +199,18 @@ const UserProfile = props => {
     // The name, the user name and the personal password can be changed and the place of residence can be added.
     const onEditBtnClick = e => {
         e.preventDefault();
-        if (state.password !== state.repassword) {
+        const passwordHash = require('password-hash');
+console.log(passwordHash.verify(state.repassword, state.password));
+        if (!passwordHash.verify(state.repassword, state.password)) {
             setState({
                 ...state,
-                modalContent: <p>Passwords do not match</p>,
+                modalContent: <p>Old Passwords do not match</p>,
+                showModal: true
+            });
+        } else if (state.newPassword !== state.renewPassword) {
+            setState({
+                ...state,
+                modalContent: <p>New Passwords do not match</p>,
                 showModal: true
             });
         } else {
@@ -197,10 +219,12 @@ const UserProfile = props => {
                 state.firstName,
                 state.lastName,
                 state.userName,
+                state.street,
                 state.city,
-                state.password,
-                state.repassword,
-                imageInpRef.current.files[0]
+                state.zip,
+                state.country,
+                imageInpRef.current.files[0],
+                state.newPassword
             ).then(data => {
                 let badgeClass = '';
                 let badgeMessage = '';
@@ -216,6 +240,7 @@ const UserProfile = props => {
                     default:
                         badgeClass = 'alert alert-success';
                         badgeMessage = 'Your profile has been changed successfully.';
+                        setState({...state, disabled: true, close:false});
                         break;
                 }
                 const badgeContentElement = (
@@ -245,10 +270,10 @@ const UserProfile = props => {
       
         setState({...state, [key]: temp});
     }
-    // toggle edit and close button
+    // toggle edit button
     const toggleEditDown = e => {
         e.preventDefault();
-        if (!state.close) {
+        if (!state.closeEdit) {
             outlinedEditRef.current.style.display = 'none';
             filledEditRef.current.style.display = 'block';
         } else {
@@ -256,22 +281,25 @@ const UserProfile = props => {
             filledEditRef.current.style.display = 'none';
         };
     }
-    const toggleEditUp = () => {
-        // e.preventDefault();
-        // outlinedEditRef.current.style.display = 'block';
-        // filledEditRef.current.style.display = 'noe';
-        if (!state.close) {
+    // toggle close button of edit
+    const toggleEditUp = e => {
+        if (!state.closeEdit) {
             filledEditRef.current.parentNode.style.display = 'none';
             filledEditRef.current.parentNode.nextElementSibling.style.display = 'inline-block';
+            minusPassRef.current.style.display = 'inline-block';
+            plusEmailRef.current.style.display = 'inline-block';
+            // minusUsrRef.current.style.display = 'inline-block';
         } else {
             filledEditRef.current.parentNode.nextElementSibling.style.display = 'none';
             filledEditRef.current.parentNode.style.display = 'inline-block';
+            minusPassRef.current.style.display = 'none';
+            plusEmailRef.current.style.display = 'none';
+            // minusUsrRef.current.style.display = 'none';
         };
     }
 
 /* ********************************************************* RETURN ********************************************************* */
     return (
-        // <Container fluid={true} className="px-4 px-sm-5 pt-5 mt-5">
         <Container className="user-profile px-4 px-sm-5 pt-5 mt-5">
 {/* ********************************************************* MODAL ********************************************************* */}
             <PopUpModal 
@@ -300,27 +328,18 @@ const UserProfile = props => {
             <Col className="text-center">
                 <h1 className="text-trans mb-4 mr-3 d-inline-block">Your Profile</h1>
                 <Button className="edit mb-4 btn-outline-light"
-                        onClick={e => setState({...state, disabled: !state.disabled, close: true})}
+                        onClick={e => setState({...state, disabled: !state.disabled, closeEdit: true})}
                         onMouseDown={e => toggleEditDown(e)}
                         onMouseUp={e => toggleEditUp(e)}
                 >
-                    {/* <img alt="pen" src="/public/imgs/pen_light_outlined.svg" /> */}
                     <EditOutlined width="2.5rem" height="2.5rem" stroke="#FDD79D" ref={outlinedEditRef} />
                     <EditFilled width="2.5rem" height="2.5rem" fill="#FDD79D" ref={filledEditRef} />
                 </Button>
-                {/* <Button
-                    className="badge-pill bg-transparent mb-4 btn btn-secondary btn-outline-light p-0 close"
-                    ref={closeRef}
-                    onClick={() => setState({...state, disabled: !state.disabled, close: false})}
-                    onMouseUp={e => toggleEditUp(e)}
-                >
-                    <span></span><span></span>
-                </Button> */}
                 <Button
                     type="button"
                     className="btn-close badge-pill bg-transparent mb-4 btn btn-secondary btn-outline-light p-0"
                     aria-label="Close"
-                    onClick={() => setState({...state, disabled: !state.disabled, close: false})}
+                    onClick={() => setState({...state, disabled: !state.disabled, closeEdit: false})}
                     onMouseUp={toggleEditUp}
                 >
                     <span></span><span></span>
@@ -345,13 +364,14 @@ const UserProfile = props => {
                 {!state.minus ?
                     <Label
                         for="upload"
-                        className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus"
+                        className="big-1 badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus"
+                        style={state.disabled ? {visibility: 'hidden', disabled: true} : {visibility: 'visible', disabled: false}}
                     >
                         <span></span><span></span>
                     </Label>
                 :
                     <Button
-                        className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 minus"
+                        className="big-1 badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 minus"
                         // ref={imgUploadRef}
                         onClick={() => setState({...state, userImg: '', minus: false})}
                     >
@@ -365,7 +385,7 @@ const UserProfile = props => {
                 <Row xs="1" md="2" className="m-auto">
                     <Col className="p-0 pr-md-5 text-center text-md-left">
                         <h4>Personal</h4>
-                        <Row xs="1" md="3" className="m-auto">
+                        <Row xs="1" md="2" className="m-auto">
                             <Col className="p-0 mb-sm-2">
                                 <FormGroup>
                                     <Label name="sex" className="w-100 h5 text-trans mb-2">Sex:</Label>
@@ -390,10 +410,87 @@ const UserProfile = props => {
                                         />
                                 </FormGroup>
                             </Col>
-                            <Col className="p-0">
-                                <FormGroup>
-                                    <Label name="birthday" className="w-100 h5 text-trans mb-2">Birthday:</Label>
-                                        <DatePicker
+                        </Row>
+                        <FormGroup className="mb-md-4 mb-3">
+                            <Label className="w-100 h5 text-trans mb-2">First Name:</Label>
+                            <Row>
+                                <Col style={{left: -0.3 + "rem"}}>
+                                    <Input
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
+                                        type="text"
+                                        placeholder={state.firstName}
+                                        required
+                                        onChange={e => setState({...state, firstName: e.target.value})}
+                                        value={state.firstName}
+                                        disabled={state.disabled}
+                                    />
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                        <FormGroup className="mb-md-4 mb-3">
+                            <Label className="w-100 h5 text-trans mb-2">Last Name:</Label>
+                            <Row>
+                                <Col style={{left: -0.3 + "rem"}}>
+                                    <Input
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
+                                        type="text"
+                                        placeholder={state.lastName}
+                                        required
+                                        onChange={e => setState({...state, lastName: e.target.value})}
+                                        value={state.lastName}
+                                        disabled={state.disabled}
+                                    />
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                        <FormGroup className="mb-md-4 mb-3">
+                            {/* <Col className="p-0 d-flex justify-content-center justify-content-md-start"> */}
+                                <Label className="w-100 h5 text-trans mb-2">User Name:</Label>
+                                {/* <Button
+                                    type="button"
+                                    className="big-2 badge-pill bg-transparent mb-2 ml-4 btn btn-secondary btn-outline-light p-0 minus"
+                                    innerRef={minusUsrRef}
+                                    onClick={e => setState({...state, disabledUsr: !state.disabledUsr})}
+                                    onMouseUp={() => {
+                                        minusUsrRef.current.style.display = 'none';
+                                        closeUsrRef.current.style.display = 'inline-block';
+                                    }}
+                                >
+                                    <span></span><span></span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    className="btn-close-pass badge-pill bg-transparent mb-2 ml-4 btn btn-secondary btn-outline-light p-0"
+                                    aria-label="Close"
+                                    innerRef={closeUsrRef}
+                                    onClick={() => setState({...state, disabledUsr: !state.disabledUsr})}
+                                    onMouseUp={() => {
+                                        closeUsrRef.current.style.display = 'none';
+                                        minusUsrRef.current.style.display = 'inline-block';
+                                    }}
+                                >
+                                    <span></span><span></span>
+                                </Button>
+                            </Col> */}
+                            <Row>
+                                <Col style={{left: -0.3 + "rem"}}>
+                                    <Input
+                                        className="badge-pill text-trans bg-transparent text-center text-md-left profile"
+                                        type="text"
+                                        placeholder={state.userName}
+                                        required
+                                        onChange={e => setState({...state, userName: e.target.value})}
+                                        value={state.userName}
+                                        disabled={true}
+                                    />
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                        <Col className="p-0">
+                            <FormGroup>
+                                <Label name="birthday" className="w-100 h5 text-trans mb-2">Birthday:</Label>
+                                    <DatePicker
+                                        className={"birthday badge-pill bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         renderCustomHeader={({
                                             date,
                                             changeYear,
@@ -444,61 +541,13 @@ const UserProfile = props => {
                                         )}
                                         selected={state.startDate}
                                         onChange={date => setState({...state, startDate: date})}
-                                        />
-                                </FormGroup>
-                            </Col>
-                        </Row>
-                        <FormGroup className="mb-md-4 mb-3">
-                            <Label className="w-100 h5 text-trans mb-2">First Name:</Label>
-                            <Row>
-                                <Col style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.firstName}
-                                        required
-                                        onChange={e => setState({...state, firstName: e.target.value})}
-                                        value={state.firstName}
                                         disabled={state.disabled}
                                     />
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup className="mb-md-4 mb-3">
-                            <Label className="w-100 h5 text-trans mb-2">Last Name:</Label>
-                            <Row>
-                                <Col style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.lastName}
-                                        required
-                                        onChange={e => setState({...state, lastName: e.target.value})}
-                                        value={state.lastName}
-                                        disabled={state.disabled}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup>
-                        <FormGroup className="mb-4">
-                            <Label className="w-100 h5 text-trans mb-2">Email:</Label>
-                            <Row>
-                                <Col style={{left: -0.3 + "rem"}}>
-                                    <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.email}
-                                        required
-                                        onChange={e => setState({...state, email: e.target.value})}
-                                        value={state.email}
-                                        disabled={state.disabled}
-                                    />
-                                </Col>
-                            </Row>
-                        </FormGroup>
+                            </FormGroup>
+                        </Col>
                     </Col>
-                    <Col className="p-0 pl-md-5 text-center text-md-left">
-                        <h4>Address</h4>
+                    <Col className="p-0 pl-md-5 mt-3 mt-md-0 text-center text-md-left">
+                        <h4>Addresses</h4>
                         <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">Street:</Label>
                             <Row>
@@ -529,16 +578,16 @@ const UserProfile = props => {
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className="mb-4">
+                        <FormGroup className="mb-md-4 mb-3">
                             <Label className="w-100 h5 text-trans mb-2">Zip Code:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
                                         className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         type="text"
-                                        placeholder={state.zipCode}
-                                        onChange={e => setState({...state, zipCode: e.target.value})}
-                                        value={state.zipCode}
+                                        placeholder={state.zip}
+                                        onChange={e => setState({...state, zip: e.target.value})}
+                                        value={state.zip}
                                         disabled={state.disabled}
                                     />
                                 </Col>
@@ -559,72 +608,140 @@ const UserProfile = props => {
                                 </Col>
                             </Row>
                         </FormGroup>
-                    </Col>
-                    {/* <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0"> */}
-                </Row>
-                <Col className="p-0 pr-md-5 text-center text-md-left">
-                    <h4>Password</h4>
-                </Col>
-                <Row xs="1" md="2" className="m-auto">
-                    <Col className="p-0 pr-md-5 text-center text-md-left">
                         <FormGroup className="mb-md-4 mb-3">
-                            <Label className="w-100 h5 text-trans mb-2">Current Password:</Label>
+                            <Col className="p-0 d-flex justify-content-center justify-content-md-start">
+                                <Label className="h5 text-trans mb-2">Email:</Label>
+                                <Button
+                                    type="button"
+                                    className="big-2 badge-pill bg-transparent ml-4 btn btn-secondary btn-outline-light p-0 plus"
+                                    innerRef={plusEmailRef}
+                                    onClick={e => setState({...state, disabledEmail: !state.disabledEmail})}
+                                    onMouseUp={() => {
+                                        plusEmailRef.current.style.display = 'none';
+                                        closeEmailRef.current.style.display = 'inline-block';
+                                    }}
+                                >
+                                    <span></span><span></span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    className="btn-close-pass badge-pill bg-transparent ml-4 btn btn-secondary btn-outline-light p-0"
+                                    aria-label="Close"
+                                    innerRef={closeEmailRef}
+                                    onClick={() => setState({...state, disabledEmail: !state.disabledEmail})}
+                                    onMouseUp={() => {
+                                        closeEmailRef.current.style.display = 'none';
+                                        plusEmailRef.current.style.display = 'inline-block';
+                                    }}
+                                >
+                                    <span></span><span></span>
+                                </Button>
+                            </Col>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.password}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabledEmail ? " profile" : "")}
+                                        type="email"
+                                        placeholder={state.email}
                                         required
-                                        onChange={e => setState({...state, password: e.target.value})}
-                                        value={state.password}
-                                        disabled={state.disabled}
+                                        onChange={e => setState({...state, email: e.target.value})}
+                                        value={state.email}
+                                        disabled={state.disabledEmail}
                                     />
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className={"mb-md-4 mb-3" + (state.disabled ? " hidden" : "")}>
-                            <Label className="w-100 h5 text-trans mb-2">Repeat Current Password:</Label>
+                    </Col>
+                    <Col className="p-0 pr-md-5 mt-3 text-center text-md-left">
+                        <h4>Password</h4>
+                    </Col>
+                    {/* <Col xs="12" sm={{size: 8, offset: 2}} lg={{size: 6, offset: 3}} xl={{size: 4, offset: 4}} className="p-0"> */}
+                </Row>
+                <Row xs="1" md="2" className="m-auto">
+                    <Col className="p-0 pr-md-5 text-center text-md-left">
+                        <FormGroup className="mb-md-4 mb-3">
+                            <Col className="p-0 d-flex justify-content-center justify-content-md-start">
+                                <Label className="h5 text-trans mb-2">Password:</Label>
+                                <Button
+                                    type="button"
+                                    className="big-2 badge-pill bg-transparent ml-4 btn btn-secondary btn-outline-light p-0 minus"
+                                    innerRef={minusPassRef}
+                                    onClick={e => setState({...state, disabledPass: !state.disabledPass})}
+                                    onMouseUp={() => {
+                                        minusPassRef.current.style.display = 'none';
+                                        closePassRef.current.style.display = 'inline-block';
+                                    }}
+                                >
+                                    <span></span><span></span>
+                                </Button>
+                                <Button
+                                    type="button"
+                                    className="btn-close-pass badge-pill bg-transparent ml-4 btn btn-secondary btn-outline-light p-0"
+                                    aria-label="Close"
+                                    innerRef={closePassRef}
+                                    onClick={() => setState({...state, disabledPass: !state.disabledPass})}
+                                    onMouseUp={() => {
+                                        closePassRef.current.style.display = 'none';
+                                        minusPassRef.current.style.display = 'inline-block';
+                                    }}
+                                >
+                                    <span></span><span></span>
+                                </Button>
+                            </Col>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
+                                        className="badge-pill text-trans bg-transparent text-center text-md-left"
+                                        type="password"
+                                        placeholder={state.password.slice(0, 4)}
+                                        required
+                                        value={state.password.slice(0, 4)}
+                                        disabled="disabled"
+                                        style={{border:'none'}}
+                                    />
+                                </Col>
+                            </Row>
+                        </FormGroup>
+                        <FormGroup className={"mb-md-4 mb-3" + (state.disabledPass ? " hidden" : "")}>
+                            <Label className="w-100 h5 text-trans mb-2">Old Password:</Label>
+                            <Row>
+                                <Col style={{left: -0.3 + "rem"}}>
+                                    <Input
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabledPass ? " profile" : "")}
+                                        type="password"
                                         required
                                         onChange={e => setState({...state, repassword: e.target.value})}
-                                        value={state.password}
+                                        value={state.repassword}
                                     />
                                 </Col>
                             </Row>
                         </FormGroup>
                     </Col>
                     <Col className="p-0 pl-md-5 text-center text-md-left">
-                        <FormGroup className={"mb-md-4 mb-3" + (state.disabled ? " hidden" : "")}>
+                        <FormGroup className={"mb-md-4 mb-3" + (state.disabledPass ? " hidden" : "")}>
                             <Label className="w-100 h5 text-trans mb-2">New Password:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.password}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabledPass ? " profile" : "")}
+                                        type="password"
                                         required
                                         onChange={e => setState({...state, newPassword: e.target.value})}
-                                        value={state.password}
+                                        value={state.newPassword}
                                     />
                                 </Col>
                             </Row>
                         </FormGroup>
-                        <FormGroup className={"mb-4" + (state.disabled ? " hidden" : "")}>
+                        <FormGroup className={"mb-4" + (state.disabledPass ? " hidden" : "")}>
                             <Label className="w-100 h5 text-trans mb-2">Repeat New Password:</Label>
                             <Row>
                                 <Col style={{left: -0.3 + "rem"}}>
                                     <Input
-                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
-                                        type="text"
-                                        placeholder={state.password}
+                                        className={"badge-pill text-trans bg-transparent text-center text-md-left" + (state.disabledPass ? " profile" : "")}
+                                        type="password"
                                         required
                                         onChange={e => setState({...state, renewPassword: e.target.value})}
-                                        value={state.password}
+                                        value={state.renewPassword}
                                     />
                                 </Col>
                             </Row>
@@ -632,7 +749,11 @@ const UserProfile = props => {
                     </Col>
                 </Row>
                 <Col xs="12" className={"text-center text-trans" + (state.disabled ? " hidden" : "")}>
-                    <Button className="big badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus">
+                    <Button
+                        type="submit"
+                        className="big-1 badge-pill bg-transparent my-4 btn btn-secondary btn-outline-light p-0 plus"
+                        onClick={onEditBtnClick}
+                    >
                         <span></span><span></span>
                     </Button>
                 </Col>

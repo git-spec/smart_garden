@@ -1,8 +1,8 @@
 import React, {useRef} from 'react';
 import useSlider from '../hooks/useSlider';
 // redux
-import {connect} from 'react-redux';
-import {setSlideAni1Action, setSlideAni2Action, setSlideAni3Action} from '../actions';
+// import {connect} from 'react-redux';
+// import {setSlideAni1Action, setSlideAni2Action, setSlideAni3Action} from '../actions';
 
 const Slider = props => {
     // refs
@@ -17,21 +17,21 @@ const Slider = props => {
     const slideIdx = (newIdx) => {
         switch (newIdx) {
             case 0:
-                props.setSlideAni1Action('slide-ani-1');
+                // props.setSlideAni1Action('slide-ani-1');
                 document.body.classList.remove('color-4');
                 document.body.classList.remove('color-5');
                 document.body.classList.remove('color-8');
                 document.body.classList.add('color-1');
                 break;
             case 1:
-                props.setSlideAni2Action('slide-ani-2');
+                // props.setSlideAni2Action('slide-ani-2');
                 document.body.classList.remove('color-1');
                 document.body.classList.remove('color-5');
                 document.body.classList.remove('color-8');
                 document.body.classList.add('color-4');
                 break;
             case 2:
-                props.setSlideAni2Action('slide-ani-3');
+                // props.setSlideAni2Action('slide-ani-3');
                 document.body.classList.remove('color-1');
                 document.body.classList.remove('color-4');
                 document.body.classList.remove('color-5');
@@ -63,7 +63,7 @@ console.log(props);
                             <a ref={slideBtn} href="" className="feature-btn badge-pill px-3" />
                         </div>
                     </div>
-                    <div ref={slideClass} className="slider-btn-wrapper align-self-center">
+                    <div ref={slideClass} className="slider-btn-wrapper align-self-center mt-4">
                         {props.images.map((e, idx) => {
                             return (
                                 <button
@@ -87,13 +87,14 @@ console.log(props);
 };
 
 /* ********************************************************* MAP STATE TO PROPS ********************************************************* */
-const mapStateToProps = state => {
-    return {
-        slideAni1: state.slideAni1,
-        slideAni2: state.slideAni2,
-        slideAni3: state.slideAni3
-    };
-};
+// const mapStateToProps = state => {
+//     return {
+//         slideAni1: state.slideAni1,
+//         slideAni2: state.slideAni2,
+//         slideAni3: state.slideAni3
+//     };
+// };
 
 /* ********************************************************* EXPORT ********************************************************* */
-export default connect(mapStateToProps, {setSlideAni1Action, setSlideAni2Action, setSlideAni3Action})(Slider);
+// export default connect(mapStateToProps, {setSlideAni1Action, setSlideAni2Action, setSlideAni3Action})(Slider);
+export default Slider;

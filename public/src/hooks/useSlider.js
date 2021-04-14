@@ -1,19 +1,47 @@
 // import e from 'cors';
 import {useEffect} from 'react';
-
+  
+/**
+* Show selected slider and its index.
+* @param {Object}   slideFeat   DOM Element of slider feature.
+* @param {Object}   slideImage  DOM Element of slider image.
+* @param {Object}   slideTitle  DOM Element of slider title.
+* @param {Object}   slideText   DOM Element of slider text.
+* @param {Object}   slideClass  DOM Element of slider button wrapper.
+* @param {Object}   slideBtn    DOM Element of slider feature button.
+* @param {Function} slideIdx    function to change background-color of body.
+* @return {Function} selected slider and index.
+*/
 const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, slideBtn, slideIdx, images) => {
     let slideCounter = 0;
+    let slides = [];
 
     useEffect(() => startSlider());
-
+  
+    /**
+    * Set slider 1 at beginning.
+    * @param {Object}   slideFeat   DOM Element of slider feature.
+    * @param {Object}   slideImage  DOM Element of slider image.
+    * @param {Object}   slideTitle  DOM Element of slider title.
+    * @param {Object}   slideText   DOM Element of slider text.
+    * @param {Object}   slideClass  DOM Element of slider button wrapper.
+    * @param {Object}   slideBtn    DOM Element of slider feature button.
+    * @param {Function} slideIdx    function to change background-color of body.
+    * @return {Function} selected slider and index.
+    */
     const startSlider =() => {
         slideImage.current.style.backgroundImage = `linear-gradient(
                                                         to right,
                                                         rgba(34, 34, 34, 0.4),
                                                         rgba(68, 68, 68, 0.4)
                                                     ), url(${images[0].src})`;
-        slideFeat.current.classList.add('slide-1', 'slide-ani-1');
-        slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+        if (!slides.includes('slide1')) {
+            slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+            slides.push('slide1');
+        } else {
+            slideFeat.current.classList.add('slide-1');
+        };
+        slideFeat.current.classList.remove('slide-2', 'slide-ani-2', 'slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
         slideTitle.current.innerHTML = images[0].title;
         slideText.current.innerHTML = images[0].text;
         slideBtn.current.innerHTML = images[0].button;
@@ -39,10 +67,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
         // }
         switch (slide - 1) {
             case 0:
-                if (!slideFeat.current.classList.contains('slide-1')) {
+                if (!slides.includes('slide1')) {
                     slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+                    slides.push('slide1');
+                } else {
+                    slideFeat.current.classList.add('slide-1');
                 };
-                slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+                slideFeat.current.classList.remove('slide-2', 'slide-ani-2', 'slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
                 slideBtn.current.href = '/register';
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slide - 1].button;
@@ -51,20 +82,26 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 slideIdx(slide - 1);
                 break;
             case 1:
-                if (!slideFeat.current.classList.contains('slide-2')) {
-                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-5');
+                if (!slides.includes('slide2')) {
+                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-2', 'px-md-5');
+                    slides.push('slide2');
+                } else {
+                    slideFeat.current.classList.add('slide-2', 'container', 'px-2', 'px-md-5');
                 };
-                slideFeat.current.classList.remove('slide-1', 'slide-3');
+                slideFeat.current.classList.remove('slide-1', 'slide-ani-1', 'slide-3', 'slide-ani-3');
                 slideBtn.current.style.display = 'none';
                 animateSlide(slideImage);
                 handleClass(slide - 1);
                 slideIdx(slide - 1);
                 break;
             case 2:
-                if (!slideFeat.current.classList.contains('slide-3')) {
-                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-5');
+                if (!slides.includes('slide3')) {
+                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
+                    slides.push('slide3');
+                } else {
+                    slideFeat.current.classList.add('slide-3', 'container', 'px-2', 'px-md-5');
                 };
-                slideFeat.current.classList.remove('slide-1', 'slide-2');
+                slideFeat.current.classList.remove('slide-1', 'slide-ani-1', 'slide-2', 'slide-ani-2');
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slide - 1].button;
                 animateSlide(slideImage);
@@ -154,10 +191,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
         slideText.current.innerHTML = images[slide].text;
         switch (slide) {
             case 0:
-                if (!slideFeat.current.classList.contains('slide-1')) {
+                if (!slides.includes('slide1')) {
                     slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+                    slides.push('slide1');
+                } else {
+                    slideFeat.current.classList.add('slide-1');
                 };
-                slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+                slideFeat.current.classList.remove('slide-2', 'slide-ani-2', 'slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
                 slideBtn.current.href = '/register';
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slide].button;
@@ -167,10 +207,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 slideIdx(slide);
                 break;
             case 1:
-                if (!slideFeat.current.classList.contains('slide-2')) {
-                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-5');
+                if (!slides.includes('slide2')) {
+                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-2', 'px-2', 'px-md-5');
+                    slides.push('slide2');
+                } else {
+                    slideFeat.current.classList.add('slide-2', 'container', 'px-2', 'px-md-5');
                 };
-                slideFeat.current.classList.remove('slide-1', 'slide-3');
+                slideFeat.current.classList.remove('slide-1', 'slide-ani-1', 'slide-3' ,'slide-ani-3');
                 slideBtn.current.style.display = 'none';
                 slideCounter = slide;
                 animateSlide(slideImage);
@@ -178,10 +221,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 slideIdx(slide);
                 break;
             case 2:
-                if (!slideFeat.current.classList.contains('slide-3')) {
-                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-5');
+                if (!slides.includes('slide3')) {
+                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
+                    slides.push('slide3');
+                } else {
+                    slideFeat.current.classList.add('slide-3', 'container', 'px-2', 'px-md-5');
                 };
-                slideFeat.current.classList.remove('slide-1', 'slide-2');
+                slideFeat.current.classList.remove('slide-1', 'slide-ani-1', 'slide-2', 'slide-ani-2');
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slide].button;
                 slideCounter = slide;
@@ -190,7 +236,7 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 slideIdx(slide);
                 break;
             default:
-                slideFeat.current.classList.remove('container', 'px-5');
+                slideFeat.current.classList.remove('container', 'px-2', 'px-md-5');
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slide].button;
                 slideCounter = slide;
@@ -229,10 +275,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
         slideText.current.innerHTML = images[slideCounter + 1].text;
         switch (slideCounter + 1) {
             case 0:
-                if (!slideFeat.current.classList.contains('slide-1')) {
+                if (!slides.includes('slide1')) {
                     slideFeat.current.classList.add('slide-1', 'slide-ani-1');
+                    slides.push('slide1');
+                } else {
+                    slideFeat.current.classList.add('slide-1');
                 };
-                slideFeat.current.classList.remove('slide-2', 'slide-3', 'container', 'px-5');
+                slideFeat.current.classList.remove('slide-2', 'slide-ani-2', 'slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
                 slideBtn.current.href = '/register';
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slideCounter + 1].button;
@@ -242,10 +291,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 animateSlide(slideImage);
                 break;
             case 1:
-                if (!slideFeat.current.classList.contains('slide-2')) {
-                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-5');
+                if (!slides.includes('slide2')) {
+                    slideFeat.current.classList.add('slide-2', 'slide-ani-2', 'container', 'px-2', 'px-md-5');
+                    slides.push('slide2');
+                } else {
+                    slideFeat.current.classList.add('slide-2', 'container', 'px-2', 'px-md-5');
                 };
-                slideFeat.current.classList.remove('slide-1', 'slide-3');
+                slideFeat.current.classList.remove('slide-1', 'slide-ani-1', 'slide-3', 'slide-ani-3');
                 slideBtn.current.style.display = 'none';
                 handleClass(slideCounter + 1);
                 slideIdx(slideCounter + 1);
@@ -253,10 +305,13 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 animateSlide(slideImage);
                 break;
             case 2:
-                if (!slideFeat.current.classList.contains('slide-3')) {
-                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-5');
+                if (!slides.includes('slide3')) {
+                    slideFeat.current.classList.add('slide-3', 'slide-ani-3', 'container', 'px-2', 'px-md-5');
+                    slides.push('slide3');
+                } else {
+                    slideFeat.current.classList.add('slide-3', 'container', 'px-2', 'px-md-5');
                 };
-                slideFeat.current.classList.remove('slide-1', 'slide-2');
+                slideFeat.current.classList.remove('slide-1', 'slide-ani-1', 'slide-2', 'slide-ani-2');
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slideCounter + 1].button;
                 handleClass(slideCounter + 1);
@@ -265,7 +320,7 @@ const useSlider = (slideFeat, slideImage, slideTitle, slideText, slideClass, sli
                 animateSlide(slideImage);
                 break;
             default:
-                slideFeat.current.classList.remove('container', 'px-5');
+                slideFeat.current.classList.remove('container', 'px-2', 'px-md-5');
                 slideBtn.current.style.display = 'inline-block';
                 slideBtn.current.innerHTML = images[slideCounter + 1].button;
                 handleClass(slideCounter + 1);

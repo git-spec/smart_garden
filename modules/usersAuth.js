@@ -127,24 +127,9 @@ function checkUser(user, password) {
 
 /* ***************************************************** USER PROFILE ******************************************************* */
 // gets the user data to edit them on the user profile page
-function getUser(id) {
+function getUser(user) {
     return new Promise((resolve, reject) => {
-        runQuery(`SELECT * FROM users WHERE id=${id}`).then(users => {
-            if (users.length === 0) {
-                reject(3);
-            } else {
-                resolve(users[0]);
-            }
-        }).catch(err => {
-            reject(err);
-        });
-    });
-}
-
-// gets the username of all
-function getUserName(userName) {
-    return new Promise((resolve, reject) => {
-        runQuery(`SELECT username FROM users WHERE username LIKE '${userName}'`).then(users => {
+        runQuery(`SELECT * FROM users WHERE id=${user} OR username=${user} OR email=${user}`).then(users => {
             if (users.length === 0) {
                 reject(3);
             } else {
@@ -335,7 +320,6 @@ module.exports = {
     resetPassword,
     getAllUsers,
     getUser,
-    getUserName,
     changeVerification,
     informBlockedUserByEmail,
     deleteUser,

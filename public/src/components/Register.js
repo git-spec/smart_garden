@@ -11,9 +11,7 @@ import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reacts
 // components
 import PopUpModal from './PopUpModal';
 // services
-import {getUserNamePost, registerPost} from '../services/api';
-// validator
-import validator from 'validator';
+import {getUserPost, registerPost} from '../services/api';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class Register extends React.Component {
@@ -71,13 +69,13 @@ class Register extends React.Component {
             lastName: !lastName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),
             // eslint-disable-next-line
             userName: !userName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g),
-            email: !validator.isEmail(email),
+            email: !email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
             // password: validator.isStrongPassword(password)
         };
     }
     // check username
     checkExistence = userName => {
-            getUserNamePost(userName).then(result => {
+            getUserPost(userName).then(result => {
                 if (result.username) {
                     this.setState({...this.state, existUserName: true});
                 } else {
