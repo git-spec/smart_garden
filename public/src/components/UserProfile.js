@@ -58,10 +58,10 @@ const UserProfile = props => {
         userImg: '',
         firstName: '',
         lastName: '',
-        street: '–  –  –',
-        city: '–  –  –',
-        zip: '–  –  –',
-        country: '–  –  –',
+        street: '– – –',
+        city: '– – –',
+        zip: '– – –',
+        country: '– – –',
         userName: '',
         password: '',
         repassword: '',
@@ -339,8 +339,12 @@ console.log(passwordHash.verify(state.repassword, state.password));
                     type="button"
                     className="btn-close badge-pill bg-transparent mb-4 btn btn-secondary btn-outline-light p-0"
                     aria-label="Close"
-                    onClick={() => setState({...state, disabled: !state.disabled, closeEdit: false})}
-                    onMouseUp={toggleEditUp}
+                    onClick={() => setState({...state, disabled: !state.disabled, disabledPass: !state.disabledPass, closeEdit: false, closePass: false})}
+                    onMouseUp={() => {
+                        closePassRef.current.style.display = 'none';
+                        minusPassRef.current.style.display = 'inline-block';
+                        toggleEditUp()
+                    }}
                 >
                     <span></span><span></span>
                 </Button>
@@ -390,7 +394,7 @@ console.log(passwordHash.verify(state.repassword, state.password));
                                 <FormGroup>
                                     <Label name="sex" className="w-100 h5 text-trans mb-2">Sex:</Label>
                                         <Select
-                                            title="–&ensp;–&ensp;–"
+                                            title="–&thinsp;–&thinsp;–"
                                             list={state.sex}
                                             resetThenSet={resetThenSet}
                                             className={state.disabled ? " profile" : ""}
@@ -402,7 +406,7 @@ console.log(passwordHash.verify(state.repassword, state.password));
                                 <FormGroup>
                                     <Label name="title" className="w-100 h5 text-trans mb-2">Title:</Label>
                                         <Select
-                                            title="–&ensp;–&ensp;–"
+                                            title="–&thinsp;–&thinsp;–"
                                             list={state.title}
                                             resetThenSet={resetThenSet}
                                             className={state.disabled ? " profile" : ""}
@@ -490,6 +494,7 @@ console.log(passwordHash.verify(state.repassword, state.password));
                             <FormGroup>
                                 <Label name="birthday" className="w-100 h5 text-trans mb-2">Birthday:</Label>
                                     <DatePicker
+                                        dateFormat="dd.MM.yyyy"
                                         className={"birthday badge-pill bg-transparent text-center text-md-left" + (state.disabled ? " profile" : "")}
                                         renderCustomHeader={({
                                             date,
@@ -693,9 +698,9 @@ console.log(passwordHash.verify(state.repassword, state.password));
                                     <Input
                                         className="badge-pill text-trans bg-transparent text-center text-md-left"
                                         type="password"
-                                        placeholder={state.password.slice(0, 4)}
+                                        placeholder={state.password.slice(0, 6)}
                                         required
-                                        value={state.password.slice(0, 4)}
+                                        value={state.password.slice(0, 6)}
                                         disabled="disabled"
                                         style={{border:'none'}}
                                     />

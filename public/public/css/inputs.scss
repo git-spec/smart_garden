@@ -12,6 +12,9 @@
 
 input {
   @include changeInput;
+  // &[type=password] {
+  //   letter-spacing: .3rem;
+  // }
   &.form-control {
     height: auto;
     font-weight: bold;
