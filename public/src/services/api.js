@@ -156,12 +156,12 @@ export const getUserPost = id => {
     });
 };
 
-export const editUserPost = (id, firstName, lastName, userName, city, zip, country, userImg, newPassword) => {
+export const editUserPost = (id, userImg, firstName, lastName, userName, city, zip, country, newPassword) => {
     return new Promise((resolve, reject) => {
         const fd = new FormData();
         if (userImg) {
             fd.append('userImg', userImg);
-        }
+        };
         fd.append('id', id);
         fd.append('firstName', firstName);
         fd.append('lastName', lastName);
@@ -169,7 +169,9 @@ export const editUserPost = (id, firstName, lastName, userName, city, zip, count
         fd.append('city', city);
         fd.append('city', zip);
         fd.append('country', country);
-        fd.append('password', newPassword);
+        if (newPassword) {
+            fd.append('password', newPassword);
+        };
         fetch('/edituser', {
             method: 'POST',
             body: fd

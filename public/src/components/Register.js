@@ -12,6 +12,8 @@ import {Container, Row, Col, Form, FormGroup, Label, Input, Button} from 'reacts
 import PopUpModal from './PopUpModal';
 // services
 import {getUserPost, registerPost} from '../services/api';
+// hooks
+import {validateChar, validateInp} from '../hooks/useValidation';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 class Register extends React.Component {
@@ -33,9 +35,9 @@ class Register extends React.Component {
                 message: ''
             },
             touched: {
-                firstName: false,
-                lastName: false,
-                userName: false,
+                firstname: false,
+                lastname: false,
+                username: false,
                 email: false,
                 password: false,
                 repassword: false
@@ -50,29 +52,16 @@ class Register extends React.Component {
     
 /* ********************************************************* FUNCTIONS ********************************************************* */    
     // check exsiting input
-    validateInp = (firstName, lastName, userName, email, password, repassword) => {
-        return {
-            firstName: firstName.length === 0,
-            lastName: lastName.length === 0,
-            userName: userName.length === 0,
-            email: email.length === 0,
-            password: password.length === 0,
-            repassword: repassword.length === 0
-        };
-    }  
-    // check characters
-    validateChar = (firstName, lastName, userName, email, password) => {
-        return {
-            // eslint-disable-next-line
-            firstName: !firstName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),           // [^0-9!@#$%^&*()_+\=\[\]{};':"\\|,<>\/?]?
-            // eslint-disable-next-line
-            lastName: !lastName.match(/^[A-ZÀ-Üa-zß-ü]+[\.]?[ \-]?([A-ZÀ-Üa-zß-ü ]*)$/g),
-            // eslint-disable-next-line
-            userName: !userName.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g),
-            email: !email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/),
-            // password: validator.isStrongPassword(password)
-        };
-    }
+    // validateInp = (firstName, lastName, userName, email, password, repassword) => {
+    //     return {
+    //         firstName: firstName.length === 0,
+    //         lastName: lastName.length === 0,
+    //         userName: userName.length === 0,
+    //         email: email.length === 0,
+    //         password: password.length === 0,
+    //         repassword: repassword.length === 0
+    //     };
+    // }
     // check username
     checkExistence = userName => {
             getUserPost(userName).then(result => {
@@ -176,34 +165,56 @@ class Register extends React.Component {
 /* ********************************************************* RENDER ********************************************************* */
     render() {
         // change border-color of inputs to danger
-        const inputErrs = this.validateInp(
-            this.state.firstName,
-            this.state.lastName,
-            this.state.userName,
-            this.state.email,
-            this.state.password,
-            this.state.repassword
-        );
+        const inputErrs = validateInp({
+            firstname: this.state.firstName,
+            lastname: this.state.lastName,
+            username: this.state.userName,
+            email: this.state.email,
+            password: this.state.password,
+            repassword: this.state.repassword
+        });
         // change border-color of inputs to danger
-        const charErrs = this.validateChar(
-            this.state.firstName,
-            this.state.lastName,
-            this.state.userName,
-            this.state.email,
-            this.state.password
-        );
+        const charErrs = validateChar({
+            name: [this.state.firstName, this.state.lastName],
+            char : [this.state.userName],
+            email: this.state.email,
+            password: {
+                high: this.state.password,
+                medium: this.state.password,
+                low: this.state.password,
+                base: this.state.password
+            }
+        });
         // show error message for input error
         const touched = this.state.touched
         function markInpError(field) {
-            const hasError = inputErrs[field];
+            const hasError = inputErrs.input[field];
             const showError = touched[field];
             return hasError ? showError : false;
         }
         // show error message for character error
         function markCharError(field) {
-            const hasError = charErrs[field];
+            let hasError = '';
             const showError = touched[field];
-            return hasError ? showError : false;
+            switch (field) {
+                case 'firstname':
+                    charErrs.user.name[0] ?  hasError = true : hasError = false;
+                    return hasError ? showError : false;
+                case 'lastname':
+                    charErrs.user.name[1] ?  hasError = true : hasError = false;
+                    return hasError ? showError : false;
+                case 'username':
+                    charErrs.user.char[0] ?  hasError = true : hasError = false;
+                    return hasError ? showError : false;
+                case 'email':
+                    charErrs.user.email ?  hasError = true : hasError = false;
+                    return hasError ? showError : false;
+                case 'password':
+                    charErrs.user.password.length ?  hasError = true : hasError = false;
+                    return hasError ? showError : false;
+                default:
+                    break;
+            };
         }
         // enable login-button
         const isEnabled = !Object.keys(inputErrs).some(x => inputErrs[x]) && !Object.keys(charErrs).some(x => charErrs[x]);
@@ -233,12 +244,12 @@ class Register extends React.Component {
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">First Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markInpError('firstName') || markCharError('firstName') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('firstname') || markCharError('firstname') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter your first name"
                                         value={this.state.firstName}
                                         onChange={e => this.setState({firstName: e.target.value})}
-                                        onBlur={this.handleBlur('firstName')}
+                                        onBlur={this.handleBlur('firstname')}
                                         required
                                     />
                                 </FormGroup>
@@ -247,9 +258,9 @@ class Register extends React.Component {
                                     {
                                         this.state.firstName.trim() === ''
                                     ?
-                                        markInpError('firstName') ? "Please enter your first name." : ""
+                                        markInpError('firstname') ? "Please enter your first name." : ""
                                     :
-                                        markCharError('firstName') ? "Please use only letters seperated by dot, hyphen or space." : ""
+                                        markCharError('firstname') ? "Please use only letters seperated by dot, hyphen or space." : ""
                                     }
                                 </p>
                             </Col>
@@ -257,12 +268,12 @@ class Register extends React.Component {
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">Last Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markInpError('lastName') || markCharError('lastName') ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('lastname') || markCharError('lastname') ? "error" : "")}
                                         type="text"
                                         placeholder="Enter your last name"
                                         value={this.state.lastName}
                                         onChange={e => this.setState({lastName: e.target.value})}
-                                        onBlur={this.handleBlur('lastName')}
+                                        onBlur={this.handleBlur('lastname')}
                                         required
                                     />
                                 </FormGroup>
@@ -271,9 +282,9 @@ class Register extends React.Component {
                                     {
                                         this.state.lastName.trim() === ''
                                     ?
-                                        markInpError('lastName') ? "Please enter your last name." : ""
+                                        markInpError('lastname') ? "Please enter your last name." : ""
                                     :
-                                        markCharError('lastName') ? "Please use only letters seperated by dot, hyphen or space." : ""
+                                        markCharError('lastname') ? "Please use only letters seperated by dot, hyphen or space." : ""
                                     }
                                 </p>
                             </Col>
@@ -305,12 +316,12 @@ class Register extends React.Component {
                                 <FormGroup className="text-left mb-1">
                                     <Label className="w-100 h5 text-trans mb-2 ml-2">User Name:</Label>
                                     <Input
-                                        className={"badge-pill bg-transparent " + (markInpError('userName') || markCharError('userName') ? "error" : this.state.existUserName ? "error" : "")}
+                                        className={"badge-pill bg-transparent " + (markInpError('username') || markCharError('username') ? "error" : this.state.existUserName ? "error" : "")}
                                         type="text"
                                         placeholder="Enter an user name"
                                         value={this.state.userName}
                                         onChange={e => this.setState({userName: e.target.value}, this.checkExistence(e.target.value))}
-                                        onBlur={this.handleBlur('userName')}
+                                        onBlur={this.handleBlur('username')}
                                         required
                                     />
                                 </FormGroup>
@@ -319,9 +330,9 @@ class Register extends React.Component {
                                     {
                                         this.state.userName.trim() === ""
                                     ?
-                                        markInpError('userName') ? "Please enter a user name." : ""
+                                        markInpError('username') ? "Please enter a user name." : ""
                                     :
-                                        markCharError('userName') ? "Please use only letters, numbers and several charachters." : this.state.existUserName ? "The name already exists. Please choose another one." : ""
+                                        markCharError('username') ? "Please use only letters, numbers and several charachters." : this.state.existUserName ? "The name already exists. Please choose another one." : ""
                                     }
                                 </p>
                             </Col>

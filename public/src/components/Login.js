@@ -12,6 +12,8 @@ import {setUserAction, setSocketAction, setBackgroundColor5Action, setBackground
 import PopUpModal from './PopUpModal';
 // services
 import {loginPost} from '../services/api';
+// hooks
+import {validateChar, validateInp} from '../hooks/useValidation';
 
 /* ********************************************************* COMPONENT ********************************************************* */
 const Login = props => {
@@ -26,7 +28,7 @@ const Login = props => {
         modalTitle: '',
         modalContent: null,
         touched: {
-            loginName: false,
+            loginname: false,
             password: false
         }
     };
@@ -40,14 +42,7 @@ const Login = props => {
     // eslint-disable-next-line
     }, []);
 
-/* ********************************************************* FUNCTIONS ********************************************************* */    
-    // check exsiting input
-    const validateInp = (name, password) => {
-        return {loginName: name.length === 0, password: password.length === 0};
-    }
-    // change border-color of inputs to danger
-    const inpErrs = validateInp(state.loginName, state.password);
-    // const isEnabled =  state.loginName.trim().length > 0 &&  state.password.length > 0;
+/* ********************************************************* FUNCTIONS ********************************************************* */
     // check blur of inputs
     const handleBlur = field => e => {
         e.preventDefault();
@@ -56,26 +51,32 @@ const Login = props => {
             touched: {...state.touched, [field]: true}
         });
     }
+    // check exsiting input
+    // change border-color of inputs to danger
+    const inpErrs = validateInp({loginname: state.loginName, password: state.password});
+    // const isEnabled =  state.loginName.trim().length > 0 &&  state.password.length > 0;
     // show input error message
     const markInpError = field => {
-        const hasError = inpErrs[field];
+        const hasError = inpErrs.input[field];
         const showError = state.touched[field];
         return hasError ? showError : false;
     }
     // check characters
-    const validateChar = (name) => {
-        // eslint-disable-next-line
-        return {loginName: !name.match(/^([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)([A-ZÀ-Üa-zß-ü0-9!?@#$: \+\.\-]*)$/g)};
-    }
-    const charErrs = validateChar(state.loginName);
+    const charErrs = validateChar({char: [state.loginName]});
     // show character error message
     const markCharError = field => {
-        const hasError = charErrs[field];
+        let hasError = '';
         const showError = state.touched[field];
-        return hasError ? showError : false;
+        switch (field) {
+            case 'loginname':
+                charErrs.user.char[0] ?  hasError = true : hasError = false;
+                return hasError ? showError : false;
+            default:
+                break;
+        };
     }
     // enable login-button
-    const isEnabled = !Object.keys(inpErrs).some(x => inpErrs[x]) && !Object.keys(charErrs).some(x => charErrs[x]);
+    const isEnabled = !Object.keys(inpErrs.input).some(x => inpErrs.input[x]) && !Object.keys(charErrs.user).some(x => charErrs.user[x]);
   
     // The user can log in and enter the secure user area by entering the email or username and password.
     const onLoginBtnClick = e => {
@@ -172,12 +173,12 @@ const Login = props => {
                         <FormGroup className="mb-1 text-left">
                             <Label className="w-100 h5 text-trans mb-2 ml-2">Username / Email:</Label>
                             <Input
-                                className={"badge-pill bg-transparent " + (markInpError('loginName') ? "error" : "")}
+                                className={"badge-pill bg-transparent " + (markInpError('loginname') || markCharError('loginname') ? "error" : "")}
                                 type="text"
                                 placeholder="Enter your username or email"
                                 value={state.loginName}
                                 onChange={e => setState({...state, loginName: e.target.value})}
-                                onBlur={handleBlur('loginName')}
+                                onBlur={handleBlur('loginname')}
                                 required
                             />
                         </FormGroup>
@@ -186,9 +187,9 @@ const Login = props => {
                             {
                                 state.loginName.trim() === ''
                             ?
-                                markInpError('loginName') ? "Please enter your user name or email." : ""
+                                markInpError('loginname') ? "Please enter your user name or email." : ""
                             :
-                                markCharError('loginName') ? "Please enter a valid user name or email." : ""
+                                markCharError('loginname') ? "Please enter a valid user name or email." : ""
                             }
                         </p>
                     </Col>

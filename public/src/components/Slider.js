@@ -60,7 +60,7 @@ console.log(props);
                         <div ref={slideText} className="feature-text"></div>
                         {/* <button ref={slideBtn} className="feature-btn badge-pill px-3"></button> */}
                         <div className="feature-btn-wrapper mb-3">
-                            <a ref={slideBtn} href="" className="feature-btn badge-pill px-3" />
+                            <a ref={slideBtn} href="#" className="feature-btn badge-pill px-3"></a>
                         </div>
                     </div>
                     <div ref={slideClass} className="slider-btn-wrapper align-self-center mt-4">

@@ -27,6 +27,8 @@ import PopUpModal from './PopUpModal';
 import Select from './Select';
 // services
 import {editUserPost, getUserPost} from '../services/api';
+// hooks
+import {validateChar} from '../hooks/useValidation';
 // import {useWindowDimension} from '../hooks/useWindowDimension';
 // images
 import {ReactComponent as EditOutlined} from '../imgs/pen_outlined.svg';
@@ -56,6 +58,8 @@ const UserProfile = props => {
         closeEdit: false,
         closePass: false,
         userImg: '',
+        sex: '– – –',
+        title: '– – –',
         firstName: '',
         lastName: '',
         street: '– – –',
@@ -71,7 +75,7 @@ const UserProfile = props => {
         modalContent: null,
         badgeContent: null,
         startDate: new Date(),
-        sex: [
+        sexList: [
             {
                 id: 0,
                 title: 'female',
@@ -91,7 +95,7 @@ const UserProfile = props => {
                 key: 'sex'
             }
         ],
-        title: [
+        titleList: [
             {
                 id: 0,
                 title: 'Prof.',
@@ -127,6 +131,8 @@ const UserProfile = props => {
       "November",
       "December"
     ];
+let firstName = 'wr4x31*#';
+console.log(validateChar(firstName));
 
 /* ********************************************************* USE EFFECT ********************************************************* */
     useEffect(() => {
@@ -159,6 +165,8 @@ const UserProfile = props => {
                     if (mounted) {
                         setState({
                             ...state,
+                            sex: user.sex,
+                            tilte: user.title,
                             firstName: user.firstname,
                             lastName: user.lastname,
                             userName: user.username,
@@ -200,31 +208,81 @@ const UserProfile = props => {
     const onEditBtnClick = e => {
         e.preventDefault();
         const passwordHash = require('password-hash');
-console.log(passwordHash.verify(state.repassword, state.password));
-        if (!passwordHash.verify(state.repassword, state.password)) {
-            setState({
-                ...state,
-                modalContent: <p>Old Passwords do not match</p>,
-                showModal: true
-            });
-        } else if (state.newPassword !== state.renewPassword) {
-            setState({
-                ...state,
-                modalContent: <p>New Passwords do not match</p>,
-                showModal: true
-            });
+        if (state.repassword) {
+            if (!passwordHash.verify(state.repassword, state.password)) {
+                setState({
+                    ...state,
+                    modalContent: <p>Old Passwords do not match</p>,
+                    showModal: true
+                });
+            }  else {
+                if (state.newPassword !== state.renewPassword) {
+                    setState({
+                        ...state,
+                        modalContent: <p>New Passwords do not match</p>,
+                        showModal: true
+                    });
+                } else {
+                    editUserPost(
+                        props.user.id,
+                        imageInpRef.current.files[0],
+                        state.sex,
+                        state.title,
+                        state.firstName,
+                        state.lastName,
+                        state.userName,
+                        state.street,
+                        state.city,
+                        state.zip,
+                        state.country,
+                        state.newPassword
+                    ).then(data => {
+                        let badgeClass = '';
+                        let badgeMessage = '';
+                        switch (data) {
+                            case 2:
+                                badgeClass = 'alert alert-danger';
+                                badgeMessage = 'There was a server side error, please contact the administrator.';
+                                break;
+                            case 3:
+                                badgeClass = 'alert alert-danger';
+                                badgeMessage = 'There is already a user with the same username, please choose another one.';
+                                break;
+                            default:
+                                badgeClass = 'alert alert-success';
+                                badgeMessage = 'Your profile has been changed successfully.';
+                                setState({...state, disabled: true, close:false});
+                                break;
+                        }
+                        const badgeContentElement = (
+                            <div className={badgeClass} role="alert">
+                                {badgeMessage}
+                            </div>
+                        );
+                        setState({...state, badgeContent: badgeContentElement});        
+                    }).catch(() => {
+                        const badgeContentElement = (
+                            <div className="alert alert-danger" role="alert">
+                                Can not send the data to server.
+                            </div>
+                        );
+                        setState({...state, badgeContent: badgeContentElement});
+                    });
+                }
+            }
         } else {
             editUserPost(
                 props.user.id,
+                imageInpRef.current.files[0],
+                state.sex,
+                state.title,
                 state.firstName,
                 state.lastName,
                 state.userName,
                 state.street,
                 state.city,
                 state.zip,
-                state.country,
-                imageInpRef.current.files[0],
-                state.newPassword
+                state.country
             ).then(data => {
                 let badgeClass = '';
                 let badgeMessage = '';
@@ -394,8 +452,8 @@ console.log(passwordHash.verify(state.repassword, state.password));
                                 <FormGroup>
                                     <Label name="sex" className="w-100 h5 text-trans mb-2">Sex:</Label>
                                         <Select
-                                            title="–&thinsp;–&thinsp;–"
-                                            list={state.sex}
+                                            title={state.sex}
+                                            list={state.sexList}
                                             resetThenSet={resetThenSet}
                                             className={state.disabled ? " profile" : ""}
                                             disabled={state.disabled}
@@ -406,8 +464,8 @@ console.log(passwordHash.verify(state.repassword, state.password));
                                 <FormGroup>
                                     <Label name="title" className="w-100 h5 text-trans mb-2">Title:</Label>
                                         <Select
-                                            title="–&thinsp;–&thinsp;–"
-                                            list={state.title}
+                                            title={state.title}
+                                            list={state.titleList}
                                             resetThenSet={resetThenSet}
                                             className={state.disabled ? " profile" : ""}
                                             disabled={state.disabled}
